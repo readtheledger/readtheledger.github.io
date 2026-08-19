@@ -21,6 +21,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
 <title>The Ledger — Finance, read properly</title>
 <meta name="description" content="A quiet reader for high-quality, free-to-read financial journalism.">
+<link rel="canonical" href="https://readtheledger.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Ledger">
+<meta property="og:title" content="The Ledger — Finance, read properly">
+<meta property="og:description" content="A quiet reader for high-quality, free-to-read financial journalism.">
+<meta property="og:url" content="https://readtheledger.github.io/">
+<meta property="og:image" content="https://readtheledger.github.io/icon-512.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The Ledger — Finance, read properly">
+<meta name="twitter:description" content="A quiet reader for high-quality, free-to-read financial journalism.">
+<meta name="twitter:image" content="https://readtheledger.github.io/icon-512.png">
 <meta name="theme-color" content="#FFF1E5" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#12100E" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -84,6 +95,7 @@ button,input,select{font:inherit;color:inherit}
 button{background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
 a{color:inherit}
 .tap{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* ---------- masthead ---------- */
@@ -107,7 +119,7 @@ nav.sections::-webkit-scrollbar{display:none}
   font-family:var(--ui);font-size:.74rem;font-weight:600;letter-spacing:.02em;
   padding:11px 10px;white-space:nowrap;color:var(--ink-3);border-bottom:2px solid transparent;min-height:44px
 }
-.seclink[aria-current="true"]{color:var(--ink);border-bottom-color:var(--accent-2)}
+.seclink[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent-2)}
 
 /* search bar */
 .searchwrap{padding:10px 14px;border-top:1px solid var(--rule);display:none;max-width:1100px;margin:0 auto}
@@ -303,7 +315,7 @@ ol.rail .hl{font-size:1rem;line-height:1.25}
   <div class="datestrip" id="datestrip"></div>
   <nav class="sections" aria-label="Sections"><div class="sections-inner" id="secnav"></div></nav>
   <div class="searchwrap" id="searchwrap">
-    <input id="q" type="search" placeholder="Search headlines, sources, topics…" autocomplete="off" enterkeyhint="search">
+    <input id="q" type="search" placeholder="Search headlines, sources, topics…" autocomplete="off" enterkeyhint="search" aria-label="Search headlines, sources and topics">
   </div>
 </header>
 
@@ -1035,7 +1047,7 @@ function visible(){
 
 function cardHTML(it, lead){
   const savedOn = !!S.saved[it.id];
-  return `<article class="card ${lead?"lead":""} ${S.read[it.id]?"read":""}" data-id="${it.id}">
+  return `<article class="card ${lead?"lead":""} ${S.read[it.id]?"read":""}" data-id="${it.id}" tabindex="0">
     <div class="cardtop">
       <div>
         <p class="kicker">${esc(it.section)}</p>
@@ -1056,7 +1068,7 @@ function cardHTML(it, lead){
 }
 
 function wimCardHTML(it){
-  return `<article class="card wim" data-id="${it.id}">
+  return `<article class="card wim" data-id="${it.id}" tabindex="0">
     <p class="wimlabel">Why it matters</p>
     <h2 class="hl">${esc(it.title)}</h2>
     <p class="wimnote">${esc(it.ledger ? it.standfirst : ledgerNote(it))}</p>
@@ -1066,7 +1078,7 @@ function wimCardHTML(it){
 function weeklyCardHTML(){
   const it = weeklyItem();
   if(!it) return "";
-  return `<article class="card weekly" data-id="${it.id}">
+  return `<article class="card weekly" data-id="${it.id}" tabindex="0">
     <p class="weeklylabel">The Ledger Weekly · Deep dive</p>
     <h2 class="hl">${esc(it.title)}</h2>
     <p class="standfirst">${esc(it.standfirst)}</p>
@@ -1121,7 +1133,7 @@ function render(){
                  .sort((a,b)=>scoreOf(b)-scoreOf(a)).slice(0,5);
   rail.innerHTML = most.length ?
     `<p class="railhead">From the newsstand</p><ol class="rail">` +
-      most.map(i=>`<li data-id="${i.id}"><div><h3 class="hl">${esc(i.title)}</h3>
+      most.map(i=>`<li data-id="${i.id}" tabindex="0"><div><h3 class="hl">${esc(i.title)}</h3>
         <div class="meta"><span class="badge">${esc(i.source)}</span><span class="dot">${when(i.ts)}</span></div></div></li>`).join("") +
     `</ol>` : "";
 
@@ -1136,6 +1148,14 @@ function bindCards(){
   $$("article.card, ol.rail li").forEach(el=>{
     el.onclick = ev=>{
       if(ev.target.closest("[data-save]")) return;
+      const it = itemById(el.dataset.id);
+      if(it) openReader(it);
+    };
+    // cards are focusable, so a keyboard can open them like a tap does
+    el.onkeydown = ev=>{
+      if(ev.key!=="Enter" && ev.key!==" ") return;
+      if(ev.target.closest("[data-save]")) return;
+      ev.preventDefault();
       const it = itemById(el.dataset.id);
       if(it) openReader(it);
     };
@@ -1496,6 +1516,9 @@ function applyTheme(){
   const t=store.get(LS.theme,"auto");
   const dark = t==="dark" || (t==="auto" && matchMedia("(prefers-color-scheme: dark)").matches);
   document.documentElement.dataset.theme = dark?"dark":"light";
+  // keep the browser/status-bar colour in step with the theme actually showing,
+  // including when the in-app toggle overrides the system preference
+  $$('meta[name="theme-color"]').forEach(m=>m.setAttribute("content", dark?"#12100E":"#FFF1E5"));
   $$("#segTheme button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.theme===t));
 }
 function applySize(){
@@ -1511,7 +1534,7 @@ function renderFeedStatus(){
 }
 function renderSecNav(){
   $("#secnav").innerHTML = SECTIONS.map(s=>
-    `<button class="seclink tap" data-sec="${esc(s)}" aria-current="${s===S.section}">${esc(s)}</button>`).join("");
+    `<button class="seclink tap" data-sec="${esc(s)}"${s===S.section?' aria-current="page"':''}>${esc(s)}</button>`).join("");
   $$("#secnav .seclink").forEach(b=>b.onclick=()=>{
     S.section=b.dataset.sec; renderSecNav(); render(); window.scrollTo({top:0,behavior:"smooth"});
   });
@@ -1584,7 +1607,7 @@ function boot(){
   $("#dRate").onclick=()=>{
     const i=(RATES.indexOf(TTS.rate)+1)%RATES.length;
     TTS.rate=RATES[i]; player.playbackRate=TTS.rate;
-    $("#dRate").textContent=TTS.rate.toFixed(TTS.rate%1?2:1).replace(/0$/,"")+"×";
+    $("#dRate").textContent=(TTS.rate%1 ? String(TTS.rate) : TTS.rate.toFixed(1))+"×";
     if(TTS.mode==="speech"&&TTS.playing){ speechSynthesis.cancel(); speakNext(); }
   };
   $("#seek").oninput=e=>{
@@ -1608,7 +1631,12 @@ function boot(){
 
   // keyboard niceties on desktop
   document.addEventListener("keydown",e=>{
-    if(e.key==="Escape"){ if($("#settings").classList.contains("on")) $("#settings").classList.remove("on"); else if($("#reader").classList.contains("on")) closeReader(); }
+    if(e.key==="Escape"){
+      if($("#settings").classList.contains("on")) $("#settings").classList.remove("on");
+      // leave through history like the back button, so the history entry the
+      // reader pushed doesn't linger after the panel has closed
+      else if($("#reader").classList.contains("on")){ if(history.state&&history.state.reader) history.back(); else closeReader(); }
+    }
     if(e.key===" " && $("#dock").classList.contains("on")){ e.preventDefault(); togglePlay(); }
   });
 

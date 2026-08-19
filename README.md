@@ -58,9 +58,9 @@ A note on the *Long reads* rail: it is ranked by depth and source quality, not b
 
 ## Files
 
-`index.html` is the entire application — markup, styles and logic in one file. `sw.js` is the offline shell. `manifest.webmanifest` plus the PNG icons make it installable. `qa.py` and `qa_live.py` are the test suites, and `fetch_fixtures.sh` captures the feeds the live suite reads.
+`index.html` is the entire application — markup, styles and logic in one file. `content.js` is the publication: The Ledger's own articles, loaded at boot. `sw.js` is the offline shell. `manifest.webmanifest` plus the PNG icons make it installable. `qa.py` and `qa_live.py` are the test suites, and `fetch_fixtures.sh` captures the feeds the live suite reads.
 
-Only the first four files plus the icons need to be deployed. The tests and this README can stay behind.
+Only the first four files plus the icons need to be deployed — the workflow in `.github/workflows/pages.yml` does exactly that, and fails the build if anything the app references is missing from the artifact. The tests and this README stay behind.
 
 ## Tests
 

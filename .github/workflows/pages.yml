@@ -36,10 +36,25 @@ jobs:
       - name: Assemble the site
         run: |
           mkdir -p _site
-          cp index.html sw.js manifest.webmanifest _site/
+          cp index.html content.js sw.js manifest.webmanifest _site/
           cp icon-180.png icon-192.png icon-512.png icon-maskable-512.png _site/
           touch _site/.nojekyll
           ls -la _site
+
+      # every file the app itself asks for must actually be in the artifact —
+      # a missing one (content.js, an icon) fails the deploy here, not in the field
+      - name: Check nothing the app references is missing
+        run: |
+          missing=0
+          refs="sw.js
+          $(grep -oE '(src|href)="[^"]+"' index.html | cut -d'"' -f2 | grep -v '^http' | grep -v '[${]')
+          $(grep -oE '"\./[^"]+"' sw.js | tr -d '"' | sed 's|^\./||')
+          $(grep -oE '"src": *"[^"]+"' manifest.webmanifest | cut -d'"' -f4)"
+          for f in $refs; do
+            case "$f" in ""|*/) continue;; esac
+            if [ ! -f "_site/$f" ]; then echo "MISSING from _site: $f"; missing=1; fi
+          done
+          [ "$missing" -eq 0 ]
 
       - uses: actions/upload-pages-artifact@v5
         with:
