@@ -113,11 +113,14 @@ header.masthead{
 .icobtn.refreshing svg{animation:ledger-spin .7s linear infinite}
 @keyframes ledger-spin{to{transform:rotate(360deg)}}
 .icobtn{border:1px solid transparent}
+#btnRefresh,#rRefresh{color:var(--ink-2);background:var(--chip);border-color:var(--rule);box-shadow:none}
+#btnRefresh:active,#rRefresh:active{background:var(--paper-2)}
 @media(max-width:380px){
   .mast-row{gap:2px;padding:6px 8px 8px}
   .icobtn{width:40px;height:40px}
   .icobtn svg{width:19px;height:19px}
   .wordmark{font-size:1.25rem}
+  #btnRefresh,#rRefresh{background:transparent;border-color:transparent}
 }
 
 /* section nav */
