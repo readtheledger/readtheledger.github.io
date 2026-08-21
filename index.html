@@ -1598,7 +1598,7 @@ function boot(){
   }
   const _br = $("#btnRefresh"); if(_br) _br.onclick = hardRefresh;
   const _rr = $("#rRefresh"); if(_rr) _rr.onclick = hardRefresh;
-  $("[data-close]").forEach(el=>el.onclick=()=>$("#settings").classList.remove("on"));
+  $$("[data-close]").forEach(el=>el.onclick=()=>$("#settings").classList.remove("on"));
 
   // settings
   $("#saveSettings").onclick = ()=>{
