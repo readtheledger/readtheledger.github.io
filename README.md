@@ -14,17 +14,25 @@ The front page is arranged like a newspaper, entirely from The Ledger's own arti
 
 Every article has two buttons that matter. **Listen** reads the piece aloud — with your own OpenAI API key it uses OpenAI's speech models and sounds close to a human presenter, and without a key it falls back to the voice built into your phone, so the button always works. **Copy** puts the whole article on your clipboard as clean plain text: headline, publication, author, date, original link, then the body.
 
+## Every story has an address
+
+Each Ledger article is published at `/story/<id>/` and each editorial section at its own path (`/markets/`, `/central-banks/`, `/tech-and-finance/` and so on). Those pages are written by `build.mjs`: each one is the app, with that page's title, description, canonical URL, Open Graph and Twitter Card metadata and `NewsArticle` structured data in its head, and a static copy of the content inside `<main>` so the story reads in full — headline, standfirst, body, sources, date — with JavaScript off. When the app boots on one of those pages it removes the static copy and opens the same story in the reader, so the address keeps meaning what it meant; a refresh, a bookmark or a shared link all come back to the story. Headlines on the front page are ordinary links to those addresses, section tabs are links to the section pages, and Share hands the system a Ledger story's own URL (a Newsstand item still shares the publisher's original). The build also writes `sitemap.xml`, `robots.txt` and a real `404.html`.
+
+```
+node build.mjs            # writes the site into ./_site
+```
+
 ## Getting it onto your iPhone
 
-The app is a folder of static files. It needs to be served over HTTPS for the service worker, Add-to-Home-Screen and clipboard access to work, so opening `index.html` straight off the filesystem will only give you a partial experience.
+The site is a folder of static files. It needs to be served over HTTPS at the root of a domain for the service worker, Add-to-Home-Screen and clipboard access to work, so opening `index.html` straight off the filesystem will only give you a partial experience.
 
-The quickest route is **Netlify Drop**: go to `app.netlify.com/drop` on your laptop and drag this whole folder onto the page. You get an HTTPS URL in a few seconds, with no account needed to start. Open that URL in Safari on your phone, tap the share icon, then *Add to Home Screen*.
+Run `node build.mjs` and publish the `_site` folder. The quickest route is **Netlify Drop**: go to `app.netlify.com/drop` on your laptop and drag `_site` onto the page. You get an HTTPS URL in a few seconds, with no account needed to start. Open that URL in Safari on your phone, tap the share icon, then *Add to Home Screen*.
 
-For **GitHub Pages**, commit these files to a repository, then in Settings → Pages set the source to your branch and root folder. Your URL will be `https://<user>.github.io/<repo>/`. **Cloudflare Pages** and **Vercel** both work the same way — point them at the folder, no build command, no output directory.
+For **GitHub Pages**, the workflow in `.github/workflows/pages.yml` runs the build and deploys `_site` on every push to `main`; in Settings → Pages the source should be *GitHub Actions* so that only that workflow publishes. The pages are written for the root of a domain (`https://<user>.github.io/`), not a repository sub-path. **Cloudflare Pages** and **Vercel** work the same way — build command `node build.mjs`, output directory `_site`.
 
 Once installed to the home screen the app runs full-screen with the salmon status bar, and the service worker keeps the shell and your last-read articles available when you lose signal.
 
-Redeploying is just replacing the files: the service worker asks the network for `index.html` first and only falls back to its cached copy when the network is slow or absent, so a change reaches everyone who has installed the app on their next launch. Nothing has to be version-stamped by hand.
+Redeploying is just replacing the files: the service worker asks the network for every page first and only falls back to its cached copy — the page itself, cached under its own address, or the app shell for a story it has never fetched — when the network is slow or absent, so a change reaches everyone who has installed the app on their next launch. A 404 from the server stays a 404. The build stamps the service worker with a hash of the app and the edition, so a new article installs a fresh shell without anything being version-stamped by hand.
 
 ## Adding your OpenAI key
 
@@ -58,9 +66,9 @@ A note on the *Long reads* rail: it is ranked by depth and source quality, not b
 
 ## Files
 
-`index.html` is the entire application — markup, styles and logic in one file. `content.js` is the publication: The Ledger's own articles, loaded at boot. `sw.js` is the offline shell. `manifest.webmanifest` plus the PNG icons make it installable. `qa.py` and `qa_live.py` are the test suites, and `fetch_fixtures.sh` captures the feeds the live suite reads.
+`index.html` is the entire application — markup, styles and logic in one file. `content.js` is the publication: The Ledger's own articles, loaded at boot. `sw.js` is the offline shell. `manifest.webmanifest` plus the PNG icons make it installable. `build.mjs` writes the story and section pages, the sitemap, `robots.txt` and the 404 page into `_site`. `qa.py`, `qa_live.py` and `qa_pages.py` are the test suites, and `fetch_fixtures.sh` captures the feeds the live suite reads.
 
-Only the first four files plus the icons need to be deployed — the workflow in `.github/workflows/pages.yml` does exactly that, and fails the build if anything the app references is missing from the artifact. The tests and this README stay behind.
+Only `_site` is deployed — the workflow in `.github/workflows/pages.yml` runs the build and publishes that folder, and the build fails if anything a page references is missing from the output. The tests and this README stay behind.
 
 ## Tests
 
@@ -69,17 +77,25 @@ Both suites drive headless Chromium at a 440 × 956 viewport with touch and mobi
 ```
 pip install playwright && playwright install chromium
 
-python3 qa.py            # 51 checks: layout, touch targets, copy, listen fallback,
+python3 qa.py            # 53 checks: layout, touch targets, copy, listen fallback,
                          # dark mode, settings persistence, manifest, service worker,
                          # URL sanitising, bookmark durability, cache limits, the
                          # editorial mix, Ledger sourcing and the licence model
+python3 qa_pages.py      # 75 checks: builds the site, then every story and section
+                         # page in a fresh browser with JavaScript off (content,
+                         # metadata, dates, links), the same addresses with it on
+                         # (refresh, back and forward, sharing, bookmarks, audio,
+                         # copy), the sitemap, robots.txt and 404, the service
+                         # worker caching pages by address, letting a 404 through
+                         # and serving offline, and an upgrade from the previously
+                         # released worker
 ./fetch_fixtures.sh      # capture eight real feeds (not committed — see .gitignore)
 python3 qa_live.py       # 23 checks: sectioning, dedupe, bylines, sanitisation, the
                          # mix and licence model, the Newsstand, copy fidelity,
                          # TTS chunking against real publisher output
 ```
 
-The live suite intercepts the relay request and answers with the captured feeds, so it exercises the real fetch-and-parse path without depending on the network being up. Publisher feed content is deliberately not committed to this repository.
+The page suite serves the built site the way GitHub Pages does — directories to `index.html`, unknown paths to `404.html` with a 404 status — and simulates an outage by dropping connections at the server, because a browser's offline emulation does not reach a service worker's own fetches. The live suite intercepts the relay request and answers with the captured feeds, so it exercises the real fetch-and-parse path without depending on the network being up. Publisher feed content is deliberately not committed to this repository.
 
 ## Known limits
 

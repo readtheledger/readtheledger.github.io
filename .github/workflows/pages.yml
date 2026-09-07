@@ -1,8 +1,10 @@
 name: Deploy to GitHub Pages
 
-# The app is a folder of static files, so there is nothing to build — this only
-# picks out the files that belong on the web (the README and the test suites stay
-# behind, as the README says) and hands them to Pages.
+# The app is a folder of static files plus one build step: build.mjs writes a
+# page for every Ledger story and section (the app, with that page's content in
+# it), the sitemap, robots.txt and a real 404, into _site. The README and the
+# test suites stay behind, as the README says. The build itself fails if any
+# file a page references is missing from the output.
 
 on:
   push:
@@ -33,27 +35,25 @@ jobs:
         with:
           enablement: true
 
-      - name: Assemble the site
+      - name: Build the site
         run: |
-          mkdir -p _site
-          cp index.html content.js sw.js manifest.webmanifest _site/
-          cp icon-180.png icon-192.png icon-512.png icon-maskable-512.png _site/
-          touch _site/.nojekyll
-          ls -la _site
+          node --version
+          node build.mjs _site
+          find _site -type f | sort
 
-      # every file the app itself asks for must actually be in the artifact —
-      # a missing one (content.js, an icon) fails the deploy here, not in the field
-      - name: Check nothing the app references is missing
+      # belt and braces after the build's own reference check: the files the
+      # installed app precaches, and the pages this release exists to publish,
+      # must be in the artifact
+      - name: Check the artifact is complete
         run: |
           missing=0
-          refs="sw.js
-          $(grep -oE '(src|href)="[^"]+"' index.html | cut -d'"' -f2 | grep -v '^http' | grep -v '[${]')
-          $(grep -oE '"\./[^"]+"' sw.js | tr -d '"' | sed 's|^\./||')
-          $(grep -oE '"src": *"[^"]+"' manifest.webmanifest | cut -d'"' -f4)"
-          for f in $refs; do
-            case "$f" in ""|*/) continue;; esac
-            if [ ! -f "_site/$f" ]; then echo "MISSING from _site: $f"; missing=1; fi
+          for f in index.html content.js sw.js manifest.webmanifest icon-180.png icon-192.png icon-512.png icon-maskable-512.png sitemap.xml robots.txt 404.html .nojekyll; do
+            [ -f "_site/$f" ] || { echo "MISSING from _site: $f"; missing=1; }
           done
+          stories=$(find _site/story -name index.html | wc -l)
+          echo "story pages: $stories"
+          [ "$stories" -ge 1 ] || { echo "no story pages were generated"; missing=1; }
+          grep -q 'ledger-shell-v[0-9]*-[0-9a-f]\{8\}' _site/sw.js || { echo "sw.js was not stamped by the build"; missing=1; }
           [ "$missing" -eq 0 ]
 
       - uses: actions/upload-pages-artifact@v5

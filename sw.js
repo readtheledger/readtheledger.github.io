@@ -1,22 +1,34 @@
 /* The Ledger — offline shell.
-   Caches the app itself and the last pages you opened, so a dropped signal
+   Caches the app itself and the pages you have opened, so a dropped signal
    doesn't cost you your reading. Feeds and audio are cached separately
-   (localStorage / IndexedDB) by the app. */
+   (localStorage / IndexedDB) by the app.
 
-const VERSION = "3";
-const SHELL = "ledger-shell-v" + VERSION;
-const RUNTIME = "ledger-runtime-v" + VERSION;
+   Every story and section has an address of its own, and each one is cached
+   under that address. A page the server answers for — a story, a section, a
+   real 404 — is always what the reader gets while the network is up; the cache
+   only speaks when the network cannot. */
+
+const VERSION = "4";
+const BUILD = "dev";   // build.mjs stamps a hash of the app and the edition here,
+                       // so a new article or a changed page installs a fresh shell
+const SHELL   = "ledger-shell-v"   + VERSION + "-" + BUILD;
+const RUNTIME = "ledger-runtime-v" + VERSION + "-" + BUILD;
 const FILES = [
-  "./",
-  "./index.html",
-  "./content.js",
-  "./manifest.webmanifest",
-  "./icon-192.png",
-  "./icon-512.png",
-  "./icon-180.png"
+  "/",
+  "/index.html",
+  "/content.js",
+  "/manifest.webmanifest",
+  "/icon-192.png",
+  "/icon-512.png",
+  "/icon-180.png"
 ];
 
-/* How long a launch waits for a fresh copy of the app before falling back to the
+/* Addresses the app itself can render from content.js when a page has never
+   been fetched: the front page, a story, an editorial section. Offline, these
+   fall back to the shell; anything else does not pretend to exist. */
+const APP_ROUTE = /^\/(?:index\.html)?$|^\/story\/[^/]+\/?$|^\/[a-z0-9-]+\/?$/;
+
+/* How long a launch waits for a fresh copy of the page before falling back to the
    cached one. Long enough for a slow train connection, short enough not to feel
    like a hang. */
 const NAV_TIMEOUT = 3500;
@@ -29,6 +41,8 @@ self.addEventListener("install", e => {
   );
 });
 
+/* Every earlier cache goes — including the v3 shell that kept a single index.html
+   under a relative key — so an upgrade from the installed app starts clean. */
 self.addEventListener("activate", e => {
   e.waitUntil(
     caches.keys()
@@ -37,11 +51,19 @@ self.addEventListener("activate", e => {
   );
 });
 
-/* The whole app is index.html, so a cache-first shell means a deploy never reaches
-   anyone who has already installed it. Navigations go to the network first and only
-   fall back to the cached copy when the network is slow or gone — an update lands on
-   the next launch, offline still works, and no cache name has to be bumped by hand. */
+/* A page is cached by its path, never its query string, so /story/x/?utm=… and a
+   cache-busting refresh both find the same copy. */
+function pageKey(url) {
+  return url.origin + url.pathname;
+}
+
+/* Network first: a deploy reaches an installed reader on the next launch, and a
+   404 from the server stays a 404. The cache answers only when the network is
+   slow or gone — first with the very page that was asked for, then, for an
+   address the app can render itself, with the shell. */
 async function navigate(req) {
+  const url = new URL(req.url);
+  const key = pageKey(url);
   const cache = await caches.open(SHELL);
   try {
     const ctl = new AbortController();
@@ -49,11 +71,19 @@ async function navigate(req) {
     let res;
     try { res = await fetch(req, {signal:ctl.signal, cache:"no-cache"}); }
     finally { clearTimeout(timer); }
-    if (!res || !res.ok) throw new Error("HTTP " + (res && res.status));
-    cache.put("./index.html", res.clone());
-    return res;
+    if (res.ok && !res.redirected && res.type === "basic") cache.put(key, res.clone());
+    return res;                       // 200 cached and served; 404, 500, redirects served as they are
   } catch (e) {
-    return (await cache.match("./index.html")) || (await cache.match("./")) || Response.error();
+    const own = await cache.match(key);
+    if (own) return own;
+    if (APP_ROUTE.test(url.pathname)) {
+      const shell = (await cache.match("/index.html")) || (await cache.match("/"));
+      if (shell) return shell;
+    }
+    return new Response(
+      "<!doctype html><meta charset=\"utf-8\"><title>Offline — The Ledger</title>" +
+      "<p style=\"font-family:Georgia,serif;padding:2em\">You're offline and this page hasn't been saved on this device.</p>",
+      {status:503, headers:{"Content-Type":"text/html; charset=utf-8"}});
   }
 }
 
@@ -63,8 +93,8 @@ self.addEventListener("fetch", e => {
 
   const url = new URL(req.url);
 
-  // never touch the speech API or the CORS relays — always live
-  if (/api\.openai\.com|allorigins|corsproxy|codetabs/.test(url.hostname)) return;
+  // never touch the speech API, the analytics ping or the CORS relays — always live
+  if (/api\.openai\.com|goatcounter\.com|allorigins|corsproxy|codetabs/.test(url.hostname)) return;
 
   if (req.mode === "navigate") {
     e.respondWith(navigate(req));
