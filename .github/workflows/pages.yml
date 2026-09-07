@@ -43,18 +43,10 @@ jobs:
 
       # belt and braces after the build's own reference check: the files the
       # installed app precaches, and the pages this release exists to publish,
-      # must be in the artifact
+      # must be in the artifact. The same script runs inside qa_pages.py, so
+      # what the deploy relies on is what the tests exercise.
       - name: Check the artifact is complete
-        run: |
-          missing=0
-          for f in index.html content.js sw.js manifest.webmanifest icon-180.png icon-192.png icon-512.png icon-maskable-512.png sitemap.xml robots.txt 404.html .nojekyll; do
-            [ -f "_site/$f" ] || { echo "MISSING from _site: $f"; missing=1; }
-          done
-          stories=$(find _site/story -name index.html | wc -l)
-          echo "story pages: $stories"
-          [ "$stories" -ge 1 ] || { echo "no story pages were generated"; missing=1; }
-          grep -q 'ledger-shell-v[0-9]*-[0-9a-f]\{8\}' _site/sw.js || { echo "sw.js was not stamped by the build"; missing=1; }
-          [ "$missing" -eq 0 ]
+        run: sh check_site.sh _site
 
       - uses: actions/upload-pages-artifact@v5
         with:

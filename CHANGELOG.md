@@ -26,10 +26,16 @@ All notable changes to The Ledger. Dates are UTC.
 - **Service worker v4.** Pages are cached under their own addresses (query
   strings ignored). Navigations stay network-first; a 404 or any other answer
   from the server is passed through unchanged rather than replaced by the cached
-  shell. Offline, a visited page is served from its own cached copy, a story the
-  app can render itself falls back to the shell, and anything else is an honest
-  503. The build stamps the worker with a hash of the app and the edition, so a
-  new article installs a fresh shell. Upgrading from v3 removes the old caches.
+  shell. Offline, a visited page is served from its own cached copy; a page the
+  app can render itself — the front page, a section or a story that exists in
+  this edition, from a route list the build stamps into the worker — falls back
+  to the shell; anything else, including an unknown story or section, is an
+  honest 503. The build stamps the worker with a hash of the app and the
+  edition, so a new article installs a fresh shell. Upgrading from v3 removes
+  the old caches.
+- The Pages workflow's artifact check is `check_site.sh`, and `qa_pages.py` runs
+  the same script on its own build (and on a copy with an unstamped worker,
+  which it must reject).
 - Asset references (`content.js`, `sw.js`, the manifest and icons) are rooted at
   `/`, so they resolve from every page; the manifest's `start_url` and `scope`
   are `/`. The pages are written for the root of a domain.

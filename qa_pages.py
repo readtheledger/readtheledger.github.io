@@ -66,6 +66,21 @@ def build():
         print(r.stdout); print(r.stderr); sys.exit("build failed")
     print(r.stdout.strip())
 
+def artifact_check(results):
+    """The workflow's own artifact check, run on this build — and on a copy of it
+    whose worker was never stamped, which it must reject."""
+    def run(d):
+        r = subprocess.run(["sh", os.path.join(ROOT, "check_site.sh"), d], capture_output=True, text=True)
+        return r.returncode, (r.stdout + r.stderr).strip()
+    code, out = run(SITE)
+    results.append(("PASS" if code == 0 else "FAIL", "workflow artifact check accepts the built site", out.splitlines()[-1] if out else ""))
+    bad = os.path.join(ROOT, "_site_unstamped")
+    shutil.rmtree(bad, ignore_errors=True); shutil.copytree(SITE, bad)
+    shutil.copy(os.path.join(ROOT, "sw.js"), os.path.join(bad, "sw.js"))     # the source worker: BUILD = "dev", no route list
+    code, out = run(bad)
+    results.append(("PASS" if code == 1 and "sw.js" in out else "FAIL", "workflow artifact check rejects an unstamped worker", f"exit={code}"))
+    shutil.rmtree(bad, ignore_errors=True)
+
 def previous_release():
     """The last released app, so the upgrade check starts from what readers have installed."""
     shutil.rmtree(OLD, ignore_errors=True); os.makedirs(OLD)
@@ -92,6 +107,12 @@ async def main():
     results = []
     def ok(name, cond, extra=""):
         results.append((("PASS" if cond else "FAIL"), name, str(extra)))
+    artifact_check(results)
+    routes = re.search(r'^const ROUTES = (\[.*\]);$', open(os.path.join(SITE, "sw.js")).read(), re.M)
+    routes = json.loads(routes.group(1)) if routes else []
+    ok("service worker carries exactly this edition's addresses",
+       sorted(routes) == sorted(["/", "/index.html"] + [f"/{slug(s)}/" for s in PAGE_SECTIONS] + [f"/story/{a['id']}/" for a in arts]),
+       f"{len(routes)} routes")
 
     async with async_playwright() as p:
         b = await p.chromium.launch(args=["--no-sandbox"])
@@ -315,8 +336,18 @@ async def main():
         await page.wait_for_selector("#reader.on", timeout=8000)
         ok("offline, an unvisited story is rendered by the app shell",
            r.status == 200 and (await page.locator("#rwrap h1").inner_text()).strip() == a2["title"], f"status={r.status}")
-        r = await page.goto(base + "/sitemap.xml", wait_until="load")
-        ok("offline, a page the app cannot render does not pretend to exist", r.status == 503, f"status={r.status}")
+        # ...as does a section that exists but was never visited...
+        r = await page.goto(base + "/economics/", wait_until="load")
+        await page.wait_for_timeout(600)
+        cur = await page.locator('#secnav [aria-current="page"]').get_attribute("data-sec")
+        ok("offline, an unvisited section is rendered by the app shell", r.status == 200 and cur == "Economics", f"status={r.status} section={cur}")
+        # ...but an address that is not in this edition must not come back as the
+        # front page with a 200: an unknown story, an unknown section, a file
+        for path, what in [("/story/no-such-story/", "an unknown story"), ("/not-a-real-section/", "an unknown section"), ("/sitemap.xml", "a page the app cannot render")]:
+            r = await page.goto(base + path, wait_until="load")
+            ok(f"offline, {what} is an explicit 503, not the shell",
+               r.status == 503 and await page.locator("#reader").count() == 0 and "offline" in (await page.content()).lower(),
+               f"status={r.status}")
         STATE["down"] = False
         await ctx.close()
 

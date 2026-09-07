@@ -49,6 +49,7 @@ for (const marker of ["<!-- meta:start", "<!-- meta:end -->", "<!-- static:slot"
   if (!index.includes(marker)) fail("index.html is missing the " + marker + " marker");
 }
 if (!swSrc.includes('const BUILD = "dev";')) fail("sw.js is missing the BUILD stamp");
+if (!/^const ROUTES = \[[^\n]*\];$/m.test(swSrc)) fail("sw.js is missing the ROUTES list");
 
 // the app's own slug rule must be the one the pages were written with
 const appSlug = /function slugOf\(section\)\{[^\n]*\}/.exec(index);
@@ -277,9 +278,16 @@ nav{border-top:1px solid var(--rule);margin-top:28px;padding-top:14px;font-famil
 </html>
 `);
 
-// the app's files, with the service worker stamped by the edition it ships
+// the app's files, with the service worker stamped by the edition it ships and
+// told exactly which addresses the app can render offline: the front page, the
+// sections and the stories that exist in this edition, and nothing else
 const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(swSrc).digest("hex").slice(0, 8);
-write("sw.js", swSrc.replace('const BUILD = "dev";', 'const BUILD = "' + stamp + '";'));
+const routes = ["/", "/index.html"].concat(PAGE_SECTIONS.map(sectionPath), articles.map(storyPath));
+const sw = swSrc
+  .replace('const BUILD = "dev";', 'const BUILD = "' + stamp + '";')
+  .replace(/^const ROUTES = \[[^\n]*\];$/m, "const ROUTES = " + JSON.stringify(routes) + ";");
+if (!sw.includes('const BUILD = "' + stamp + '"') || !sw.includes('"/story/' + articles[0].id + '/"')) fail("sw.js was not stamped");
+write("sw.js", sw);
 for (const f of ["content.js", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]) {
   fs.copyFileSync(path.join(ROOT, f), path.join(OUT, f));
   written.push(f);

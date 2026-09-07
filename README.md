@@ -32,7 +32,7 @@ For **GitHub Pages**, the workflow in `.github/workflows/pages.yml` runs the bui
 
 Once installed to the home screen the app runs full-screen with the salmon status bar, and the service worker keeps the shell and your last-read articles available when you lose signal.
 
-Redeploying is just replacing the files: the service worker asks the network for every page first and only falls back to its cached copy — the page itself, cached under its own address, or the app shell for a story it has never fetched — when the network is slow or absent, so a change reaches everyone who has installed the app on their next launch. A 404 from the server stays a 404. The build stamps the service worker with a hash of the app and the edition, so a new article installs a fresh shell without anything being version-stamped by hand.
+Redeploying is just replacing the files: the service worker asks the network for every page first and only falls back to its cached copy — the page itself, cached under its own address, or the app shell for a story or section that exists in this edition (the build stamps that list into the worker) — when the network is slow or absent, so a change reaches everyone who has installed the app on their next launch. A 404 from the server stays a 404, and offline, an address that is not in the edition is a 503 rather than the front page. The build stamps the service worker with a hash of the app and the edition, so a new article installs a fresh shell without anything being version-stamped by hand.
 
 ## Adding your OpenAI key
 
@@ -66,7 +66,7 @@ A note on the *Long reads* rail: it is ranked by depth and source quality, not b
 
 ## Files
 
-`index.html` is the entire application — markup, styles and logic in one file. `content.js` is the publication: The Ledger's own articles, loaded at boot. `sw.js` is the offline shell. `manifest.webmanifest` plus the PNG icons make it installable. `build.mjs` writes the story and section pages, the sitemap, `robots.txt` and the 404 page into `_site`. `qa.py`, `qa_live.py` and `qa_pages.py` are the test suites, and `fetch_fixtures.sh` captures the feeds the live suite reads.
+`index.html` is the entire application — markup, styles and logic in one file. `content.js` is the publication: The Ledger's own articles, loaded at boot. `sw.js` is the offline shell. `manifest.webmanifest` plus the PNG icons make it installable. `build.mjs` writes the story and section pages, the sitemap, `robots.txt` and the 404 page into `_site`; `check_site.sh` is the artifact check the deploy runs on that folder. `qa.py`, `qa_live.py` and `qa_pages.py` are the test suites, and `fetch_fixtures.sh` captures the feeds the live suite reads.
 
 Only `_site` is deployed — the workflow in `.github/workflows/pages.yml` runs the build and publishes that folder, and the build fails if anything a page references is missing from the output. The tests and this README stay behind.
 
@@ -81,7 +81,8 @@ python3 qa.py            # 53 checks: layout, touch targets, copy, listen fallba
                          # dark mode, settings persistence, manifest, service worker,
                          # URL sanitising, bookmark durability, cache limits, the
                          # editorial mix, Ledger sourcing and the licence model
-python3 qa_pages.py      # 75 checks: builds the site, then every story and section
+python3 qa_pages.py      # 81 checks: builds the site, runs the deploy's own artifact
+                         # check on it (and on an unstamped copy it must reject), then every story and section
                          # page in a fresh browser with JavaScript off (content,
                          # metadata, dates, links), the same addresses with it on
                          # (refresh, back and forward, sharing, bookmarks, audio,

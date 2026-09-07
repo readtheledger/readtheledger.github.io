@@ -23,10 +23,15 @@ const FILES = [
   "/icon-180.png"
 ];
 
-/* Addresses the app itself can render from content.js when a page has never
-   been fetched: the front page, a story, an editorial section. Offline, these
-   fall back to the shell; anything else does not pretend to exist. */
-const APP_ROUTE = /^\/(?:index\.html)?$|^\/story\/[^/]+\/?$|^\/[a-z0-9-]+\/?$/;
+/* The addresses the app can render from content.js when a page has never been
+   fetched: the front page, every story and every section that actually exists
+   in this edition. build.mjs stamps the full list; offline, only these fall
+   back to the shell, and an address that is not on it does not pretend to exist. */
+const ROUTES = ["/", "/index.html"];
+
+function appRoute(pathname) {
+  return ROUTES.includes(pathname) || (!pathname.endsWith("/") && ROUTES.includes(pathname + "/"));
+}
 
 /* How long a launch waits for a fresh copy of the page before falling back to the
    cached one. Long enough for a slow train connection, short enough not to feel
@@ -60,7 +65,9 @@ function pageKey(url) {
 /* Network first: a deploy reaches an installed reader on the next launch, and a
    404 from the server stays a 404. The cache answers only when the network is
    slow or gone — first with the very page that was asked for, then, for an
-   address the app can render itself, with the shell. */
+   address on the build's route list, with the shell; for anything else, an
+   honest 503, because a page that does not exist must not come back as the
+   front page with a 200. */
 async function navigate(req) {
   const url = new URL(req.url);
   const key = pageKey(url);
@@ -76,7 +83,7 @@ async function navigate(req) {
   } catch (e) {
     const own = await cache.match(key);
     if (own) return own;
-    if (APP_ROUTE.test(url.pathname)) {
+    if (appRoute(url.pathname)) {
       const shell = (await cache.match("/index.html")) || (await cache.match("/"));
       if (shell) return shell;
     }
