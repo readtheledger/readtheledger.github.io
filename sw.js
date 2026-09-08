@@ -16,6 +16,7 @@ const RUNTIME = "ledger-runtime-v" + VERSION + "-" + BUILD;
 const FILES = [
   "/",
   "/index.html",
+  "/sources.js",
   "/content.js",
   "/manifest.webmanifest",
   "/icon-192.png",
@@ -108,12 +109,27 @@ self.addEventListener("fetch", e => {
     return;
   }
 
+  // the gathered Newsstand is the edition of the moment: network first, so a
+  // fresh gathering is seen on the next launch, and the cached copy only when
+  // the network is gone
+  if (url.origin === location.origin && url.pathname.startsWith("/data/")) {
+    e.respondWith(
+      fetch(req).then(res => {
+        // clone before the page starts reading the body, or there is nothing left to keep
+        if (res && res.ok) { const copy = res.clone(); caches.open(RUNTIME).then(c => c.put(req, copy)); }
+        return res;
+      }).catch(() => caches.match(req).then(hit => hit || Response.error()))
+    );
+    return;
+  }
+
   // fonts, icons, same-origin assets: cache first, refresh in background
   e.respondWith(
     caches.match(req).then(hit => {
       const live = fetch(req).then(res => {
         if (res && res.ok && (url.origin === location.origin || /fonts\.(googleapis|gstatic)\.com/.test(url.hostname))) {
-          caches.open(RUNTIME).then(c => c.put(req, res.clone()));
+          const copy = res.clone();
+          caches.open(RUNTIME).then(c => c.put(req, copy));
         }
         return res;
       }).catch(() => hit);

@@ -15,7 +15,7 @@ say() { echo "$1"; missing=1; }
 [ -d "$dir" ] || { echo "MISSING: $dir is not a directory"; exit 1; }
 
 # the files the installed app precaches, and the files this release publishes
-for f in index.html content.js sw.js manifest.webmanifest \
+for f in index.html content.js sources.js sw.js manifest.webmanifest \
          icon-180.png icon-192.png icon-512.png icon-maskable-512.png \
          sitemap.xml robots.txt 404.html .nojekyll; do
   [ -f "$dir/$f" ] || say "MISSING from $dir: $f"
@@ -38,6 +38,14 @@ grep -Eq '^const BUILD = "[0-9a-f]{8}";' "$dir/sw.js" \
   || say "MISSING: sw.js was not stamped by the build (const BUILD)"
 grep -Eq '^const ROUTES = \[.*"/story/[^"]+/".*\];' "$dir/sw.js" \
   || say "MISSING: sw.js does not carry the build's route list (const ROUTES)"
+
+# the gathered Newsstand, when there is one, must be an edition the app can read
+if [ -f "$dir/data/feed.json" ]; then
+  python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); assert d["fetched"] and isinstance(d["items"],list) and isinstance(d["sources"],list); print("newsstand: %d items, gathered %s" % (len(d["items"]), d["fetched"]))' "$dir/data/feed.json" \
+    || say "MISSING: data/feed.json is not an edition the app can read"
+else
+  echo "newsstand: no data/feed.json in $dir (the app will gather in the browser)"
+fi
 
 # every page in the sitemap exists in the output
 for loc in $(grep -o '<loc>[^<]*</loc>' "$dir/sitemap.xml" 2>/dev/null | sed 's|<loc>https://readtheledger.github.io||; s|</loc>||'); do

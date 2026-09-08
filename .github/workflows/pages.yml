@@ -9,6 +9,11 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # the Newsstand is gathered every half hour — a target, not a promise: GitHub
+  # may delay or drop scheduled runs under load, which is why the app shows the
+  # time the Newsstand was actually gathered, and why this can be run by hand
+  schedule:
+    - cron: "*/30 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -74,6 +79,14 @@ jobs:
             sleep 5
           done
           echo "::warning::gave up waiting for the built-in build after 3 minutes; deploying anyway"
+
+      # every public feed, gathered into one file; a feed that does not answer
+      # keeps its items from the edition that is live now, marked stale. If the
+      # gatherer itself fails the site still deploys, and the app gathers in the
+      # browser as it used to.
+      - name: Gather the Newsstand
+        continue-on-error: true
+        run: node fetch_feeds.mjs
 
       - name: Build the site
         run: |

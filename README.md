@@ -44,13 +44,19 @@ Lock-screen and background playback use the Media Session API, so the title, ski
 
 ## Changing the sources
 
-Open `index.html` and find the `SOURCES` array near the top of the script. Each entry looks like this:
+Open `sources.js`. Each entry looks like this:
 
 ```js
-{n:"Calculated Risk", u:"https://calculatedrisk.substack.com/feed", s:"Economics", h:true, q:1.25, k:"analysis"}
+{n:"Calculated Risk", u:"https://calculatedrisk.substack.com/feed", s:"Economics", h:true, q:1.25, k:"analysis", rights:"summary"}
 ```
 
-`n` is the display name, `u` is the RSS or Atom URL, `s` is the fallback section when the text gives no clearer signal, `h:true` marks a heavy full-text feed (fetched in a second wave so the front page paints fast), and `q` is a quality weight used when choosing the lead story — analysts and central banks sit above 1.0, wire filler below. `k` is the editorial kind — `"news"`, `"analysis"` or `"deep"` — which decides where the source's stories sit in the front-page mix. `lic` names a reuse licence and exists only where one genuinely does (The Conversation's CC BY-ND, Federal Reserve Board material, the ECB's reproduction-with-acknowledgement terms); a source without `lic` is never republished in full, no matter what its feed carries. Delete a line to remove a source; add a line to add one. Nothing else needs to change.
+`n` is the display name, `u` is the RSS or Atom URL, `s` is the fallback section when the text gives no clearer signal, `h:true` marks a heavy full-text feed (fetched in a second wave when the app has to gather in the browser), and `q` is a quality weight used when choosing the lead story — analysts and central banks sit above 1.0, wire filler below. `k` is the editorial kind — `"news"`, `"analysis"` or `"deep"` — which decides where the source's stories sit in the front-page mix. `rights` records what The Ledger may carry from the feed: `"summary"` (a summary, one short attributed quote and a link out) or `"full"` (the whole article), and `"full"` needs `lic` to name the licence — The Conversation's CC BY-ND, Federal Reserve Board material, the ECB's reproduction-with-acknowledgement terms. The gatherer refuses to run for a source with no rights value, so nothing ships without a recorded permission. Delete a line to remove a source; add a line to add one. The app and the gatherer both read this file, so nothing else needs to change.
+
+## How the Newsstand is gathered
+
+`fetch_feeds.mjs` reads every feed in `sources.js` and writes one file, `data/feed.json`, that the app loads with a single request: the items, the time they were gathered, and the state of every source. The Pages workflow runs it before each build — on every push and every half hour on a schedule, which is a target rather than a promise, since GitHub may delay or drop scheduled runs; that is why the app shows the time the Newsstand was *actually* gathered, in Settings and at the top of the Newsstand, and why the workflow can also be run by hand. A feed that does not answer keeps its items from the edition that is live, marked as kept from an earlier gathering with their real time, so the page is never emptied by one bad feed. Every item is checked on the way in — an absolute link, a publication date that parses and is not in the future, a title — and anything else is dropped and counted. The same story is carried once (duplicates removed by link, then by title), and a story credited to Reuters, AP or another wire keeps that origin whichever desk carried it, so copies of one syndicated report can never pass for independent confirmations. A `"summary"` source ships an excerpt and a word count, never the article, so the rights rule is enforced in the data as well as on the page.
+
+If the gathered file cannot be read, the app gathers in the browser as it always did, through public CORS relays, so an installed reader is never left with nothing.
 
 The Ledger's own articles live in `content.js`, not in `index.html`: each entry carries its `kind` (`"news"`, `"analysis"` or `"deep"`), section, headline, body and a `sources` array crediting every piece of research behind it — replace or add an entry and redeploy to publish. Mark the current deep-dive feature with `weekly:true`. `index.html` still holds `WIM_NOTES`, the short "Why it matters" context notes shown on the front-page card, by desk.
 
@@ -58,7 +64,7 @@ Every feed shipped here was checked by hand: public, free, no login and no paywa
 
 ## How it handles article text
 
-Browsers cannot read cross-origin RSS directly, so feeds are fetched through public CORS relays with a fallback chain (`api.allorigins.win`, then `corsproxy.io`, then `api.codetabs.com`). If all of them fail, the app shows whatever is already cached on your device rather than an empty screen.
+The Newsstand normally arrives as the gathered file described above. When it cannot be read, browsers cannot read cross-origin RSS directly, so feeds are fetched through public CORS relays with a fallback chain (`api.allorigins.win`, then `corsproxy.io`, then `api.codetabs.com`). If all of them fail, the app shows whatever is already cached on your device rather than an empty screen.
 
 What renders is decided by rights, not by what the feed happened to carry. A source with a named reuse licence renders in full — sanitised of scripts, iframes and inline handlers, with the licence stated in the attribution line and a link to the original. Every other story, including the many whose feeds carry complete articles, is presented as The Ledger's page: the summary as the lede, at most one short quote attributed to the publisher, the Ledger's "Why it matters" analysis in its own box, an attribution line, and a solid *Read the full story* button out to the source. Links and images are kept only if the browser resolves them to `http`, `https` or `mailto`, which is stricter than it sounds: a leading space or tab makes `javascript:` look harmless to a naive check but not to the URL parser. A content security policy sits behind that, so no script can be loaded from another host and the page can only talk to the speech API and the feed relays — the API key in local storage has nowhere to be sent even if something did slip through. The app never scrapes past a paywall and never fetches anything a feed did not publish.
 
@@ -66,7 +72,7 @@ A note on the *Long reads* rail: it is ranked by depth and source quality, not b
 
 ## Files
 
-`index.html` is the entire application — markup, styles and logic in one file. `content.js` is the publication: The Ledger's own articles, loaded at boot. `sw.js` is the offline shell. `manifest.webmanifest` plus the PNG icons make it installable. `build.mjs` writes the story and section pages, the sitemap, `robots.txt` and the 404 page into `_site`; `check_site.sh` is the artifact check the deploy runs on that folder. `qa.py`, `qa_live.py` and `qa_pages.py` are the test suites, and `fetch_fixtures.sh` captures the feeds the live suite reads.
+`index.html` is the entire application — markup, styles and logic in one file. `content.js` is the publication: The Ledger's own articles, loaded at boot. `sw.js` is the offline shell. `manifest.webmanifest` plus the PNG icons make it installable. `sources.js` is the list of public feeds, read by the app and the gatherer alike. `fetch_feeds.mjs` gathers those feeds into `data/feed.json`. `build.mjs` writes the story and section pages, the sitemap, `robots.txt` and the 404 page into `_site` and copies the gathered Newsstand in; `check_site.sh` is the artifact check the deploy runs on that folder. `qa.py`, `qa_live.py`, `qa_pages.py` and `qa_feed.py` are the test suites, and `fetch_fixtures.sh` captures the feeds the live suite reads.
 
 Only `_site` is deployed — the workflow in `.github/workflows/pages.yml` runs the build and publishes that folder, and the build fails if anything a page references is missing from the output. The tests and this README stay behind.
 
@@ -81,8 +87,9 @@ python3 qa.py            # 53 checks: layout, touch targets, copy, listen fallba
                          # dark mode, settings persistence, manifest, service worker,
                          # URL sanitising, bookmark durability, cache limits, the
                          # editorial mix, Ledger sourcing and the licence model
-python3 qa_pages.py      # 81 checks: builds the site, runs the deploy's own artifact
-                         # check on it (and on an unstamped copy it must reject), then every story and section
+python3 qa_pages.py      # 86 checks: builds the site, runs the deploy's own artifact
+                         # check on it (and on an unstamped copy it must reject), the
+                         # app's reading of a gathered Newsstand, then every story and section
                          # page in a fresh browser with JavaScript off (content,
                          # metadata, dates, links), the same addresses with it on
                          # (refresh, back and forward, sharing, bookmarks, audio,
@@ -90,6 +97,11 @@ python3 qa_pages.py      # 81 checks: builds the site, runs the deploy's own art
                          # worker caching pages by address, letting a 404 through
                          # and serving offline, and an upgrade from the previously
                          # released worker
+python3 qa_feed.py       # 21 checks: the gatherer against synthetic RSS and Atom
+                         # feeds — validation and dropped-item reasons, excerpts
+                         # versus licensed markup, duplicates, wire origins, a
+                         # feed answering 500 kept stale from the previous
+                         # edition, a feed that never answers, rights enforcement
 ./fetch_fixtures.sh      # capture eight real feeds (not committed — see .gitignore)
 python3 qa_live.py       # 23 checks: sectioning, dedupe, bylines, sanitisation, the
                          # mix and licence model, the Newsstand, copy fidelity,

@@ -10,3 +10,6 @@ __pycache__/
 _site/
 _old/
 _site_unstamped/
+
+# the gathered Newsstand (fetch_feeds.mjs writes it; the workflow gathers a fresh one)
+data/
