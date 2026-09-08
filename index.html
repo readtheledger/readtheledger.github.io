@@ -502,6 +502,7 @@ html.js #static{display:none}
 <div id="toast" role="status" aria-live="polite"></div>
 <audio id="player" preload="auto" playsinline></audio>
 
+<script src="/sources.js"></script>
 <script src="/content.js"></script>
 <script>
 "use strict";
@@ -511,10 +512,10 @@ html.js #static{display:none}
    ======================================================================= */
 
 /* ------------------------- 1. sources ------------------------- */
-/* Every feed below was checked by hand: public, free to read, no paywall and no
-   login. h:true marks a heavy full-text feed, fetched in a second wave so the
-   front page appears fast.  (Nothing from the FT, WSJ, Bloomberg or The
-   Economist is included by design.)
+/* The feeds live in sources.js, shared with the build-time fetcher, so a source
+   is added or removed in exactly one place. Every one was checked by hand:
+   public, free to read, no paywall and no login. (Nothing from the FT, WSJ,
+   Bloomberg or The Economist is included by design.)
 
    k is the editorial kind, which drives the front-page mix:
      "news"      — timely reporting; sixty to seventy per cent of the front page
@@ -526,42 +527,13 @@ html.js #static{display:none}
    the feed, however careful the credit — is presented as The Ledger's own
    summary with a short attributed quote and a link out. A public feed is an
    invitation to read, not a licence to republish. */
-const SOURCES = [
-  // ---- news desks with open feeds ----
-  {n:"CNBC Markets",       u:"https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10000664", s:"Markets", q:0.9, k:"news"},
-  {n:"CNBC Economy",       u:"https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=20910258", s:"Economics", q:0.95, k:"news"},
-  {n:"MarketWatch",        u:"https://feeds.content.dowjones.io/public/rss/mw_topstories", s:"Markets", q:0.95, k:"news"},
-  {n:"Yahoo Finance",      u:"https://finance.yahoo.com/news/rssindex",                   s:"Markets", q:0.85, k:"news"},
-  {n:"Business Insider",   u:"https://markets.businessinsider.com/rss/news",              s:"Markets", q:0.85, k:"news"},
-  {n:"BBC Business",       u:"https://feeds.bbci.co.uk/news/business/rss.xml",            s:"Companies", q:1.0, k:"news"},
-  {n:"The Guardian",       u:"https://www.theguardian.com/uk/business/rss",               s:"Companies", h:true, q:1.05, k:"news"},
-  {n:"Fortune",            u:"https://fortune.com/feed/fortune-feeds/?id=3230629",        s:"Companies", h:true, q:1.0, k:"news"},
-  {n:"Semafor Business",   u:"https://www.semafor.com/rss.xml",                           s:"Companies", h:true, q:1.05, k:"news"},
-  // ---- startups & AI ----
-  {n:"TechCrunch",         u:"https://techcrunch.com/feed/",                              s:"Tech & Finance", q:0.95, k:"news"},
-  {n:"VentureBeat AI",     u:"https://venturebeat.com/category/ai/feed/",                 s:"Tech & Finance", q:0.9, k:"news"},
-  // ---- central banks & official research ----
-  {n:"Federal Reserve",    u:"https://www.federalreserve.gov/feeds/press_all.xml",        s:"Central Banks", q:1.15, k:"news", lic:"US government work, public domain"},
-  {n:"Fed Speeches",       u:"https://www.federalreserve.gov/feeds/speeches.xml",         s:"Central Banks", q:1.15, k:"news", lic:"US government work, public domain"},
-  {n:"FEDS Notes",         u:"https://www.federalreserve.gov/feeds/feds_notes.xml",       s:"Economics", q:1.25, k:"deep", lic:"US government work, public domain"},
-  {n:"ECB",                u:"https://www.ecb.europa.eu/rss/press.html",                  s:"Central Banks", q:1.15, k:"news", lic:"ECB — reproduction permitted with acknowledgement"},
-  {n:"Bank of England",    u:"https://www.bankofengland.co.uk/rss/news",                  s:"Central Banks", q:1.15, k:"news"},
-  {n:"FRED Blog",          u:"https://fredblog.stlouisfed.org/feed/",                     s:"Economics", q:1.2, k:"analysis"},
-  // ---- Creative Commons / academic ----
-  {n:"The Conversation",   u:"https://theconversation.com/us/business/articles.atom",     s:"Opinion", h:true, q:1.2, k:"deep", lic:"CC BY-ND 4.0"},
-  // ---- independent analysts publishing in full ----
-  {n:"Calculated Risk",    u:"https://calculatedrisk.substack.com/feed",                  s:"Economics", h:true, q:1.25, k:"analysis"},
-  {n:"Marginal Revolution",u:"https://marginalrevolution.com/feed",                       s:"Economics", q:1.2, k:"analysis"},
-  {n:"Econbrowser",        u:"https://econbrowser.com/feed",                              s:"Economics", q:1.25, k:"deep"},
-  {n:"Apricitas",          u:"https://www.apricitas.io/feed",                             s:"Economics", h:true, q:1.3, k:"deep"},
-  {n:"Noahpinion",         u:"https://www.noahpinion.blog/feed",                          s:"Opinion", h:true, q:1.25, k:"analysis"},
-  {n:"Klement on Investing",u:"https://klementoninvesting.substack.com/feed",             s:"Opinion", h:true, q:1.25, k:"analysis"},
-  {n:"The Big Picture",    u:"https://ritholtz.com/feed/",                                s:"Opinion", h:true, q:1.15, k:"analysis"},
-  {n:"Damodaran",          u:"https://aswathdamodaran.blogspot.com/feeds/posts/default?alt=rss", s:"Opinion", h:true, q:1.3, k:"deep"},
-  {n:"Abnormal Returns",   u:"https://abnormalreturns.com/feed/",                         s:"Markets", h:true, q:1.05, k:"analysis"},
-  {n:"A Wealth of Common Sense",u:"https://awealthofcommonsense.com/feed/",               s:"Personal Finance", q:1.2, k:"analysis"},
-  {n:"Of Dollars And Data",u:"https://ofdollarsanddata.com/feed/",                        s:"Personal Finance", h:true, q:1.2, k:"analysis"}
-];
+const SOURCES = (window.LEDGER_SOURCES || []);
+
+/* The Newsstand is gathered by the build (fetch_feeds.mjs) into one file, so a
+   launch makes one request for it instead of twenty-nine through public relays.
+   The file carries the time it was gathered and, per source, whether the items
+   are fresh or kept from an earlier gathering because the feed did not answer. */
+const EDITION_URL = "/data/feed.json";
 
 const SECTIONS = ["Front page","Markets","Companies","Economics","Central Banks","Opinion","Tech & Finance","Personal Finance","Newsstand","Saved"];
 
@@ -592,7 +564,8 @@ const TAGS = [
   ["Opinion",      /\b(opinion|commentary|the case (for|against)|column|essay|why .{0,40}\?)\b/gi]
 ];
 
-/* CORS relays, tried in order. RSS is public, but browsers block cross-origin XML. */
+/* CORS relays, tried in order, only when the gathered edition cannot be read.
+   RSS is public, but browsers block cross-origin XML. */
 /* Privacy-respecting analytics, off by default. Create a free GoatCounter
    account (goatcounter.com), then put your site code here — e.g. "theledger"
    for theledger.goatcounter.com. Counting uses a plain image request: no
@@ -630,7 +603,8 @@ const store = {
 const S = {
   items:[], section:"Front page", query:"",
   saved:store.get(LS.saved,{}), savedItems:store.get(LS.savedItems,{}), read:store.get(LS.read,{}),
-  feedStatus:[], current:null, loading:false, banner:"", stale:false
+  feedStatus:[], current:null, loading:false, banner:"", stale:false,
+  edition:null   // {fetched} once the gathered Newsstand file has been read
 };
 
 /* A bookmarked article has to outlive the feed cache it arrived in, so the whole
@@ -795,7 +769,9 @@ function makeItem(o){
   const clean = sanitize(o.rawHtml||"");
   const text  = htmlToText(clean);
   const title = decodeEntities(o.title).replace(/\s+/g," ").trim();
-  const words = text ? text.trim().split(/\s+/).length : 0;
+  // the gathered edition carries only an excerpt of an unlicensed article, but
+  // counts the whole; the count is what decides whether the feed carried full text
+  const words = o.words || (text ? text.trim().split(/\s+/).length : 0);
   return {
     id: hash(o.link || title),
     title, link:safeUrl(o.link), weight:o.weight||1,
@@ -1002,6 +978,26 @@ function commit(items, opts){
   return clean.length;
 }
 
+/* One request for the gathered edition. Anything but a good, well-formed file
+   throws, and the caller falls back to gathering in the browser. */
+async function fetchEdition(){
+  const ctl = new AbortController();
+  const to  = setTimeout(()=>ctl.abort(), 12000);
+  try{
+    const res = await fetch(EDITION_URL, {cache:"no-cache", signal:ctl.signal});
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    const j = await res.json();
+    if(!j || !Array.isArray(j.items) || !j.fetched) throw new Error("not an edition");
+    return j;
+  }finally{ clearTimeout(to); }
+}
+function editionTime(){
+  const t = S.edition && Date.parse(S.edition.fetched);
+  if(!t) return "";
+  const sameDay = new Date(t).toDateString() === new Date().toDateString();
+  return new Date(t).toLocaleString(undefined, sameDay ? {hour:"2-digit",minute:"2-digit"} : {day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
+}
+
 async function loadFeeds(opts){
   if(S.loading) return; S.loading=true;
   const silent = opts && opts.silent;
@@ -1013,7 +1009,27 @@ async function loadFeeds(opts){
     S.items = (cached && cached.items && cached.items.length) ? cached.items.concat(EDITORIAL, [DEMO]) : EDITORIAL.concat([DEMO]);
     S.stale = !!(cached && cached.items && cached.items.length);
   }
-  S.banner = silent ? S.banner : (S.stale ? "Refreshing from public feeds…" : "Fetching live stories from public feeds…");
+  S.banner = silent ? S.banner : (S.stale ? "Refreshing the Newsstand…" : "Opening the Newsstand…");
+  render();
+
+  // the gathered edition: one file, with the time it was gathered and the state
+  // of every source; the relays below are only for when it cannot be read
+  let edition = null;
+  try{ edition = await fetchEdition(); }catch(e){ edition = null; }
+  if(edition){
+    S.edition = {fetched: edition.fetched};
+    S.feedStatus = (edition.sources||[]).map(f=>({n:f.n, ok:!!f.ok, stale:!!f.stale, count:f.count||0, since:f.fetchedAt||"", error:f.error||""}));
+    const items = edition.items.map(it=>makeItem({
+      title:it.title, link:it.link, rawHtml:it.html, author:it.author, date:it.date,
+      source:it.source, hintSection:it.section, weight:it.weight||1, kind:it.kind||"news",
+      lic:it.lic||"", words:it.words
+    }));
+    const total = commit(items);
+    S.loading=false;
+    if(!silent) toast(total ? total+" stories · Newsstand gathered "+editionTime() : "The Newsstand file was empty — showing what's saved on this device");
+    return;
+  }
+  if(!silent) S.banner = "Fetching live stories from public feeds…";
   render();
 
   // wave 1: light feeds, so the front page is usable in a couple of seconds
@@ -1186,7 +1202,11 @@ function render(){
   // block, the weekly deep dive a little further down
   const extras = S.section==="Front page" && !S.query && list.some(i=>!i.demo);
   let wimDone = !(extras && S.wim), weeklyDone = !extras;
-  let html = (S.section==="Front page" ? "" : bannerHTML()) + cardHTML(lead,true);
+  // the Newsstand says when it was gathered, and whether any source is being
+  // carried from an earlier gathering
+  const gathered = S.section==="Newsstand" && S.edition && S.edition.fetched
+    ? `<p class="datestrip" style="padding:12px 0 0" id="gathered">Gathered ${esc(editionTime())}${S.feedStatus.some(f=>f.stale) ? " · some sources kept from an earlier gathering" : ""}</p>` : "";
+  let html = gathered + (S.section==="Front page" ? "" : bannerHTML()) + cardHTML(lead,true);
   rest.forEach((i,idx)=>{
     html += cardHTML(i,false);
     if(!wimDone && idx>=2){ html += wimCardHTML(S.wim); wimDone = true; }
@@ -1635,9 +1655,17 @@ function applySize(){
 }
 function renderFeedStatus(){
   const el=$("#feedstatus"); if(!el) return;
-  el.innerHTML = S.feedStatus.length
-    ? S.feedStatus.map(f=>`<div><span>${esc(f.n)}</span><span class="st">${f.ok?f.count+" items":"unavailable"}</span></div>`).join("")
-    : SOURCES.map(s=>`<div><span>${esc(s.n)}</span><span class="st">not fetched yet</span></div>`).join("");
+  // the time on show is when the Newsstand was actually gathered, never when it
+  // was meant to be; a source that did not answer says so, and says how old the
+  // items it kept are
+  const head = S.edition && S.edition.fetched
+    ? `<div><span><strong>Newsstand gathered</strong></span><span class="st">${esc(editionTime())}</span></div>` : "";
+  const status = f => f.ok ? f.count+" items"
+                    : f.stale ? f.count+" items · kept from "+(f.since ? when(Date.parse(f.since)) : "an earlier gathering")
+                    : "unavailable";
+  el.innerHTML = head + (S.feedStatus.length
+    ? S.feedStatus.map(f=>`<div><span>${esc(f.n)}</span><span class="st">${esc(status(f))}</span></div>`).join("")
+    : SOURCES.map(s=>`<div><span>${esc(s.n)}</span><span class="st">not fetched yet</span></div>`).join(""));
 }
 function renderSecNav(){
   // sections with a page of their own are ordinary links to it; Newsstand and

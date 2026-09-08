@@ -5,6 +5,36 @@ All notable changes to The Ledger. Dates are UTC.
 ## Unreleased
 
 ### Added
+- **The Newsstand is gathered by the build.** `fetch_feeds.mjs` reads every
+  feed in `sources.js` and writes `data/feed.json` — the items, the time they
+  were gathered and the state of every source — which the app loads with one
+  request instead of twenty-nine through public relays. The Pages workflow
+  gathers on every push and every half hour on a schedule (a target, not a
+  promise), and can be run by hand. A feed that does not answer keeps its items
+  from the live edition, marked as kept from an earlier gathering with their
+  real time; the Newsstand and Settings show when the Newsstand was actually
+  gathered. Items are validated on the way in (absolute link, parseable
+  non-future date, title) and dropped with a counted reason otherwise;
+  duplicates are removed by link and then title; a wire story keeps its origin
+  (Reuters, AP, AFP, PA Media) whichever desk carried it.
+- `sources.js` holds the feed list for the app and the gatherer, with an
+  explicit `rights` value per source ("summary" or "full"); the gatherer refuses
+  a source with no rights value, or "full" without a licence, and ships only an
+  excerpt and a word count for a "summary" source.
+- `qa_feed.py`: 21 checks on the gatherer against synthetic feeds; `qa_pages.py`
+  now also checks the app's reading of a gathered edition and the worker's
+  caching of it.
+
+### Changed
+- The service worker serves `/data/` network first, so a fresh gathering is
+  seen on the next launch and the cached copy answers only when the network is
+  gone. `sources.js` is precached with the shell.
+- If the gathered file cannot be read the app gathers in the browser through the
+  relays as before, so nothing is lost while the scheduled gathering settles in.
+
+## 2026-09-08
+
+### Added
 - **Every story has an address.** `build.mjs` writes a page for each Ledger
   article (`/story/<id>/`) and each editorial section (`/markets/`,
   `/central-banks/`, …): the app, with that page's title, description, canonical

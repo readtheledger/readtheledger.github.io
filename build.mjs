@@ -281,18 +281,34 @@ nav{border-top:1px solid var(--rule);margin-top:28px;padding-top:14px;font-famil
 // the app's files, with the service worker stamped by the edition it ships and
 // told exactly which addresses the app can render offline: the front page, the
 // sections and the stories that exist in this edition, and nothing else
-const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(swSrc).digest("hex").slice(0, 8);
+const sourcesSrc = read("sources.js");
+const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(swSrc).digest("hex").slice(0, 8);
 const routes = ["/", "/index.html"].concat(PAGE_SECTIONS.map(sectionPath), articles.map(storyPath));
 const sw = swSrc
   .replace('const BUILD = "dev";', 'const BUILD = "' + stamp + '";')
   .replace(/^const ROUTES = \[[^\n]*\];$/m, "const ROUTES = " + JSON.stringify(routes) + ";");
 if (!sw.includes('const BUILD = "' + stamp + '"') || !sw.includes('"/story/' + articles[0].id + '/"')) fail("sw.js was not stamped");
 write("sw.js", sw);
-for (const f of ["content.js", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]) {
+for (const f of ["content.js", "sources.js", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]) {
   fs.copyFileSync(path.join(ROOT, f), path.join(OUT, f));
   written.push(f);
 }
 write(".nojekyll", "");
+
+// the gathered Newsstand, when fetch_feeds.mjs has run before the build; the app
+// falls back to gathering in the browser when the file is absent
+const editionFile = path.join(ROOT, "data", "feed.json");
+if (fs.existsSync(editionFile)) {
+  let edition;
+  try { edition = JSON.parse(fs.readFileSync(editionFile, "utf8")); } catch (e) { fail("data/feed.json is not valid JSON: " + e.message); }
+  if (!edition || !edition.fetched || !Array.isArray(edition.items) || !Array.isArray(edition.sources)) fail("data/feed.json is not an edition (needs fetched, sources, items)");
+  fs.mkdirSync(path.join(OUT, "data"), { recursive:true });
+  fs.copyFileSync(editionFile, path.join(OUT, "data", "feed.json"));
+  written.push("data/feed.json");
+  console.log("build: Newsstand edition gathered " + edition.fetched + ", " + edition.items.length + " items from " + edition.sources.filter(s => s.ok).length + " of " + edition.sources.length + " sources");
+} else {
+  console.log("build: no data/feed.json — the app will gather the Newsstand in the browser");
+}
 
 /* ------------------------------------------------------------------- guard */
 /* Every address a page refers to must exist in the output: an asset, a page, or
@@ -316,7 +332,13 @@ for (const rel of written) {
   // src="content.js" inside /story/<id>/ is caught as the missing file it would be
   for (const m of html.matchAll(/\b(?:src|href)="([^"]+)"/g)) check(fromDir === "." ? "" : fromDir, m[1]);
 }
-for (const m of fs.readFileSync(path.join(OUT, "sw.js"), "utf8").matchAll(/"(\/[^"]*)"/g)) check("", m[1]);
+// the worker's precache list and route list name files and pages that must exist
+// (other strings in it, like a path prefix, are not addresses)
+for (const list of ["FILES", "ROUTES"]) {
+  const m = new RegExp("^const " + list + " = (\\[[\\s\\S]*?\\]);", "m").exec(sw);
+  if (!m) fail("sw.js is missing " + list);
+  for (const ref of JSON.parse(m[1].replace(/\/\/[^\n]*/g, ""))) check("", ref);
+}
 for (const m of fs.readFileSync(path.join(OUT, "manifest.webmanifest"), "utf8").matchAll(/"src": *"([^"]+)"/g)) check("", m[1]);
 if (missing.size) fail("references to files that are not in the output:\n  " + [...missing].join("\n  "));
 

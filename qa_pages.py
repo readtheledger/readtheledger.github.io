@@ -90,6 +90,24 @@ def previous_release():
     for f in ["icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]:
         shutil.copy(os.path.join(ROOT, f), OLD)
 
+def synthetic_newsstand():
+    """A small gathered edition written straight into the build, so the app's
+    reading of it — and the worker's caching of it — can be checked without
+    the network."""
+    long = " ".join(f"Sentence {i} of a report on rates, earnings and spending, in some detail." for i in range(1, 40))
+    items = []
+    for i in range(12):
+        items.append({"id": f"n{i}", "source": "Wire Desk" if i % 2 else "Analyst Blog", "origin": "Wire Desk" if i % 2 else "Analyst Blog",
+                      "title": f"Newsstand story {i} about markets and the economy", "link": f"https://example.com/n/{i}",
+                      "author": "A Writer", "date": f"2026-09-07T{23-i:02d}:00:00Z", "html": "<p>" + long[:1200] + "</p>",
+                      "words": 420, "section": "Markets" if i % 2 else "Economics", "kind": "news" if i % 2 else "analysis",
+                      "weight": 1, "lic": "", "rights": "summary"})
+    return {"schema": 1, "fetched": "2026-09-08T02:30:00Z", "duplicates": 0,
+            "sources": [{"n": "Wire Desk", "ok": True, "stale": False, "count": 6, "fetchedAt": "2026-09-08T02:30:00Z"},
+                        {"n": "Analyst Blog", "ok": False, "stale": True, "count": 6, "fetchedAt": "2026-09-07T20:00:00Z", "error": "HTTP 503"},
+                        {"n": "Quiet Desk", "ok": False, "stale": False, "count": 0, "error": "timed out"}],
+            "items": items}
+
 def edition():
     js = ('const vm=require("vm"),fs=require("fs");const c={window:{}};'
           'vm.runInNewContext(fs.readFileSync(process.argv[1],"utf8"),c);'
@@ -102,6 +120,9 @@ PAGE_SECTIONS = ["Markets","Companies","Economics","Central Banks","Opinion","Te
 # ------------------------------------------------------------------- checks
 async def main():
     build(); previous_release()
+    os.makedirs(os.path.join(SITE, "data"), exist_ok=True)
+    NEWSSTAND = synthetic_newsstand()
+    json.dump(NEWSSTAND, open(os.path.join(SITE, "data", "feed.json"), "w"))
     ed = edition(); arts = ed["articles"]
     base = f"http://127.0.0.1:{PORT}"
     results = []
@@ -306,6 +327,28 @@ async def main():
         clip = await page.evaluate("navigator.clipboard.readText()")
         ok("copy carries the article from a story address", a0["title"] in clip and len(clip) > 500, f"{len(clip)} chars")
 
+        # ============ 2b. the gathered Newsstand ============
+        relay_hits = []
+        page.on("request", lambda r: relay_hits.append(r.url) if ("allorigins" in r.url or "corsproxy" in r.url or "codetabs" in r.url) else None)
+        await page.goto(base + "/", wait_until="load")
+        await page.wait_for_function("S.edition && S.edition.fetched", timeout=15000)
+        await page.wait_for_timeout(600)
+        ns = await page.evaluate("""() => { S.section='Newsstand'; S.query=''; render();
+          return {n: visible().length, gathered: (document.querySelector('#gathered')||{}).textContent||'',
+                  fetched: S.edition.fetched, stale: S.feedStatus.filter(f=>f.stale).map(f=>f.n),
+                  words: S.items.filter(i=>!i.demo && !i.ledger)[0].words}; }""")
+        ok("the app reads the gathered Newsstand with one request and no relays",
+           ns["fetched"] == NEWSSTAND["fetched"] and ns["n"] == 12 and not relay_hits, f"{ns['n']} items, relay requests: {len(relay_hits)}")
+        ok("the Newsstand says when it was gathered and that a source is being kept",
+           ns["gathered"].startswith("Gathered") and "kept from an earlier gathering" in ns["gathered"] and ns["stale"] == ["Analyst Blog"], ns["gathered"])
+        ok("the edition's word count stands in for the withheld article", ns["words"] == 420, ns["words"])
+        await page.locator("#btnSettings").click(); await page.wait_for_timeout(300)
+        status = await page.locator("#feedstatus").inner_text()
+        ok("settings list the gathering time and each source's real state",
+           "Newsstand gathered" in status and "Wire Desk" in status and "6 items" in status and "kept from" in status and "unavailable" in status,
+           status.replace("\n", " | ")[:160])
+        await page.evaluate("document.querySelector('#settings').classList.remove('on'); S.section='Front page'; render();")
+
         # ============ 3. the service worker ============
         await page.wait_for_function("navigator.serviceWorker && navigator.serviceWorker.controller !== null", timeout=15000)
         names = await page.evaluate("caches.keys()")
@@ -325,6 +368,12 @@ async def main():
                                      next(n for n in names if n.startswith("ledger-shell-v4-")))
         ok("visited pages are cached by their own path", p0 in cached and p1 in cached, cached)
         STATE["down"] = True
+        # the Newsstand file is network first, so a fresh gathering is seen on the
+        # next launch; the cached copy answers only when the network is gone
+        r = await page.goto(base + "/", wait_until="load")
+        await page.wait_for_timeout(1500)
+        off = await page.evaluate("() => ({fetched: S.edition && S.edition.fetched, n: S.items.filter(i=>!i.demo && !i.ledger).length})")
+        ok("offline, the gathered Newsstand is served from the worker's cache", off["fetched"] == NEWSSTAND["fetched"] and off["n"] == 12, off)
         r = await page.goto(base + p1, wait_until="load")
         await page.wait_for_selector("#reader.on", timeout=8000)
         ok("offline, a visited story loads from its own cached page",
