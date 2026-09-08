@@ -1,8 +1,10 @@
 name: Deploy to GitHub Pages
 
-# The app is a folder of static files, so there is nothing to build — this only
-# picks out the files that belong on the web (the README and the test suites stay
-# behind, as the README says) and hands them to Pages.
+# The app is a folder of static files plus one build step: build.mjs writes a
+# page for every Ledger story and section (the app, with that page's content in
+# it), the sitemap, robots.txt and a real 404, into _site. The README and the
+# test suites stay behind, as the README says. The build itself fails if any
+# file a page references is missing from the output.
 
 on:
   push:
@@ -33,28 +35,41 @@ jobs:
         with:
           enablement: true
 
-      - name: Assemble the site
+      # A repository named <owner>.github.io gets Pages switched on by GitHub
+      # itself, publishing the branch through its built-in build — so until the
+      # source is changed, every push is published twice and the last build to
+      # finish wins. This makes this workflow the only publishing path. It runs
+      # here, with the job's own token, because the Pages settings API is the
+      # one place the change can be made without a person in the settings page.
+      - name: Make this workflow the only publishing path
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          mkdir -p _site
-          cp index.html content.js sw.js manifest.webmanifest _site/
-          cp icon-180.png icon-192.png icon-512.png icon-maskable-512.png _site/
-          touch _site/.nojekyll
-          ls -la _site
+          api="https://api.github.com/repos/${{ github.repository }}/pages"
+          hdr=(-H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28")
+          current=$(curl -sS "${hdr[@]}" "$api" | sed -n 's/.*"build_type": *"\([a-z]*\)".*/\1/p')
+          echo "Pages source before: ${current:-unknown}"
+          if [ "$current" != "workflow" ]; then
+            code=$(curl -sS -o /tmp/pages.json -w '%{http_code}' -X PUT "${hdr[@]}" "$api" -d '{"build_type":"workflow"}')
+            echo "PUT build_type=workflow → HTTP $code"
+            [ "$code" = "204" ] || cat /tmp/pages.json
+          fi
+          after=$(curl -sS "${hdr[@]}" "$api" | sed -n 's/.*"build_type": *"\([a-z]*\)".*/\1/p')
+          echo "Pages source after: ${after:-unknown}"
+          [ "$after" = "workflow" ] || echo "::warning::Pages source is still '${after:-unknown}'; set Settings → Pages → Source to GitHub Actions by hand"
 
-      # every file the app itself asks for must actually be in the artifact —
-      # a missing one (content.js, an icon) fails the deploy here, not in the field
-      - name: Check nothing the app references is missing
+      - name: Build the site
         run: |
-          missing=0
-          refs="sw.js
-          $(grep -oE '(src|href)="[^"]+"' index.html | cut -d'"' -f2 | grep -v '^http' | grep -v '[${]')
-          $(grep -oE '"\./[^"]+"' sw.js | tr -d '"' | sed 's|^\./||')
-          $(grep -oE '"src": *"[^"]+"' manifest.webmanifest | cut -d'"' -f4)"
-          for f in $refs; do
-            case "$f" in ""|*/) continue;; esac
-            if [ ! -f "_site/$f" ]; then echo "MISSING from _site: $f"; missing=1; fi
-          done
-          [ "$missing" -eq 0 ]
+          node --version
+          node build.mjs _site
+          find _site -type f | sort
+
+      # belt and braces after the build's own reference check: the files the
+      # installed app precaches, and the pages this release exists to publish,
+      # must be in the artifact. The same script runs inside qa_pages.py, so
+      # what the deploy relies on is what the tests exercise.
+      - name: Check the artifact is complete
+        run: sh check_site.sh _site
 
       - uses: actions/upload-pages-artifact@v5
         with:

@@ -5,3 +5,8 @@ fixtures/
 shot-*.png
 __pycache__/
 .DS_Store
+
+# build output (build.mjs) and the previous release the upgrade test installs first
+_site/
+_old/
+_site_unstamped/

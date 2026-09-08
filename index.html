@@ -2,6 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<!-- The build (build.mjs) writes a static copy of the page's content into
+     <main> so every story and section reads without JavaScript. The class set
+     here hides that copy the moment the app is going to take over, so a reader
+     with JavaScript sees the app and a reader without it sees the article. -->
+<script>document.documentElement.classList.add("js");</script>
 <!-- Article bodies come from publisher feeds by way of third-party relays, and the
      reader's OpenAI key lives in this origin's local storage. The policy below is the
      backstop: no script may be loaded from anywhere else, and the only hosts this page
@@ -19,6 +24,7 @@
   media-src 'self' blob:;
   connect-src 'self' https://api.openai.com https://api.allorigins.win https://corsproxy.io https://api.codetabs.com">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+<!-- meta:start — build.mjs replaces this block per page (story, section, front) -->
 <title>The Ledger — Finance, read properly</title>
 <meta name="description" content="A quiet reader for high-quality, free-to-read financial journalism.">
 <link rel="canonical" href="https://readtheledger.github.io/">
@@ -32,15 +38,16 @@
 <meta name="twitter:title" content="The Ledger — Finance, read properly">
 <meta name="twitter:description" content="A quiet reader for high-quality, free-to-read financial journalism.">
 <meta name="twitter:image" content="https://readtheledger.github.io/icon-512.png">
+<!-- meta:end -->
 <meta name="theme-color" content="#FFF1E5" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#12100E" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="The Ledger">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icon-180.png">
-<link rel="icon" href="icon-192.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<link rel="icon" href="/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -297,6 +304,23 @@ ol.rail .hl{font-size:1rem;line-height:1.25}
 #toast.on{opacity:1;transform:translate(-50%,0)}
 #dock.on ~ #toast{bottom:calc(120px + var(--safe-b))}
 
+/* headlines are real links to the story's own page; the card's handler opens the
+   reader in place when JavaScript is running */
+.hl a{color:inherit;text-decoration:none}
+
+/* ---------- static copy, written by build.mjs ----------
+   Shown only when JavaScript is off (or before the app takes over); the app
+   removes it at boot. Reuses the reader's own classes so the page reads the
+   same either way. */
+html.js #static{display:none}
+#static .static-nav{display:flex;flex-wrap:wrap;gap:4px;padding:0;border-bottom:1px solid var(--rule)}
+#static .static-nav a{text-decoration:none;display:inline-flex;align-items:center}
+#static .rwrap{padding-left:0;padding-right:0}
+#static .kicker a{text-decoration:none}
+#static .static-home{font-family:var(--ui);font-size:.82rem;margin:26px 0 0}
+#static .static-home a{color:var(--accent);font-weight:600;text-decoration:none}
+#static article.card{cursor:default}
+
 @media (min-width:820px){
   .grid{display:grid;grid-template-columns:1fr 300px;gap:34px;align-items:start}
   .railcol{position:sticky;top:150px}
@@ -336,6 +360,7 @@ ol.rail .hl{font-size:1rem;line-height:1.25}
 
 <main>
   <div class="pull" id="pullIndicator">Release to refresh</div>
+  <!-- static:slot — build.mjs writes the page's static copy here -->
   <div class="grid">
     <div><div id="feed"></div></div>
     <div class="railcol"><div id="railHost"></div></div>
@@ -477,7 +502,7 @@ ol.rail .hl{font-size:1rem;line-height:1.25}
 <div id="toast" role="status" aria-live="polite"></div>
 <audio id="player" preload="auto" playsinline></audio>
 
-<script src="content.js"></script>
+<script src="/content.js"></script>
 <script>
 "use strict";
 /* =======================================================================
@@ -539,6 +564,22 @@ const SOURCES = [
 ];
 
 const SECTIONS = ["Front page","Markets","Companies","Economics","Central Banks","Opinion","Tech & Finance","Personal Finance","Newsstand","Saved"];
+
+/* ------------------------- 1b. addresses -------------------------
+   Every Ledger story and every editorial section has a page of its own, written
+   by build.mjs; these helpers are the one place the shape of those addresses is
+   decided, and build.mjs mirrors them. Newsstand and Saved are app-only views
+   (live feeds and this device's bookmarks), so they have no page. */
+const SITE = "https://readtheledger.github.io";
+const PAGE_SECTIONS = SECTIONS.filter(s=>s!=="Front page" && s!=="Newsstand" && s!=="Saved");
+function slugOf(section){ return String(section).toLowerCase().replace(/&/g,"and").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""); }
+function sectionPath(section){ return section==="Front page" ? "/" : (PAGE_SECTIONS.includes(section) ? "/"+slugOf(section)+"/" : ""); }
+function sectionFromPath(path){
+  const m = /^\/([a-z0-9-]+)\/?$/.exec(path||"");
+  return m ? (PAGE_SECTIONS.find(s=>slugOf(s)===m[1]) || "") : "";
+}
+function storyPath(it){ return (it && it.ledger && it.id) ? "/story/"+encodeURIComponent(it.id)+"/" : ""; }
+function storyIdFromPath(path){ const m = /^\/story\/([^/]+)\/?$/.exec(path||""); return m ? decodeURIComponent(m[1]) : ""; }
 
 /* keyword → section, so items land in a sensible place regardless of feed */
 const TAGS = [
@@ -1069,7 +1110,7 @@ function cardHTML(it, lead){
     <div class="cardtop">
       <div>
         <p class="kicker">${esc(it.section)}</p>
-        <h2 class="hl">${esc(it.title)}</h2>
+        <h2 class="hl">${linkHTML(it)}</h2>
         ${it.standfirst?`<p class="standfirst">${esc(it.standfirst)}</p>`:""}
         <div class="meta">
           <span class="badge">${esc(it.source)}</span>
@@ -1085,10 +1126,18 @@ function cardHTML(it, lead){
   </article>`;
 }
 
+/* A Ledger story's headline is an ordinary link to its own page — crawlable, and
+   usable with the middle button or a long press. The anchor is kept out of the tab
+   order because the card itself is focusable and opens on Enter, so a keyboard
+   user meets each story once. Feed items have no page of their own. */
+function linkHTML(it){
+  const p = storyPath(it);
+  return p ? `<a href="${esc(p)}" tabindex="-1">${esc(it.title)}</a>` : esc(it.title);
+}
 function wimCardHTML(it){
   return `<article class="card wim" data-id="${it.id}" tabindex="0">
     <p class="wimlabel">Why it matters</p>
-    <h2 class="hl">${esc(it.title)}</h2>
+    <h2 class="hl">${linkHTML(it)}</h2>
     <p class="wimnote">${esc(it.ledger ? it.standfirst : ledgerNote(it))}</p>
     <div class="meta"><span class="badge">${esc(it.source)}</span><span class="dot">${when(it.ts)}</span><span class="dot">${it.ledger?"Analysis by The Ledger":"Context by The Ledger"}</span></div>
   </article>`;
@@ -1098,7 +1147,7 @@ function weeklyCardHTML(){
   if(!it) return "";
   return `<article class="card weekly" data-id="${it.id}" tabindex="0">
     <p class="weeklylabel">The Ledger Weekly · Deep dive</p>
-    <h2 class="hl">${esc(it.title)}</h2>
+    <h2 class="hl">${linkHTML(it)}</h2>
     <p class="standfirst">${esc(it.standfirst)}</p>
     <div class="meta"><span class="badge">The Ledger</span><span class="dot">${readMins(it.words)} min read</span><span class="dot">Original analysis</span></div>
   </article>`;
@@ -1166,8 +1215,13 @@ function bindCards(){
   $$("article.card, ol.rail li").forEach(el=>{
     el.onclick = ev=>{
       if(ev.target.closest("[data-save]")) return;
+      // a modified click on the headline link (new tab, new window) is the browser's
+      // to handle; a plain one opens the reader here, at the story's own address
+      if(ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey || ev.button===1) return;
       const it = itemById(el.dataset.id);
-      if(it) openReader(it);
+      if(!it) return;
+      ev.preventDefault();
+      openReader(it);
     };
     // cards are focusable, so a keyboard can open them like a tap does
     el.onkeydown = ev=>{
@@ -1203,10 +1257,11 @@ function sameName(a,b){
 }
 
 /* ------------------------- 6. reader ------------------------- */
-function openReader(it){
+function openReader(it, opts){
+  opts = opts||{};
   S.current = it;
   S.read[it.id]=1; store.set(LS.read,S.read);
-  ping("/article/"+it.id);
+  ping(storyPath(it) || "/article/"+it.id);
 
   // checked again here rather than trusted: this item may have been read back from a
   // cache written by an older build, before links were vetted on the way in
@@ -1267,7 +1322,11 @@ function openReader(it){
 
   const r=$("#reader"); r.classList.add("on"); r.setAttribute("aria-hidden","false"); r.scrollTop=0;
   document.body.style.overflow="hidden";
-  history.pushState({reader:true},"");
+  // a Ledger story is read at its own address, so the URL bar, a bookmark and a
+  // shared link all name the story; a feed item keeps the page it was opened from.
+  // popstate re-opens a story from history and asks not to push it again.
+  if(!opts.nopush) history.pushState({reader:true, id:it.id}, "", storyPath(it) || location.pathname + location.search);
+  document.title = (it.demo ? "The Ledger" : it.title + " — The Ledger");
   updateProgress();
   render();
 }
@@ -1275,6 +1334,33 @@ function closeReader(){
   const r=$("#reader"); r.classList.remove("on"); r.setAttribute("aria-hidden","true");
   document.body.style.overflow="";
   $("#progress").style.width="0";
+  document.title = HOME_TITLE;
+  // closed without going back through history (Escape with no entry, a test, a
+  // direct call): the address must not keep naming a story that is no longer open
+  if(storyIdFromPath(location.pathname)) history.replaceState({}, "", sectionPath(S.section) || "/");
+}
+/* the title to return to when a story closes: a story page was titled for its
+   story, so it goes back to the site's; a section page keeps its own */
+const HOME_TITLE = storyIdFromPath(location.pathname) ? "The Ledger — Finance, read properly" : document.title;
+
+/* ------------------------- 6b. addresses at boot ------------------------- */
+/* Every story and section page is the app plus a static copy of its content.
+   When the app boots on one of those pages it drops the static copy and opens
+   the same thing in the reader, so the address in the bar keeps meaning what it
+   meant. A story landed on directly is given a front page to go back to. */
+function route(){
+  const st = $("#static"); if(st) st.remove();
+  const path = location.pathname;
+  const id = storyIdFromPath(path);
+  if(id){
+    const it = EDITORIAL.find(a=>a.id===id) || S.savedItems[id] || null;
+    history.replaceState({home:true}, "", "/");
+    if(it){ openReader(it); return; }
+    toast("That story isn't in this edition", 2600);
+    return;
+  }
+  const sec = sectionFromPath(path);
+  if(sec){ S.section = sec; renderSecNav(); }
 }
 function updateProgress(){
   const r=$("#reader");
@@ -1317,7 +1403,10 @@ async function copyArticle(){
 }
 async function shareArticle(){
   if(!S.current) return;
-  const d={title:S.current.title, text:S.current.standfirst||S.current.title, url:safeUrl(S.current.link)||location.href};
+  // a Ledger story shares its own page; a feed item shares the publisher's original
+  const own = storyPath(S.current);
+  const d={title:S.current.title, text:S.current.standfirst||S.current.title,
+           url: own ? location.origin + own : (safeUrl(S.current.link)||location.href)};
   try{
     if(navigator.share){ await navigator.share(d); }
     else if(navigator.clipboard){ await navigator.clipboard.writeText((d.url||"")+" — "+d.title); toast("Link copied"); }
@@ -1551,11 +1640,28 @@ function renderFeedStatus(){
     : SOURCES.map(s=>`<div><span>${esc(s.n)}</span><span class="st">not fetched yet</span></div>`).join("");
 }
 function renderSecNav(){
-  $("#secnav").innerHTML = SECTIONS.map(s=>
-    `<button class="seclink tap" data-sec="${esc(s)}"${s===S.section?' aria-current="page"':''}>${esc(s)}</button>`).join("");
-  $$("#secnav .seclink").forEach(b=>b.onclick=()=>{
-    S.section=b.dataset.sec; renderSecNav(); render(); window.scrollTo({top:0,behavior:"smooth"});
+  // sections with a page of their own are ordinary links to it; Newsstand and
+  // Saved exist only inside the app, so they stay buttons
+  $("#secnav").innerHTML = SECTIONS.map(s=>{
+    const cur = s===S.section ? ' aria-current="page"' : '';
+    const p = sectionPath(s);
+    return p ? `<a class="seclink tap" href="${esc(p)}" data-sec="${esc(s)}"${cur}>${esc(s)}</a>`
+             : `<button class="seclink tap" data-sec="${esc(s)}"${cur}>${esc(s)}</button>`;
+  }).join("");
+  $$("#secnav .seclink").forEach(b=>b.onclick=ev=>{
+    if(ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+    ev.preventDefault();
+    showSection(b.dataset.sec);
+    window.scrollTo({top:0,behavior:"smooth"});
   });
+}
+/* Switching section swaps the address in place rather than adding a history
+   entry, which is how the tabs have always behaved — back leaves the site, or
+   closes an open story, it never walks through tabs. */
+function showSection(sec){
+  S.section = sec; renderSecNav(); render();
+  const p = sectionPath(sec);
+  if(p && !$("#reader").classList.contains("on") && location.pathname !== p) history.replaceState({}, "", p);
 }
 function costHint(){
   const m=store.get(LS.model,"gpt-4o-mini-tts");
@@ -1580,7 +1686,7 @@ function boot(){
     if(w.classList.contains("on")) $("#q").focus(); else { $("#q").value=""; S.query=""; render(); }
   };
   $("#q").oninput = e=>{ S.query=e.target.value.trim(); render(); };
-  $("#btnSaved").onclick = ()=>{ S.section="Saved"; renderSecNav(); render(); window.scrollTo({top:0}); };
+  $("#btnSaved").onclick = ()=>{ showSection("Saved"); window.scrollTo({top:0}); };
   $("#btnTheme").onclick = ()=>{
     const now=document.documentElement.dataset.theme==="dark"?"light":"dark";
     store.set(LS.theme,now); applyTheme(); toast(now==="dark"?"Dark mode":"Light mode",1200);
@@ -1634,7 +1740,15 @@ function boot(){
     toast(on?"Saved":"Removed"); render();
   };
   $("#reader").addEventListener("scroll", updateProgress, {passive:true});
-  window.addEventListener("popstate", ()=>{ if($("#reader").classList.contains("on")) closeReader(); });
+  // back closes an open story; forward, onto a story entry, opens it again
+  window.addEventListener("popstate", ev=>{
+    const st = ev.state || {};
+    if(st.reader && st.id){
+      const it = itemById(st.id) || EDITORIAL.find(a=>a.id===st.id);
+      if(it){ openReader(it, {nopush:true}); return; }
+    }
+    if($("#reader").classList.contains("on")) closeReader();
+  });
 
   // dock
   $("#dPlay").onclick=togglePlay;
@@ -1681,13 +1795,14 @@ function boot(){
   // updateViaCache:"none" keeps the browser's HTTP cache out of the worker's own
   // update check, so a deploy is noticed on the next launch rather than a day later
   if("serviceWorker" in navigator && location.protocol.startsWith("http")){
-    navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(reg=>{
+    navigator.serviceWorker.register("/sw.js",{updateViaCache:"none"}).then(reg=>{
       setInterval(()=>{ reg.update().catch(()=>{}); }, 60*60*1000);
       document.addEventListener("visibilitychange",()=>{ if(!document.hidden) reg.update().catch(()=>{}); });
     }).catch(()=>{});
   }
 
-  ping("/");
+  ping(location.pathname);
+  route();
   loadFeeds();
   setInterval(()=>loadFeeds({silent:true}), 30*60*1000);
   document.addEventListener("visibilitychange",()=>{
