@@ -6,7 +6,7 @@ that sharing, bookmarks, audio and back navigation still work from those
 addresses with JavaScript on; that the service worker caches pages by their
 addresses, lets a real 404 through while online, and upgrades cleanly from the
 previously released service worker (the one installed readers have now)."""
-import asyncio, http.server, socketserver, threading, os, sys, json, subprocess, shutil, re, urllib.parse
+import asyncio, http.server, socketserver, threading, os, sys, json, subprocess, shutil, re, urllib.parse, tempfile
 from playwright.async_api import async_playwright
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -81,6 +81,35 @@ def artifact_check(results):
     results.append(("PASS" if code == 1 and "sw.js" in out else "FAIL", "workflow artifact check rejects an unstamped worker", f"exit={code}"))
     shutil.rmtree(bad, ignore_errors=True)
 
+def assisted_piece_check(results):
+    """A piece marked produced:"assisted" must carry the line that says so, on the
+    static page and nowhere else; an unknown value must stop the build."""
+    work = tempfile.mkdtemp(prefix="ledger-produced-")
+    def content(produced):
+        return ('window.LEDGER_CONTENT = {updated:"2026-09-09", articles:[{id:"led-test-assisted", kind:"news", section:"Markets", '
+                + (f'produced:{json.dumps(produced)}, ' if produced is not None else "")
+                + 'date:"2026-09-09T06:00:00Z", title:"A test piece", standfirst:"A standfirst for a test piece.", '
+                'html:`<p>First paragraph of the test piece.</p><p>Second paragraph.</p>`, '
+                'sources:[{t:"A source", u:"https://example.com/s", p:"Example"}]}]};')
+    def build_with(produced):
+        cf = os.path.join(work, "content.js"); open(cf, "w").write(content(produced))
+        out = os.path.join(work, "site-" + str(produced))
+        r = subprocess.run(["node", os.path.join(ROOT, "build.mjs"), out, "--content", cf], capture_output=True, text=True)
+        page = os.path.join(out, "story", "led-test-assisted", "index.html")
+        html = open(page).read() if os.path.exists(page) else ""
+        # the static page's own attribution line, not the app script (which carries both wordings)
+        m = re.search(r'<div id="static">[\s\S]*?<p class="attrline">([\s\S]*?)</p>', html)
+        return r.returncode, r.stdout + r.stderr, (m.group(1) if m else "")
+    code, log, line = build_with("assisted")
+    results.append(("PASS" if code == 0 and line.startswith("Drafted with AI assistance from the credited sources and reviewed by <strong>The Ledger</strong>'s editor before publication.")
+                    else "FAIL", "an assisted piece carries the AI-assistance attribution line", f"exit={code} line={line[:50]!r}"))
+    code, log, line = build_with(None)
+    results.append(("PASS" if code == 0 and line.startswith("Reported and written by <strong>The Ledger</strong>.") else "FAIL",
+                    "a piece with no produced value is reported, the default", f"exit={code} line={line[:50]!r}"))
+    code, log, html = build_with("automated")
+    results.append(("PASS" if code == 1 and "produced must be one of" in log else "FAIL", "an unknown produced value stops the build", f"exit={code}"))
+    shutil.rmtree(work, ignore_errors=True)
+
 def previous_release():
     """The last released app, so the upgrade check starts from what readers have installed."""
     shutil.rmtree(OLD, ignore_errors=True); os.makedirs(OLD)
@@ -129,6 +158,7 @@ async def main():
     def ok(name, cond, extra=""):
         results.append((("PASS" if cond else "FAIL"), name, str(extra)))
     artifact_check(results)
+    assisted_piece_check(results)
     routes = re.search(r'^const ROUTES = (\[.*\]);$', open(os.path.join(SITE, "sw.js")).read(), re.M)
     routes = json.loads(routes.group(1)) if routes else []
     ok("service worker carries exactly this edition's addresses",
@@ -170,6 +200,15 @@ async def main():
                pub == a["date"] and ld.get("datePublished") == a["date"] and ld.get("headline") == a["title"]
                and ld.get("@type") == "NewsArticle", f"published={pub} ld={ld.get('datePublished')}")
             ok(f"{a['id']}: links home and to its section", home >= 1 and kick == f"/{slug(a['section'])}/", f"kicker={kick}")
+
+        # the attribution line says how each piece was produced; every current piece
+        # was written by a person, and the build prints exactly that
+        lines = []
+        for a in arts:
+            await page.goto(base + f"/story/{a['id']}/", wait_until="load")
+            lines.append((await page.locator("#static .attrline").inner_text()).strip())
+        ok("every published piece carries the 'reported' attribution line",
+           all(l.startswith("Reported and written by The Ledger.") for l in lines) and len(lines) == len(arts), lines[0][:60])
 
         # every asset the page asks for is rooted at /, so it resolves from /story/<id>/
         rel = await page.evaluate("""() => [...document.querySelectorAll('script[src],link[href]')]
