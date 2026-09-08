@@ -37,26 +37,43 @@ jobs:
 
       # A repository named <owner>.github.io gets Pages switched on by GitHub
       # itself, publishing the branch through its built-in build — so until the
-      # source is changed, every push is published twice and the last build to
-      # finish wins. This makes this workflow the only publishing path. It runs
-      # here, with the job's own token, because the Pages settings API is the
-      # one place the change can be made without a person in the settings page.
-      - name: Make this workflow the only publishing path
+      # source is changed (Settings → Pages → Source → GitHub Actions; the job's
+      # token is not allowed to change it), every push is published twice and
+      # the last build to finish wins. So this job reads the Pages source, and
+      # while it is still the built-in build, waits for that build of this very
+      # commit to finish before deploying — which makes the pages this workflow
+      # built the ones that are live. Once the source is GitHub Actions there is
+      # nothing to wait for and the step is a few hundred milliseconds.
+      - name: Deploy after the built-in build, so this build is the one that is live
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           api="https://api.github.com/repos/${{ github.repository }}/pages"
           hdr=(-H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28")
-          current=$(curl -sS "${hdr[@]}" "$api" | sed -n 's/.*"build_type": *"\([a-z]*\)".*/\1/p')
-          echo "Pages source before: ${current:-unknown}"
-          if [ "$current" != "workflow" ]; then
-            code=$(curl -sS -o /tmp/pages.json -w '%{http_code}' -X PUT "${hdr[@]}" "$api" -d '{"build_type":"workflow"}')
-            echo "PUT build_type=workflow → HTTP $code"
-            [ "$code" = "204" ] || cat /tmp/pages.json
+          source=$(curl -sS "${hdr[@]}" "$api" | sed -n 's/.*"build_type": *"\([a-z]*\)".*/\1/p')
+          echo "Pages source: ${source:-unknown}"
+          if [ "$source" = "workflow" ]; then
+            echo "This workflow is the only publishing path; nothing to wait for."
+            exit 0
           fi
-          after=$(curl -sS "${hdr[@]}" "$api" | sed -n 's/.*"build_type": *"\([a-z]*\)".*/\1/p')
-          echo "Pages source after: ${after:-unknown}"
-          [ "$after" = "workflow" ] || echo "::warning::Pages source is still '${after:-unknown}'; set Settings → Pages → Source to GitHub Actions by hand"
+          echo "::warning::Pages source is '${source:-unknown}', so GitHub's built-in build also publishes every push. Waiting for its build of ${{ github.sha }} so this deploy lands last. Set Settings → Pages → Source to GitHub Actions to retire it."
+          for i in $(seq 1 36); do
+            latest=$(curl -sS -w '\n%{http_code}' "${hdr[@]}" "$api/builds/latest")
+            code=$(echo "$latest" | tail -1)
+            if [ "$code" != "200" ]; then
+              echo "builds API answered HTTP $code; waiting 90 s instead"
+              sleep 90; exit 0
+            fi
+            commit=$(echo "$latest" | sed -n 's/.*"commit": *"\([0-9a-f]*\)".*/\1/p')
+            status=$(echo "$latest" | sed -n 's/.*"status": *"\([a-z_]*\)".*/\1/p')
+            echo "built-in build: commit ${commit:0:7} status ${status:-unknown}"
+            if [ "$commit" = "${{ github.sha }}" ] && [ "$status" != "building" ] && [ "$status" != "queued" ]; then
+              echo "built-in build of this commit has finished (${status}); deploying now so this build is live."
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::warning::gave up waiting for the built-in build after 3 minutes; deploying anyway"
 
       - name: Build the site
         run: |
