@@ -202,18 +202,31 @@ async function fetchOne(src) {
 }
 
 /* ------------------------------------------------------- previous edition */
+/* The edition that is live is what a failing feed falls back on, so reading it
+   has to be reliable and its outcome visible: the live copy is asked for past
+   every cache (a CDN that once answered 404 for the address would otherwise go
+   on saying so), and the run says what it found or why it found nothing. */
 async function readPrevious(where) {
   try {
     let text;
     if (/^https?:\/\//.test(where)) {
+      const u = new URL(where); u.searchParams.set("gathered", String(Date.now()));
       const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), TIMEOUT);
-      try { const r = await fetch(where, { signal: ctl.signal, headers: { "User-Agent": UA } }); if (!r.ok) throw new Error("HTTP " + r.status); text = await r.text(); }
-      finally { clearTimeout(t); }
+      try {
+        const r = await fetch(u, { signal: ctl.signal, cache: "no-store", headers: { "User-Agent": UA, "Cache-Control": "no-cache", "Pragma": "no-cache" } });
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        text = await r.text();
+      } finally { clearTimeout(t); }
     } else if (fs.existsSync(where)) text = fs.readFileSync(where, "utf8");
-    else return null;
+    else throw new Error("no such file");
     const j = JSON.parse(text);
-    return (j && Array.isArray(j.items) && Array.isArray(j.sources)) ? j : null;
-  } catch (e) { return null; }
+    if (!j || !Array.isArray(j.items) || !Array.isArray(j.sources)) throw new Error("not an edition");
+    console.log("previous edition: gathered " + j.fetched + ", " + j.items.length + " items from " + j.sources.filter(s => s.ok).length + " sources (" + where + ")");
+    return j;
+  } catch (e) {
+    console.log("previous edition: none to fall back on — " + (e && e.name === "AbortError" ? "timed out" : String(e && e.message || e)) + " (" + where + ")");
+    return null;
+  }
 }
 
 /* ------------------------------------------------------------------- run */
