@@ -725,6 +725,10 @@ function makeEditorial(a){
   const text  = htmlToText(clean);
   return {
     id:a.id, ledger:true, weekly:!!a.weekly, kind:a.kind||"news",
+    // how the piece was produced, which decides the attribution line it carries:
+    // "reported" (written by a person) or "assisted" (drafted with AI assistance
+    // from the credited sources, then reviewed by a person before publication)
+    produced: a.produced==="assisted" ? "assisted" : "reported",
     source:"The Ledger", author:"The Ledger", section:a.section||"Markets",
     title:a.title, standfirst:a.standfirst||"", link:"",
     date:a.date, ts:Date.parse(a.date)||Date.now(),
@@ -732,6 +736,13 @@ function makeEditorial(a){
     sources:(a.sources||[]).map(x=>({t:x.t, u:safeUrl(x.u), p:x.p})).filter(x=>x.u),
     fullText:true, republish:true, lic:"", weight:1.4
   };
+}
+/* The attribution line says how a piece was actually produced, per piece, and
+   never by default. build.mjs prints the same words on the static page. */
+function productionLine(produced){
+  return produced==="assisted"
+    ? "Drafted with AI assistance from the credited sources and reviewed by <strong>The Ledger</strong>'s editor before publication."
+    : "Reported and written by <strong>The Ledger</strong>.";
 }
 const EDITORIAL = ((window.LEDGER_CONTENT && window.LEDGER_CONTENT.articles) || []).map(makeEditorial);
 function weeklyItem(){ return EDITORIAL.find(a=>a.weekly) || null; }
@@ -1304,7 +1315,7 @@ function openReader(it, opts){
     const srcs = (it.sources||[]).map(s=>
       `<li><a href="${esc(s.u)}" target="_blank" rel="noopener noreferrer">${esc(s.t)}</a> — ${esc(s.p)}</li>`).join("");
     wimBox = srcs ? `<aside class="sourcesbox"><h3>Sources & further reading</h3><ul>${srcs}</ul></aside>` : "";
-    attr = it.demo ? "" : `<p class="attrline">Reported and written by <strong>The Ledger</strong>. Material sources are credited and linked above; quotations are brief and attributed.</p>`;
+    attr = it.demo ? "" : `<p class="attrline">${productionLine(it.produced)} Material sources are credited and linked above; quotations are brief and attributed.</p>`;
   }else if(mode==="licensed"){
     body = it.html;
     wimBox = `<aside class="wimbox"><h3>Why it matters</h3><p>${esc(ledgerNote(it))}</p><p class="wimsig">— The Ledger</p></aside>`;

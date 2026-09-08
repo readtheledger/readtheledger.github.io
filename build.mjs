@@ -24,7 +24,16 @@ import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
-const OUT  = path.resolve(process.argv[2] || path.join(ROOT, "_site"));
+const argv = process.argv.slice(2);
+const opt  = (name, dflt) => { const i = argv.indexOf("--" + name); return i >= 0 ? argv[i + 1] : dflt; };
+const OUT  = path.resolve(argv.find(a => !a.startsWith("--") && !argv[argv.indexOf(a) - 1]?.startsWith("--")) || path.join(ROOT, "_site"));
+const CONTENT_FILE = path.resolve(opt("content", path.join(ROOT, "content.js")));   // the tests build from a content file of their own
+const PRODUCED = ["reported", "assisted"];
+/* the attribution line says how a piece was actually produced, per piece, and
+   never by default; index.html prints the same words in the reader */
+const productionLine = produced => produced === "assisted"
+  ? "Drafted with AI assistance from the credited sources and reviewed by <strong>The Ledger</strong>'s editor before publication."
+  : "Reported and written by <strong>The Ledger</strong>.";
 const SITE = "https://readtheledger.github.io";
 const SITE_TITLE = "The Ledger — Finance, read properly";
 const SITE_DESC  = "A quiet reader for high-quality, free-to-read financial journalism.";
@@ -42,7 +51,7 @@ const read = f => fs.readFileSync(path.join(ROOT, f), "utf8");
 
 /* ------------------------------------------------------------------ inputs */
 const index = read("index.html");
-const contentSrc = read("content.js");
+const contentSrc = fs.readFileSync(CONTENT_FILE, "utf8");
 const swSrc = read("sw.js");
 
 for (const marker of ["<!-- meta:start", "<!-- meta:end -->", "<!-- static:slot"]) {
@@ -79,6 +88,7 @@ for (const a of articles) {
   if (!PAGE_SECTIONS.includes(a.section)) fail(where + ": section '" + a.section + "' has no page");
   if (!a.date || isNaN(Date.parse(a.date))) fail(where + ": date must be ISO 8601");
   if (!a.title || !a.title.trim()) fail(where + ": missing title");
+  if (a.produced !== undefined && !PRODUCED.includes(a.produced)) fail(where + ": produced must be one of " + PRODUCED.join(", "));
   if (!a.standfirst || !a.standfirst.trim()) fail(where + ": missing standfirst");
   if (!a.html || !a.html.trim()) fail(where + ": missing body");
   for (const re of RISKY) if (re.test(a.html)) fail(where + ": body contains markup the static page will not carry (" + re + ")");
@@ -161,7 +171,7 @@ function storyHTML(a) {
       <div class="rmeta"><span class="badge">The Ledger</span><time class="dot" datetime="${esc(a.date)}">${dateTime(a.date)}</time><span class="dot">${readMins(w)} min read</span></div>
       <div class="rbody">${a.html}</div>
       <aside class="sourcesbox"><h3>Sources &amp; further reading</h3><ul>${srcs}</ul></aside>
-      <p class="attrline">Reported and written by <strong>The Ledger</strong>. Material sources are credited and linked above; quotations are brief and attributed.</p>
+      <p class="attrline">${productionLine(a.produced)} Material sources are credited and linked above; quotations are brief and attributed.</p>
       <p class="static-home"><a href="/">← The Ledger front page</a></p>
     </article>
   </div>`;

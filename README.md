@@ -58,7 +58,7 @@ Open `sources.js`. Each entry looks like this:
 
 If the gathered file cannot be read, the app gathers in the browser as it always did, through public CORS relays, so an installed reader is never left with nothing.
 
-The Ledger's own articles live in `content.js`, not in `index.html`: each entry carries its `kind` (`"news"`, `"analysis"` or `"deep"`), section, headline, body and a `sources` array crediting every piece of research behind it — replace or add an entry and redeploy to publish. Mark the current deep-dive feature with `weekly:true`. `index.html` still holds `WIM_NOTES`, the short "Why it matters" context notes shown on the front-page card, by desk.
+The Ledger's own articles live in `content.js`, not in `index.html`: each entry carries its `kind` (`"news"`, `"analysis"` or `"deep"`), section, headline, body and a `sources` array crediting every piece of research behind it — replace or add an entry and redeploy to publish. Mark the current deep-dive feature with `weekly:true`. Each entry may also carry `produced`: `"reported"` (the default — a person wrote it) or `"assisted"` (a model drafted it from the credited sources and a person checked every claim before publication). The attribution line under the piece says which, in the reader and on the static page alike, and the build refuses any other value. `REVIEW.md` is the process that makes that label true; `drafts/` is where a piece waits for it. `index.html` still holds `WIM_NOTES`, the short "Why it matters" context notes shown on the front-page card, by desk.
 
 Every feed shipped here was checked by hand: public, free, no login and no paywall. The Financial Times, WSJ, Bloomberg and The Economist are deliberately absent. Settings shows a live list of which feeds answered on the last refresh and how many items each returned.
 
@@ -87,7 +87,7 @@ python3 qa.py            # 53 checks: layout, touch targets, copy, listen fallba
                          # dark mode, settings persistence, manifest, service worker,
                          # URL sanitising, bookmark durability, cache limits, the
                          # editorial mix, Ledger sourcing and the licence model
-python3 qa_pages.py      # 86 checks: builds the site, runs the deploy's own artifact
+python3 qa_pages.py      # 90 checks: builds the site, runs the deploy's own artifact
                          # check on it (and on an unstamped copy it must reject), the
                          # app's reading of a gathered Newsstand, then every story and section
                          # page in a fresh browser with JavaScript off (content,

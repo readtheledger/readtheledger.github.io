@@ -25,6 +25,14 @@ All notable changes to The Ledger. Dates are UTC.
   now also checks the app's reading of a gathered edition and the worker's
   caching of it.
 
+- **Production labels, per piece.** An article in `content.js` may carry
+  `produced: "reported"` (the default) or `"assisted"`; the attribution line
+  under it — in the reader and on the static page — says which, and the build
+  refuses any other value. `REVIEW.md` sets out the review loop (fetch → draft →
+  check claims against sources → approve → publish) and the per-edition
+  checklist; `drafts/` holds pieces waiting for it; `docs/briefing-budget.md`
+  is the budget the Daily Briefing is gated on, for the owner to approve.
+
 ### Changed
 - The service worker serves `/data/` network first, so a fresh gathering is
   seen on the next launch and the cached copy answers only when the network is
