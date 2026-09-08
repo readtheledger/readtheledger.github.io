@@ -40,6 +40,17 @@ jobs:
         with:
           enablement: true
 
+      # every public feed, gathered into one file; a feed that does not answer
+      # keeps its items from the edition that is live now, marked stale. This
+      # runs before the wait below on purpose: while the Pages source is still
+      # the built-in build, that build replaces the live site — without the
+      # gathered file — the moment it finishes, so the previous edition has to
+      # be read before then. If the gatherer itself fails the site still
+      # deploys, and the app gathers in the browser as it used to.
+      - name: Gather the Newsstand
+        continue-on-error: true
+        run: node fetch_feeds.mjs
+
       # A repository named <owner>.github.io gets Pages switched on by GitHub
       # itself, publishing the branch through its built-in build — so until the
       # source is changed (Settings → Pages → Source → GitHub Actions; the job's
@@ -79,14 +90,6 @@ jobs:
             sleep 5
           done
           echo "::warning::gave up waiting for the built-in build after 3 minutes; deploying anyway"
-
-      # every public feed, gathered into one file; a feed that does not answer
-      # keeps its items from the edition that is live now, marked stale. If the
-      # gatherer itself fails the site still deploys, and the app gathers in the
-      # browser as it used to.
-      - name: Gather the Newsstand
-        continue-on-error: true
-        run: node fetch_feeds.mjs
 
       - name: Build the site
         run: |
