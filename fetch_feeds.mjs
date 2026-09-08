@@ -47,6 +47,9 @@ const EXCERPT      = 1500;      // characters of text shipped for a "summary" so
 const FULL_MAX     = 120000;    // characters of markup shipped for a "full" source
 const FUTURE_SLACK = 24 * 3600 * 1000;
 const RIGHTS = ["summary", "full"];
+/* The conventional form for a feed reader: says what it is and where to find
+   out more. Some hosts refuse anything that does not begin "Mozilla/5.0". */
+const UA = "Mozilla/5.0 (compatible; TheLedger/1.0; +https://readtheledger.github.io/)";
 
 const fail = msg => { console.error("fetch_feeds: " + msg); process.exit(1); };
 
@@ -158,7 +161,7 @@ async function fetchOne(src) {
   try {
     const res = await fetch(src.u, {
       signal: ctl.signal, redirect: "follow",
-      headers: { "User-Agent": "TheLedger/1.0 (+https://readtheledger.github.io/)", "Accept": "application/rss+xml, application/atom+xml, application/xml;q=0.9, text/xml;q=0.9, */*;q=0.5" }
+      headers: { "User-Agent": UA, "Accept": "application/rss+xml, application/atom+xml, application/xml;q=0.9, text/xml;q=0.9, */*;q=0.5" }
     });
     if (!res.ok) throw new Error("HTTP " + res.status);
     const xml = await res.text();
@@ -204,7 +207,7 @@ async function readPrevious(where) {
     let text;
     if (/^https?:\/\//.test(where)) {
       const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), TIMEOUT);
-      try { const r = await fetch(where, { signal: ctl.signal, headers: { "User-Agent": "TheLedger/1.0" } }); if (!r.ok) throw new Error("HTTP " + r.status); text = await r.text(); }
+      try { const r = await fetch(where, { signal: ctl.signal, headers: { "User-Agent": UA } }); if (!r.ok) throw new Error("HTTP " + r.status); text = await r.text(); }
       finally { clearTimeout(t); }
     } else if (fs.existsSync(where)) text = fs.readFileSync(where, "utf8");
     else return null;
