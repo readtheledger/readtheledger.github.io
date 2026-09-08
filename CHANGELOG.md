@@ -40,7 +40,10 @@ All notable changes to The Ledger. Dates are UTC.
   `/`, so they resolve from every page; the manifest's `start_url` and `scope`
   are `/`. The pages are written for the root of a domain.
 - The Pages workflow now runs `node build.mjs` and publishes `_site`; the build
-  fails if any file a page references is missing from the output.
+  fails if any file a page references is missing from the output. The workflow
+  also sets the repository's Pages source to "GitHub Actions" through the Pages
+  API with its own token, so it becomes the only publishing path and GitHub's
+  built-in branch build no longer races it.
 
 ## 2026-08-19
 

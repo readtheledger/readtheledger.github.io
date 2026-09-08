@@ -35,6 +35,29 @@ jobs:
         with:
           enablement: true
 
+      # A repository named <owner>.github.io gets Pages switched on by GitHub
+      # itself, publishing the branch through its built-in build — so until the
+      # source is changed, every push is published twice and the last build to
+      # finish wins. This makes this workflow the only publishing path. It runs
+      # here, with the job's own token, because the Pages settings API is the
+      # one place the change can be made without a person in the settings page.
+      - name: Make this workflow the only publishing path
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          api="https://api.github.com/repos/${{ github.repository }}/pages"
+          hdr=(-H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28")
+          current=$(curl -sS "${hdr[@]}" "$api" | sed -n 's/.*"build_type": *"\([a-z]*\)".*/\1/p')
+          echo "Pages source before: ${current:-unknown}"
+          if [ "$current" != "workflow" ]; then
+            code=$(curl -sS -o /tmp/pages.json -w '%{http_code}' -X PUT "${hdr[@]}" "$api" -d '{"build_type":"workflow"}')
+            echo "PUT build_type=workflow → HTTP $code"
+            [ "$code" = "204" ] || cat /tmp/pages.json
+          fi
+          after=$(curl -sS "${hdr[@]}" "$api" | sed -n 's/.*"build_type": *"\([a-z]*\)".*/\1/p')
+          echo "Pages source after: ${after:-unknown}"
+          [ "$after" = "workflow" ] || echo "::warning::Pages source is still '${after:-unknown}'; set Settings → Pages → Source to GitHub Actions by hand"
+
       - name: Build the site
         run: |
           node --version
