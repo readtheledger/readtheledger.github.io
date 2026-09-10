@@ -158,7 +158,7 @@ async def main():
                and await page.evaluate("document.querySelector('#robotsMeta').content") == "noindex,follow", g)
             kick = await page.evaluate("[...document.querySelectorAll('#feed article.card')].map(c=>[c.dataset.id, c.querySelector('.kicker').textContent])")
             ok(f"{W}: a story with no economic case shows a Newsstand kicker, not the desk's Companies", ["p3", "Newsstand"] in kick and ["p4", "Central Banks"] in kick, kick)
-            ok(f"{W}: an undated item says date unknown", await page.evaluate("(document.querySelector('#feed article.card[data-id=\"p5\"] .meta')||{}).textContent||''").find("date unknown") >= 0)
+            ok(f"{W}: an undated item says date unknown", "date unknown" in await txt(page, '#feed article.card[data-id="p5"] .meta'))
             await shot(page, f"newsstand-{W}")
             # ---- the Companies tab does not carry the political story
             await page.locator('#secnav a[data-sec="Companies"]').click(); await page.wait_for_timeout(300)

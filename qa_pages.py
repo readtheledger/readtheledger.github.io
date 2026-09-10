@@ -303,7 +303,8 @@ async def main():
         await page.locator('#secnav a[data-sec="Markets"]').click()
         await page.wait_for_function("location.pathname === '/markets/'", timeout=5000)
         kickers = await page.evaluate("() => [...document.querySelectorAll('#feed article.card .kicker')].map(k=>k.textContent)")
-        ok("section tab is a link that updates the address", kickers and all(k == "Markets" for k in kickers), kickers)
+        # a news story past its week carries "From the archive · " before its section
+        ok("section tab is a link that updates the address", kickers and all(k.endswith("Markets") for k in kickers), kickers)
         await page.reload(wait_until="load")
         await page.wait_for_timeout(600)
         cur = await page.locator('#secnav [aria-current="page"]').get_attribute("data-sec")
