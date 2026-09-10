@@ -17,6 +17,10 @@
        by title, and a wire story credited to Reuters, AP or the like is marked
        with that origin, so copies of one syndicated report can never pass for
        independent confirmations.
+     - Every item is filed by its subject (topics.js): the section it lands in,
+       the confidence of that filing and the reason are all in the file, and the
+       publisher's own category is kept beside them as desk. A story with no
+       clear economic subject is filed under no topic and stays in the Newsstand.
      - Rights are enforced in the data. Each source declares what The Ledger may
        carry from it; a source with no rights value, or "full" with no licence,
        stops the run. A "summary" source ships an excerpt of the text and a word
@@ -24,8 +28,8 @@
        was never given.
 
      node fetch_feeds.mjs                       # sources.js → data/feed.json
-     node fetch_feeds.mjs --sources s.js --previous prev.json --out out.json
-                          --now 2026-09-08T03:00:00Z --timeout 15000
+     node fetch_feeds.mjs --sources s.js --topics topics.js --previous prev.json
+                          --out out.json --now 2026-09-08T03:00:00Z --timeout 15000
 
    Node 18 or later, no dependencies. */
 
@@ -57,6 +61,12 @@ const fail = msg => { console.error("fetch_feeds: " + msg); process.exit(1); };
 const ctx = { window: {} };
 try { vm.runInNewContext(fs.readFileSync(SOURCES_FILE, "utf8"), ctx); } catch (e) { fail("cannot read " + SOURCES_FILE + ": " + e.message); }
 const SOURCES = ctx.window.LEDGER_SOURCES;
+/* the same classifier the app uses, so a story is filed once, here, and the
+   edition carries the verdict and the confidence behind it */
+const TOPICS_FILE = path.resolve(opt("topics", path.join(ROOT, "topics.js")));
+try { vm.runInNewContext(fs.readFileSync(TOPICS_FILE, "utf8"), ctx); } catch (e) { fail("cannot read " + TOPICS_FILE + ": " + e.message); }
+const TOPICS = ctx.window.LEDGER_TOPICS;
+if (!TOPICS || typeof TOPICS.classify !== "function") fail("topics.js does not define LEDGER_TOPICS.classify");
 if (!Array.isArray(SOURCES) || !SOURCES.length) fail("no sources in " + SOURCES_FILE);
 for (const s of SOURCES) {
   if (!s.n || !/^https?:\/\//.test(s.u || "")) fail("a source needs a name and an http(s) URL: " + JSON.stringify(s));
@@ -186,13 +196,18 @@ async function fetchOne(src) {
         if (ex.length > EXCERPT) { const cut = ex.slice(0, EXCERPT); const stop = cut.lastIndexOf(". "); ex = (stop > 400 ? cut.slice(0, stop + 1) : cut.replace(/\s\S*$/, "")) + " …"; }
         html = ex ? "<p>" + esc(ex) + "</p>" : "";
       }
+      // filed by its subject; the publisher's category (desk) is kept as
+      // evidence and shown as the feed's own filing, and the verdict travels
+      // with its confidence so it can be inspected and overridden
+      const topic = TOPICS.classify({ title: p.title, text, hint: src.s, fixed: !!src.fixed });
       return {
         id: hash(p.link || p.title),
         source: src.n, origin: originOf(p.author, text, src.n),
         title: p.title, link: p.link, author: p.author || src.n,
         date: new Date(ts).toISOString(),
         html, words,
-        section: src.s || "Markets", kind: src.k || "news", weight: src.q || 1, lic: src.lic || "", rights: src.rights
+        section: topic.section, topic: { confidence: topic.confidence, reason: topic.reason }, desk: src.s || "",
+        kind: src.k || "news", weight: src.q || 1, lic: src.lic || "", rights: src.rights
       };
     }).filter(Boolean).slice(0, PER_SOURCE);
     return { ok: true, items, dropped };
@@ -232,7 +247,16 @@ async function readPrevious(where) {
 /* ------------------------------------------------------------------- run */
 const previous = await readPrevious(PREVIOUS);
 const prevSource = n => previous ? previous.sources.find(s => s.n === n) : null;
-const prevItems  = n => previous ? previous.items.filter(i => i.source === n) : [];
+/* an item kept from an earlier edition is filed by today's rules if that edition
+   did not file it (or filed it under an older rule set), so the file never mixes
+   two ways of filing */
+const prevItems  = n => previous ? previous.items.filter(i => i.source === n).map(i => {
+  if (i.topic && typeof i.topic === "object" && "desk" in i) return i;
+  const src = SOURCES.find(s => s.n === n) || {};
+  const desk = i.desk || i.section || src.s || "";
+  const t = TOPICS.classify({ title: i.title, html: i.html, hint: desk, fixed: !!src.fixed });
+  return { ...i, section: t.section, topic: { confidence: t.confidence, reason: t.reason }, desk };
+}) : [];
 
 const results = await Promise.all(SOURCES.map(async src => ({ src, ...(await fetchOne(src)) })));
 

@@ -10,7 +10,11 @@ The front page carries only The Ledger's own journalism. Every article there is 
 
 ## What it does
 
-The front page is arranged like a newspaper, entirely from The Ledger's own articles: one bold lead story, short news stories underneath, a claret-edged **Why it matters** card carrying the day's best analysis with The Ledger's context, **The Ledger Weekly** deep dive, and a *Long reads* rail beside it on wider screens. Section tabs across the top cover Markets, Companies, Economics, Central Banks, Opinion, Tech & Finance and Personal Finance, plus a **Newsstand** tab for the public-feed stories and your saved articles. Search, bookmarking, mark-as-read, pull-to-refresh and a reading-progress bar are all there, and there is a full dark reading mode.
+The front page is arranged like a newspaper, entirely from The Ledger's own articles: one bold lead story, short news stories underneath, a claret-edged **Why it matters** card carrying the day's best analysis with The Ledger's context, **The Ledger Weekly** deep dive, and a *Long reads* rail beside it on wider screens. The masthead carries the wordmark, **Search** and **Menu**; the topic strip beneath covers Markets, Companies, Economics, Central Banks, Opinion, Tech & Finance and Personal Finance, plus **Newsstand** for the public-feed stories and **Saved** for your bookmarks (the menu lists the same topics and groups the secondary actions — dark mode, settings, checking for a newer Newsstand, reloading the app). Search, bookmarking, mark-as-read, pull-to-refresh and a reading-progress bar are all there, and there is a full dark reading mode.
+
+## Dates you can trust
+
+Every time on show comes from the content. The masthead's edition line is the newest publication date in `content.js` — "Latest edition 17 August 2026" — and it is written by the build, so it reads without JavaScript and never becomes today's date. A news story more than a week old is labelled *From the archive*; analysis and deep work carry their date and are not expired by age. A Newsstand item whose feed gave no usable date says *date unknown* rather than *just now*. The About page is part of the app, not an article: it sits at the foot of the front page and carries no date. The Newsstand says when it was actually gathered and how long ago, and a refresh reports one of three outcomes — a newer edition loaded, no newer edition, or the edition could not be reached and the previous one is kept with its true time. `docs/package-1/navigation-behaviour.md` sets out the addresses, the history behaviour and the sharing messages.
 
 Every article has two buttons that matter. **Listen** reads the piece aloud — with your own OpenAI API key it uses OpenAI's speech models and sounds close to a human presenter, and without a key it falls back to the voice built into your phone, so the button always works. **Copy** puts the whole article on your clipboard as clean plain text: headline, publication, author, date, original link, then the body.
 
@@ -60,7 +64,13 @@ If the gathered file cannot be read, the app gathers in the browser as it always
 
 The Ledger's own articles live in `content.js`, not in `index.html`: each entry carries its `kind` (`"news"`, `"analysis"` or `"deep"`), section, headline, body and a `sources` array crediting every piece of research behind it — replace or add an entry and redeploy to publish. Mark the current deep-dive feature with `weekly:true`. Each entry may also carry `produced`: `"reported"` (the default — a person wrote it) or `"assisted"` (a model drafted it from the credited sources and a person checked every claim before publication). The attribution line under the piece says which, in the reader and on the static page alike, and the build refuses any other value. `REVIEW.md` is the process that makes that label true; `drafts/` is where a piece waits for it. `index.html` still holds `WIM_NOTES`, the short "Why it matters" context notes shown on the front-page card, by desk.
 
-Every feed shipped here was checked by hand: public, free, no login and no paywall. The Financial Times, WSJ, Bloomberg and The Economist are deliberately absent. Settings shows a live list of which feeds answered on the last refresh and how many items each returned.
+Every feed shipped here was checked by hand: public, free, no login and no paywall. The Financial Times, WSJ, Bloomberg and The Economist are deliberately absent. Settings shows a live list of which feeds answered on the last gathering and how many items each returned.
+
+## How a Newsstand story is filed
+
+`topics.js` files each story by its actual subject — the headline first, then the opening of the summary, then the rest — and by its economic relevance. The publisher's category (`s` in `sources.js`) is supporting evidence, never the verdict: a business desk's feed carries politics and human interest, and a story with no economic case of its own stays in the Newsstand under no topic rather than filling Companies. A source marked `fixed:true` is always filed under its own section (a central bank's press feed is Central Banks whatever a headline says), and a table of headline patterns files recurring formats. The gatherer writes the section, its confidence and its reason into the edition, and the reader shows the publisher's own filing beside The Ledger's when they differ. `node eval_topics.mjs --edition data/feed.json` scores the classifier against the labelled sample in `docs/package-1/topic-sample.json`.
+
+A Newsstand story's context box is labelled honestly. The desk's standing note is **Background** — a general note on that kind of story, and the box says so. **Why it matters** appears only for a note an editor wrote about that story and checked against the sources it names, kept in `context.js`; it is empty until someone writes one, and nothing is generated to fill it.
 
 ## How it handles article text
 
@@ -72,7 +82,7 @@ A note on the *Long reads* rail: it is ranked by depth and source quality, not b
 
 ## Files
 
-`index.html` is the entire application — markup, styles and logic in one file. `content.js` is the publication: The Ledger's own articles, loaded at boot. `sw.js` is the offline shell. `manifest.webmanifest` plus the PNG icons make it installable. `sources.js` is the list of public feeds, read by the app and the gatherer alike. `fetch_feeds.mjs` gathers those feeds into `data/feed.json`. `build.mjs` writes the story and section pages, the sitemap, `robots.txt` and the 404 page into `_site` and copies the gathered Newsstand in; `check_site.sh` is the artifact check the deploy runs on that folder. `qa.py`, `qa_live.py`, `qa_pages.py` and `qa_feed.py` are the test suites, and `fetch_fixtures.sh` captures the feeds the live suite reads.
+`index.html` is the entire application — markup, styles and logic in one file. `content.js` is the publication: The Ledger's own articles, loaded at boot. `sw.js` is the offline shell. `manifest.webmanifest` plus the PNG icons make it installable. `sources.js` is the list of public feeds, read by the app and the gatherer alike; `topics.js` is the filing rule they share; `context.js` holds reviewed story-specific context. `fetch_feeds.mjs` gathers those feeds into `data/feed.json`. `build.mjs` writes the story and section pages, the sitemap, `robots.txt` and the 404 page into `_site` and copies the gathered Newsstand in; `check_site.sh` is the artifact check the deploy runs on that folder. `qa.py`, `qa_live.py`, `qa_pages.py` and `qa_feed.py` are the test suites, and `fetch_fixtures.sh` captures the feeds the live suite reads.
 
 Only `_site` is deployed — the workflow in `.github/workflows/pages.yml` runs the build and publishes that folder, and the build fails if anything a page references is missing from the output. The tests and this README stay behind.
 
@@ -97,6 +107,9 @@ python3 qa_pages.py      # 90 checks: builds the site, runs the deploy's own art
                          # worker caching pages by address, letting a 404 through
                          # and serving offline, and an upgrade from the previously
                          # released worker
+python3 qa_package1.py   # package 1: freshness, filing, labels, the masthead and
+                         # menu at 360/390/768/1440, restorable views, sharing outcomes
+node eval_topics.mjs --edition data/feed.json   # the classifier against the labelled sample
 python3 qa_feed.py       # 21 checks: the gatherer against synthetic RSS and Atom
                          # feeds — validation and dropped-item reasons, excerpts
                          # versus licensed markup, duplicates, wire origins, a

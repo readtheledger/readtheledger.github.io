@@ -39,6 +39,11 @@
 <meta name="twitter:description" content="A quiet reader for high-quality, free-to-read financial journalism.">
 <meta name="twitter:image" content="https://readtheledger.github.io/icon-512.png">
 <!-- meta:end -->
+<!-- app-only views (Newsstand, Saved, search) are addressed by ?view= and ?q=,
+     and the app marks them noindex so a personal or transient view is never
+     indexed as a page of its own; robots.txt says the same for crawlers that
+     do not run scripts -->
+<meta name="robots" id="robotsMeta" content="index,follow">
 <meta name="theme-color" content="#FFF1E5" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#12100E" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -111,28 +116,34 @@ header.masthead{
   padding-top:var(--safe-t);border-bottom:1px solid var(--rule);
 }
 .mast-row{display:flex;align-items:center;gap:8px;padding:6px 14px 8px;max-width:1100px;margin:0 auto}
-.wordmark{font-family:var(--display);font-weight:800;font-size:1.4rem;letter-spacing:-.02em;line-height:1;flex:1;min-width:0}
+.wordmark{font-family:var(--display);font-weight:800;font-size:1.4rem;letter-spacing:-.02em;line-height:1;flex:1;min-width:0;white-space:nowrap;text-decoration:none;color:inherit}
 .wordmark span{color:var(--accent-2)}
-.datestrip{font-family:var(--ui);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);padding:0 14px 6px;max-width:1100px;margin:0 auto}
+/* the two masthead actions carry a visible word each: what they do is not a guess */
+.mastbtn{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 12px 0 10px;border:1px solid var(--rule-2);border-radius:999px;font-family:var(--ui);font-size:.76rem;font-weight:600;color:var(--ink-2);background:var(--chip);flex:0 0 auto}
+.mastbtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mastbtn[aria-expanded="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.datestrip{font-family:var(--ui);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);padding:0 14px 6px;max-width:1100px;margin:0 auto;line-height:1.5}
 .icobtn{width:44px;height:44px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:var(--ink-2)}
 .icobtn:active{background:var(--paper-2)}
 .icobtn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .icobtn.refreshing svg{animation:ledger-spin .7s linear infinite}
 @keyframes ledger-spin{to{transform:rotate(360deg)}}
 .icobtn{border:1px solid transparent}
-#btnRefresh,#rRefresh{color:var(--ink-2);background:var(--chip);border-color:var(--rule);box-shadow:none}
-#btnRefresh:active,#rRefresh:active{background:var(--paper-2)}
 @media(max-width:380px){
-  .mast-row{gap:2px;padding:6px 8px 8px}
-  .icobtn{width:40px;height:40px}
-  .icobtn svg{width:19px;height:19px}
+  .mast-row{gap:6px;padding:6px 10px 8px}
   .wordmark{font-size:1.25rem}
-  #btnRefresh,#rRefresh{background:transparent;border-color:transparent}
+  .mastbtn{padding:0 9px 0 8px;font-size:.72rem}
 }
 
-/* section nav */
-nav.sections{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-top:1px solid var(--rule)}
+/* topic strip: scrolls sideways on a phone, and says so — a fade and a chevron
+   appear while there is more to the right, and go when the end is reached */
+.secwrap{position:relative;border-top:1px solid var(--rule)}
+nav.sections{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;scroll-behavior:smooth}
 nav.sections::-webkit-scrollbar{display:none}
+.secwrap.scrollable::after{content:"";position:absolute;right:44px;top:0;bottom:0;width:36px;background:linear-gradient(90deg,transparent,var(--paper));pointer-events:none}
+.secmore{position:absolute;right:0;top:0;height:100%;width:44px;display:none;align-items:center;justify-content:center;background:var(--paper);color:var(--ink-2);font-family:var(--ui);font-size:1.1rem;font-weight:700;border-left:1px solid var(--rule)}
+.secwrap.scrollable .secmore{display:inline-flex}
+@media (prefers-reduced-motion:reduce){nav.sections{scroll-behavior:auto}}
 .sections-inner{display:flex;gap:4px;padding:0 10px;max-width:1100px;margin:0 auto;width:max-content;min-width:100%}
 .seclink{
   font-family:var(--ui);font-size:.74rem;font-weight:600;letter-spacing:.02em;
@@ -143,6 +154,7 @@ nav.sections::-webkit-scrollbar{display:none}
 /* search bar */
 .searchwrap{padding:10px 14px;border-top:1px solid var(--rule);display:none;max-width:1100px;margin:0 auto}
 .searchwrap.on{display:block}
+.searchwrap label{display:block;font-family:var(--ui);font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:0 0 6px}
 .searchwrap input{
   width:100%;padding:12px 14px;border:1px solid var(--rule-2);border-radius:10px;
   background:var(--chip);font-family:var(--ui);font-size:.95rem;min-height:44px
@@ -168,10 +180,21 @@ main{max-width:1100px;margin:0 auto;padding:0 14px calc(96px + var(--safe-b))}
 
 article.card{padding:18px 0;border-bottom:1px solid var(--rule);cursor:pointer}
 article.card:first-of-type{padding-top:16px}
-article.card.lead .hl{font-size:clamp(1.9rem,7.6vw,2.6rem)}
+article.card.lead .hl{font-size:clamp(1.55rem,6vw,2.3rem)}
 article.card.lead .standfirst{font-size:1.06rem}
 article.card:not(.lead) .hl{font-size:clamp(1.15rem,4.6vw,1.4rem)}
 article.card.read .hl,article.card.read .standfirst{opacity:.55}
+/* a news story past its week is labelled as archive; analysis and deep work are
+   not news and carry only their date */
+.kicker .arch{color:var(--ink-3);font-weight:600}
+article.card.about{background:var(--paper-2);border:1px solid var(--rule);border-radius:12px;padding:16px;margin:18px 0}
+article.card.about .hl{font-size:1.15rem}
+/* every view says what it is: a heading, then a line about its state */
+.viewhead{padding:14px 0 2px}
+.viewhead h1{font-family:var(--ui);font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin:0;color:var(--ink)}
+.viewhead .viewnote{font-family:var(--ui);font-size:.76rem;color:var(--ink-3);margin:6px 0 0;line-height:1.5}
+.viewhead .viewnote .btn{margin-top:8px}
+.btn.small{min-height:36px;padding:7px 14px;font-size:.76rem}
 .cardtop{display:flex;gap:14px;align-items:flex-start}
 .cardtop>div{flex:1;min-width:0}
 .savebtn{color:var(--ink-3);flex:0 0 44px}
@@ -212,8 +235,15 @@ ol.rail .hl{font-size:1rem;line-height:1.25}
 #reader{position:fixed;inset:0;z-index:70;background:var(--paper);overflow-y:auto;-webkit-overflow-scrolling:touch;transform:translateX(100%);transition:transform .26s ease;visibility:hidden}
 #reader.on{transform:none;visibility:visible}
 .rbar{position:sticky;top:0;background:var(--paper);border-bottom:1px solid var(--rule);padding-top:var(--safe-t);z-index:5}
-.rbar-in{display:flex;align-items:center;gap:2px;padding:4px 8px;max-width:var(--maxw);margin:0 auto}
+.rbar-in{display:flex;align-items:center;gap:0;padding:4px 6px;max-width:var(--maxw);margin:0 auto}
 .rbar-in .spacer{flex:1}
+/* reader actions carry their names under the icons */
+.rbtn{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:52px;min-height:48px;padding:2px 4px;border-radius:10px;color:var(--ink-2);font-family:var(--ui);font-size:.56rem;font-weight:600;letter-spacing:.02em}
+.rbtn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.rbtn:active{background:var(--paper-2)}
+.rbtn[aria-pressed="true"]{color:var(--accent-2)}
+.rbtn .lbl{white-space:nowrap}
+.preview-tag{font-family:var(--ui);font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin:0 0 6px}
 .rwrap{max-width:var(--maxw);margin:0 auto;padding:22px 18px calc(150px + var(--safe-b))}
 .rwrap h1{font-family:var(--display);font-weight:700;font-size:clamp(1.75rem,7vw,2.45rem);line-height:1.13;letter-spacing:-.015em;margin:6px 0 0}
 .rstand{font-size:1.1rem;color:var(--ink-2);margin:14px 0 0;line-height:1.5}
@@ -243,6 +273,10 @@ ol.rail .hl{font-size:1rem;line-height:1.25}
 .wimbox h3{font-family:var(--ui);font-size:.66rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-2);margin:0 0 8px}
 .wimbox p{margin:0;font-size:.98rem;line-height:1.6}
 .wimbox .wimsig{font-family:var(--ui);font-size:.72rem;color:var(--ink-3);margin-top:8px}
+.wimbox.background{border-left-color:var(--rule-2)}
+.wimbox.background h3{color:var(--ink-3)}
+.wimbox ul{margin:8px 0 0;padding-left:1.1em;font-family:var(--ui);font-size:.78rem;line-height:1.6}
+.wimbox ul a{color:var(--accent)}
 .sourcesbox{border:1px solid var(--rule-2);border-left:3px solid var(--teal);border-radius:0 12px 12px 0;background:var(--paper-2);padding:16px 18px;margin:26px 0}
 .sourcesbox h3{font-family:var(--ui);font-size:.66rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin:0 0 8px}
 .sourcesbox ul{margin:0;padding-left:1.1em;font-family:var(--ui);font-size:.82rem;line-height:1.7}
@@ -294,6 +328,13 @@ ol.rail .hl{font-size:1rem;line-height:1.25}
 .feedlist{font-family:var(--ui);font-size:.76rem;color:var(--ink-2);margin-top:8px}
 .feedlist div{padding:9px 0;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;gap:10px}
 .feedlist .st{color:var(--ink-3);font-size:.7rem;white-space:nowrap}
+/* the menu: topics as a list of links, then the secondary actions */
+.menulist{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}
+.menulist a{display:flex;align-items:center;min-height:44px;padding:0 6px;font-family:var(--ui);font-size:.9rem;font-weight:600;text-decoration:none;border-bottom:1px solid var(--rule)}
+.menulist a[aria-current="page"]{color:var(--accent-2)}
+.menu-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.menu-actions .btn{width:100%}
+@media (min-width:600px){.sheet .panel.menu{left:auto;right:12px;top:12px;bottom:auto;width:360px;border-radius:16px;max-height:calc(100dvh - 24px)}}
 
 /* toast */
 #toast{
@@ -324,7 +365,7 @@ html.js #static{display:none}
 @media (min-width:820px){
   .grid{display:grid;grid-template-columns:1fr 300px;gap:34px;align-items:start}
   .railcol{position:sticky;top:150px}
-  article.card.lead .hl{font-size:3rem}
+  article.card.lead .hl{font-size:2.6rem}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -334,27 +375,24 @@ html.js #static{display:none}
 
 <header class="masthead">
   <div class="mast-row">
-    <div class="wordmark">The Ledger<span>.</span></div>
-    <button class="icobtn tap" id="btnRefresh" aria-label="Refresh to load the latest version" title="Refresh">
-      <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3.2-6.8"/><path d="M21 3v6h-6"/></svg>
+    <a class="wordmark" href="/" aria-label="The Ledger — front page">The Ledger<span>.</span></a>
+    <button class="mastbtn tap" id="btnSearch" aria-expanded="false" aria-controls="searchwrap">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span>Search</span>
     </button>
-    <button class="icobtn tap" id="btnSearch" aria-label="Search">
-      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-    </button>
-    <button class="icobtn tap" id="btnSaved" aria-label="Saved articles">
-      <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg>
-    </button>
-    <button class="icobtn tap" id="btnTheme" aria-label="Toggle dark mode">
-      <svg viewBox="0 0 24 24"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>
-    </button>
-    <button class="icobtn tap" id="btnSettings" aria-label="Settings">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.6M12 18.6v2.6M4.5 12H2M22 12h-2.5M6.2 6.2 4.6 4.6M19.4 19.4l-1.6-1.6M17.8 6.2l1.6-1.6M4.6 19.4l1.6-1.6"/></svg>
+    <button class="mastbtn tap" id="btnMenu" aria-expanded="false" aria-controls="menu" aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>Menu</span>
     </button>
   </div>
-  <div class="datestrip" id="datestrip"></div>
-  <nav class="sections" aria-label="Sections"><div class="sections-inner" id="secnav"></div></nav>
+  <!-- the edition line: the newest publication date in content.js, written by the
+       build for readers without JavaScript and kept current by the app; never a clock -->
+  <p class="datestrip" id="datestrip"></p>
+  <div class="secwrap" id="secwrap">
+    <nav class="sections" id="secscroll" aria-label="Topics"><div class="sections-inner" id="secnav"></div></nav>
+    <button class="secmore" id="secMore" aria-label="Show more topics" tabindex="-1">›</button>
+  </div>
   <div class="searchwrap" id="searchwrap">
-    <input id="q" type="search" placeholder="Search headlines, sources, topics…" autocomplete="off" enterkeyhint="search" aria-label="Search headlines, sources and topics">
+    <label for="q">Search</label>
+    <input id="q" type="search" placeholder="Headlines, sources, topics…" autocomplete="off" enterkeyhint="search">
   </div>
 </header>
 
@@ -371,24 +409,21 @@ html.js #static{display:none}
 <section id="reader" aria-hidden="true">
   <div class="rbar">
     <div class="rbar-in">
-      <button class="icobtn tap" id="rBack" aria-label="Back to front page">
-        <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
-      </button>
-      <button class="icobtn tap" id="rRefresh" aria-label="Refresh to load the latest version" title="Refresh">
-        <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3.2-6.8"/><path d="M21 3v6h-6"/></svg>
+      <button class="rbtn tap" id="rBack" aria-label="Back">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg><span class="lbl">Back</span>
       </button>
       <div class="spacer"></div>
-      <button class="icobtn tap" id="rListen" aria-label="Listen to this article">
-        <svg viewBox="0 0 24 24"><path d="M4 14v-3a8 8 0 0 1 16 0v3"/><path d="M4 14a2.4 2.4 0 0 0 2.4 2.4h.6V14H4zM20 14a2.4 2.4 0 0 1-2.4 2.4H17V14h3z"/><path d="M17 16.4V18a3 3 0 0 1-3 3h-2"/></svg>
+      <button class="rbtn tap" id="rListen" aria-label="Listen to this article">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14v-3a8 8 0 0 1 16 0v3"/><path d="M4 14a2.4 2.4 0 0 0 2.4 2.4h.6V14H4zM20 14a2.4 2.4 0 0 1-2.4 2.4H17V14h3z"/><path d="M17 16.4V18a3 3 0 0 1-3 3h-2"/></svg><span class="lbl">Listen</span>
       </button>
-      <button class="icobtn tap" id="rCopy" aria-label="Copy article">
-        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M15 5.5A1.5 1.5 0 0 0 13.5 4h-8A1.5 1.5 0 0 0 4 5.5v8A1.5 1.5 0 0 0 5.5 15"/></svg>
+      <button class="rbtn tap" id="rCopy" aria-label="Copy article as text">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M15 5.5A1.5 1.5 0 0 0 13.5 4h-8A1.5 1.5 0 0 0 4 5.5v8A1.5 1.5 0 0 0 5.5 15"/></svg><span class="lbl">Copy</span>
       </button>
-      <button class="icobtn tap" id="rShare" aria-label="Share article">
-        <svg viewBox="0 0 24 24"><path d="M12 16V4"/><path d="M8 8l4-4 4 4"/><path d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>
+      <button class="rbtn tap" id="rShare" aria-label="Share this story's link">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4"/><path d="M8 8l4-4 4 4"/><path d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg><span class="lbl" id="rShareLbl">Share</span>
       </button>
-      <button class="icobtn tap" id="rSave" aria-label="Save article" aria-pressed="false">
-        <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg>
+      <button class="rbtn tap" id="rSave" aria-label="Save article" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg><span class="lbl">Save</span>
       </button>
     </div>
   </div>
@@ -420,6 +455,24 @@ html.js #static{display:none}
     <input id="seek" type="range" min="0" max="1000" value="0" aria-label="Seek">
     <span class="time" id="dDur">0:00</span>
     <button class="rate tap" id="dRate" aria-label="Playback speed">1.0×</button>
+  </div>
+</div>
+
+<!-- ================= MENU ================= -->
+<div class="sheet" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="veil" data-close-menu></div>
+  <div class="panel menu">
+    <div class="grab"></div>
+    <h2>Menu</h2>
+    <nav aria-label="Topics"><ul class="menulist" id="menuTopics"></ul></nav>
+    <div class="menu-actions">
+      <button class="btn ghost" id="btnSaved">Saved articles</button>
+      <button class="btn ghost" id="btnTheme" aria-pressed="false">Dark mode</button>
+      <button class="btn ghost" id="btnRefresh" title="Check whether a newer Newsstand edition has been gathered">Check Newsstand</button>
+      <button class="btn ghost" id="btnSettings">Settings</button>
+      <button class="btn ghost" id="btnReload" title="Clears this device's cached copy of the app and loads it again">Reload app</button>
+      <button class="btn solid" data-close-menu>Close</button>
+    </div>
   </div>
 </div>
 
@@ -480,9 +533,9 @@ html.js #static{display:none}
     </div>
 
     <div class="field">
-      <label>Sources <span style="font-weight:400;text-transform:none;letter-spacing:0">(last refresh)</span></label>
+      <label>Newsstand sources <span style="font-weight:400;text-transform:none;letter-spacing:0">(as last gathered)</span></label>
       <div class="feedlist" id="feedstatus"></div>
-      <p class="hint">Only publicly available RSS/Atom feeds are used. Nothing behind a paywall or login is fetched, and full articles always link back to the publisher.</p>
+      <p class="hint">The Newsstand is gathered on the site's build, on a half-hour schedule that GitHub runs when it can — a target, not a promise — so the time shown is when it was <em>actually</em> gathered. Only publicly available RSS/Atom feeds are used; nothing behind a paywall or login is fetched, and every story links back to its publisher. Gathering the Newsstand never changes The Ledger's own articles.</p>
     </div>
 
     <div class="field">
@@ -503,6 +556,8 @@ html.js #static{display:none}
 <audio id="player" preload="auto" playsinline></audio>
 
 <script src="/sources.js"></script>
+<script src="/topics.js"></script>
+<script src="/context.js"></script>
 <script src="/content.js"></script>
 <script>
 "use strict";
@@ -536,6 +591,10 @@ const SOURCES = (window.LEDGER_SOURCES || []);
 const EDITION_URL = "/data/feed.json";
 
 const SECTIONS = ["Front page","Markets","Companies","Economics","Central Banks","Opinion","Tech & Finance","Personal Finance","Newsstand","Saved"];
+/* the filing rules live in topics.js, shared with the gatherer */
+const TOPICS = window.LEDGER_TOPICS || {classify: o => ({section: o.hint || "", confidence: "none", reason: "topics.js missing"})};
+/* reviewed, story-specific context (context.js); empty unless an editor wrote one */
+const CONTEXT = window.LEDGER_CONTEXT || {};
 
 /* ------------------------- 1b. addresses -------------------------
    Every Ledger story and every editorial section has a page of its own, written
@@ -552,17 +611,10 @@ function sectionFromPath(path){
 }
 function storyPath(it){ return (it && it.ledger && it.id) ? "/story/"+encodeURIComponent(it.id)+"/" : ""; }
 function storyIdFromPath(path){ const m = /^\/story\/([^/]+)\/?$/.exec(path||""); return m ? decodeURIComponent(m[1]) : ""; }
-
-/* keyword → section, so items land in a sensible place regardless of feed */
-const TAGS = [
-  ["Central Banks",/\b(fed|fomc|ecb|boe|boj|federal reserve|central bank(s|ing)?|monetary polic\w+|rate (cut|hike|rise|decision)s?|basis points|quantitative (easing|tightening)|policy rate)\b/gi],
-  ["Companies",    /\b(earnings|revenues?|quarterly results|mergers?|acquisitions?|ipo|ceo|chief executive|layoffs?|guidance|buybacks?|dividends?|antitrust|takeovers?|profits?)\b/gi],
-  ["Markets",      /\b(stocks?|equit\w+|bonds?|yields?|treasur\w+|s&p|nasdaq|dow|index(es)?|crude|oil price\w*|gold price\w*|currenc\w+|dollar|forex|commodit\w+|markets?|rall(y|ies)|sell-?off|volatilit\w+|credit spreads?)\b/gi],
-  ["Tech & Finance",/\b(ai|artificial intelligence|fintech|crypto\w*|bitcoin|ethereum|stablecoins?|semiconductors?|chipmakers?|data cent\w+|cloud computing|nvidia|software|startups?|venture capital|funding round|series [a-e]\b|seed round|unicorns?|openai|anthropic|llms?|foundation models?|gpus?)\b/gi],
-  ["Personal Finance",/\b(retirement|401k|401\(k\)|roth|mortgages?|savings?|portfolios?|index funds?|etfs?|budgeting|credit cards?|insurance|financial advis\w+|estate planning)\b/gi],
-  ["Economics",    /\b(inflation|cpi|pce|gdp|unemployment|payrolls?|jobs report|recession|productivit\w+|trade deficit|tariffs?|housing starts?|consumer spending|econom\w+|labou?r market)\b/gi],
-  ["Opinion",      /\b(opinion|commentary|the case (for|against)|column|essay|why .{0,40}\?)\b/gi]
-];
+/* app-only views live on the current page's address with a query: ?view=newsstand,
+   ?view=saved, ?q=term — so a reload, a new tab or a shared address restores them */
+const VIEW_PARAM = {"Newsstand":"newsstand", "Saved":"saved"};
+function viewFromParam(v){ return Object.keys(VIEW_PARAM).find(k=>VIEW_PARAM[k]===v) || ""; }
 
 /* CORS relays, tried in order, only when the gathered edition cannot be read.
    RSS is public, but browsers block cross-origin XML. */
@@ -654,11 +706,14 @@ function toast(msg,ms){
 /* ------------------------- 3. demo article (offline safety net) -------------
    Written by The Ledger itself so the reading experience, Listen and Copy all
    work before any network call succeeds. Not attributed to any publisher.     */
+/* The About page has no publication date and takes no place in the chronology:
+   it is shown as a card of its own at the foot of the front page, and never in
+   a section, the Newsstand or a search. */
 const DEMO = {
   id:"demo-1", source:"The Ledger", section:"About", author:"The Ledger",
-  date:new Date().toISOString(), link:"", demo:true, words:430, fullText:true,
-  title:"A quiet place to read the market, one story at a time",
-  standfirst:"This built-in page shows you the reading experience: the typography, the Listen button and one-tap copy. Pull down on the front page to load live stories from public feeds.",
+  date:"", link:"", demo:true, words:430, fullText:true,
+  title:"About The Ledger: a quiet place to read the market, one story at a time",
+  standfirst:"What this is, where the stories come from, and how Listen and Copy work. This page is part of the app, not an article, and carries no date.",
   html:`<p>The Ledger does one thing: it collects financial journalism that is free to read on the open web and puts it in front of you without clutter. There are no adverts, no trackers, no pop-ups asking for your email, and nothing here reaches past a publisher's paywall. Every story keeps its byline, its publication and a link home.</p>
   <p>The front page is arranged the way a newspaper is arranged. One lead story sits at the top, short news stories follow underneath, a <em>Why it matters</em> card explains the significance of the day's best analysis, and a <em>Long reads</em> rail keeps the deeper work in view. Tap any headline to open it. Tap the bookmark to keep it.</p>
   <blockquote>Reading well is mostly a matter of removing things: the interruptions, the autoplay video, the third request to accept cookies.</blockquote>
@@ -670,7 +725,7 @@ const DEMO = {
   <p>Wire services and mainstream business desks that publish open feeds; central banks and official researchers; Creative Commons outlets; and a shortlist of independent analysts. Stories are presented as The Ledger's own summary and context with a link to the original — full articles appear only where the publisher's licence allows it, and each one says so. You can see the full source list, and how each feed is behaving, in Settings.</p>`
 };
 DEMO.text = htmlToText(DEMO.html);
-DEMO.ts = Date.parse(DEMO.date) || Date.now();
+DEMO.ts = NaN;
 
 /* ------------------------- 3b. the Ledger's editorial voice -------------------
    Two things here are written by The Ledger itself, in this file, and are the
@@ -716,6 +771,28 @@ function ledgerNote(it){
   let h=0; const s=String(it.id||""); for(let i=0;i<s.length;i++) h=(h*33+s.charCodeAt(i))|0;
   return notes[Math.abs(h)%notes.length];
 }
+/* What the app may say beside a Newsstand story, and what it calls it. A note
+   an editor wrote about this very story (context.js) is "Why it matters"; the
+   standing note for its desk is "Background", and is labelled as such wherever
+   it appears — in the reader, in Copy and in Listen alike. Nothing is invented
+   to fill the gap. */
+function linkKey(u){
+  try{ const x=new URL(u); x.hash=""; for(const k of [...x.searchParams.keys()]) if(/^(utm_|fbclid|gclid|ref$|source$|cmpid|ncid|mc_cid|mc_eid)/i.test(k)) x.searchParams.delete(k);
+       x.hostname=x.hostname.replace(/^www\./,""); return (x.origin+x.pathname.replace(/\/+$/,"")+(x.search||"")).toLowerCase(); }
+  catch(e){ return String(u||"").toLowerCase(); }
+}
+const CONTEXT_BY_KEY = (()=>{ const m={}; for(const k of Object.keys(CONTEXT)) m[linkKey(k)] = CONTEXT[k]; return m; })();
+function contextOf(it){
+  const c = it.link ? CONTEXT_BY_KEY[linkKey(it.link)] : null;
+  if(c && c.why){
+    return {label:"Why it matters", text:String(c.why), reviewed:true,
+            sources:(c.sources||[]).map(x=>({t:x.t, u:safeUrl(x.u), p:x.p})).filter(x=>x.u),
+            sig:"— The Ledger" + (c.by ? ", " + c.by : "") + (c.reviewed ? ", reviewed " + c.reviewed : "")};
+  }
+  const desk = it.section || "Markets";
+  return {label:"Background", text:ledgerNote(it), reviewed:false, sources:[],
+          sig:"— The Ledger's standing note on " + desk + " stories, not a reading of this article"};
+}
 
 /* The Ledger's articles, loaded from content.js — the publication itself.
    Each is original Ledger writing with its material sources credited and
@@ -731,7 +808,7 @@ function makeEditorial(a){
     produced: a.produced==="assisted" ? "assisted" : "reported",
     source:"The Ledger", author:"The Ledger", section:a.section||"Markets",
     title:a.title, standfirst:a.standfirst||"", link:"",
-    date:a.date, ts:Date.parse(a.date)||Date.now(),
+    date:a.date, ts:Date.parse(a.date),   // NaN if the date does not parse: shown as unknown, never as now
     html:clean, text, words:text.trim().split(/\s+/).length,
     sources:(a.sources||[]).map(x=>({t:x.t, u:safeUrl(x.u), p:x.p})).filter(x=>x.u),
     fullText:true, republish:true, lic:"", weight:1.4
@@ -770,8 +847,8 @@ function parseFeed(xmlText, src){
     const rawHtml = pick("content\\:encoded","content","description","summary");
     const title   = pick("title") || "Untitled";
     const author  = pick("dc\\:creator","creator","author>name","author") || src.n;
-    const date    = pick("pubDate","published","updated","dc\\:date") || new Date().toISOString();
-    return makeItem({title, link, rawHtml, author, date, source:src.n, hintSection:src.s,
+    const date    = pick("pubDate","published","updated","dc\\:date");   // absent stays absent: never the visitor's clock
+    return makeItem({title, link, rawHtml, author, date, source:src.n, hintSection:src.s, fixed:!!src.fixed,
                      weight:src.q||1, kind:src.k||"news", lic:src.lic||""});
   });
 }
@@ -787,11 +864,14 @@ function makeItem(o){
     id: hash(o.link || title),
     title, link:safeUrl(o.link), weight:o.weight||1,
     source:o.source, author:cleanAuthor(o.author),
-    date:o.date, ts:Date.parse(o.date)||Date.now(),
+    date:o.date||"", ts:Date.parse(o.date||""),   // NaN when missing or unparseable: shown as unknown
     html:clean, text,
     standfirst: firstSentences(text, 190),
     words,
-    section: classify(title+" "+text, o.hintSection),
+    // the gathered edition already carries the filing and its confidence; an
+    // item read straight from a feed is filed here by the same rules
+    section: o.topic ? (o.section||"") : TOPICS.classify({title, text, hint:o.hintSection, fixed:!!o.fixed}).section,
+    topic: o.topic || null, desk: o.desk || o.hintSection || "",
     kind: o.kind||"news", lic: o.lic||"",
     fullText: words > 220,
     /* the whole article is shown only when the publisher's licence permits it;
@@ -801,21 +881,6 @@ function makeItem(o){
   };
 }
 
-/* Weight of evidence, not first match: count the signals for each section and
-   take the strongest, so a passing mention of "the Fed" doesn't file a story
-   about national parks under Central Banks. */
-function classify(blob, hint){
-  const sample = String(blob||"").slice(0,2600);
-  let best=null, bestN=0;
-  for(const [sec,re] of TAGS){
-    re.lastIndex = 0;
-    const n = (sample.match(re)||[]).length;
-    if(n > bestN){ bestN=n; best=sec; }
-  }
-  if(bestN >= 2) return best;                 // clear signal
-  if(hint) return hint;                        // otherwise trust the feed
-  return best || "Markets";
-}
 function hash(s){ let h=0; s=String(s); for(let i=0;i<s.length;i++){ h=(h*31 + s.charCodeAt(i))|0; } return "a"+Math.abs(h).toString(36); }
 function decodeEntities(s){ const d=document.createElement("textarea"); d.innerHTML=String(s||""); return d.value; }
 function cleanAuthor(a){
@@ -903,8 +968,9 @@ function presentedText(it){
   const bits = [it.standfirst || firstSentences(it.text||"", 190)];
   const q = shortQuote(it);
   if(q) bits.push("From "+it.source+"'s report: "+q);
-  bits.push("Why it matters. "+ledgerNote(it));
-  bits.push("The full article is at "+it.source+".");
+  const c = contextOf(it);
+  bits.push(c.label+". "+c.text);
+  bits.push("The original article is at "+it.source+".");
   return bits.filter(Boolean).join(" ");
 }
 
@@ -913,7 +979,8 @@ function presentedText(it){
    wire filler is nudged down. */
 const FILLER = /premarket|biggest mov|stocks? to watch|what to watch|live updates?|briefing|round-?up|newsletter|podcast|photos of|in pictures|quiz/i;
 function scoreOf(it){
-  const hours = Math.max(0,(Date.now()-it.ts)/3.6e6);
+  // an unknown date is treated as old, never as new
+  const hours = isNaN(it.ts) ? 24*30 : Math.max(0,(Date.now()-it.ts)/3.6e6);
   const fresh = Math.exp(-hours/72);
   const depth = 0.35 + 0.65*Math.min(1,(it.words||0)/800);
   let s = (it.weight||1) * depth * fresh * (it.fullText?1.25:1);
@@ -954,9 +1021,11 @@ async function harvest(list){
    no offline reading at all. Keep a smaller set, and give up items rather than the
    whole cache when the browser says no. */
 const CACHE_MAX = 40;
-function writeCache(items){
+function writeCache(items, fetched){
+  // the edition's own gathering time travels with the cache, so a copy read back
+  // offline still says when the Newsstand was actually gathered
   for(let n=Math.min(CACHE_MAX, items.length); n>=5; n=Math.floor(n/2)){
-    if(store.set(LS.cache,{at:Date.now(), items:items.slice(0,n)})) return n;
+    if(store.set(LS.cache,{at:Date.now(), fetched:fetched||"", items:items.slice(0,n)})) return n;
   }
   store.del(LS.cache);
   return 0;
@@ -969,12 +1038,12 @@ function commit(items, opts){
     if(!k || seen.has(k)) return;
     seen.add(k); clean.push(it);
   });
-  clean.sort((a,b)=> b.ts - a.ts);
+  clean.sort((a,b)=> (b.ts||0) - (a.ts||0));   // unknown dates sort last
   if(clean.length){
     S.items = clean.concat(EDITORIAL, [DEMO]);
     S.stale=false;
     S.banner = (opts && opts.partial) ? "Still gathering the longer reads…" : "";
-    writeCache(clean);
+    writeCache(clean, S.edition && S.edition.fetched);
     // a bookmark made before this build, or one whose article has just come back on
     // the feed, gets its own copy kept now
     let backfilled = false;
@@ -1002,42 +1071,83 @@ async function fetchEdition(){
     return j;
   }finally{ clearTimeout(to); }
 }
+/* When the Newsstand was gathered — the edition file's own time, never the
+   visitor's clock — as an absolute time, and how long ago that was. An edition
+   without a usable time says so. */
+function editionTs(){ const t = S.edition && Date.parse(S.edition.fetched); return t && !isNaN(t) ? t : NaN; }
 function editionTime(){
-  const t = S.edition && Date.parse(S.edition.fetched);
-  if(!t) return "";
-  const sameDay = new Date(t).toDateString() === new Date().toDateString();
-  return new Date(t).toLocaleString(undefined, sameDay ? {hour:"2-digit",minute:"2-digit"} : {day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
+  const t = editionTs();
+  if(isNaN(t)) return "unknown";
+  return new Date(t).toLocaleString(undefined, {day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
 }
+function editionAge(){ const t = editionTs(); return isNaN(t) ? "" : ago(t); }
+function gatheredLine(){
+  const t = editionTs();
+  if(isNaN(t)) return "Newsstand gathering time unknown";
+  return "Newsstand gathered " + editionTime() + " (" + ago(t) + ")";
+}
+/* the edition line in the masthead: the publication's newest date, and the
+   Newsstand's gathering time once that is known */
+const EDITION_TS = (()=>{ const ts = EDITORIAL.map(a=>a.ts).filter(t=>!isNaN(t)); return ts.length ? Math.max.apply(null, ts) : NaN; })();
+function editionLine(){
+  const ed = isNaN(EDITION_TS) ? "" : "Latest edition " + new Date(EDITION_TS).toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"});
+  const ns = S.edition ? gatheredLine() : "";
+  return [ed, ns].filter(Boolean).join(" · ");
+}
+function renderDatestrip(){ const d=$("#datestrip"); if(d) d.textContent = editionLine(); }
 
+/* Loads the Newsstand and says what happened. A refresh has exactly three
+   outcomes, and each is reported in those words: a newer edition was loaded;
+   there is no newer edition than the one on show; or the edition could not be
+   reached and the previous one is kept, with its own gathering time. None of
+   them touches The Ledger's own articles — gathering the Newsstand is not new
+   reporting, and the edition line says so separately. */
 async function loadFeeds(opts){
   if(S.loading) return; S.loading=true;
-  const silent = opts && opts.silent;
+  const silent = opts && opts.silent, manual = opts && opts.manual;
+  const before = S.edition ? S.edition.fetched : "";
 
   // Never show an empty screen: paint whatever is already on the device — or the
-  // built-in page — while the network works.
+  // built-in page — while the network works, with the time that copy was gathered.
   if(!S.items.length){
     const cached = store.get(LS.cache,null);
     S.items = (cached && cached.items && cached.items.length) ? cached.items.concat(EDITORIAL, [DEMO]) : EDITORIAL.concat([DEMO]);
     S.stale = !!(cached && cached.items && cached.items.length);
+    if(S.stale && cached.fetched && !S.edition){ S.edition = {fetched: cached.fetched, cached:true}; }
   }
-  S.banner = silent ? S.banner : (S.stale ? "Refreshing the Newsstand…" : "Opening the Newsstand…");
-  render();
+  S.banner = silent ? S.banner : (S.stale ? "Checking for a newer Newsstand…" : "Opening the Newsstand…");
+  render(); renderDatestrip();
 
   // the gathered edition: one file, with the time it was gathered and the state
-  // of every source; the relays below are only for when it cannot be read
-  let edition = null;
-  try{ edition = await fetchEdition(); }catch(e){ edition = null; }
+  // of every source; the relays below are only for when it cannot be read and
+  // there is no earlier edition to keep
+  let edition = null, failure = "";
+  try{ edition = await fetchEdition(); }catch(e){ edition = null; failure = String(e && e.message || e); }
   if(edition){
+    const newer = !before || (Date.parse(edition.fetched) > Date.parse(before));
     S.edition = {fetched: edition.fetched};
     S.feedStatus = (edition.sources||[]).map(f=>({n:f.n, ok:!!f.ok, stale:!!f.stale, count:f.count||0, since:f.fetchedAt||"", error:f.error||""}));
     const items = edition.items.map(it=>makeItem({
       title:it.title, link:it.link, rawHtml:it.html, author:it.author, date:it.date,
-      source:it.source, hintSection:it.section, weight:it.weight||1, kind:it.kind||"news",
-      lic:it.lic||"", words:it.words
+      source:it.source, hintSection:it.desk||it.section, section:it.section, topic:it.topic, desk:it.desk,
+      weight:it.weight||1, kind:it.kind||"news", lic:it.lic||"", words:it.words
     }));
     const total = commit(items);
-    S.loading=false;
-    if(!silent) toast(total ? total+" stories · Newsstand gathered "+editionTime() : "The Newsstand file was empty — showing what's saved on this device");
+    S.loading=false; S.outcome = newer ? "new" : "same";
+    renderDatestrip();
+    if(!silent){
+      if(!total) toast("The Newsstand edition was empty — showing what's saved on this device", 3200);
+      else if(newer && before) toast("Newer Newsstand edition loaded — gathered "+editionTime(), 3200);
+      else if(newer) toast(total+" Newsstand stories · gathered "+editionTime(), 2600);
+      else toast("No newer Newsstand edition — still the one gathered "+editionTime(), 3200);
+    }
+    return;
+  }
+  // the edition could not be read: keep what is on show, with its true time
+  if(S.edition || S.items.some(i=>!i.demo && !i.ledger)){
+    S.loading=false; S.outcome = "kept"; S.banner = "";
+    render(); renderDatestrip();
+    if(!silent) toast("Couldn't reach the Newsstand — keeping the edition gathered "+editionTime(), 3600);
     return;
   }
   if(!silent) S.banner = "Fetching live stories from public feeds…";
@@ -1051,8 +1161,9 @@ async function loadFeeds(opts){
   const heavy = await harvest(SOURCES.filter(s=>s.h));
   const total = commit(light.concat(heavy));
 
-  S.loading=false;
-  if(!silent) toast(total ? total+" stories loaded" : "Live feeds unreachable — showing what's saved on this device");
+  S.loading=false; S.outcome = total ? "browser" : "kept";
+  renderDatestrip();
+  if(!silent) toast(total ? total+" stories gathered in the browser — no edition time available" : "Live feeds unreachable — showing what's saved on this device", 3200);
 }
 function normTitle(t){ return String(t||"").toLowerCase().replace(/[^a-z0-9 ]/g,"").replace(/\s+/g," ").trim().slice(0,70); }
 
@@ -1071,7 +1182,7 @@ function composeFront(real){
   const deep     = rank(real.filter(i=>i.kind==="deep"));
 
   // the bold lead: the strongest news story of the last three days
-  const recentNews = news.filter(i=>Date.now()-i.ts < 72*3.6e6);
+  const recentNews = news.filter(i=>!isNaN(i.ts) && Date.now()-i.ts < 72*3.6e6);
   const lead = recentNews[0] || news[0] || analysis[0] || deep[0];
 
   // the why-it-matters card carries the strongest analysis piece of the day
@@ -1126,17 +1237,37 @@ function visible(){
   else list = list.filter(i=>i.section===S.section);
   if(S.query){
     const q=S.query.toLowerCase();
-    list = list.filter(i=> (i.title+" "+i.source+" "+i.author+" "+i.standfirst).toLowerCase().includes(q));
+    list = list.filter(i=> !i.demo && (i.title+" "+i.source+" "+i.author+" "+i.standfirst).toLowerCase().includes(q));
   }
   return list;
 }
 
+/* A news story more than a week old is labelled as archive so its age is read
+   before its headline; analysis and deep work are not news and are not expired
+   by age — they carry their date and nothing more. */
+function ageDays(it){ return isNaN(it.ts) ? NaN : (Date.now()-it.ts)/864e5; }
+function isArchive(it){ return !it.demo && (it.kind||"news")==="news" && ageDays(it) > 7; }
+function kickerHTML(it){
+  if(it.demo) return `<p class="kicker">About</p>`;
+  const sec = it.section || "Newsstand";
+  return `<p class="kicker">${isArchive(it) ? '<span class="arch">From the archive · </span>' : ''}${esc(sec)}</p>`;
+}
 function cardHTML(it, lead){
   const savedOn = !!S.saved[it.id];
+  if(it.demo){
+    return `<article class="card about" data-id="${it.id}" tabindex="0">
+      <div class="cardtop"><div>
+        ${kickerHTML(it)}
+        <h2 class="hl">${esc(it.title)}</h2>
+        <p class="standfirst">${esc(it.standfirst)}</p>
+        <div class="meta"><span class="badge">The Ledger</span><span class="dot">Part of the app · no date</span></div>
+      </div></div>
+    </article>`;
+  }
   return `<article class="card ${lead?"lead":""} ${S.read[it.id]?"read":""}" data-id="${it.id}" tabindex="0">
     <div class="cardtop">
       <div>
-        <p class="kicker">${esc(it.section)}</p>
+        ${kickerHTML(it)}
         <h2 class="hl">${linkHTML(it)}</h2>
         ${it.standfirst?`<p class="standfirst">${esc(it.standfirst)}</p>`:""}
         <div class="meta">
@@ -1199,11 +1330,14 @@ function render(){
   const feed=$("#feed"), rail=$("#railHost");
   let list = visible();
 
+  const head = viewHeadHTML(list.length);
+  setTitle(); setRobots();
+
   if(!list.length){
-    feed.innerHTML = bannerHTML() + `<div class="notice"><h3>Nothing here</h3><p style="margin:0">${
+    feed.innerHTML = head + bannerHTML() + `<div class="notice"><h3>Nothing here</h3><p style="margin:0">${
       S.section==="Saved" ? "You haven't bookmarked anything yet. Tap the ribbon on any headline to keep it."
-                          : "No stories match. Try another section or clear the search."}</p></div>`;
-    rail.innerHTML=""; bindBanner(); return;
+                          : "No stories match. Try another topic or clear the search."}</p></div>`;
+    rail.innerHTML=""; bindBanner(); bindViewHead(); return;
   }
 
   const lead = list[0], rest = list.slice(1, 26);
@@ -1213,11 +1347,7 @@ function render(){
   // block, the weekly deep dive a little further down
   const extras = S.section==="Front page" && !S.query && list.some(i=>!i.demo);
   let wimDone = !(extras && S.wim), weeklyDone = !extras;
-  // the Newsstand says when it was gathered, and whether any source is being
-  // carried from an earlier gathering
-  const gathered = S.section==="Newsstand" && S.edition && S.edition.fetched
-    ? `<p class="datestrip" style="padding:12px 0 0" id="gathered">Gathered ${esc(editionTime())}${S.feedStatus.some(f=>f.stale) ? " · some sources kept from an earlier gathering" : ""}</p>` : "";
-  let html = gathered + (S.section==="Front page" ? "" : bannerHTML()) + cardHTML(lead,true);
+  let html = head + (S.section==="Front page" ? "" : bannerHTML()) + cardHTML(lead,true);
   rest.forEach((i,idx)=>{
     html += cardHTML(i,false);
     if(!wimDone && idx>=2){ html += wimCardHTML(S.wim); wimDone = true; }
@@ -1226,6 +1356,7 @@ function render(){
   if(!wimDone) html += wimCardHTML(S.wim);
   if(!weeklyDone) html += weeklyCardHTML();
   feed.innerHTML = html;
+  bindViewHead();
 
   const most = S.items.filter(i=>!i.demo && !i.ledger && i.fullText && i.kind!=="news").slice()
                  .sort((a,b)=>scoreOf(b)-scoreOf(a)).slice(0,5);
@@ -1239,7 +1370,46 @@ function render(){
 }
 function bindBanner(){
   const r=$("#retry");
-  if(r) r.onclick=()=>{ S.banner=""; loadFeeds(); };
+  if(r) r.onclick=()=>{ S.banner=""; loadFeeds({manual:true}); };
+}
+/* Every view opens with a heading that says what it is and a line about its
+   state: the Newsstand's gathering time and age, the Saved list's count, the
+   search's term and count. The front page's heading is for assistive
+   technology only — the masthead already says where you are. */
+function viewHeadHTML(n){
+  const sec = S.section;
+  if(S.query){
+    return `<header class="viewhead"><h1>Search</h1><p class="viewnote">${n} ${n===1?"story":"stories"} matching “${esc(S.query)}”${sec!=="Front page" ? " in " + esc(sec) : ""}</p></header>`;
+  }
+  if(sec==="Newsstand"){
+    const stale = S.feedStatus.filter(f=>f.stale).length, down = S.feedStatus.filter(f=>!f.ok && !f.stale).length;
+    const bits = [gatheredLine()];
+    if(S.edition && S.edition.cached) bits.push("this device's saved copy");
+    if(stale) bits.push(stale + (stale===1?" source":" sources") + " kept from an earlier gathering");
+    if(down) bits.push(down + " unavailable");
+    return `<header class="viewhead"><h1>Newsstand</h1><p class="viewnote" id="gathered">${esc(bits.join(" · "))}. What the desk is reading from public feeds, with a link to each original — not The Ledger's own reporting.<br><button class="btn ghost small" id="nsRefresh">Check for a newer edition</button></p></header>`;
+  }
+  if(sec==="Saved") return `<header class="viewhead"><h1>Saved articles</h1><p class="viewnote">${n} saved on this device</p></header>`;
+  if(sec==="Front page") return `<h1 class="sr">Front page</h1>`;
+  return `<header class="viewhead"><h1>${esc(sec)}</h1><p class="viewnote">${n} ${n===1?"story":"stories"}</p></header>`;
+}
+function bindViewHead(){
+  const b=$("#nsRefresh"); if(b) b.onclick=()=>loadFeeds({manual:true});
+}
+/* the document title names the view, so tabs and history entries read right */
+const SITE_TITLE = "The Ledger — Finance, read properly";
+function viewTitle(){
+  if(S.query) return "Search: " + S.query + " — The Ledger";
+  if(S.section==="Newsstand") return "Newsstand — The Ledger";
+  if(S.section==="Saved") return "Saved articles — The Ledger";
+  if(S.section==="Front page") return SITE_TITLE;
+  return S.section + " — The Ledger";
+}
+function setTitle(){ if(!$("#reader").classList.contains("on")) document.title = viewTitle(); }
+/* a personal or transient view is not a page to index */
+function setRobots(){
+  const m=$("#robotsMeta"); if(!m) return;
+  m.setAttribute("content", (S.query || S.section==="Newsstand" || S.section==="Saved") ? "noindex,follow" : "index,follow");
 }
 
 function bindCards(){
@@ -1272,14 +1442,21 @@ function bindCards(){
   });
 }
 
-function when(ts){
-  if(!ts || isNaN(ts)) return "";
+function ago(ts){
   const m = Math.round((Date.now()-ts)/60000);
   if(m<1) return "just now";
   if(m<60) return m+" min ago";
   const h=Math.round(m/60); if(h<24) return h+(h===1?" hour ago":" hours ago");
-  const d=Math.round(h/24); if(d<7) return d+(d===1?" day ago":" days ago");
-  return new Date(ts).toLocaleDateString(undefined,{day:"numeric",month:"short"});
+  const d=Math.round(h/24); return d+(d===1?" day ago":" days ago");
+}
+/* a publication time, relative within the week and absolute after it; a date
+   that is missing or does not parse is said to be unknown, never guessed */
+function when(ts){
+  if(ts===undefined || ts===null || isNaN(ts)) return "date unknown";
+  const d = (Date.now()-ts)/864e5;
+  if(d < 7) return ago(ts);
+  const thisYear = new Date(ts).getFullYear() === new Date().getFullYear();
+  return new Date(ts).toLocaleDateString(undefined, thisYear ? {day:"numeric",month:"short"} : {day:"numeric",month:"short",year:"numeric"});
 }
 function readMins(w){ return Math.max(1, Math.round(w/220)); }
 function sameName(a,b){
@@ -1309,16 +1486,24 @@ function openReader(it, opts){
   const own  = it.demo || it.ledger;
   const mode = own ? "ledger" : (it.republish && it.html ? "licensed" : "summary");
 
+  // the context box: an editor's reviewed note on this story is "Why it
+  // matters"; the desk's standing note is "Background", and says so
+  const ctxBox = ()=>{
+    const c = contextOf(it);
+    const srcs = c.sources.map(s=>`<li><a href="${esc(s.u)}" target="_blank" rel="noopener noreferrer">${esc(s.t)}</a> — ${esc(s.p)}</li>`).join("");
+    return `<aside class="wimbox${c.reviewed?"":" background"}"><h3>${c.label}</h3><p>${esc(c.text)}</p>${srcs?`<ul>${srcs}</ul>`:""}<p class="wimsig">${esc(c.sig)}</p></aside>`;
+  };
   let body, wimBox = "", attr = "";
   if(mode==="ledger"){
     body = it.html;
     const srcs = (it.sources||[]).map(s=>
       `<li><a href="${esc(s.u)}" target="_blank" rel="noopener noreferrer">${esc(s.t)}</a> — ${esc(s.p)}</li>`).join("");
     wimBox = srcs ? `<aside class="sourcesbox"><h3>Sources & further reading</h3><ul>${srcs}</ul></aside>` : "";
-    attr = it.demo ? "" : `<p class="attrline">${productionLine(it.produced)} Material sources are credited and linked above; quotations are brief and attributed.</p>`;
+    attr = it.demo ? `<p class="attrline">This page is part of the app and is not an article; it carries no publication date.</p>`
+                   : `<p class="attrline">${productionLine(it.produced)} Material sources are credited and linked above; quotations are brief and attributed.</p>`;
   }else if(mode==="licensed"){
     body = it.html;
-    wimBox = `<aside class="wimbox"><h3>Why it matters</h3><p>${esc(ledgerNote(it))}</p><p class="wimsig">— The Ledger</p></aside>`;
+    wimBox = ctxBox();
     attr = `<hr class="rule">
       <p class="attrline">Republished in full from <strong>${esc(it.source)}</strong> — ${esc(it.lic)} — with attribution.
       ${link?`<a href="${esc(link)}" target="_blank" rel="noopener noreferrer">Read at source →</a>`:""}</p>`;
@@ -1327,22 +1512,27 @@ function openReader(it, opts){
     const quote = shortQuote(it);
     body = (lede ? `<p>${esc(lede)}</p>` : "") +
            (quote ? `<figure class="quotebox"><blockquote>${esc(quote)}</blockquote><figcaption>— from ${esc(it.source)}'s report</figcaption></figure>` : "");
-    wimBox = `<aside class="wimbox"><h3>Why it matters</h3><p>${esc(ledgerNote(it))}</p><p class="wimsig">— The Ledger</p></aside>`;
-    attr = `<p class="attrline">Reported by <strong>${esc(it.source)}</strong>${sameName(it.author,it.source)?"":" ("+esc(it.author)+")"}. Summary and context by The Ledger; the article itself stays with the publisher.</p>
-      ${link?`<p class="srccta"><a class="btn solid" href="${esc(link)}" target="_blank" rel="noopener noreferrer">Read the full story at ${esc(it.source)} →</a></p>`:""}`;
+    wimBox = ctxBox();
+    attr = `<p class="attrline">Reported by <strong>${esc(it.source)}</strong>${sameName(it.author,it.source)?"":" ("+esc(it.author)+")"}. This is a Newsstand preview — a summary by The Ledger; the article itself stays with the publisher.</p>
+      ${link?`<p class="srccta"><a class="btn solid" href="${esc(link)}" target="_blank" rel="noopener noreferrer">Read the original at ${esc(it.source)} →</a></p>`:""}`;
   }
 
+  const dateLine = it.demo ? "" : (isNaN(it.ts) ? "Publication date unknown"
+                   : new Date(it.ts).toLocaleString(undefined,{day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit"}));
+  const filed = (!own && it.desk && it.desk!==(it.section||"")) ? `<span class="dot">filed by ${esc(it.source)} under ${esc(it.desk)}</span>` : "";
   $("#rwrap").innerHTML =
-    `<p class="kicker">${esc(it.section)}</p>
+    `${own ? "" : `<p class="preview-tag">Newsstand preview</p>`}
+     ${kickerHTML(it)}
      <h1>${esc(it.title)}</h1>
      ${it.standfirst && mode!=="summary" ? `<p class="rstand">${esc(it.standfirst)}</p>`:""}
      <div class="rmeta">
        <span class="badge">${esc(it.source)}</span>
        ${sameName(it.author,it.source)?"":`<span class="byline">${esc(it.author)}</span>`}
-       <span class="dot">${new Date(it.ts).toLocaleString(undefined,{day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit"})}</span>
-       ${it.words && mode!=="summary"?`<span class="dot">${readMins(it.words)} min read</span>`:""}
+       ${dateLine ? `<span class="dot">${esc(dateLine)}</span>` : `<span class="dot">Part of the app · no date</span>`}
+       ${it.words && mode!=="summary" && !it.demo ?`<span class="dot">${readMins(it.words)} min read</span>`:""}
+       ${filed}
      </div>
-     ${own?"":`<p class="srcbox" style="margin:-4px 0 20px">${mode==="licensed"?"Republished with permission":"The Ledger's summary"}${link?` · <a href="${esc(link)}" target="_blank" rel="noopener noreferrer">original at ${esc(it.source)} →</a>`:""}</p>`}
+     ${own?"":`<p class="srcbox" style="margin:-4px 0 20px">${mode==="licensed"?"Republished with permission":"Preview by The Ledger"}${link?` · <a href="${esc(link)}" target="_blank" rel="noopener noreferrer">read the original at ${esc(it.source)} →</a>`:""}</p>`}
      <div class="rbody">${body}</div>
      ${wimBox}
      ${attr}`;
@@ -1350,6 +1540,11 @@ function openReader(it, opts){
   const rs=$("#rSave");
   rs.setAttribute("aria-pressed", !!S.saved[it.id]);
   $("svg",rs).setAttribute("fill", S.saved[it.id]?"currentColor":"none");
+  // the share button says what it will share: a Ledger story's own link, or
+  // the publisher's original for a Newsstand item
+  const shareOwn = !!storyPath(it);
+  $("#rShareLbl").textContent = shareOwn ? "Share" : "Share original";
+  $("#rShare").setAttribute("aria-label", shareOwn ? "Share this story's link" : "Share the original article's link");
 
   const r=$("#reader"); r.classList.add("on"); r.setAttribute("aria-hidden","false"); r.scrollTop=0;
   document.body.style.overflow="hidden";
@@ -1357,7 +1552,7 @@ function openReader(it, opts){
   // shared link all name the story; a feed item keeps the page it was opened from.
   // popstate re-opens a story from history and asks not to push it again.
   if(!opts.nopush) history.pushState({reader:true, id:it.id}, "", storyPath(it) || location.pathname + location.search);
-  document.title = (it.demo ? "The Ledger" : it.title + " — The Ledger");
+  document.title = (it.demo ? "About — The Ledger" : it.title + " — The Ledger");
   updateProgress();
   render();
 }
@@ -1365,14 +1560,11 @@ function closeReader(){
   const r=$("#reader"); r.classList.remove("on"); r.setAttribute("aria-hidden","true");
   document.body.style.overflow="";
   $("#progress").style.width="0";
-  document.title = HOME_TITLE;
+  document.title = viewTitle();
   // closed without going back through history (Escape with no entry, a test, a
   // direct call): the address must not keep naming a story that is no longer open
-  if(storyIdFromPath(location.pathname)) history.replaceState({}, "", sectionPath(S.section) || "/");
+  if(storyIdFromPath(location.pathname)) history.replaceState({}, "", viewAddress());
 }
-/* the title to return to when a story closes: a story page was titled for its
-   story, so it goes back to the site's; a section page keeps its own */
-const HOME_TITLE = storyIdFromPath(location.pathname) ? "The Ledger — Finance, read properly" : document.title;
 
 /* ------------------------- 6b. addresses at boot ------------------------- */
 /* Every story and section page is the app plus a static copy of its content.
@@ -1392,6 +1584,27 @@ function route(){
   }
   const sec = sectionFromPath(path);
   if(sec){ S.section = sec; renderSecNav(); }
+  // an app-only view or a search, restored from the address
+  const params = new URLSearchParams(location.search);
+  const v = viewFromParam(params.get("view")||"");
+  if(v){ S.section = v; renderSecNav(); }
+  const q = (params.get("q")||"").trim();
+  if(q){ S.query = q; $("#q").value = q; $("#searchwrap").classList.add("on"); $("#btnSearch").setAttribute("aria-expanded","true"); }
+}
+/* the address for the current view: a page path for the front page and the
+   sections, ?view= for the app-only views, ?q= for a search on top of either */
+function viewAddress(){
+  const base = sectionPath(S.section) || "/";
+  const p = new URLSearchParams();
+  if(VIEW_PARAM[S.section]) p.set("view", VIEW_PARAM[S.section]);
+  if(S.query) p.set("q", S.query);
+  const qs = p.toString();
+  return base + (qs ? "?" + qs : "");
+}
+function syncAddress(){
+  if($("#reader").classList.contains("on")) return;
+  const want = viewAddress();
+  if(location.pathname + location.search !== want) history.replaceState({}, "", want);
 }
 function updateProgress(){
   const r=$("#reader");
@@ -1404,7 +1617,7 @@ function updateProgress(){
 function plainText(it){
   const link = safeUrl(it.link);
   const lines=[it.title,"",it.source + (it.author&&it.author!==it.source?" — "+it.author:""),
-    new Date(it.ts).toLocaleString(undefined,{dateStyle:"long",timeStyle:"short"})];
+    it.demo ? "Part of the app — no publication date" : (isNaN(it.ts) ? "Publication date unknown" : new Date(it.ts).toLocaleString(undefined,{dateStyle:"long",timeStyle:"short"}))];
   if(link) lines.push(link);
   if(it.demo || it.ledger || it.republish){
     lines.push("", it.text || it.standfirst || "");
@@ -1413,36 +1626,51 @@ function plainText(it){
     lines.push("", it.standfirst || firstSentences(it.text||"",190) || "");
     const q = shortQuote(it);
     if(q) lines.push("", "“"+q+"” — "+it.source);
-    lines.push("", "Why it matters: "+ledgerNote(it), "— The Ledger");
-    lines.push("", "[Summary and context by The Ledger. Full article at "+it.source+(link?": "+link:".")+"]");
+    const c = contextOf(it);
+    lines.push("", c.label+": "+c.text, c.sig);
+    if(c.sources.length) lines.push(...c.sources.map(x=>"  "+x.t+" — "+x.p+": "+x.u));
+    lines.push("", "[Newsstand preview — a summary by The Ledger. The original article is at "+it.source+(link?": "+link:".")+"]");
   }
   return lines.join("\n");
+}
+async function copyText(txt){
+  try{
+    if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(txt); return true; }
+    const ta=document.createElement("textarea");
+    ta.value=txt; ta.setAttribute("readonly",""); ta.style.position="fixed"; ta.style.top="-1000px";
+    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0,txt.length);
+    const ok = document.execCommand("copy"); ta.remove();
+    return !!ok;
+  }catch(e){ return false; }
 }
 async function copyArticle(){
   if(!S.current) return;
   const txt = plainText(S.current);
-  try{
-    if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(txt); }
-    else{
-      const ta=document.createElement("textarea");
-      ta.value=txt; ta.setAttribute("readonly",""); ta.style.position="fixed"; ta.style.top="-1000px";
-      document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0,txt.length);
-      document.execCommand("copy"); ta.remove();
-    }
-    toast("Copied — "+txt.trim().split(/\s+/).length+" words");
-  }catch(e){ toast("Couldn't copy — long-press to select instead", 2600); }
+  if(await copyText(txt)) toast("Copied — "+txt.trim().split(/\s+/).length+" words");
+  else toast("Couldn't copy — long-press to select instead", 2600);
 }
+/* Share hands the system the right link — a Ledger story's own address, or the
+   publisher's original for a Newsstand item — and says what happened: the share
+   sheet completed (which means the link went to the app the reader chose, not
+   that anything was posted), the reader cancelled, or sharing was unavailable
+   and the link was copied instead. */
 async function shareArticle(){
-  if(!S.current) return;
-  // a Ledger story shares its own page; a feed item shares the publisher's original
-  const own = storyPath(S.current);
-  const d={title:S.current.title, text:S.current.standfirst||S.current.title,
-           url: own ? location.origin + own : (safeUrl(S.current.link)||location.href)};
-  try{
-    if(navigator.share){ await navigator.share(d); }
-    else if(navigator.clipboard){ await navigator.clipboard.writeText((d.url||"")+" — "+d.title); toast("Link copied"); }
-    else toast("Sharing not supported here");
-  }catch(e){ /* user cancelled */ }
+  const it = S.current; if(!it) return;
+  const own = storyPath(it);
+  const url = own ? location.origin + own : safeUrl(it.link);
+  if(!url){ toast("There is no link to share for this page", 2400); return; }
+  const what = own ? "this story's link" : "the original article's link";
+  const d = {title:it.title, text:it.standfirst||it.title, url};
+  if(navigator.share){
+    try{ await navigator.share(d); S.shared = {outcome:"shared", url}; toast("Shared "+what+" — sent to the app you chose", 3000); return; }
+    catch(e){
+      if(e && e.name==="AbortError"){ S.shared = {outcome:"cancelled", url}; toast("Share cancelled", 1800); return; }
+      // anything else: fall through and copy the link instead
+    }
+  }
+  const ok = await copyText(url);
+  S.shared = {outcome: ok ? "copied" : "failed", url};
+  toast(ok ? "Sharing isn't available here — copied "+what+" instead" : "Couldn't share or copy the link — it is "+url, ok ? 3200 : 6000);
 }
 
 /* ------------------------- 7. audio: OpenAI TTS + fallback ------------------ */
@@ -1669,8 +1897,8 @@ function renderFeedStatus(){
   // the time on show is when the Newsstand was actually gathered, never when it
   // was meant to be; a source that did not answer says so, and says how old the
   // items it kept are
-  const head = S.edition && S.edition.fetched
-    ? `<div><span><strong>Newsstand gathered</strong></span><span class="st">${esc(editionTime())}</span></div>` : "";
+  const head = S.edition
+    ? `<div><span><strong>Newsstand gathered</strong></span><span class="st">${esc(editionTime())}${editionAge() ? " · " + esc(editionAge()) : ""}</span></div>` : "";
   const status = f => f.ok ? f.count+" items"
                     : f.stale ? f.count+" items · kept from "+(f.since ? when(Date.parse(f.since)) : "an earlier gathering")
                     : "unavailable";
@@ -1678,29 +1906,59 @@ function renderFeedStatus(){
     ? S.feedStatus.map(f=>`<div><span>${esc(f.n)}</span><span class="st">${esc(status(f))}</span></div>`).join("")
     : SOURCES.map(s=>`<div><span>${esc(s.n)}</span><span class="st">not fetched yet</span></div>`).join(""));
 }
-function renderSecNav(){
-  // sections with a page of their own are ordinary links to it; Newsstand and
-  // Saved exist only inside the app, so they stay buttons
-  $("#secnav").innerHTML = SECTIONS.map(s=>{
+/* every topic is an ordinary link: the sections to their own pages, Newsstand
+   and Saved to the front page with ?view= — so they open in a new tab, are
+   crawlable where they should be, and restore from the address */
+function sectionHref(s){ return sectionPath(s) || ("/?view=" + VIEW_PARAM[s]); }
+function navLinks(cls){
+  return SECTIONS.map(s=>{
     const cur = s===S.section ? ' aria-current="page"' : '';
-    const p = sectionPath(s);
-    return p ? `<a class="seclink tap" href="${esc(p)}" data-sec="${esc(s)}"${cur}>${esc(s)}</a>`
-             : `<button class="seclink tap" data-sec="${esc(s)}"${cur}>${esc(s)}</button>`;
+    return `<a class="${cls}" href="${esc(sectionHref(s))}" data-sec="${esc(s)}"${cur}>${esc(s)}</a>`;
   }).join("");
-  $$("#secnav .seclink").forEach(b=>b.onclick=ev=>{
+}
+function renderSecNav(){
+  $("#secnav").innerHTML = navLinks("seclink tap");
+  $("#menuTopics").innerHTML = SECTIONS.map(s=>
+    `<li><a href="${esc(sectionHref(s))}" data-sec="${esc(s)}"${s===S.section ? ' aria-current="page"' : ''}>${esc(s)}</a></li>`).join("");
+  $$("#secnav .seclink, #menuTopics a").forEach(b=>b.onclick=ev=>{
     if(ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
     ev.preventDefault();
+    closeMenu();
     showSection(b.dataset.sec);
     window.scrollTo({top:0,behavior:"smooth"});
   });
+  // keep the current topic in view on a narrow screen without scrolling the page
+  const nav=$("#secscroll"), cur=$('#secnav [aria-current="page"]');
+  if(nav && cur){
+    const left = cur.offsetLeft - (nav.clientWidth - cur.offsetWidth)/2;
+    if(Math.abs(nav.scrollLeft - left) > 4) nav.scrollLeft = Math.max(0, left);
+  }
+  updateSecCue();
 }
-/* Switching section swaps the address in place rather than adding a history
+/* the fade and chevron at the right of the topic strip appear only while there
+   is more to the right, so a phone reader knows the strip scrolls */
+function updateSecCue(){
+  const nav=$("#secscroll"), wrap=$("#secwrap"); if(!nav || !wrap) return;
+  wrap.classList.toggle("scrollable", nav.scrollWidth - nav.clientWidth - nav.scrollLeft > 8);
+}
+/* Switching topic swaps the address in place rather than adding a history
    entry, which is how the tabs have always behaved — back leaves the site, or
-   closes an open story, it never walks through tabs. */
+   closes an open story, it never walks through tabs. The address always names
+   the view, so a reload or a new tab lands on the same one. */
 function showSection(sec){
   S.section = sec; renderSecNav(); render();
-  const p = sectionPath(sec);
-  if(p && !$("#reader").classList.contains("on") && location.pathname !== p) history.replaceState({}, "", p);
+  syncAddress();
+}
+function openMenu(){
+  renderSecNav();
+  $("#btnTheme").setAttribute("aria-pressed", document.documentElement.dataset.theme==="dark");
+  $("#menu").classList.add("on"); $("#btnMenu").setAttribute("aria-expanded","true");
+  const first=$("#menuTopics a"); if(first) first.focus();
+}
+function closeMenu(){
+  if(!$("#menu").classList.contains("on")) return;
+  $("#menu").classList.remove("on"); $("#btnMenu").setAttribute("aria-expanded","false");
+  $("#btnMenu").focus();
 }
 function costHint(){
   const m=store.get(LS.model,"gpt-4o-mini-tts");
@@ -1710,9 +1968,7 @@ function costHint(){
 
 /* ------------------------- 9. wiring ------------------------- */
 function boot(){
-  $("#datestrip").textContent =
-    new Date().toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long",year:"numeric"}) + " · Free financial journalism, gathered";
-
+  renderDatestrip();   // the edition's date from the publication, not today's from a clock
   applyTheme(); applySize(); renderSecNav(); renderFeedStatus(); costHint();
 
   $("#apikey").value = store.get(LS.key,"");
@@ -1721,19 +1977,28 @@ function boot(){
 
   // header
   $("#btnSearch").onclick = ()=>{
-    const w=$("#searchwrap"); w.classList.toggle("on");
-    if(w.classList.contains("on")) $("#q").focus(); else { $("#q").value=""; S.query=""; render(); }
+    const w=$("#searchwrap"); const on = w.classList.toggle("on");
+    $("#btnSearch").setAttribute("aria-expanded", on);
+    if(on) $("#q").focus(); else { $("#q").value=""; S.query=""; render(); syncAddress(); }
   };
-  $("#q").oninput = e=>{ S.query=e.target.value.trim(); render(); };
-  $("#btnSaved").onclick = ()=>{ showSection("Saved"); window.scrollTo({top:0}); };
+  let qTimer=null;
+  $("#q").oninput = e=>{ S.query=e.target.value.trim(); render(); clearTimeout(qTimer); qTimer=setTimeout(syncAddress, 400); };
+  $("#q").onkeydown = e=>{ if(e.key==="Enter"){ e.preventDefault(); syncAddress(); } };
+  $("#btnMenu").onclick = ()=>{ $("#menu").classList.contains("on") ? closeMenu() : openMenu(); };
+  $$("[data-close-menu]").forEach(el=>el.onclick=closeMenu);
+  $("#btnSaved").onclick = ()=>{ closeMenu(); showSection("Saved"); window.scrollTo({top:0}); };
   $("#btnTheme").onclick = ()=>{
     const now=document.documentElement.dataset.theme==="dark"?"light":"dark";
-    store.set(LS.theme,now); applyTheme(); toast(now==="dark"?"Dark mode":"Light mode",1200);
+    store.set(LS.theme,now); applyTheme(); $("#btnTheme").setAttribute("aria-pressed", now==="dark"); toast(now==="dark"?"Dark mode":"Light mode",1200);
   };
-  $("#btnSettings").onclick = ()=>{ renderFeedStatus(); $("#settings").classList.add("on"); };
+  $("#btnSettings").onclick = ()=>{ closeMenu(); renderFeedStatus(); $("#settings").classList.add("on"); };
+  $("#btnRefresh").onclick = ()=>{ closeMenu(); loadFeeds({manual:true}); };
+  window.addEventListener("resize", updateSecCue);
+  $("#secscroll").addEventListener("scroll", updateSecCue, {passive:true});
+  $("#secMore").onclick = ()=>{ $("#secscroll").scrollBy({left: Math.round($("#secscroll").clientWidth*0.7), behavior:"smooth"}); };
   async function hardRefresh(){
-    ["btnRefresh","rRefresh"].forEach(id=>{ const b=$("#"+id); if(b) b.classList.add("refreshing"); });
-    toast("Refreshing...", 4000);
+    closeMenu();
+    toast("Reloading the app…", 4000);
     try{
       if("serviceWorker" in navigator){
         const regs = await navigator.serviceWorker.getRegistrations();
@@ -1748,8 +2013,7 @@ function boot(){
     url.searchParams.set("_r", String(Date.now()));
     location.replace(url.toString());
   }
-  const _br = $("#btnRefresh"); if(_br) _br.onclick = hardRefresh;
-  const _rr = $("#rRefresh"); if(_rr) _rr.onclick = hardRefresh;
+  $("#btnReload").onclick = hardRefresh;
   $$("[data-close]").forEach(el=>el.onclick=()=>$("#settings").classList.remove("on"));
 
   // settings
@@ -1804,7 +2068,7 @@ function boot(){
     if(TTS.mode==="openai"&&player.duration) player.currentTime=(e.target.value/1000)*player.duration;
   };
 
-  // pull to refresh
+  // pull to refresh: a manual check for a newer Newsstand, reported in words
   let y0=null;
   window.addEventListener("touchstart",e=>{ y0 = (window.scrollY<=0 && !$("#reader").classList.contains("on")) ? e.touches[0].clientY : null; },{passive:true});
   window.addEventListener("touchmove",e=>{
@@ -1814,7 +2078,7 @@ function boot(){
   },{passive:true});
   window.addEventListener("touchend",e=>{
     if(y0!==null && $("#pullIndicator").classList.contains("on")){
-      $("#pullIndicator").classList.remove("on"); loadFeeds();
+      $("#pullIndicator").classList.remove("on"); loadFeeds({manual:true});
     }
     y0=null;
   },{passive:true});
@@ -1823,6 +2087,7 @@ function boot(){
   document.addEventListener("keydown",e=>{
     if(e.key==="Escape"){
       if($("#settings").classList.contains("on")) $("#settings").classList.remove("on");
+      else if($("#menu").classList.contains("on")) closeMenu();
       // leave through history like the back button, so the history entry the
       // reader pushed doesn't linger after the panel has closed
       else if($("#reader").classList.contains("on")){ if(history.state&&history.state.reader) history.back(); else closeReader(); }
@@ -1842,6 +2107,7 @@ function boot(){
 
   ping(location.pathname);
   route();
+  render();
   loadFeeds();
   setInterval(()=>loadFeeds({silent:true}), 30*60*1000);
   document.addEventListener("visibilitychange",()=>{

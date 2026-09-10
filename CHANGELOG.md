@@ -4,6 +4,67 @@ All notable changes to The Ledger. Dates are UTC.
 
 ## Unreleased
 
+### Package 1 — freshness, topics, labels, navigation, sharing
+
+#### Freshness you can trust
+- Publication times come from the content, never from the visitor's clock or a
+  refresh: the masthead's edition line is the newest date in `content.js`
+  ("Latest edition 17 August 2026"), written by the build so it reads without
+  JavaScript, and an item whose date is missing or does not parse says "date
+  unknown" rather than "just now". The About page leaves the chronology — it
+  is a labelled card at the foot of the front page with no date at all.
+- A news story more than a week old is labelled **From the archive** on its card
+  and in the reader; analysis and deep work are not news and are not expired by
+  age. Dates and links are unchanged.
+- The Newsstand says when it was actually gathered and how long ago, on the
+  view itself, in the masthead line and in Settings; an edition without a
+  usable time says "unknown". The half-hour schedule is described as a target.
+- A refresh ends in one of three messages: a newer edition loaded, no newer
+  edition, or the edition could not be reached and the previous one is kept
+  with its true time. The previous edition's time travels with the offline copy.
+  Gathering the Newsstand is never presented as new reporting.
+
+#### Topics filed by subject
+- `topics.js` files a Newsstand story by its actual subject — headline first,
+  then the summary — with the publisher's category as supporting evidence and
+  the economic case as the test. Political and human-interest stories carried
+  by a business desk stay in the Newsstand under no topic ("General") instead of
+  filling Companies. A source can be marked `fixed` in `sources.js` (its
+  category is the verdict), and a headline-pattern override table files
+  recurring formats. The gatherer writes the section, the confidence and the
+  reason into the edition; the app files the same way when it has to gather in
+  the browser. Rights, attribution, dates and wire origins are untouched.
+- `eval_topics.mjs` scores the classifier against an 86-story sample from 26
+  publishers (`docs/package-1/topic-sample.json`); the result and the labels'
+  provenance are in `docs/package-1/classification-evaluation.md`.
+
+#### Honest labels
+- The desk's standing notes are now labelled **Background** wherever they
+  appear — reader, Copy and Listen — with a signature that says they are a
+  general note, not a reading of the article. **Why it matters** is reserved
+  for a reviewed, story-specific note in `context.js`, with its sources and
+  reviewer, and is empty until an editor writes one. Nothing is generated.
+
+#### Navigation on a phone
+- A compact masthead: the wordmark (a link home, on one line) and two labelled
+  buttons, **Search** and **Menu**. The menu lists every topic as a link and
+  groups the secondary actions: Saved, Dark mode, Check Newsstand, Settings,
+  Reload app. The topic strip stays, with a fade and chevron while
+  there is more to the right. The lead headline is a size that leaves the next
+  story visible. Every view opens with a heading and a line about its state
+  (Newsstand, Saved, Search, each section). Reader actions carry visible
+  labels. Checked at 360, 390, 768 and 1440 px in headless Chromium.
+
+#### Predictable navigation and sharing
+- Newsstand, Saved and search are restorable addresses (`/?view=newsstand`,
+  `/?view=saved`, `?q=term`), titled to match, marked `noindex` and disallowed
+  in `robots.txt`; every topic is an ordinary link. A Newsstand preview keeps
+  the address it was opened from, offers **Read the original** and
+  **Share original**, and never gets a Ledger address of its own.
+- Share reports its outcome in words — completed, cancelled, or copied instead
+  when the share sheet is unavailable — and never claims a post was made.
+  `docs/package-1/navigation-behaviour.md` is the documented contract.
+
 ### Added
 - **The Newsstand is gathered by the build.** `fetch_feeds.mjs` reads every
   feed in `sources.js` and writes `data/feed.json` — the items, the time they

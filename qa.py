@@ -108,6 +108,7 @@ async def main():
         await page.wait_for_timeout(400)
         await page.locator("#rBack").click()
         await page.wait_for_timeout(700)
+        await page.locator("#btnMenu").click()
         await page.locator("#btnSaved").click()
         await page.wait_for_timeout(500)
         ok("saved section lists the bookmark", await page.locator("article.card").count() >= 1)
@@ -122,16 +123,19 @@ async def main():
         await page.fill("#q", "")
         await page.locator("#btnSearch").click()
 
-        # dark mode
+        # dark mode (from the menu)
+        await page.locator("#btnMenu").click()
         await page.locator("#btnTheme").click()
         await page.wait_for_timeout(400)
         theme = await page.evaluate("document.documentElement.dataset.theme")
         ok("dark mode toggles", theme == "dark", f"theme={theme}")
+        await page.evaluate("closeMenu()")
         await page.screenshot(path=os.path.join(ROOT, "shot-dark.png"))
+        await page.locator("#btnMenu").click()
         await page.locator("#btnTheme").click()
         await page.wait_for_timeout(300)
 
-        # settings + persistence
+        # settings + persistence (from the menu)
         await page.locator("#btnSettings").click()
         await page.wait_for_timeout(400)
         ok("settings sheet opens", await page.locator("#settings.on").count() == 1)
@@ -318,15 +322,17 @@ async def main():
                   quote: !!document.querySelector('#rwrap .quotebox'),
                   wimbox: !!document.querySelector('#rwrap .wimbox'),
                   cta: !!document.querySelector('#rwrap .srccta a'),
-                  attr: ((document.querySelector('#rwrap .attrline')||{}).textContent||"").includes('Summary and context by The Ledger'),
+                  attr: ((document.querySelector('#rwrap .attrline')||{}).textContent||"").includes('a summary by The Ledger'),
+                  label: (document.querySelector('#rwrap .wimbox h3')||{}).textContent||"",
                   copied: plainText(it), spoken: speechText(it)};
         }""")
         ok("unlicensed article shown as summary, not reprint",
            summary["rendered"] < summary["full"] * 0.4, f"{summary['rendered']} of {summary['full']} chars shown")
         ok("summary carries quote, context, attribution and route out",
            summary["quote"] and summary["wimbox"] and summary["cta"] and summary["attr"])
-        ok("copy carries the summary, not the withheld body",
-           len(summary["copied"]) < summary["full"] * 0.5 and "Why it matters" in summary["copied"]
+        ok("a standing note is labelled Background, not Why it matters", summary["label"] == "Background", summary["label"])
+        ok("copy carries the summary, not the withheld body, with the same label",
+           len(summary["copied"]) < summary["full"] * 0.5 and "Background:" in summary["copied"] and "Why it matters" not in summary["copied"]
            and "https://example.com/" in summary["copied"], f"{len(summary['copied'])} chars")
         ok("listen reads the summary, not the withheld body",
            len(summary["spoken"]) < summary["full"] * 0.5, f"{len(summary['spoken'])} chars")
@@ -352,7 +358,7 @@ async def main():
           // inspectable because ping() is the sole sender
           return ping.toString().includes(".goatcounter.com/count") &&
                  ping.toString().includes("new Image()") &&
-                 !document.querySelector('script[src]:not([src="/content.js"]):not([src="/sources.js"])');
+                 !document.querySelector('script[src]:not([src="/content.js"]):not([src="/sources.js"]):not([src="/topics.js"]):not([src="/context.js"])');
         }""")
         ok("analytics is an image ping to goatcounter only, no scripts", pixel_only)
 

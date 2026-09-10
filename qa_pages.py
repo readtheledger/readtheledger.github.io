@@ -309,8 +309,9 @@ async def main():
         cur = await page.locator('#secnav [aria-current="page"]').get_attribute("data-sec")
         ok("refreshing a section address lands on that section", cur == "Markets" and await page.locator("#static").count() == 0, f"current={cur}")
         tabs = await page.evaluate("() => [...document.querySelectorAll('#secnav .seclink')].map(e=>e.tagName+':'+(e.getAttribute('href')||''))")
-        ok("editorial sections are anchors, Newsstand and Saved stay buttons",
-           tabs[0] == "A:/" and "A:/markets/" in tabs and "BUTTON:" in tabs and tabs.count("BUTTON:") == 2, tabs)
+        ok("every topic is an anchor: sections to their pages, Newsstand and Saved to ?view=",
+           tabs[0] == "A:/" and "A:/markets/" in tabs and "A:/?view=newsstand" in tabs and "A:/?view=saved" in tabs
+           and all(t.startswith("A:") for t in tabs), tabs)
 
         # sharing: a Ledger story shares its own address; a feed item shares the publisher's
         await page.goto(base + p0, wait_until="load")
@@ -345,7 +346,7 @@ async def main():
            await page.locator('#rSave[aria-pressed="true"]').count() == 1)
         await page.go_back()
         await page.wait_for_function("location.pathname === '/'", timeout=5000)
-        await page.locator("#btnSaved").click(); await page.wait_for_timeout(400)
+        await page.locator("#btnMenu").click(); await page.locator("#btnSaved").click(); await page.wait_for_timeout(400)
         saved_href = await page.locator("#feed article.card .hl a").first.get_attribute("href")
         await page.locator("#feed article.card .hl a").first.click()
         await page.wait_for_selector("#reader.on", timeout=5000)
@@ -378,10 +379,10 @@ async def main():
                   words: S.items.filter(i=>!i.demo && !i.ledger)[0].words}; }""")
         ok("the app reads the gathered Newsstand with one request and no relays",
            ns["fetched"] == NEWSSTAND["fetched"] and ns["n"] == 12 and not relay_hits, f"{ns['n']} items, relay requests: {len(relay_hits)}")
-        ok("the Newsstand says when it was gathered and that a source is being kept",
-           ns["gathered"].startswith("Gathered") and "kept from an earlier gathering" in ns["gathered"] and ns["stale"] == ["Analyst Blog"], ns["gathered"])
+        ok("the Newsstand says when it was gathered, how long ago, and that a source is being kept",
+           ns["gathered"].startswith("Newsstand gathered") and "ago)" in ns["gathered"] and "kept from an earlier gathering" in ns["gathered"] and ns["stale"] == ["Analyst Blog"], ns["gathered"])
         ok("the edition's word count stands in for the withheld article", ns["words"] == 420, ns["words"])
-        await page.locator("#btnSettings").click(); await page.wait_for_timeout(300)
+        await page.locator("#btnMenu").click(); await page.locator("#btnSettings").click(); await page.wait_for_timeout(300)
         status = await page.locator("#feedstatus").inner_text()
         ok("settings list the gathering time and each source's real state",
            "Newsstand gathered" in status and "Wire Desk" in status and "6 items" in status and "kept from" in status and "unavailable" in status,
