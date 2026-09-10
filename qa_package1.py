@@ -99,6 +99,9 @@ async def main():
     def ok(n, c, x=""): results.append(("PASS" if c else "FAIL", n, str(x)))
     def shot(page, name):
         return page.screenshot(path=os.path.join(SHOTS, name + ".png")) if SHOTS else asyncio.sleep(0)
+    # the app keys a card by a hash of the item's link, so cards are found by link
+    async def cid(page, link_suffix):
+        return await page.evaluate("suf => (S.items.find(i => i.link && i.link.endsWith(suf)) || {}).id || ''", link_suffix)
     async def txt(page, sel):
         return await page.evaluate("s => (document.querySelector(s) || {textContent: ''}).textContent.trim().replace(/\\s+/g, ' ')", sel)
 
@@ -156,17 +159,18 @@ async def main():
                (await txt(page, ".viewhead h1")) == "Newsstand" and g.startswith("Newsstand gathered") and "ago)" in g and "1 source kept from an earlier gathering" in g
                and await page.evaluate("location.pathname + location.search") == "/?view=newsstand" and await page.title() == "Newsstand — The Ledger"
                and await page.evaluate("document.querySelector('#robotsMeta').content") == "noindex,follow", g)
-            kick = await page.evaluate("[...document.querySelectorAll('#feed article.card')].map(c=>[c.dataset.id, c.querySelector('.kicker').textContent])")
-            ok(f"{W}: a story with no economic case shows a Newsstand kicker, not the desk's Companies", ["p3", "Newsstand"] in kick and ["p4", "Central Banks"] in kick, kick)
-            ok(f"{W}: an undated item says date unknown", "date unknown" in await txt(page, '#feed article.card[data-id="p5"] .meta'))
+            P = {n: await cid(page, suf) for n, suf in [("p1", "/wire-desk/1"), ("p2", "/wire-desk/2"), ("p3", "/business-desk/3"), ("p4", "/business-desk/4"), ("p5", "/wire-desk/5")]}
+            kick = dict(await page.evaluate("[...document.querySelectorAll('#feed article.card')].map(c=>[c.dataset.id, c.querySelector('.kicker').textContent])"))
+            ok(f"{W}: a story with no economic case shows a Newsstand kicker, not the desk's Companies", kick.get(P["p3"]) == "Newsstand" and kick.get(P["p4"]) == "Central Banks", kick)
+            ok(f"{W}: an undated item says date unknown", "date unknown" in await txt(page, f'#feed article.card[data-id="{P["p5"]}"] .meta'))
             await shot(page, f"newsstand-{W}")
             # ---- the Companies tab does not carry the political story
             await page.locator('#secnav a[data-sec="Companies"]').click(); await page.wait_for_timeout(300)
             ids = await page.evaluate("[...document.querySelectorAll('#feed article.card')].map(c=>c.dataset.id)")
-            ok(f"{W}: Companies tab carries the Companies story and not the political one", "p2" in ids and "p3" not in ids and await page.evaluate("location.pathname") == "/companies/", ids)
+            ok(f"{W}: Companies tab carries the Companies story and not the political one", P["p2"] in ids and P["p3"] not in ids and await page.evaluate("location.pathname") == "/companies/", ids)
             # ---- reader of a Newsstand item: Background, publisher's filing, Read/Share original
             await page.locator('#secnav a[data-sec="Newsstand"]').click(); await page.wait_for_timeout(300)
-            await page.locator('#feed article.card[data-id="p4"]').click(); await page.wait_for_selector("#reader.on"); await page.wait_for_timeout(300)
+            await page.locator(f'#feed article.card[data-id="{P["p4"]}"]').click(); await page.wait_for_selector("#reader.on"); await page.wait_for_timeout(300)
             ok(f"{W}: standing note is labelled Background with an honest signature, and the publisher's own filing is shown",
                (await txt(page, "#rwrap .wimbox h3")) == "Background" and "standing note" in await txt(page, "#rwrap .wimsig")
                and "filed by Business Desk under Companies" in await txt(page, "#rwrap .rmeta"))
@@ -179,7 +183,7 @@ async def main():
             await page.evaluate("history.back()"); await page.wait_for_timeout(300)
             ok(f"{W}: Newsstand preview keeps the page address and Back closes it", await page.locator("#reader.on").count() == 0 and await page.evaluate("location.search") == "?view=newsstand")
             # ---- a reviewed note is Why it matters, with its sources
-            await page.locator('#feed article.card[data-id="p1"]').click(); await page.wait_for_selector("#reader.on"); await page.wait_for_timeout(300)
+            await page.locator(f'#feed article.card[data-id="{P["p1"]}"]').click(); await page.wait_for_selector("#reader.on"); await page.wait_for_timeout(300)
             ok(f"{W}: a reviewed note from context.js is Why it matters with its source and reviewer",
                (await txt(page, "#rwrap .wimbox h3")) == "Why it matters" and await page.locator("#rwrap .wimbox ul a").count() == 1
                and "reviewed 2026-09-10" in await txt(page, "#rwrap .wimsig") and "Why it matters:" in await page.evaluate("plainText(S.current)"))
