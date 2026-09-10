@@ -36,7 +36,17 @@ Full detail: `CHANGELOG.md` (Unreleased → Package 1), `navigation-behaviour.md
 
 ### Checks I ran (headless Chromium in the build container; a simulation, not a phone)
 
-{{RESULTS}}
+| Check | Result | Where |
+|---|---|---|
+| `qa_package1.py` — package 1 at 360/390/768/1440 (freshness, filing, labels, masthead/menu, restorable views, share outcomes, refresh outcomes) | **114/114** | new suite |
+| Smoke run against the **real edition** of 10 Sep (347 items) at the same four widths, incl. share success/cancel/fallback and search/Saved restore | **89/89** | `docs/package-1/shots/` came from this run |
+| `qa.py` — layout, touch targets, copy, listen fallback, dark mode, settings, manifest, worker, sanitising, bookmarks, cache, editorial mix, rights model | **54/54** (was 53; one check added for the Background label in Copy) | existing suite, updated |
+| `qa_pages.py` — built pages JS-off/on, metadata, dates, links, sharing, bookmarks, audio, worker caching, 404, offline, upgrade from v3 | **90/90** | existing suite, updated for the menu and topic links |
+| `qa_feed.py` — gatherer against synthetic feeds, now incl. `section`/`topic`/`desk` and filing of items kept from older editions | **26/26** (was 21) | existing suite, extended |
+| `eval_topics.mjs` — 86-story labelled sample, 26 publishers | **86/86 with excerpts; 83/86 (96.5%) headlines only** | `classification-evaluation.md` |
+| `check_site.sh` on the build | ok | run by `qa_pages.py` and the workflow |
+
+Regression coverage the package asked for: story links (`qa_pages`: headline links, direct landing, reload, back/forward), search (`qa_package1`: heading, address, restore; `qa.py`: empty state), bookmarks (`qa_pages`: from a story address, Saved list; `qa.py`: durability), dark mode (`qa.py`; `qa_package1` screenshot), reader controls (`qa.py`: copy, listen fallback, rate, progress; `qa_pages`: audio and copy from a story address), failed-feed/freshness (`qa_package1`: 503 from the server keeps the edition with its time; no-newer and newer outcomes; unknown date; edition line; archive label; About card), keyboard/focus (`qa_package1`: menu takes focus and returns it on Escape; Escape closes a story through history; `qa.py`: Enter opens a focused card), share paths (`qa_package1` and the smoke run: completed / cancelled / copied-instead for both a Ledger story and a Newsstand preview).
 
 Screenshots in `shots/` were captured by the smoke run against the real edition
 of 10 September (recovered from the live site; not committed), at 360, 390, 768
