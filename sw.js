@@ -29,6 +29,7 @@ const FILES = [
   "/topics.js",
   "/context.js",
   "/about.js",
+  "/analytics.js",
   "/media.js",
   "/content.js",
   "/manifest.webmanifest",

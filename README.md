@@ -84,6 +84,13 @@ A note on the *Long reads* rail: it is ranked by depth and source quality, not b
 
 ## Files
 
+Pageview collection is currently off. The optional local adapter in `analytics.js`
+counts deliberate page/reader navigation when configured and offers a persistent
+**Exclude my visits** choice in About. It excludes local/preview and recognized
+automated browsers. `docs/measurement.md` defines the count model and its limits;
+`python qa_analytics.py` tests requests with all traffic intercepted, including
+the unconfigured production state. No new analytics service or visitor ID is added.
+
 `index.html` is the entire application — markup, styles and logic in one file. `content.js` is the publication: The Ledger's own articles, loaded at boot. `about.js` is the About page, shared by the app and the build. `media.js` is the contract and renderer for a piece's picture, shared the same way; `assets/editorial/<id>/` holds each picture's web derivatives and provenance (masters stay outside the repository; `make_derivatives.py` makes the derivatives). `sw.js` is the offline shell. `manifest.webmanifest` plus the PNG icons make it installable. `sources.js` is the list of public feeds, read by the app and the gatherer alike; `topics.js` is the filing rule they share; `context.js` holds reviewed story-specific context. `fetch_feeds.mjs` gathers those feeds into `data/feed.json`. `build.mjs` writes the story, section and About pages, the sitemaps, the Atom feed, `robots.txt` and the 404 page into `_site` and copies the gathered Newsstand in; `check_site.sh` is the artifact check the deploy runs on that folder. `qa.py`, `qa_live.py`, `qa_pages.py`, `qa_feed.py`, `qa_package1.py` and `qa_seo.py` are the test suites, and `fetch_fixtures.sh` captures the feeds the live suite reads.
 
 Only `_site` is deployed — the workflow in `.github/workflows/pages.yml` runs the build and publishes that folder, and the build fails if anything a page references is missing from the output. The tests and this README stay behind.

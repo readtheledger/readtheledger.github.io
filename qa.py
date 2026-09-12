@@ -352,17 +352,15 @@ async def main():
            f"{licensed['rendered']}/{licensed['full']} chars")
         await page.evaluate("closeReader()")
 
-        # launch plumbing: feedback link present; analytics silent until a code is set
+        # Launch plumbing; request payload and exclusion behavior are exercised
+        # with all collector traffic intercepted in qa_analytics.py.
         fb = await page.evaluate("""() => !!document.querySelector('#settings a[href*="github.com/readtheledger/readtheledger.github.io/issues"]')""")
         ok("feedback link in settings", fb)
         pixel_only = await page.evaluate("""() => {
-          // image-ping only, single host, and never a script: the mechanism is
-          // inspectable because ping() is the sole sender
-          return ping.toString().includes(".goatcounter.com/count") &&
-                 ping.toString().includes("new Image()") &&
-                 !document.querySelector('script[src]:not([src="/content.js"]):not([src="/sources.js"]):not([src="/topics.js"]):not([src="/context.js"]):not([src="/about.js"]):not([src="/media.js"])');
+          return !!window.LEDGER_ANALYTICS &&
+                 [...document.querySelectorAll('script[src]')].every(s => new URL(s.src).origin === location.origin);
         }""")
-        ok("analytics is an image ping to goatcounter only, no scripts", pixel_only)
+        ok("analytics adapter is local; no external scripts", pixel_only)
 
         # front page screenshot after a successful-ish state
         await page.evaluate("document.querySelector('#settings').classList.remove('on')")
