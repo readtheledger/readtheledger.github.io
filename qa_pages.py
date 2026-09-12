@@ -162,7 +162,7 @@ async def main():
     routes = re.search(r'^const ROUTES = (\[.*\]);$', open(os.path.join(SITE, "sw.js")).read(), re.M)
     routes = json.loads(routes.group(1)) if routes else []
     ok("service worker carries exactly this edition's addresses",
-       sorted(routes) == sorted(["/", "/index.html"] + [f"/{slug(s)}/" for s in PAGE_SECTIONS] + [f"/story/{a['id']}/" for a in arts]),
+       sorted(routes) == sorted(["/", "/index.html", "/about/"] + [f"/{slug(s)}/" for s in PAGE_SECTIONS] + [f"/story/{a['id']}/" for a in arts]),
        f"{len(routes)} routes")
 
     async with async_playwright() as p:
@@ -223,7 +223,7 @@ async def main():
             want = sorted(f"/story/{a['id']}/" for a in arts if a["section"] == s)
             ok(f"section /{slug(s)}/ lists its stories", r.status == 200 and sorted(links) == want, f"{len(links)} links")
         r = await page.goto(base + "/", wait_until="load")
-        links = await page.evaluate("() => [...document.querySelectorAll('#static article.card .hl a')].map(a=>a.getAttribute('href'))")
+        links = await page.evaluate("() => [...document.querySelectorAll('#static article.card:not(.about) .hl a')].map(a=>a.getAttribute('href'))")
         ok("front page links to every story without JavaScript",
            r.status == 200 and sorted(links) == sorted(f"/story/{a['id']}/" for a in arts), f"{len(links)} links")
         secnav = await page.evaluate("() => [...document.querySelectorAll('#static .static-nav a')].map(a=>a.getAttribute('href'))")

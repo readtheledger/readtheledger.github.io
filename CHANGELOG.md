@@ -28,14 +28,26 @@ says about itself.
 - **The About page has an address: `/about/`.** Its text moved to `about.js`,
   shared by the app (the card at the foot of the front page, the menu's About
   link, the reader) and the build (a static page with `AboutPage` structured
-  data). It says how pieces are labelled, what the Newsstand is, and where
-  corrections go — an issue on the public repository — and names no person,
-  because the publication has not stated one. It still carries no date.
+  data). It says how pieces are labelled — as the intended editorial standard,
+  since the published pieces carry the default label and predate any kept
+  review record — what the Newsstand is (a half-hour target that scheduled
+  runs have missed by hours, with the real gathering time shown), where
+  corrections go (an issue on the public repository), and every destination
+  data can go to (GoatCounter, the feed relays as a fallback, OpenAI only with
+  a key). It names no person, because the publication has not stated one, and
+  still carries no date.
 - **Structured data:** `BreadcrumbList` on every section, story and About page
   (Home › Section › Story); `Organization` on the front page with the logo and
   the repository as `sameAs`; a section's `CollectionPage` lists its pieces.
-  `NewsArticle` is unchanged except that `dateModified` reads an article's
-  `updated` field when one is set (the build refuses one earlier than `date`).
+  `NewsArticle` no longer names the site icon as its `image`: Google's Article
+  guidance asks for an image of the article, not a logo, and requires no
+  properties, so a piece without an image of its own carries none. A piece may
+  declare `image: {u, alt, w, h, caption}` in `content.js`; the build validates
+  it (https, alt text, size; the icon is refused), writes it as `ImageObject`,
+  shows it on the static page and in the reader, and uses it for the sharing
+  preview (otherwise the preview stays the icon). `dateModified` reads an
+  article's `updated` field when one is set (the build refuses one earlier
+  than `date`).
 - **Titles and descriptions say what is on the page.** The front page's
   description names the desks and the sourcing rule; a section's gives its
   count and latest piece; an empty section's says it is empty.

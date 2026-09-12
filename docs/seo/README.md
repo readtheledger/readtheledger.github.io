@@ -69,6 +69,7 @@ the local build).
 | Generic descriptions | Front: names the desks and the sourcing rule. Section: count + latest piece and its date. Empty section: says it is empty. | `qa_seo.py` |
 | No links between pieces; no About page | *More from The Ledger* on every story page (four pieces, same desk first, never itself). `/about/` from `about.js`, shared with the app; About in every static nav and in the menu. | `qa_seo.py`, `qa_pages.py` |
 | No breadcrumbs / Organization | `BreadcrumbList` on section, story and About pages; `Organization` (logo, repository as `sameAs`) on the front page; `CollectionPage.hasPart`; `AboutPage` with the organisation as `mainEntity`. `dateModified` honours an article's `updated` field (the build refuses one earlier than `date`). | `qa_seo.py` parses every JSON-LD block |
+| `NewsArticle.image` was the 512 px site icon | Removed. Google's Article guidance asks for an image that represents the article, not a logo, and has no required properties, so a piece without an image of its own carries none. A piece may now declare `image: {u, alt, w, h, caption}` in `content.js`; the build validates it (https, alt text, size; the icon is refused), writes it as `ImageObject`, shows it on the static page and in the reader, and uses it for the sharing preview. Without one, `og:image` stays the icon — a sharing preview, not an article image claim. No piece has an image today; no rich-result eligibility is claimed. | `qa_seo.py`: a fixture piece with an image, one without, and the icon refused |
 | No news sitemap / feed | `sitemap-news.xml` with a 48-hour window (empty otherwise, which Google documents as acceptable); `feed.xml` (Atom, own pieces in full); both linked from `robots.txt` / every page. `/about/` in `sitemap.xml` without `lastmod`. | `qa_seo.py` builds as of two clocks to prove the window |
 | Fonts render-blocking, unused weights | Stylesheet loaded with `media="print" onload="this.media='all'"` plus a `<noscript>` fallback; unused weights dropped. | Lighthouse `render-blocking-insight`; `qa_seo.py` |
 | Contrast, skip link | Teal `#0A626B` (6.4:1 on paper); read-state dimming 75 %; a skip link to `<main id="main">`. | Lighthouse `color-contrast`; `qa_seo.py` |
@@ -81,12 +82,20 @@ Not changed, on purpose:
 - **No author is invented.** `author` stays the organisation. A byline, a
   contact address and a corrections policy beyond "open an issue" need facts
   the owner has not stated (see below).
+- **The About page claims only what the repository evidences.** The eight
+  published pieces carry the default production label and predate any kept
+  review record (`REVIEW.md` is the policy; no review record exists for them),
+  so the page describes the labels as the intended editorial standard, not as
+  completed human review. It gives the half-hour gathering as a target that
+  scheduled runs have missed by hours, and names every destination data can
+  go to (GoatCounter, the feed relays as a fallback, OpenAI only with a key).
 - **The four same-origin scripts stay parser-blocking.** Deferring them would
   mean turning the inline app into a module (or a separate file), which the
   test suites drive through page globals; that is a larger change than this
   pass should carry, and the scripts are small (about 50 KB, one origin).
-- **The article `image` stays the icon.** There are no article images; a logo
-  is a weak `image` but not a false one. Real images are a content opportunity.
+- **No article images exist yet.** The eight pieces have none, so their
+  `NewsArticle` markup carries no `image`; adding real ones is a content
+  opportunity, and the build now supports them.
 
 ## Measurements
 
@@ -114,8 +123,9 @@ MEASUREMENTS_PLACEHOLDER
    repository's issues, which is true. An email address or a corrections
    log would be better; both are owner facts.
 4. **Images.** A representative image per piece (1200 px wide or more, in
-   more than one aspect ratio) would make the article markup complete and
-   sharing previews real; the icon is a placeholder.
+   more than one aspect ratio) would complete the article markup and make
+   sharing previews real; `content.js` accepts `image: {u, alt, w, h, caption}`
+   per piece and the build does the rest. None exists today.
 5. **Newsstand summaries.** They are what the feeds give. Any Newsstand item
    The Ledger wants in search needs a Ledger piece written about it, with the
    review loop in `REVIEW.md`.

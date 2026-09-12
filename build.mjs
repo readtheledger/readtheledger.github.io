@@ -104,6 +104,13 @@ for (const a of articles) {
   if (!a.html || !a.html.trim()) fail(where + ": missing body");
   for (const re of RISKY) if (re.test(a.html)) fail(where + ": body contains markup the static page will not carry (" + re + ")");
   if (a.updated !== undefined && (isNaN(Date.parse(a.updated)) || Date.parse(a.updated) < Date.parse(a.date))) fail(where + ": updated must be an ISO 8601 date on or after date");
+  // an optional representative image: an https address, alt text, and its size
+  // in pixels; the logo is not an article image and is never used as one
+  if (a.image !== undefined) {
+    const im = a.image;
+    if (!im || typeof im !== "object" || !/^https:\/\/[^\s"<>]+$/.test(im.u || "") || !im.alt || !(im.w > 0) || !(im.h > 0)) fail(where + ": image needs u (https), alt, w and h");
+    if (/icon-\d+\.png$/.test(im.u)) fail(where + ": the site icon is not an article image");
+  }
   if (!Array.isArray(a.sources) || !a.sources.length) fail(where + ": needs at least one source");
   for (const s of a.sources) {
     if (!s.t || !s.p || !/^https:\/\/[^\s"<>]+$/.test(s.u || "")) fail(where + ": every source needs a title, an https URL and a publisher");
@@ -131,7 +138,10 @@ const crumbs = items => ({ "@context":"https://schema.org", "@type":"BreadcrumbL
   "itemListElement": items.map((it, i) => ({ "@type":"ListItem", "position": i + 1, "name": it.name, "item": it.url })) });
 const HOME = { name: "The Ledger", url: SITE + "/" };
 
-function metaBlock({ title, ogTitle, description, canonical, ogType, extra, ld }) {
+function metaBlock({ title, ogTitle, description, canonical, ogType, extra, ld, image }) {
+  // the sharing image: the piece's own when it has one, otherwise the icon
+  // (a sharing preview, not a claim that the icon is the article's image)
+  const share = image ? image.u : SITE + "/icon-512.png";
   return [
     "<!-- meta:start — written by build.mjs -->",
     `<title>${esc(title)}</title>`,
@@ -143,11 +153,12 @@ function metaBlock({ title, ogTitle, description, canonical, ogType, extra, ld }
     `<meta property="og:title" content="${esc(ogTitle || title)}">`,
     `<meta property="og:description" content="${esc(description)}">`,
     `<meta property="og:url" content="${esc(canonical)}">`,
-    `<meta property="og:image" content="${SITE}/icon-512.png">`,
-    `<meta name="twitter:card" content="summary">`,
+    `<meta property="og:image" content="${esc(share)}">`,
+    ...(image ? [`<meta property="og:image:width" content="${image.w}">`, `<meta property="og:image:height" content="${image.h}">`, `<meta property="og:image:alt" content="${esc(image.alt)}">`] : []),
+    `<meta name="twitter:card" content="${image ? "summary_large_image" : "summary"}">`,
     `<meta name="twitter:title" content="${esc(ogTitle || title)}">`,
     `<meta name="twitter:description" content="${esc(description)}">`,
-    `<meta name="twitter:image" content="${SITE}/icon-512.png">`,
+    `<meta name="twitter:image" content="${esc(share)}">`,
     ...(extra || []),
     jsonLd(ld),
     "<!-- meta:end -->"
@@ -211,6 +222,11 @@ function relatedHTML(a) {
   }</ul></nav>`;
 }
 
+function ledeImageHTML(a) {
+  if (!a.image) return "";
+  return `<figure class="lede"><img src="${esc(a.image.u)}" alt="${esc(a.image.alt)}" width="${a.image.w}" height="${a.image.h}">${a.image.caption ? `<figcaption>${esc(a.image.caption)}</figcaption>` : ""}</figure>`;
+}
+
 function storyHTML(a) {
   const w = words(a.html);
   const srcs = a.sources.map(s =>
@@ -221,6 +237,7 @@ function storyHTML(a) {
       <h1>${esc(a.title)}</h1>
       <p class="rstand">${esc(a.standfirst)}</p>
       <div class="rmeta"><span class="badge">The Ledger</span><time class="dot" datetime="${esc(a.date)}">${dateTime(a.date)}</time><span class="dot">${readMins(w)} min read</span></div>
+      ${ledeImageHTML(a)}
       <div class="rbody">${a.html}</div>
       <aside class="sourcesbox"><h2>Sources &amp; further reading</h2><ul>${srcs}</ul></aside>
       <p class="attrline">${productionLine(a.produced)} Material sources are credited and linked above; quotations are brief and attributed.</p>
@@ -319,7 +336,7 @@ for (const a of articles) {
   const canonical = SITE + storyPath(a);
   const description = descOf(a.standfirst);
   write("story/" + a.id + "/index.html", page({
-    title: a.title + " — The Ledger", ogTitle: a.title, description, canonical, ogType: "article",
+    title: a.title + " — The Ledger", ogTitle: a.title, description, canonical, ogType: "article", image: a.image,
     extra: [
       `<meta property="article:published_time" content="${esc(a.date)}">`,
       `<meta property="article:section" content="${esc(a.section)}">`,
@@ -332,7 +349,10 @@ for (const a of articles) {
       "articleSection": a.section, "wordCount": words(a.html),
       "isAccessibleForFree": true, "inLanguage": "en",
       "url": canonical, "mainEntityOfPage": { "@type":"WebPage", "@id": canonical },
-      "image": [SITE + "/icon-512.png"],
+      // image only when the piece has a representative one of its own: Google's
+      // Article guidance asks for an image of the article, not a logo, and has
+      // no required properties, so a piece without one simply carries none
+      ...(a.image ? { "image": [{ "@type":"ImageObject", "url": a.image.u, "width": a.image.w, "height": a.image.h, "caption": a.image.alt }] } : {}),
       "author": { "@type":"Organization", "name":"The Ledger", "url": SITE + "/" },
       "publisher": ORG,
       "citation": a.sources.map(s => ({ "@type":"CreativeWork", "name": s.t, "url": s.u, "publisher": { "@type":"Organization", "name": s.p } }))

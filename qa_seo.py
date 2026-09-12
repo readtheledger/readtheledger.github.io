@@ -23,7 +23,8 @@ def slug(s): return re.sub(r"^-|-$", "", re.sub(r"[^a-z0-9]+", "-", s.lower().re
 
 ARTS = [
   {"id":"seo-fresh",  "kind":"news",     "section":"Markets",   "date":"2026-09-12T11:00:00Z", "title":"A fresh piece, an hour old",  "standfirst":"Published within the news window."},
-  {"id":"seo-recent", "kind":"analysis", "section":"Economics", "date":"2026-09-09T09:00:00Z", "title":"A recent analysis, three days old", "standfirst":"Outside the news window, inside the archive threshold."},
+  {"id":"seo-recent", "kind":"analysis", "section":"Economics", "date":"2026-09-09T09:00:00Z", "title":"A recent analysis, three days old", "standfirst":"Outside the news window, inside the archive threshold.",
+   "image":{"u":"https://example.com/photos/recent-1600x900.jpg","alt":"A chart of the thing the piece is about","w":1600,"h":900,"caption":"The chart. Source: Example."}},
   {"id":"seo-old",    "kind":"news",     "section":"Markets",   "date":"2026-09-02T09:00:00Z", "title":"An older story, ten days old", "standfirst":"From the archive."},
 ]
 def content_js():
@@ -163,6 +164,17 @@ async def main():
            and [i["name"] for i in L[1]["itemListElement"]] == ["The Ledger", "Markets", ARTS[0]["title"]]
            and [i["item"] for i in L[1]["itemListElement"]] == [f"{SITE_URL}/", f"{SITE_URL}/markets/", f"{SITE_URL}/story/seo-fresh/"])
         ok("story page: no author is invented (the organisation is the author, no person named)", "Person" not in json.dumps(L))
+        ok("story page without an image of its own carries no NewsArticle image (the logo is not one); sharing preview is the icon",
+           "image" not in L[0] and 'property="og:image" content="https://readtheledger.github.io/icon-512.png"' in html and 'twitter:card" content="summary"' in html)
+        html2 = rd("story", "seo-recent", "index.html"); L2 = lds(html2)
+        await page.goto(base + "/story/seo-recent/")
+        ok("story page with an image of its own: NewsArticle.image is that image, with its size; sharing preview uses it; the page shows it",
+           L2[0]["image"][0]["url"] == "https://example.com/photos/recent-1600x900.jpg" and L2[0]["image"][0]["width"] == 1600
+           and 'property="og:image" content="https://example.com/photos/recent-1600x900.jpg"' in html2 and 'twitter:card" content="summary_large_image"' in html2
+           and await page.evaluate("(()=>{const f=document.querySelector('#static figure.lede img');return !!f && f.alt.startsWith('A chart') && f.getAttribute('width')==='1600'})()"))
+        bad = os.path.join(work, "bad.js"); open(bad, "w").write(content_js().replace("https://example.com/photos/recent-1600x900.jpg", "https://readtheledger.github.io/icon-512.png"))
+        rb = subprocess.run(["node", os.path.join(ROOT, "build.mjs"), site + "-bad", "--content", bad, "--now", NOW], capture_output=True, text=True)
+        ok("the build refuses the site icon as an article image", rb.returncode == 1 and "not an article image" in rb.stdout + rb.stderr)
 
         r = await page.goto(base + "/about/")
         hs = await heads(); html = rd("about", "index.html"); L = lds(html)
@@ -170,6 +182,8 @@ async def main():
         ok("About page: canonical, indexable, AboutPage with the organisation as its subject and a breadcrumb",
            f'<link rel="canonical" href="{SITE_URL}/about/">' in html and 'content="index,follow"' in html
            and L[0]["@type"] == "AboutPage" and L[0]["mainEntity"]["@type"] == "Organization" and L[1]["@type"] == "BreadcrumbList")
+        ok("About page: the schedule is a target, the labels are the standard rather than a review record, and every data flow is named",
+           await page.evaluate("(()=>{const t=document.querySelector('#static').textContent;return /target is a fresh gathering every half hour/.test(t) && /sometimes delayed by hours/.test(t) && /intended editorial standard/.test(t) && /What leaves your device/.test(t) && /OpenAI/.test(t) && /relay/.test(t) && /GoatCounter/.test(t)})()"))
         ok("About page: says it has no date and where corrections go, names no person",
            await page.evaluate("(()=>{const t=document.querySelector('#static').textContent;return /no date/.test(t) && /Corrections and contact/.test(t) && /github\\.com\\/readtheledger/.test(t)})()")
            and await page.locator('#static .static-nav a[href="/about/"][aria-current="page"]').count() == 1)
