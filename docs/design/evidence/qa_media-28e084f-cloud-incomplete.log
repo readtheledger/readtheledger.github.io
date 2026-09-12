@@ -1,0 +1,40 @@
+build: 18 pages, 8 stories, 5 sections with content, 0 in the news sitemap, shell e779775b → /tmp/ledger-media-9xew_v6n/site
+PASS worker: media.js precached, pictures never precached, bounded image cache of its own, scoped to the build
+PASS archive label on static pages: a news story past a week says so, analysis carries only its date
+PASS story with a picture: NewsArticle.image is the piece's own derivative with size, credit and AI source type
+PASS story with a picture: sharing preview is the piece's own picture, large card
+PASS as published, every piece carries a picture
+PASS fixture, story without a picture: no NewsArticle.image, icon only as the sharing preview, no figure
+PASS every derivative a piece names is served
+PASS no master is shipped: every editorial file under 600 KB, provenance carries the master's hash only
+PASS static story: kicker, headline, deck, picture, byline/date, body — in that order
+PASS static story: one figure with alt text, reserved size, three WebP candidates, sizes, eager and high priority
+PASS static story: caption is editorial, credit names the maker, disclosure says AI-generated
+PASS static story at 390px, 2x: the picture fills the viewport and the 1200px derivative is chosen
+PASS fixture, static story without a picture: text-led, same order, nothing left empty
+PASS fixture, front page: the row whose story lost its picture stays text-led; lead, two thumbnails and the feature are unchanged
+PASS static front: the lead keeps editorial order and carries its own picture above the words, eager
+PASS static front: thumbnails on the two stories after the lead only; the rows after are text-led although their stories have pictures
+PASS static front: a compact story shows a lazy 3:2 thumbnail with no caption, summary and meta below at full width
+PASS static front: the weekly feature shows its picture above an italic headline
+PASS direct navigation: the reader opens on the story, the static copy is gone once the picture has loaded, exactly one hero figure is visible
+PASS handover: the hero is fetched from the server once, one derivative, for the static page and the reader together
+PASS reader: the archive label sits above a news headline past a week, and the true date is shown
+PASS reader: the figure follows the deck and precedes the byline; caption, credit and disclosure present
+PASS typography at 390px, regular size: headline 30–34px upright, deck 18–19.5px, body 20–21px with comfortable leading
+PASS the reader's text-size setting still scales headline, deck and body
+PASS the weekly feature's headline is the italic display face, with the drop cap reserved for it
+PASS fixture: a story without a picture reads text-led in the reader, no figure, no drop cap, byline after the deck
+PASS Listen: the reader reserves more than the dock's height below the article
+PASS Back from a directly opened story lands on the front page with the reader closed
+PASS Forward reopens the story with its picture
+PASS Save, Copy and Share are unchanged on a story with a picture
+PASS front page: the feature picture is a real image that has loaded once scrolled into view
+PASS front page: the compact thumbnail is 112px wide, 3:2, and the 480px derivative is chosen
+PASS front page on a phone: the lead's summary shows at most four lines and a supporting story's three, the rest clipped
+PASS front page in the app: one lead picture, two thumbnails, one feature picture — and no more
+PASS worker: one image cache, named for this build, holding the 1200px hero after a controlled load
+PASS worker: after 45 pictures through it the cache holds at most 40, the oldest gone
+PASS a replaced picture alone gives the build a new stamp
+PASS after the new build, the worker activates and drops every old cache; the same 1200px address then yields the replaced picture, fetched from the server past the HTTP cache's max-age
+exit 143

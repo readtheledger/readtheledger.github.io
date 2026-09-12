@@ -137,6 +137,26 @@ the text-size setting, the Listen dock's space, Back and Forward from a
 direct story load, Save/Copy/Share, no overflow from 320 to 1440 px, no
 master shipped, and the worker's bounded image cache.
 
+### Test evidence for the release head (28e084f)
+
+All runs are headless Chromium, not GitHub CI (this repository has no CI test
+job). "Cloud" is this build sandbox, where Google Fonts and every external
+host are unreachable; "local" is the reviewer's machine, where fonts load.
+
+| Suite | Cloud (this sandbox) | Local (independent reviewer) |
+|---|---|---|
+| `qa.py` | 54/54 | 53/54 before the drop-cap check was aligned; the same change |
+| `qa_feed.py` | 26/26 | 26/26 |
+| `qa_seo.py` | 49/49 at 3b7b5e4 (no change to the checked files since) | 49/49 |
+| `qa_package1.py` | 114/114 | 114/114 |
+| `qa_pages.py` | traceback in a chained run while the media suite ran alongside; the solo re-run was stopped by the reviewer's release decision — recorded as **not completed here** (`evidence/suites-chain-cloud.log`) | 89/90: every page and worker check passed; the one failure was `check_site.sh` splitting an absolute Windows path with a space, which passes with a relative `_site` and does not affect the Linux workflow |
+| `qa_media.py` | 38 of 39 checks passed, then stopped before the final overflow sweep by the same decision — recorded as **incomplete** (`evidence/qa_media-28e084f-cloud-incomplete.log`) | 39/39 with external font requests isolated; the cache-upgrade scenario also run without request routing: the changed 1200 px picture was served, the new worker's build evaluated, only the new build's caches remained |
+| `eval_topics.mjs` | 83/86 (96.5 %), unchanged | — |
+
+The cloud traceback and the stopped runs are not reproduced product defects;
+no functional failure was found in any completed check. The reviewer's local
+runs cover the behaviour the two incomplete cloud runs would have covered.
+
 Not done here: a physical iPhone Safari check (outstanding; the owner can do
 it on the deployed page), and field performance data (none exists for this
 origin; lab measurements are in the pull request). The section-page

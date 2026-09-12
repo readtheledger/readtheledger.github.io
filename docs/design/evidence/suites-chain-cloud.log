@@ -1,0 +1,11 @@
+=== qa.py
+54/54 checks passed
+=== qa_pages.py
+Traceback (most recent call last):
+=== qa_feed.py
+26/26 gatherer checks passed
+=== qa_package1.py
+114/114 package-1 checks passed  (headless Chromium simulation at 360/390/768/1440 px, not a phone)
+=== eval_topics
+83/86 placed appropriately (96.5%), 67 exactly as expected, 3 outside the accepted placements, 86 not found in the edition (classified on the headline alone)
+done
