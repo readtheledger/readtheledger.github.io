@@ -29,6 +29,8 @@ const FILES = [
   "/topics.js",
   "/context.js",
   "/about.js",
+  "/privacy.js",
+  "/consent.js",
   "/analytics.js",
   "/media.js",
   "/production.js",

@@ -33,6 +33,7 @@ const SITE = "https://readtheledger.github.io";
 const SITE_TITLE = "The Ledger — Finance, read properly";
 const SITE_DESC  = "The Ledger's own financial reporting and analysis — markets, central banks, the economy, tech and personal finance — every source credited and linked.";
 const ABOUT_PATH = "/about/";
+const PRIVACY_PATH = "/privacy/";
 const FEED_PATH  = "/feed.xml";
 const NEWS_SITEMAP = "/sitemap-news.xml";
 const REPO = "https://github.com/readtheledger/readtheledger.github.io";
@@ -56,6 +57,8 @@ const index = read("index.html");
 const contentSrc = fs.readFileSync(CONTENT_FILE, "utf8");
 const swSrc = read("sw.js");
 const aboutSrc = read("about.js");
+const privacySrc = read("privacy.js");
+const consentSrc = read("consent.js");
 const analyticsSrc = read("analytics.js");
 const mediaSrc = read("media.js");
 const productionSrc = read("production.js");
@@ -83,10 +86,13 @@ if (!content || !Array.isArray(content.articles) || !content.articles.length) fa
 const articles = content.articles;
 vm.runInNewContext(aboutSrc, ctx);
 const about = ctx.window.LEDGER_ABOUT;
+vm.runInNewContext(privacySrc, ctx);
+const privacy = ctx.window.LEDGER_PRIVACY;
 vm.runInNewContext(mediaSrc, ctx);
 const M = ctx.window.LEDGER_MEDIA;
 if (!M || !M.figureHTML) fail("media.js carries no LEDGER_MEDIA");
 if (!about || !about.title || !about.standfirst || !about.html) fail("about.js carries no About page (title, standfirst, html)");
+if (!privacy || !privacy.title || !privacy.standfirst || !privacy.html) fail("privacy.js carries no Privacy page (title, standfirst, html)");
 
 /* ---------------------------------------------------------------- checking */
 /* The article bodies are The Ledger's own, but a static page has no runtime
@@ -120,6 +126,7 @@ for (const a of articles) {
 }
 if (articles.filter(a => a.weekly).length > 1) fail("more than one article is marked weekly");
 for (const re of RISKY) if (re.test(about.html)) fail("about.js: body contains markup the static page will not carry (" + re + ")");
+for (const re of RISKY) if (re.test(privacy.html)) fail("privacy.js: body contains markup the static page will not carry (" + re + ")");
 
 /* ----------------------------------------------------------------- helpers */
 const words = html => html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(Boolean).length;
@@ -268,14 +275,14 @@ function storyHTML(a) {
   </div>`;
 }
 
-function aboutHTML() {
-  return `<div id="static">${navHTML("About")}
+function infoHTML(info, label) {
+  return `<div id="static">${navHTML(label)}
     <article class="rwrap">
-      <p class="kicker">About</p>
-      <h1>${esc(about.title)}</h1>
-      <p class="rstand">${esc(about.standfirst)}</p>
+      <p class="kicker">${esc(label)}</p>
+      <h1>${esc(info.title)}</h1>
+      <p class="rstand">${esc(info.standfirst)}</p>
       <div class="rmeta"><span class="badge">The Ledger</span><span class="dot">Part of the app · no date</span></div>
-      <div class="rbody">${about.html}</div>
+      <div class="rbody">${info.html}</div>
       <p class="attrline">This page is part of the app and is not an article; it carries no publication date.</p>
       <p class="static-home"><a href="/">← The Ledger front page</a></p>
     </article>
@@ -326,7 +333,17 @@ write(ABOUT_PATH.slice(1) + "index.html", page({
     { "@context":"https://schema.org", "@type":"AboutPage", "name":"About The Ledger", "url": SITE + ABOUT_PATH, "description": descOf(about.standfirst), "isPartOf": { "@type":"WebSite", "name":"The Ledger", "url": SITE + "/" }, "mainEntity": ORG },
     crumbs([HOME, { name: "About", url: SITE + ABOUT_PATH }])
   ]
-}, aboutHTML()));
+}, infoHTML(about, "About")));
+
+// Privacy is an informational WebPage, never an article or a dated edition.
+write(PRIVACY_PATH.slice(1) + "index.html", page({
+  title: "Privacy — The Ledger", ogTitle: privacy.title,
+  description: descOf(privacy.standfirst), canonical: SITE + PRIVACY_PATH, ogType: "website",
+  ld: [
+    { "@context":"https://schema.org", "@type":"WebPage", "name":privacy.title, "url":SITE + PRIVACY_PATH, "description":descOf(privacy.standfirst), "isPartOf":{ "@type":"WebSite", "name":"The Ledger", "url":SITE + "/" } },
+    crumbs([HOME, { name:"Privacy", url:SITE + PRIVACY_PATH }])
+  ]
+}, infoHTML(privacy, "Privacy")));
 
 // sections
 const sectionUrls = [];
@@ -389,7 +406,7 @@ for (const a of articles) {
 const urls = [{ loc: SITE + "/", lastmod: newest }]
   .concat(sectionUrls)
   .concat(articles.map(a => ({ loc: SITE + storyPath(a), lastmod: a.updated || a.date })))
-  .concat([{ loc: SITE + ABOUT_PATH }]);
+  .concat([{ loc: SITE + ABOUT_PATH }, { loc: SITE + PRIVACY_PATH }]);
 write("sitemap.xml",
   '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
   urls.map(u => `  <url><loc>${esc(u.loc)}</loc>${u.lastmod ? `<lastmod>${esc(u.lastmod)}</lastmod>` : ""}</url>`).join("\n") +
@@ -448,7 +465,7 @@ nav{border-top:1px solid var(--rule);margin-top:28px;padding-top:14px;font-famil
   <h1>That page isn't in this edition.</h1>
   <p>The address may have been mistyped, or the story it pointed to is no longer published. Everything The Ledger has written is on the front page.</p>
   <p><a href="/">Go to the front page →</a></p>
-  <nav aria-label="Sections">${PAGE_SECTIONS.map(s => `<a href="${sectionPath(s)}">${esc(s)}</a>`).join("")}<a href="${ABOUT_PATH}">About</a></nav>
+  <nav aria-label="Sections">${PAGE_SECTIONS.map(s => `<a href="${sectionPath(s)}">${esc(s)}</a>`).join("")}<a href="${ABOUT_PATH}">About</a><a href="${PRIVACY_PATH}">Privacy</a></nav>
 </main>
 </body>
 </html>
@@ -468,14 +485,14 @@ if (fs.existsSync(ASSETS_DIR)) {
     if (fs.statSync(src).isFile()) assetHash.update(f.replace(/\\/g, "/")).update(fs.readFileSync(src));
   }
 }
-const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(read("topics.js")).update(read("context.js")).update(aboutSrc).update(analyticsSrc).update(mediaSrc).update(productionSrc).update(swSrc).update(assetHash.digest()).digest("hex").slice(0, 8);
-const routes = ["/", "/index.html", ABOUT_PATH].concat(PAGE_SECTIONS.map(sectionPath), articles.map(storyPath));
+const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(read("topics.js")).update(read("context.js")).update(aboutSrc).update(privacySrc).update(consentSrc).update(analyticsSrc).update(mediaSrc).update(productionSrc).update(swSrc).update(assetHash.digest()).digest("hex").slice(0, 8);
+const routes = ["/", "/index.html", ABOUT_PATH, PRIVACY_PATH].concat(PAGE_SECTIONS.map(sectionPath), articles.map(storyPath));
 const sw = swSrc
   .replace('const BUILD = "dev";', 'const BUILD = "' + stamp + '";')
   .replace(/^const ROUTES = \[[^\n]*\];$/m, "const ROUTES = " + JSON.stringify(routes) + ";");
 if (!sw.includes('const BUILD = "' + stamp + '"') || !sw.includes('"/story/' + articles[0].id + '/"')) fail("sw.js was not stamped");
 write("sw.js", sw);
-for (const f of ["content.js", "sources.js", "topics.js", "context.js", "about.js", "analytics.js", "media.js", "production.js", "manifest.webmanifest", "ads.txt", "icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]) {
+for (const f of ["content.js", "sources.js", "topics.js", "context.js", "about.js", "privacy.js", "consent.js", "analytics.js", "media.js", "production.js", "manifest.webmanifest", "ads.txt", "icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]) {
   // the publication the pages were written from is the one the app loads, so a
   // build from another content file (the tests do this) is consistent with itself
   fs.copyFileSync(f === "content.js" ? CONTENT_FILE : path.join(ROOT, f), path.join(OUT, f));

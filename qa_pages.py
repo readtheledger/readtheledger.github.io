@@ -168,7 +168,7 @@ async def main():
     routes = re.search(r'^const ROUTES = (\[.*\]);$', open(os.path.join(SITE, "sw.js")).read(), re.M)
     routes = json.loads(routes.group(1)) if routes else []
     ok("service worker carries exactly this edition's addresses",
-       sorted(routes) == sorted(["/", "/index.html", "/about/"] + [f"/{slug(s)}/" for s in PAGE_SECTIONS] + [f"/story/{a['id']}/" for a in arts]),
+       sorted(routes) == sorted(["/", "/index.html", "/about/", "/privacy/"] + [f"/{slug(s)}/" for s in PAGE_SECTIONS] + [f"/story/{a['id']}/" for a in arts]),
        f"{len(routes)} routes")
 
     async with async_playwright() as p:

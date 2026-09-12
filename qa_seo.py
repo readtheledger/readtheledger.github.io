@@ -72,6 +72,9 @@ async def main():
     STATE["root"] = site
     threading.Thread(target=serve, daemon=True).start()
     base = f"http://127.0.0.1:{PORT}"
+    async def local_only(route):
+        if route.request.url.startswith(base + "/"): await route.continue_()
+        else: await route.abort()
     rd = lambda *p: open(os.path.join(site, *p), encoding="utf-8").read()
 
     # ---- files a crawler reads
@@ -109,6 +112,7 @@ async def main():
         b = await pw.chromium.launch()
         # ---- with JavaScript off: what a crawler that does not render sees
         ctx = await b.new_context(java_script_enabled=False, viewport={"width":390,"height":844})
+        await ctx.route("**/*", local_only)
         page = await ctx.new_page()
         async def heads(): return await page.evaluate("[...document.querySelectorAll('h1,h2,h3,h4')].filter(h=>h.closest('#static')||h.closest('.masthead')).map(h=>[+h.tagName[1], h.textContent.trim().slice(0,40)])")
         def in_order(hs):
@@ -183,7 +187,7 @@ async def main():
            f'<link rel="canonical" href="{SITE_URL}/about/">' in html and 'content="index,follow"' in html
            and L[0]["@type"] == "AboutPage" and L[0]["mainEntity"]["@type"] == "Organization" and L[1]["@type"] == "BreadcrumbList")
         ok("About page: schedule is a target, archive records are missing, new work needs actual review, and data flows are named",
-           await page.evaluate("(()=>{const t=document.querySelector('#static').textContent;return /target is a fresh gathering every half hour/.test(t) && /sometimes delayed by hours/.test(t) && /A factual review record is not available/.test(t) && /New pieces in either category must pass/.test(t) && /A label alone does not prove a review happened/.test(t) && /What leaves your device/.test(t) && /OpenAI/.test(t) && /relay/.test(t) && /GoatCounter/.test(t)})()"))
+           await page.evaluate("(()=>{const t=document.querySelector('#static').textContent;return /target is a fresh gathering every half hour/.test(t) && /sometimes delayed by hours/.test(t) && /A factual review record is not available/.test(t) && /New pieces in either category must pass/.test(t) && /A label alone does not prove a review happened/.test(t) && /What leaves your device/.test(t) && /OpenAI/.test(t) && /relay/.test(t) && /Cloudflare Web Analytics/.test(t)})()"))
         ok("About page: says it has no date and where corrections go, names no person",
            await page.evaluate("(()=>{const t=document.querySelector('#static').textContent;return /no date/.test(t) && /Corrections and contact/.test(t) && /github\\.com\\/readtheledger/.test(t)})()")
            and await page.locator('#static .static-nav a[href="/about/"][aria-current="page"]').count() == 1)
@@ -193,6 +197,7 @@ async def main():
 
         # ---- with JavaScript on: the app must keep the build's signals honest
         ctx = await b.new_context(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        await ctx.route("**/*", local_only)
         page = await ctx.new_page()
         await page.goto(base + "/", wait_until="load"); await page.wait_for_selector("#feed article.card")
         robots = lambda: page.evaluate("document.querySelector('#robotsMeta').content")

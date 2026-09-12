@@ -131,10 +131,10 @@ def unpack(data, digest, destination):
 def validate_static_files(files):
     # Same application assets required by check_site.sh, plus the mandatory feed.
     # upload-pages-artifact excludes .nojekyll; Cloudflare does not use that marker.
-    required = {'index.html','404.html','content.js','sources.js','topics.js','context.js','about.js',
+    required = {'index.html','404.html','content.js','sources.js','topics.js','context.js','about.js','privacy.js','consent.js',
                 'analytics.js','media.js','production.js','sw.js','manifest.webmanifest','data/feed.json',
                 'icon-180.png','icon-192.png','icon-512.png','icon-maskable-512.png',
-                'sitemap.xml','sitemap-news.xml','feed.xml','robots.txt','about/index.html'}
+                'sitemap.xml','sitemap-news.xml','feed.xml','robots.txt','about/index.html','privacy/index.html'}
     require(required <= files.keys(), 'Incomplete Pages artifact or missing gathered feed')
     require(not any(n.endswith(('.py','.mjs','.toml','.yml','.yaml','.env')) for n in files), 'Non-static/private build files in artifact')
     require(re.search(rb'^const BUILD = "[0-9a-f]{8}";', files['sw.js'], re.M), 'Unstamped service worker')

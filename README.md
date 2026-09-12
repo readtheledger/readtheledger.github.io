@@ -94,6 +94,19 @@ opt-out reloads, privacy boundaries and the separate dashboard receipt check.
 `python qa_analytics.py --beacon <reviewed-local-beacon.js>` tests the actual
 provider script with all page and collection traffic intercepted locally.
 
+`/privacy/` is an informational page shared by the static build and reader via
+`privacy.js`, included in the ordinary sitemap and offline routes without an
+article date. Normal footer links work without JavaScript; menu and reader entry
+points share the same URL.
+`consent.js` prepares advertising-choice entry points through Google's
+`CONSENT_API_READY` callback and `showRevocationMessage`; controls stay hidden
+until that API is ready and callable. It loads no advertising/CMP scripts and
+adds no CSP permissions. Actual message/vendor setup and end-to-end revocation
+remain to be verified before ad activation. Cloudflare exclusion is separate.
+`python qa_privacy.py` checks the page, navigation, accessibility and real offline
+worker with external traffic blocked; Google readiness is mocked for the entry
+point tests. These checks do not prove a published consent message or legal compliance.
+
 `index.html` is the entire application — markup, styles and logic in one file. `content.js` is the publication: The Ledger's own articles, loaded at boot. `about.js` is the About page, shared by the app and the build. `media.js` is the contract and renderer for a piece's picture, shared the same way; `assets/editorial/<id>/` holds each picture's web derivatives and provenance (masters stay outside the repository; `make_derivatives.py` makes the derivatives). `sw.js` is the offline shell. `manifest.webmanifest` plus the PNG icons make it installable. `sources.js` is the list of public feeds, read by the app and the gatherer alike; `topics.js` is the filing rule they share; `context.js` holds reviewed story-specific context. `fetch_feeds.mjs` gathers those feeds into `data/feed.json`. `build.mjs` writes the story, section and About pages, the sitemaps, the Atom feed, `robots.txt` and the 404 page into `_site` and copies the gathered Newsstand in; `check_site.sh` is the artifact check the deploy runs on that folder. `qa.py`, `qa_live.py`, `qa_pages.py`, `qa_feed.py`, `qa_package1.py` and `qa_seo.py` are the test suites, and `fetch_fixtures.sh` captures the feeds the live suite reads.
 
 Only `_site` is deployed — the workflow in `.github/workflows/pages.yml` runs the build and publishes that folder, and the build fails if anything a page references is missing from the output. The tests and this README stay behind.
