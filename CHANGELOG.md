@@ -4,6 +4,56 @@ All notable changes to The Ledger. Dates are UTC.
 
 ## Unreleased
 
+### Search — what a crawler is served, and what it is told
+
+Audited against Google Search Central's current guidance (the audit, with
+before-and-after evidence, is `docs/seo/README.md`). Nothing about the
+publication's identity, dates or labels changed; what changed is what a page
+says about itself.
+
+- **Nothing is blocked in `robots.txt` any more.** The app-only views
+  (`/?view=newsstand`, `/?view=saved`, `?q=`) were disallowed there and marked
+  `noindex` by the app at the same time — a contradiction, since a crawler that
+  may not fetch a page cannot read its `noindex`, and Google says a blocked
+  address can still be indexed by its URL alone. They are now `noindex` with a
+  canonical of their own (a `noindex` page must not name another page as
+  canonical), and `robots.txt` allows everything. A section with no stories yet
+  is served and linked but written `noindex,follow` by the build until it has one;
+  the app keeps whatever value the build wrote.
+- **Every page opens with one `h1`** — the site's title on the front page (for
+  readers of the structure; the wordmark is the visible one), the section's name
+  with its count on a section page, the headline on a story — and the headings
+  under it are in order: the sources box, the notices and the context box are
+  `h2`. A skip link is the first thing in the body.
+- **The About page has an address: `/about/`.** Its text moved to `about.js`,
+  shared by the app (the card at the foot of the front page, the menu's About
+  link, the reader) and the build (a static page with `AboutPage` structured
+  data). It says how pieces are labelled, what the Newsstand is, and where
+  corrections go — an issue on the public repository — and names no person,
+  because the publication has not stated one. It still carries no date.
+- **Structured data:** `BreadcrumbList` on every section, story and About page
+  (Home › Section › Story); `Organization` on the front page with the logo and
+  the repository as `sameAs`; a section's `CollectionPage` lists its pieces.
+  `NewsArticle` is unchanged except that `dateModified` reads an article's
+  `updated` field when one is set (the build refuses one earlier than `date`).
+- **Titles and descriptions say what is on the page.** The front page's
+  description names the desks and the sourcing rule; a section's gives its
+  count and latest piece; an empty section's says it is empty.
+- **Real links between pages.** A story page links to four other pieces (the
+  same desk first) under *More from The Ledger*, and the section navigation on
+  every static page ends with About.
+- **Sitemaps and a feed.** `sitemap.xml` includes `/about/` (no `lastmod`, since
+  it has no date). `sitemap-news.xml` lists only what was published in the last
+  48 hours — what Google reads a news sitemap for — and is empty otherwise; an
+  archive does not qualify, and the build does not pretend it does. `feed.xml`
+  is an Atom feed of The Ledger's own pieces in full, linked from every page.
+- **Loading and accessibility.** The Google Fonts stylesheet no longer blocks
+  the first paint (text shows in the fallback face and swaps) and asks only for
+  the weights the stylesheet uses; the teal badge text and a read story's
+  dimmed standfirst now meet 4.5:1 contrast.
+- `qa_seo.py`: 45 checks on all of the above, from a fixture edition with one
+  piece inside the 48-hour window and four desks with nothing yet.
+
 ### Package 1 — freshness, topics, labels, navigation, sharing
 
 #### Freshness you can trust
@@ -57,8 +107,9 @@ All notable changes to The Ledger. Dates are UTC.
 
 #### Predictable navigation and sharing
 - Newsstand, Saved and search are restorable addresses (`/?view=newsstand`,
-  `/?view=saved`, `?q=term`), titled to match, marked `noindex` and disallowed
-  in `robots.txt`; every topic is an ordinary link. A Newsstand preview keeps
+  `/?view=saved`, `?q=term`), titled to match and marked `noindex` (the
+  `robots.txt` disallow that went with it was removed in the search pass
+  above); every topic is an ordinary link. A Newsstand preview keeps
   the address it was opened from, offers **Read the original** and
   **Share original**, and never gets a Ledger address of its own.
 - Share reports its outcome in words — completed, cancelled, or copied instead

@@ -227,7 +227,7 @@ async def main():
         ok("front page links to every story without JavaScript",
            r.status == 200 and sorted(links) == sorted(f"/story/{a['id']}/" for a in arts), f"{len(links)} links")
         secnav = await page.evaluate("() => [...document.querySelectorAll('#static .static-nav a')].map(a=>a.getAttribute('href'))")
-        ok("static section navigation present", secnav == ["/"] + [f"/{slug(s)}/" for s in PAGE_SECTIONS], secnav)
+        ok("static section navigation present, About last", secnav == ["/"] + [f"/{slug(s)}/" for s in PAGE_SECTIONS] + ["/about/"], secnav)
 
         # sitemap, robots, 404
         sm = await (await ctx.request.get(base + "/sitemap.xml")).text()

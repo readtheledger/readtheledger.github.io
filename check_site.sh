@@ -15,9 +15,9 @@ say() { echo "$1"; missing=1; }
 [ -d "$dir" ] || { echo "MISSING: $dir is not a directory"; exit 1; }
 
 # the files the installed app precaches, and the files this release publishes
-for f in index.html content.js sources.js topics.js context.js sw.js manifest.webmanifest \
+for f in index.html content.js sources.js topics.js context.js about.js sw.js manifest.webmanifest \
          icon-180.png icon-192.png icon-512.png icon-maskable-512.png \
-         sitemap.xml robots.txt 404.html .nojekyll; do
+         sitemap.xml sitemap-news.xml feed.xml robots.txt 404.html about/index.html .nojekyll; do
   [ -f "$dir/$f" ] || say "MISSING from $dir: $f"
 done
 

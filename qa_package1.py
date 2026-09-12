@@ -172,7 +172,7 @@ async def main():
             await page.locator('#secnav a[data-sec="Newsstand"]').click(); await page.wait_for_timeout(300)
             await page.locator(f'#feed article.card[data-id="{P["p4"]}"]').click(); await page.wait_for_selector("#reader.on"); await page.wait_for_timeout(300)
             ok(f"{W}: standing note is labelled Background with an honest signature, and the publisher's own filing is shown",
-               (await txt(page, "#rwrap .wimbox h3")) == "Background" and "standing note" in await txt(page, "#rwrap .wimsig")
+               (await txt(page, "#rwrap .wimbox h2")) == "Background" and "standing note" in await txt(page, "#rwrap .wimsig")
                and "filed by Business Desk under Companies" in await txt(page, "#rwrap .rmeta"))
             ok(f"{W}: preview tag, Read the original, Share original, labelled reader actions",
                await page.locator("#rwrap .preview-tag").count() == 1 and "Read the original at" in await txt(page, "#rwrap .srccta a")
@@ -185,7 +185,7 @@ async def main():
             # ---- a reviewed note is Why it matters, with its sources
             await page.locator(f'#feed article.card[data-id="{P["p1"]}"]').click(); await page.wait_for_selector("#reader.on"); await page.wait_for_timeout(300)
             ok(f"{W}: a reviewed note from context.js is Why it matters with its source and reviewer",
-               (await txt(page, "#rwrap .wimbox h3")) == "Why it matters" and await page.locator("#rwrap .wimbox ul a").count() == 1
+               (await txt(page, "#rwrap .wimbox h2")) == "Why it matters" and await page.locator("#rwrap .wimbox ul a").count() == 1
                and "reviewed 2026-09-10" in await txt(page, "#rwrap .wimsig") and "Why it matters:" in await page.evaluate("plainText(S.current)"))
             await shot(page, f"reader-newsstand-{W}")
             # ---- share outcomes
