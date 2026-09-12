@@ -157,6 +157,20 @@ e = src.get("Silent Desk", {})
 ok("a feed that never answers is unavailable, with nothing to keep",
    e.get("ok") is False and e.get("stale") is False and e.get("count") == 0 and "timed out" in e.get("error", ""), e)
 
+# every item is filed by its subject, with the confidence and the publisher's own category beside it
+ok("items carry a section, a filing confidence and the publisher's desk",
+   ed and all(("section" in i) and isinstance(i.get("topic"), dict) and i["topic"].get("confidence") and ("desk" in i) for i in ed["items"]),
+   ed and sorted({(i.get("topic") or {}).get("confidence", "?") for i in ed["items"]}))
+ok("a rates-and-stocks story from the wire desk is filed under Markets or Economics, with confidence and a reason",
+   a1 and a1["section"] in ("Markets", "Economics") and a1["topic"]["confidence"] in ("high", "medium") and a1["desk"] == "Markets" and a1["topic"]["reason"], a1 and (a1.get("section"), a1.get("topic")))
+ok("an economics research entry is filed under Economics whatever desk carried it",
+   b1 and b1["section"] == "Economics", b1 and b1.get("section"))
+ok("the oil story carried by the Companies desk is filed under Markets, not Companies",
+   c2 and c2["section"] == "Markets" and c2["desk"] == "Companies", c2 and (c2.get("section"), c2.get("desk")))
+kept = by_title.get("An opinion kept from last time")
+ok("an item kept from an edition that predates filing is filed on the way in",
+   kept and isinstance(kept.get("topic"), dict) and kept.get("desk") == "Opinion", kept and (kept.get("section"), kept.get("topic"), kept.get("desk")))
+
 dates = [i["date"] for i in ed["items"]] if ed else []
 ok("items are newest first", dates == sorted(dates, reverse=True), dates[:3])
 ok("every shipped item has an absolute link, a date and a title",

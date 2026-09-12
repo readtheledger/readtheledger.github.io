@@ -17,6 +17,8 @@ const FILES = [
   "/",
   "/index.html",
   "/sources.js",
+  "/topics.js",
+  "/context.js",
   "/content.js",
   "/manifest.webmanifest",
   "/icon-192.png",

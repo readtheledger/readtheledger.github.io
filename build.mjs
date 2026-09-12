@@ -54,7 +54,7 @@ const index = read("index.html");
 const contentSrc = fs.readFileSync(CONTENT_FILE, "utf8");
 const swSrc = read("sw.js");
 
-for (const marker of ["<!-- meta:start", "<!-- meta:end -->", "<!-- static:slot"]) {
+for (const marker of ["<!-- meta:start", "<!-- meta:end -->", "<!-- static:slot", '<p class="datestrip" id="datestrip"']) {
   if (!index.includes(marker)) fail("index.html is missing the " + marker + " marker");
 }
 if (!swSrc.includes('const BUILD = "dev";')) fail("sw.js is missing the BUILD stamp");
@@ -180,7 +180,10 @@ function storyHTML(a) {
 function page(meta, staticHtml) {
   return index
     .replace(/<!-- meta:start[\s\S]*?<!-- meta:end -->/, metaBlock(meta))
-    .replace(/<!-- static:slot[^>]*-->/, staticHtml);
+    .replace(/<!-- static:slot[^>]*-->/, staticHtml)
+    // the edition line comes from the publication, never from a clock: the
+    // newest date in content.js, written here so it reads without JavaScript
+    .replace(/(<p class="datestrip" id="datestrip"[^>]*>)[^<]*(<\/p>)/, "$1Latest edition " + esc(dateLong(newest)) + "$2");
 }
 
 /* ------------------------------------------------------------------ output */
@@ -252,7 +255,9 @@ write("sitemap.xml",
   '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
   urls.map(u => `  <url><loc>${esc(u.loc)}</loc><lastmod>${esc(u.lastmod)}</lastmod></url>`).join("\n") +
   "\n</urlset>\n");
-write("robots.txt", "User-agent: *\nAllow: /\n\nSitemap: " + SITE + "/sitemap.xml\n");
+// the app-only views and searches live on the front page's address with a query;
+// they are personal or transient, and are not pages to index
+write("robots.txt", "User-agent: *\nAllow: /\nDisallow: /*?view=\nDisallow: /*?q=\n\nSitemap: " + SITE + "/sitemap.xml\n");
 
 // a real not-found page: no app, no service-worker registration, plain links out
 write("404.html", `<!DOCTYPE html>
@@ -292,14 +297,14 @@ nav{border-top:1px solid var(--rule);margin-top:28px;padding-top:14px;font-famil
 // told exactly which addresses the app can render offline: the front page, the
 // sections and the stories that exist in this edition, and nothing else
 const sourcesSrc = read("sources.js");
-const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(swSrc).digest("hex").slice(0, 8);
+const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(read("topics.js")).update(read("context.js")).update(swSrc).digest("hex").slice(0, 8);
 const routes = ["/", "/index.html"].concat(PAGE_SECTIONS.map(sectionPath), articles.map(storyPath));
 const sw = swSrc
   .replace('const BUILD = "dev";', 'const BUILD = "' + stamp + '";')
   .replace(/^const ROUTES = \[[^\n]*\];$/m, "const ROUTES = " + JSON.stringify(routes) + ";");
 if (!sw.includes('const BUILD = "' + stamp + '"') || !sw.includes('"/story/' + articles[0].id + '/"')) fail("sw.js was not stamped");
 write("sw.js", sw);
-for (const f of ["content.js", "sources.js", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]) {
+for (const f of ["content.js", "sources.js", "topics.js", "context.js", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]) {
   fs.copyFileSync(path.join(ROOT, f), path.join(OUT, f));
   written.push(f);
 }
