@@ -9,20 +9,20 @@
 <script>document.documentElement.classList.add("js");</script>
 <!-- Article bodies come from publisher feeds by way of third-party relays, and the
      reader's OpenAI key lives in this origin's local storage. The policy below is the
-     backstop: no script may be loaded from anywhere else, and the only hosts this page
-     can talk to are the speech API and the feed relays. -->
+     backstop: scripts are limited to this site and the Cloudflare analytics beacon;
+     connections are limited to this site, speech, feed relays and analytics. -->
 <meta http-equiv="Content-Security-Policy" content="
   default-src 'self';
   base-uri 'none';
   object-src 'none';
   frame-src 'none';
   form-action 'none';
-  script-src 'self' 'unsafe-inline';
+  script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com/beacon.min.js;
   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
   font-src https://fonts.gstatic.com;
   img-src 'self' https: data: blob:;
   media-src 'self' blob:;
-  connect-src 'self' https://api.openai.com https://api.allorigins.win https://corsproxy.io https://api.codetabs.com">
+  connect-src 'self' https://api.openai.com https://api.allorigins.win https://corsproxy.io https://api.codetabs.com https://cloudflareinsights.com/cdn-cgi/rum">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
 <meta name="google-site-verification" content="HRTi_4B1AL_3WZcrRViVq4onwxlfSPT4fSQpbqtaT2c" />
 <meta name="google-adsense-account" content="ca-pub-1632733900961015">
@@ -690,9 +690,10 @@ function viewFromParam(v){ return Object.keys(VIEW_PARAM).find(k=>VIEW_PARAM[k]=
 
 /* CORS relays, tried in order, only when the gathered edition cannot be read.
    RSS is public, but browsers block cross-origin XML. */
-/* Collection is off. Set a site code only for a verified owner-controlled
-   account. analytics.js also applies the production/owner/QA guards. */
+/* One verified public Cloudflare property; GoatCounter stays inactive.
+   analytics.js gates the provider on the canonical origin and browser choice. */
 const GC_SITE = "";
+const CF_ANALYTICS_TOKEN = "e1563ba6decb4bfcae56ce3d7c2d3366";
 
 const RELAYS = [
   u => "https://api.allorigins.win/raw?url=" + encodeURIComponent(u),
@@ -869,21 +870,12 @@ function makeEditorial(a){
 }
 const EDITORIAL = ((window.LEDGER_CONTENT && window.LEDGER_CONTENT.articles) || []).map(makeEditorial);
 const ANALYTICS = window.LEDGER_ANALYTICS ? window.LEDGER_ANALYTICS.create({
-  site: GC_SITE, origin: SITE,
-  paths: ["/", ABOUT_PATH, "/newsstand/", "/saved/", "/newsstand/reader/"]
-    .concat(PAGE_SECTIONS.map(sectionPath), EDITORIAL.map(storyPath))
+  token: CF_ANALYTICS_TOKEN, origin: SITE
 }) : null;
 function trackVisiblePage(){
-  if(!ANALYTICS) return;
-  if($("#reader").classList.contains("on") && S.current){
-    const it = S.current;
-    // Newsstand previews have no public page of their own. Count that view in
-    // aggregate; its local item identity is used only to distinguish navigation.
-    ANALYTICS.visit("reader:"+it.id, storyPath(it) || "/newsstand/reader/");
-  }else{
-    const path = sectionPath(S.section) || (S.section==="Newsstand" ? "/newsstand/" : "/saved/");
-    ANALYTICS.visit("view:"+S.section, path);
-  }
+  // Start at most one provider after the app has restored the visible route.
+  // Cloudflare measures native navigation; there are no manual pageview events.
+  ANALYTICS?.visit();
 }
 function bindAnalyticsPreference(){
   const wrap = $("#rwrap");
@@ -894,8 +886,9 @@ function bindAnalyticsPreference(){
     if(!ANALYTICS){ control.disabled=true; status.textContent="Pageview counting is unavailable."; return; }
     control.disabled=false; control.checked=ANALYTICS.excluded();
     status.textContent = ANALYTICS.storageFailed()
-      ? "Counting is paused because this browser could not save or read your choice. Allow site storage to save it across reloads."
-      : !GC_SITE ? (control.checked ? "Pageview collection is off. Your choice to exclude this browser is saved for any future enablement." : "Pageview collection is off. You can still save a choice to exclude this browser.")
+      ? "Counting is paused in this page because your choice could not be saved or read. It may not survive a reload. Allow site storage, then save your choice again."
+      : ANALYTICS.unavailable() ? "Pageview counting is unavailable in this page."
+      : !CF_ANALYTICS_TOKEN ? "Pageview collection is off."
       : control.checked ? "Your visits are excluded in this browser. Uncheck to include future page visits."
       : "Your future page visits may be counted. Check to exclude them in this browser.";
   }

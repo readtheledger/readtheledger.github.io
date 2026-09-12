@@ -80,18 +80,19 @@ A Newsstand story's context box is labelled honestly. The desk's standing note i
 
 The Newsstand normally arrives as the gathered file described above. When it cannot be read, browsers cannot read cross-origin RSS directly, so feeds are fetched through public CORS relays with a fallback chain (`api.allorigins.win`, then `corsproxy.io`, then `api.codetabs.com`). If all of them fail, the app shows whatever is already cached on your device rather than an empty screen.
 
-What renders is decided by rights, not by what the feed happened to carry. A source with a named reuse licence renders in full — sanitised of scripts, iframes and inline handlers, with the licence stated in the attribution line and a link to the original. Every other story, including the many whose feeds carry complete articles, is presented as The Ledger's page: the summary as the lede, at most one short quote attributed to the publisher, the Ledger's "Why it matters" analysis in its own box, an attribution line, and a solid *Read the full story* button out to the source. Links and images are kept only if the browser resolves them to `http`, `https` or `mailto`, which is stricter than it sounds: a leading space or tab makes `javascript:` look harmless to a naive check but not to the URL parser. A content security policy sits behind that, so no script can be loaded from another host and the page can only talk to the speech API and the feed relays — the API key in local storage has nowhere to be sent even if something did slip through. The app never scrapes past a paywall and never fetches anything a feed did not publish.
+What renders is decided by rights, not by what the feed happened to carry. A source with a named reuse licence renders in full — sanitised of scripts, iframes and inline handlers, with the licence stated in the attribution line and a link to the original. Every other story, including the many whose feeds carry complete articles, is presented as The Ledger's page: the summary as the lede, at most one short quote attributed to the publisher, the Ledger's "Why it matters" analysis in its own box, an attribution line, and a solid *Read the full story* button out to the source. Links and images are kept only if the browser resolves them to `http`, `https` or `mailto`, which is stricter than it sounds: a leading space or tab makes `javascript:` look harmless to a naive check but not to the URL parser. A content security policy sits behind that, limiting scripts to this site and the Cloudflare analytics beacon, and connections to this site, speech, feed relays and the analytics endpoint. The integration does not read or transmit the speech key; changes to the third-party script remain a trust boundary. The app never scrapes past a paywall and never fetches anything a feed did not publish.
 
 A note on the *Long reads* rail: it is ranked by depth and source quality, not by readership, because a static client has no way to know what other people are reading. It is labelled honestly rather than called "most read".
 
 ## Files
 
-Pageview collection is currently off. The optional local adapter in `analytics.js`
-counts deliberate page/reader navigation when configured and offers a persistent
-**Exclude my visits** choice in About. It excludes local/preview and recognized
-automated browsers. `docs/measurement.md` defines the count model and its limits;
-`python qa_analytics.py` tests requests with all traffic intercepted, including
-the unconfigured production state. No new analytics service or visitor ID is added.
+The canonical public site uses one Cloudflare Web Analytics property. The adapter
+in `analytics.js` guards loading and outgoing requests with the persistent
+**Exclude my visits** choice, canonical-host and automation checks. GoatCounter
+remains inactive. `docs/measurement.md` describes native navigation measurement,
+opt-out reloads, privacy boundaries and the separate dashboard receipt check.
+`python qa_analytics.py --beacon <reviewed-local-beacon.js>` tests the actual
+provider script with all page and collection traffic intercepted locally.
 
 `index.html` is the entire application — markup, styles and logic in one file. `content.js` is the publication: The Ledger's own articles, loaded at boot. `about.js` is the About page, shared by the app and the build. `media.js` is the contract and renderer for a piece's picture, shared the same way; `assets/editorial/<id>/` holds each picture's web derivatives and provenance (masters stay outside the repository; `make_derivatives.py` makes the derivatives). `sw.js` is the offline shell. `manifest.webmanifest` plus the PNG icons make it installable. `sources.js` is the list of public feeds, read by the app and the gatherer alike; `topics.js` is the filing rule they share; `context.js` holds reviewed story-specific context. `fetch_feeds.mjs` gathers those feeds into `data/feed.json`. `build.mjs` writes the story, section and About pages, the sitemaps, the Atom feed, `robots.txt` and the 404 page into `_site` and copies the gathered Newsstand in; `check_site.sh` is the artifact check the deploy runs on that folder. `qa.py`, `qa_live.py`, `qa_pages.py`, `qa_feed.py`, `qa_package1.py` and `qa_seo.py` are the test suites, and `fetch_fixtures.sh` captures the feeds the live suite reads.
 
