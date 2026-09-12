@@ -28,6 +28,7 @@ const argv = process.argv.slice(2);
 const opt  = (name, dflt) => { const i = argv.indexOf("--" + name); return i >= 0 ? argv[i + 1] : dflt; };
 const OUT  = path.resolve(argv.find(a => !a.startsWith("--") && !argv[argv.indexOf(a) - 1]?.startsWith("--")) || path.join(ROOT, "_site"));
 const CONTENT_FILE = path.resolve(opt("content", path.join(ROOT, "content.js")));   // the tests build from a content file of their own
+const ASSETS_DIR   = path.resolve(opt("assets", path.join(ROOT, "assets", "editorial")));   // and, for the worker's cache test, from pictures of their own
 const PRODUCED = ["reported", "assisted"];
 /* the attribution line says how a piece was actually produced, per piece, and
    never by default; index.html prints the same words in the reader */
@@ -191,7 +192,7 @@ function cardHTML(a, lead, pos) {
   return `<article class="${cls}">
       ${variant !== "compact" ? fig : ""}
       <div class="cardtop"><div>
-        ${a.weekly ? '<p class="weeklylabel">The Ledger Weekly · Deep dive</p>' : `<p class="kicker">${esc(a.section)}</p>`}
+        ${a.weekly ? '<p class="weeklylabel">The Ledger Weekly · Deep dive</p>' : kickerHTML(a)}
         <h2 class="hl${a.weekly ? " feature-hl" : ""}"><a href="${storyPath(a)}">${esc(a.title)}</a></h2>
         ${thumb ? "" : below}
       </div>${thumb ? fig : ""}</div>
@@ -242,13 +243,19 @@ function ledeImageHTML(a) {
 }
 const absUrl = u => /^https?:/.test(u) ? u : SITE + u;
 
+/* as the app labels it: a news story more than a week old at build time is from
+   the archive; analysis and deep work carry their date and are not expired by age */
+const ARCHIVE_MS = 7 * 24 * 3600 * 1000;
+const isArchive = a => (a.kind || "news") === "news" && NOW - Date.parse(a.date) > ARCHIVE_MS;
+const kickerHTML = (a, link) => `<p class="kicker">${isArchive(a) ? '<span class="arch">From the archive · </span>' : ""}${link ? `<a href="${sectionPath(a.section)}">${esc(a.section)}</a>` : esc(a.section)}</p>`;
+
 function storyHTML(a) {
   const w = words(a.html);
   const srcs = a.sources.map(s =>
     `<li><a href="${esc(s.u)}" target="_blank" rel="noopener noreferrer">${esc(s.t)}</a> — ${esc(s.p)}</li>`).join("");
   return `<div id="static">${navHTML(a.section)}
     <article class="rwrap${a.kind === "deep" ? " feature" : ""}">
-      <p class="kicker"><a href="${sectionPath(a.section)}">${esc(a.section)}</a></p>
+      ${kickerHTML(a, true)}
       <h1>${esc(a.title)}</h1>
       <p class="rstand">${esc(a.standfirst)}</p>
       ${ledeImageHTML(a)}
@@ -452,7 +459,11 @@ nav{border-top:1px solid var(--rule);margin-top:28px;padding-top:14px;font-famil
 // told exactly which addresses the app can render offline: the front page, the
 // sections and the stories that exist in this edition, and nothing else
 const sourcesSrc = read("sources.js");
-const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(read("topics.js")).update(read("context.js")).update(aboutSrc).update(mediaSrc).update(swSrc).digest("hex").slice(0, 8);
+// the stamp covers the pictures too, so a replaced picture is a new build to the
+// worker and its image cache is started afresh
+const assetHash = crypto.createHash("sha256");
+for (const rel of written.filter(f => f.startsWith("assets/")).sort()) assetHash.update(rel).update(fs.readFileSync(path.join(OUT, rel)));
+const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(read("topics.js")).update(read("context.js")).update(aboutSrc).update(mediaSrc).update(swSrc).update(assetHash.digest()).digest("hex").slice(0, 8);
 const routes = ["/", "/index.html", ABOUT_PATH].concat(PAGE_SECTIONS.map(sectionPath), articles.map(storyPath));
 const sw = swSrc
   .replace('const BUILD = "dev";', 'const BUILD = "' + stamp + '";')
@@ -468,7 +479,7 @@ for (const f of ["content.js", "sources.js", "topics.js", "context.js", "about.j
 write(".nojekyll", "");
 
 // the editorial pictures: web derivatives and their provenance, never a master
-const assetsDir = path.join(ROOT, "assets", "editorial");
+const assetsDir = ASSETS_DIR;
 if (fs.existsSync(assetsDir)) {
   for (const f of fs.readdirSync(assetsDir, { recursive: true })) {
     const src = path.join(assetsDir, String(f));

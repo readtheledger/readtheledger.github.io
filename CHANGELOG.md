@@ -41,10 +41,24 @@ evidence.
   follow the same rule. No story moved.
 - The worker caches editorial pictures in a bounded cache of their own (40 at
   most, oldest out), never precached, so offline text never depends on them.
-- `qa_media.py`: 29 checks, including the text-led state from a fixture with
-  one piece's picture removed, one server fetch of the hero across the
-  handover, lazy pictures loading on scroll, the Listen dock's space, Back and
-  Forward from a direct story load, and no overflow from 320 to 1440 px.
+  The cache is scoped to the build, and the build stamp now covers the
+  pictures' bytes, so a replaced picture reaches installed readers with the
+  next build and the old cache is dropped; the write is attached to the fetch
+  event so a stopped worker cannot lose it.
+- The archive label (*From the archive*, on a news story more than a week old)
+  is written by the build on the static pages too, so the static story and
+  the reader agree; analysis and deep work carry their date only, as before.
+- On a phone a front-page summary shows four lines on the lead and three on a
+  supporting story, clipped; the article's own deck is whole. From 820 px the
+  lead's picture sits beside its words so the headline is on the first screen.
+- `qa_media.py`: 39 checks, including the text-led state from a fixture with
+  one piece's picture removed (a second build, served on its own port, so the
+  production pace is checked on the publication as it is), one server fetch of
+  the hero across the handover with pictures served cacheable as Pages serves
+  them, the worker's cache bound and its refresh on a replaced picture, lazy
+  pictures loading on scroll, the archive label on both pages, the summary
+  clamps, the Listen dock's space, Back and Forward from a direct story load,
+  and no overflow from 320 to 1440 px.
 
 ### Search — what a crawler is served, and what it is told
 

@@ -79,8 +79,13 @@ async def main():
 
     # ---- the built pages
     sw = rd("sw.js")
-    ok("worker: media.js precached, pictures never precached, bounded image cache of its own",
-       '"/media.js"' in sw and "assets/editorial" not in re.search(r"const FILES = \[(.*?)\];", sw, re.S).group(1) and "IMAGE_KEEP" in sw and 'startsWith("/assets/editorial/")' in sw)
+    ok("worker: media.js precached, pictures never precached, bounded image cache of its own, scoped to the build",
+       '"/media.js"' in sw and "assets/editorial" not in re.search(r"const FILES = \[(.*?)\];", sw, re.S).group(1) and "IMAGE_KEEP" in sw and 'startsWith("/assets/editorial/")' in sw
+       and 'const IMAGES  = "ledger-images-v" + VERSION + "-" + BUILD' in sw and "e.waitUntil(c.put(" in sw)
+    ok("archive label on static pages: a news story past a week says so, analysis carries only its date",
+       '<span class="arch">From the archive · </span>' in re.search(r'<div id="static">[\s\S]*?<h1>', rd("story", "led-20260817-record", "index.html")).group(0)
+       and '<span class="arch">' not in re.search(r'<div id="static">[\s\S]*?<h1>', rd("story", WITH, "index.html")).group(0)
+       and rd("index.html").count('<span class="arch">From the archive · </span>') >= 5)
     html = rd("story", WITH, "index.html"); L = lds(html)
     im = L[0]["image"][0]
     ok("story with a picture: NewsArticle.image is the piece's own derivative with size, credit and AI source type",
@@ -150,6 +155,10 @@ async def main():
         ok("direct navigation: the reader opens on the story, the static copy is gone once the picture has loaded, exactly one hero figure is visible",
            await page.locator("#static").count() == 0 and await page.locator("figure.fig-hero").count() == 1 and await page.evaluate("location.pathname") == f"/story/{WITH}/")
         ok("handover: the hero is fetched from the server once, one derivative, for the static page and the reader together", sum(h.values()) == 1 and list(h)[0].endswith("hero-1200.webp"), h)
+        await page.goto(base + "/story/led-20260817-record/", wait_until="load"); await page.wait_for_selector("#reader.on"); await page.wait_for_timeout(300)
+        ok("reader: the archive label sits above a news headline past a week, and the true date is shown",
+           "From the archive" in await page.locator("#rwrap .kicker").text_content() and "August 17, 2026" in await page.locator("#rwrap .rmeta").text_content())
+        await page.goto(base + f"/story/{WITH}/", wait_until="load"); await page.wait_for_selector("#reader.on"); await page.wait_for_timeout(300)
         ok("reader: the figure follows the deck and precedes the byline; caption, credit and disclosure present",
            await page.evaluate("(()=>{const w=document.querySelector('#rwrap');const o=[...w.querySelectorAll('h1,.rstand,figure.fig-hero,.rmeta,.rbody')].map(e=>e.matches('figure')?'figure':e.className||'h1');return JSON.stringify(o)})()") == '["h1","rstand","figure","rmeta","rbody"]'
            and await page.locator("#rwrap .fig-ai").count() == 1 and "The Ledger" in await page.locator("#rwrap .fig-credit").text_content())
@@ -196,8 +205,51 @@ async def main():
            await page.evaluate("(()=>{const i=document.querySelector('#feed article.weekly img');return i && i.complete && i.naturalWidth>0 && Math.round(i.getBoundingClientRect().width)>300})()"))
         ok("front page: the compact thumbnail is 112px wide, 3:2, and the 480px derivative is chosen",
            await page.evaluate("(()=>{const i=document.querySelector('#feed article.compact.has-image img');const r=i.getBoundingClientRect();return Math.round(r.width)===112 && Math.abs(r.width/r.height-1.5)<0.05 && (i.currentSrc||'').endsWith('hero-480.webp')})()"))
+        clamp = await page.evaluate("(()=>{const m=e=>{const cs=getComputedStyle(e);return [e.clientHeight, parseFloat(cs.lineHeight), e.scrollHeight]};return {lead:m(document.querySelector('#feed article.lead .standfirst')), comp:m(document.querySelector('#feed article.compact .standfirst'))}})()")
+        ok("front page on a phone: the lead's summary shows at most four lines and a supporting story's three, the rest clipped",
+           clamp["lead"][0] <= clamp["lead"][1] * 4 + 2 and clamp["lead"][2] > clamp["lead"][0] and clamp["comp"][0] <= clamp["comp"][1] * 3 + 2, clamp)
         ok("front page in the app: one lead picture, two thumbnails, one feature picture — and no more",
            await page.evaluate("[...document.querySelectorAll('#feed article.card figure.fig')].map(f=>f.className.replace('fig ',''))") == ["fig-lead", "fig-thumb", "fig-thumb", "fig-feature"])
+        await ctx.close()
+
+        # ---- the worker's picture cache: scoped to the build, bounded, refreshed by a replaced picture
+        ctx = await b.new_context(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        page = await ctx.new_page()
+        await page.goto(base + f"/story/{WITH}/", wait_until="load")
+        await page.wait_for_function("navigator.serviceWorker && navigator.serviceWorker.controller !== null", timeout=20000)
+        await page.reload(wait_until="load"); await page.wait_for_selector("#reader.on"); await page.wait_for_timeout(1500)
+        stampA = re.search(r'const BUILD = "([0-9a-f]{8})"', rd("sw.js")).group(1)
+        img_caches = [k for k in await page.evaluate("caches.keys()") if k.startswith("ledger-images-v")]
+        held = await page.evaluate("async k => (await (await caches.open(k)).keys()).map(r=>new URL(r.url).pathname)", img_caches[0]) if img_caches else []
+        ok("worker: one image cache, named for this build, holding the hero after a controlled load",
+           len(img_caches) == 1 and stampA in img_caches[0] and any(p.startswith(f"/assets/editorial/{WITH}/hero-") for p in held), (img_caches, held))
+        os.makedirs(os.path.join(site, "assets", "editorial", "limit"))
+        small = open(os.path.join(site, "assets", "editorial", WITH, "hero-480.webp"), "rb").read()
+        for i in range(45): open(os.path.join(site, "assets", "editorial", "limit", f"hero-{i}.webp"), "wb").write(small)
+        await page.evaluate("async () => { for (let i=0;i<45;i++) await fetch('/assets/editorial/limit/hero-'+i+'.webp'); }")
+        await page.wait_for_timeout(1500)
+        n = await page.evaluate("async k => (await (await caches.open(k)).keys()).length", img_caches[0])
+        ok("worker: after 45 pictures through it the cache holds at most 40, the oldest gone", 35 <= n <= 40, n)
+        # a new build in which this piece's picture was replaced, and nothing else changed
+        alt = os.path.join(work, "assets-b"); shutil.copytree(os.path.join(ROOT, "assets", "editorial"), alt)
+        for f in ["hero-1200.webp", "hero-768.webp", "hero-480.webp", "hero-1200.jpg"]:
+            shutil.copy(os.path.join(alt, FEATURE, f), os.path.join(alt, WITH, f))
+        siteb = os.path.join(work, "site-b")
+        rb = subprocess.run(["node", os.path.join(ROOT, "build.mjs"), siteb, "--assets", alt], capture_output=True, text=True)
+        os.makedirs(os.path.join(siteb, "data")); open(os.path.join(siteb, "data", "feed.json"), "w").write(stub)
+        stampB = re.search(r'const BUILD = "([0-9a-f]{8})"', open(os.path.join(siteb, "sw.js")).read()).group(1) if rb.returncode == 0 else ""
+        ok("a replaced picture alone gives the build a new stamp", rb.returncode == 0 and stampB and stampB != stampA, (stampA, stampB, rb.stderr[-200:]))
+        STATE["root"] = siteb
+        await page.reload(wait_until="load")
+        await page.wait_for_function("s => caches.keys().then(ks => ks.some(k => k.includes(s)))", arg=stampB, timeout=20000)
+        await page.wait_for_timeout(800)
+        await page.reload(wait_until="load"); await page.wait_for_selector("#reader.on"); await page.wait_for_timeout(1500)
+        newlen = os.path.getsize(os.path.join(siteb, "assets", "editorial", WITH, "hero-1200.webp"))
+        got = await page.evaluate(f"fetch('/assets/editorial/{WITH}/hero-1200.webp').then(r=>r.arrayBuffer()).then(b=>b.byteLength)")
+        keys2 = await page.evaluate("caches.keys()")
+        ok("after the new build installs, a reader gets the replaced picture and the old image cache is gone",
+           got == newlen and not any(stampA in k for k in keys2) and any(stampB in k for k in keys2), (got, newlen, keys2))
+        STATE["root"] = site
         await ctx.close()
 
         # ---- no horizontal overflow, JS on, at every width

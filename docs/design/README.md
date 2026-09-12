@@ -89,12 +89,36 @@ article.
 
 ## The front page
 
-Pace, not uniformity: the lead carries its picture above the words; the two
-stories after it carry a 112 px thumbnail with the summary and meta below at
-full width; the rows after that are text-led even though every piece now has
-a picture; the *Why it matters* card is unchanged; the weekly feature carries
-its picture above an italic headline. Section pages use the same rule. Saved
-and search stay as they were.
+Pace, not uniformity: the lead carries its picture above the words on a phone
+and beside them from 820 px up, so the headline is on the first screen; the
+two stories after it carry a 112 px thumbnail with the summary and meta below
+at full width; the rows after that are text-led even though every piece now
+has a picture; the *Why it matters* card is unchanged; the weekly feature
+carries its picture above an italic headline. Section pages use the same rule.
+Saved and search stay as they were.
+
+On a phone a front-page summary is a glimpse, not the deck: the lead's shows
+four lines and a supporting story's three, clipped; the headline link and the
+article's own deck are whole. Above 820 px the summaries are not clipped.
+
+The archive label the app shows — *From the archive* on a news story more than
+a week old, never on analysis or deep work, which carry their date and are not
+expired by age — is now written by the build on the static pages too, as of
+build time, so the static story and the reader agree. The true dates are
+unchanged and shown under the picture.
+
+## The worker's picture cache
+
+Pictures are never precached, so offline text never depends on them. They are
+cached on first view in a cache of their own, bounded to 40 (oldest out), and
+that cache is scoped to the build like the shell: the build stamp covers the
+pictures' bytes, so a replaced picture arrives with a new stamp and the old
+cache is dropped on activation. An installed reader cannot keep old artwork
+for a piece whose picture changed. The write is attached to the fetch event so
+a stopped worker cannot lose it. `qa_media.py` proves the three properties:
+the cache is named for the build and holds the hero; 45 pictures leave at most
+40; a build in which one picture was replaced gets a new stamp, installs, and
+serves the replaced bytes with the old cache gone.
 
 ## Evidence
 
@@ -115,7 +139,10 @@ master shipped, and the worker's bounded image cache.
 
 Not done here: a physical iPhone Safari check (outstanding; the owner can do
 it on the deployed page), and field performance data (none exists for this
-origin; lab measurements are in the pull request).
+origin; lab measurements are in the pull request). The section-page
+screenshot shows a *Live feeds unreachable* notice: the build sandbox serves a
+stub Newsstand edition with no items and cannot reach the relays; production
+serves a gathered edition and the notice does not appear.
 
 ## The art
 

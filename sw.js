@@ -13,7 +13,10 @@ const BUILD = "dev";   // build.mjs stamps a hash of the app and the edition her
                        // so a new article or a changed page installs a fresh shell
 const SHELL   = "ledger-shell-v"   + VERSION + "-" + BUILD;
 const RUNTIME = "ledger-runtime-v" + VERSION + "-" + BUILD;
-const IMAGES  = "ledger-images-v" + VERSION;   // survives a new build: a picture does not change with the edition
+/* the pictures' cache is scoped to the build like the shell: the build stamp
+   covers the pictures' bytes, so a replaced picture arrives with a new stamp and
+   the old cache goes on activation; an installed reader never keeps old artwork */
+const IMAGES  = "ledger-images-v" + VERSION + "-" + BUILD;
 const IMAGE_KEEP = 40;
 async function trimImages(c) {
   const keys = await c.keys();
@@ -138,7 +141,8 @@ self.addEventListener("fetch", e => {
   if (url.origin === location.origin && url.pathname.startsWith("/assets/editorial/")) {
     e.respondWith(
       caches.open(IMAGES).then(c => c.match(req).then(hit => hit || fetch(req).then(res => {
-        if (res && res.ok) { c.put(req, res.clone()).then(() => trimImages(c)); }
+        // the write is attached to the event, so the worker is not stopped before it lands
+        if (res && res.ok) e.waitUntil(c.put(req, res.clone()).then(() => trimImages(c)));
         return res;
       })))
     );
