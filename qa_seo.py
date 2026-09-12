@@ -30,7 +30,7 @@ ARTS = [
 def content_js():
     arts = []
     for a in ARTS:
-        arts.append(json.dumps(dict(a, html="<p>First paragraph of %s.</p><h2>A subheading</h2><p>Second paragraph.</p>" % a["id"],
+        arts.append(json.dumps(dict(a, produced="reported", html="<p>First paragraph of %s.</p><h2>A subheading</h2><p>Second paragraph.</p>" % a["id"],
                                      sources=[{"t":"A source","u":"https://example.com/s","p":"Example"}])))
     return "window.LEDGER_CONTENT = {updated:\"2026-09-12\", articles:[" + ",".join(arts) + "]};"
 
@@ -182,8 +182,8 @@ async def main():
         ok("About page: canonical, indexable, AboutPage with the organisation as its subject and a breadcrumb",
            f'<link rel="canonical" href="{SITE_URL}/about/">' in html and 'content="index,follow"' in html
            and L[0]["@type"] == "AboutPage" and L[0]["mainEntity"]["@type"] == "Organization" and L[1]["@type"] == "BreadcrumbList")
-        ok("About page: the schedule is a target, the labels are the standard rather than a review record, and every data flow is named",
-           await page.evaluate("(()=>{const t=document.querySelector('#static').textContent;return /target is a fresh gathering every half hour/.test(t) && /sometimes delayed by hours/.test(t) && /intended editorial standard/.test(t) && /What leaves your device/.test(t) && /OpenAI/.test(t) && /relay/.test(t) && /GoatCounter/.test(t)})()"))
+        ok("About page: schedule is a target, archive records are missing, new work needs actual review, and data flows are named",
+           await page.evaluate("(()=>{const t=document.querySelector('#static').textContent;return /target is a fresh gathering every half hour/.test(t) && /sometimes delayed by hours/.test(t) && /A factual review record is not available/.test(t) && /New pieces in either category must pass/.test(t) && /A label alone does not prove a review happened/.test(t) && /What leaves your device/.test(t) && /OpenAI/.test(t) && /relay/.test(t) && /GoatCounter/.test(t)})()"))
         ok("About page: says it has no date and where corrections go, names no person",
            await page.evaluate("(()=>{const t=document.querySelector('#static').textContent;return /no date/.test(t) && /Corrections and contact/.test(t) && /github\\.com\\/readtheledger/.test(t)})()")
            and await page.locator('#static .static-nav a[href="/about/"][aria-current="page"]').count() == 1)

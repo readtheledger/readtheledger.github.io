@@ -70,7 +70,9 @@ def artifact_check(results):
     """The workflow's own artifact check, run on this build — and on a copy of it
     whose worker was never stamped, which it must reject."""
     def run(d):
-        r = subprocess.run(["sh", os.path.join(ROOT, "check_site.sh"), d], capture_output=True, text=True)
+        # Match the deploy's relative-path invocation; the checkout may contain
+        # spaces (including on Windows with Git's shell).
+        r = subprocess.run(["sh", "check_site.sh", os.path.relpath(d, ROOT)], cwd=ROOT, capture_output=True, text=True)
         return r.returncode, (r.stdout + r.stderr).strip()
     code, out = run(SITE)
     results.append(("PASS" if code == 0 else "FAIL", "workflow artifact check accepts the built site", out.splitlines()[-1] if out else ""))
@@ -103,11 +105,14 @@ def assisted_piece_check(results):
     code, log, line = build_with("assisted")
     results.append(("PASS" if code == 0 and line.startswith("Drafted with AI assistance from the credited sources and reviewed by <strong>The Ledger</strong>'s editor before publication.")
                     else "FAIL", "an assisted piece carries the AI-assistance attribution line", f"exit={code} line={line[:50]!r}"))
-    code, log, line = build_with(None)
+    code, log, line = build_with("reported")
     results.append(("PASS" if code == 0 and line.startswith("Reported and written by <strong>The Ledger</strong>.") else "FAIL",
-                    "a piece with no produced value is reported, the default", f"exit={code} line={line[:50]!r}"))
+                    "an explicitly reported piece carries the human-writing attribution", f"exit={code} line={line[:50]!r}"))
+    code, log, line = build_with(None)
+    results.append(("PASS" if code == 1 and "produced must be explicitly set" in log else "FAIL",
+                    "an omitted produced value stops the build", f"exit={code}"))
     code, log, html = build_with("automated")
-    results.append(("PASS" if code == 1 and "produced must be one of" in log else "FAIL", "an unknown produced value stops the build", f"exit={code}"))
+    results.append(("PASS" if code == 1 and "produced must be explicitly set" in log else "FAIL", "an unknown produced value stops the build", f"exit={code}"))
     shutil.rmtree(work, ignore_errors=True)
 
 def previous_release():
@@ -201,14 +206,14 @@ async def main():
                and ld.get("@type") == "NewsArticle", f"published={pub} ld={ld.get('datePublished')}")
             ok(f"{a['id']}: links home and to its section", home >= 1 and kick == f"/{slug(a['section'])}/", f"kicker={kick}")
 
-        # the attribution line says how each piece was produced; every current piece
-        # was written by a person, and the build prints exactly that
+        # The original archive has no retained factual-review records; do not
+        # infer human writing from the original omitted production metadata.
         lines = []
         for a in arts:
             await page.goto(base + f"/story/{a['id']}/", wait_until="load")
             lines.append((await page.locator("#static .attrline").inner_text()).strip())
-        ok("every published piece carries the 'reported' attribution line",
-           all(l.startswith("Reported and written by The Ledger.") for l in lines) and len(lines) == len(arts), lines[0][:60])
+        ok("every original archive piece carries the missing-record attribution",
+           all(l.startswith("From The Ledger archive. A factual review record is not available for this article.") for l in lines) and len(lines) == len(arts), lines[0][:60])
 
         # every asset the page asks for is rooted at /, so it resolves from /story/<id>/
         rel = await page.evaluate("""() => [...document.querySelectorAll('script[src],link[href]')]

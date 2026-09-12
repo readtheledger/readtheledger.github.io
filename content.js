@@ -5,7 +5,8 @@
    from another outlet; quotations are brief and attributed.
 
    Fields: id (stable), kind ("news" | "analysis" | "deep"), section, title,
-   standfirst, date (ISO), html body, sources [{t: title, u: url, p: publisher}],
+   standfirst, date (ISO), produced (explicit; see REVIEW.md), html body,
+   sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
   updated: "2026-08-17",
@@ -13,6 +14,7 @@ window.LEDGER_CONTENT = {
 
   {
     id: "led-20260817-record",
+    produced: "legacy-unrecorded",
     image:{u:"/assets/editorial/led-20260817-record/hero-1200.jpg", alt:"A rising staircase of teal blocks is connected by a pulley and cord to an ochre counterweight.", w:1200, h:800, widths:[480,768,1200], ai:true, credit:"The Ledger", caption:"Rising markets and the counterweight of interest-rate uncertainty, shown conceptually."},
     kind: "news", section: "Markets",
     date: "2026-08-17T09:00:00Z",
@@ -32,6 +34,7 @@ window.LEDGER_CONTENT = {
 
   {
     id: "led-20260817-fed",
+    produced: "legacy-unrecorded",
     image:{u:"/assets/editorial/led-20260817-fed/hero-1200.jpg", alt:"Two folded arrows point in opposing directions across an empty conference table, with mountains behind it.", w:1200, h:800, widths:[480,768,1200], ai:true, credit:"The Ledger", caption:"Opposing policy directions meet around a conference table, in a conceptual illustration."},
     kind: "news", section: "Central Banks",
     date: "2026-08-17T08:30:00Z",
@@ -50,6 +53,7 @@ window.LEDGER_CONTENT = {
 
   {
     id: "led-20260817-consumer",
+    produced: "legacy-unrecorded",
     image:{u:"/assets/editorial/led-20260817-consumer/hero-1200.jpg", alt:"A grocery trolley pauses at a small folded receipt placed against its front wheel.", w:1200, h:800, widths:[480,768,1200], ai:true, credit:"The Ledger", caption:"A pause in household spending, represented by a shopping trolley meeting a small obstacle."},
     kind: "news", section: "Economics",
     date: "2026-08-17T08:00:00Z",
@@ -68,6 +72,7 @@ window.LEDGER_CONTENT = {
 
   {
     id: "led-20260817-river",
+    produced: "legacy-unrecorded",
     image:{u:"/assets/editorial/led-20260817-river/hero-1200.jpg", alt:"Coins pour from a watering can beside a sapling with circuit-like leaves growing from a microchip planter.", w:1200, h:800, widths:[480,768,1200], ai:true, credit:"The Ledger", caption:"Capital flows toward a young AI venture, shown as a conceptual illustration."},
     kind: "news", section: "Tech & Finance",
     date: "2026-08-17T07:30:00Z",
@@ -87,6 +92,7 @@ window.LEDGER_CONTENT = {
 
   {
     id: "led-20260817-aitrade",
+    produced: "legacy-unrecorded",
     image:{u:"/assets/editorial/led-20260817-aitrade/hero-1200.jpg", alt:"A microchip and a stack of coins sit on a desk as a long receipt unfurls into the foreground.", w:1200, h:800, widths:[480,768,1200], ai:true, credit:"The Ledger", caption:"AI hardware earnings and the investment costs still coming due, illustrated conceptually."},
     kind: "news", section: "Markets",
     date: "2026-08-17T07:00:00Z",
@@ -106,6 +112,7 @@ window.LEDGER_CONTENT = {
 
   {
     id: "led-20260817-badnews",
+    produced: "legacy-unrecorded",
     image:{u:"/assets/editorial/led-20260817-badnews/hero-1200.jpg", alt:"A newspaper weighs down one side of a seesaw while three ascending blocks rise on the other side.", w:1200, h:800, widths:[480,768,1200], ai:true, credit:"The Ledger", caption:"Economic news and market expectations in a shifting balance, shown conceptually."},
     kind: "analysis", section: "Markets",
     date: "2026-08-17T06:30:00Z",
@@ -123,6 +130,7 @@ window.LEDGER_CONTENT = {
 
   {
     id: "led-20260817-savers",
+    produced: "legacy-unrecorded",
     image:{u:"/assets/editorial/led-20260817-savers/hero-1200.jpg", alt:"A stack of coins casts a long shadow toward a basket containing bread and groceries.", w:1200, h:800, widths:[480,768,1200], ai:true, credit:"The Ledger", caption:"Cash savings and the everyday purchases they support, shown as a conceptual illustration."},
     kind: "analysis", section: "Personal Finance",
     date: "2026-08-17T06:00:00Z",
@@ -140,6 +148,7 @@ window.LEDGER_CONTENT = {
 
   {
     id: "led-20260817-weekly",
+    produced: "legacy-unrecorded",
     image:{u:"/assets/editorial/led-20260817-weekly/hero-1200.jpg", alt:"A server cabinet imagined as a building under construction, with a crane above and power cables flowing toward it.", w:1200, h:800, widths:[480,768,1200], ai:true, credit:"The Ledger", caption:"A conceptual view of the infrastructure and financial commitments behind AI expansion."},
     kind: "deep", section: "Tech & Finance", weekly: true,
     date: "2026-08-17T05:30:00Z",
