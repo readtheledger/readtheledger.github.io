@@ -1,0 +1,12 @@
+{
+  "name": "ledger-static-preview",
+  "compatibility_date": "2026-09-12",
+  "workers_dev": true,
+  "preview_urls": false,
+  "send_metrics": false,
+  "assets": {
+    "directory": "../../_cloudflare_site",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+}
