@@ -246,6 +246,9 @@ async def main():
         ok("a replaced picture alone gives the build a new stamp", rb.returncode == 0 and stampB and stampB != stampA, (stampA, stampB, rb.stderr[-200:]))
         before_hits = STATE["hits"][HERO]
         STATE["root"] = siteb
+        # the app asks for a worker update on every return to the page and hourly; the
+        # simulated deployment asks for one now, so the new worker is fetched at once
+        await page.evaluate("navigator.serviceWorker.getRegistration().then(r => r.update())")
         await page.reload(wait_until="load")
         # the new worker must install, activate, claim the page and clear the old caches — a
         # bounded wait for that state, not a pause; if it never happens, that is the failure
