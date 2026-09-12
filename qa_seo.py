@@ -174,7 +174,7 @@ async def main():
            and await page.evaluate("(()=>{const f=document.querySelector('#static figure.fig img');return !!f && f.alt.startsWith('A chart') && f.getAttribute('width')==='1600'})()"))
         bad = os.path.join(work, "bad.js"); open(bad, "w").write(content_js().replace("https://example.com/photos/recent-1600x900.jpg", "https://readtheledger.github.io/icon-512.png"))
         rb = subprocess.run(["node", os.path.join(ROOT, "build.mjs"), site + "-bad", "--content", bad, "--now", NOW], capture_output=True, text=True)
-        ok("the build refuses the site icon as an article image", rb.returncode == 1 and "not an article image" in rb.stdout + rb.stderr)
+        ok("the build refuses the site icon as a piece's image", rb.returncode == 1 and "the site icon is not a piece's image" in rb.stdout + rb.stderr)
 
         r = await page.goto(base + "/about/")
         hs = await heads(); html = rd("about", "index.html"); L = lds(html)
