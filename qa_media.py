@@ -5,7 +5,10 @@ picture; the handover from the static page to the reader without a second
 fetch or a duplicate figure; lazy loading below the fold; typography at 390px
 and under the reader's text-size setting; the Listen dock's reserved space; no
 horizontal overflow from 320 to 1440px; Save, Copy and Share unchanged; and
-the worker's bounded image cache. Builds from the real content.js.
+the worker's bounded image cache. Two builds: the real content.js as
+published, for everything about the production pages and their pace; and a
+fixture with one piece's picture removed (the consumer story, a text-led row on
+the front page either way), served on a second port, for the text-led state.
 
     python3 qa_media.py            # needs playwright (chromium) and node
 """
@@ -13,15 +16,17 @@ import asyncio, http.server, socketserver, threading, os, sys, json, subprocess,
 from playwright.async_api import async_playwright
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-PORT = 8943
+PORT = 8943          # the publication as it is
+PORT2 = 8944         # the fixture with one picture removed
 SITE_URL = "https://readtheledger.github.io"
-STATE = {"root": None, "hits": collections.Counter()}
+STATE = {"root": None, "root2": None, "hits": collections.Counter()}
 TYPES = {".html":"text/html; charset=utf-8", ".js":"text/javascript; charset=utf-8", ".json":"application/json", ".webp":"image/webp", ".jpg":"image/jpeg",
          ".webmanifest":"application/manifest+json", ".png":"image/png", ".xml":"application/xml; charset=utf-8", ".txt":"text/plain; charset=utf-8"}
 class Pages(http.server.BaseHTTPRequestHandler):
+    rootkey = "root"
     def log_message(self, *a): pass
     def do_GET(self):
-        root = STATE["root"]; p = urllib.parse.urlparse(self.path).path
+        root = STATE[self.rootkey]; p = urllib.parse.urlparse(self.path).path
         STATE["hits"][p] += 1
         fp = os.path.normpath(os.path.join(root, p.lstrip("/")))
         if os.path.isdir(fp):
@@ -33,9 +38,10 @@ class Pages(http.server.BaseHTTPRequestHandler):
         body = open(fp, "rb").read()
         self.send_response(200); self.send_header("Content-Type", TYPES.get(os.path.splitext(fp)[1], "application/octet-stream"))
         self.send_header("Cache-Control", "no-store"); self.send_header("Content-Length", str(len(body))); self.end_headers(); self.wfile.write(body)
-def serve():
+class Pages2(Pages): rootkey = "root2"
+def serve(port, handler):
     socketserver.ThreadingTCPServer.allow_reuse_address = True
-    with socketserver.ThreadingTCPServer(("127.0.0.1", PORT), Pages) as s: s.serve_forever()
+    with socketserver.ThreadingTCPServer(("127.0.0.1", port), handler) as s: s.serve_forever()
 
 R = []
 def ok(name, cond, note=""):
@@ -43,23 +49,30 @@ def ok(name, cond, note=""):
 def lds(html): return [json.loads(m) for m in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S)]
 def hits(prefix): return {k: v for k, v in STATE["hits"].items() if k.startswith(prefix)}
 
-WITH = "led-20260817-savers"; FEATURE = "led-20260817-weekly"; WITHOUT = "led-20260817-fed"
+WITH = "led-20260817-savers"; FEATURE = "led-20260817-weekly"; WITHOUT = "led-20260817-consumer"
 
 async def main():
-    work = tempfile.mkdtemp(prefix="ledger-media-"); site = os.path.join(work, "site")
-    # the real publication, with one piece's picture taken away for the text-led state
+    work = tempfile.mkdtemp(prefix="ledger-media-"); site = os.path.join(work, "site"); site2 = os.path.join(work, "site-noimage")
+    stub = '{"fetched":"2026-09-12T14:00:00Z","sources":[],"items":[]}'
+    # the publication as it is
+    r = subprocess.run(["node", os.path.join(ROOT, "build.mjs"), site], capture_output=True, text=True)
+    if r.returncode: print(r.stdout, r.stderr); sys.exit("build failed")
+    print(r.stdout.strip().splitlines()[-1])
+    # and the same with one piece's picture taken away, for the text-led state
     src = open(os.path.join(ROOT, "content.js"), encoding="utf-8").read()
     stripped = re.sub(r'(id:\s*"%s",\n\s*)image:\{[^\n]*\},\n' % WITHOUT, r"\1", src)
     assert stripped != src, "fixture: could not remove the picture from " + WITHOUT
     cf = os.path.join(work, "content.js"); open(cf, "w", encoding="utf-8").write(stripped)
-    r = subprocess.run(["node", os.path.join(ROOT, "build.mjs"), site, "--content", cf], capture_output=True, text=True)
-    if r.returncode: print(r.stdout, r.stderr); sys.exit("build failed")
-    print(r.stdout.strip().splitlines()[-1])
-    os.makedirs(os.path.join(site, "data")); open(os.path.join(site, "data", "feed.json"), "w").write('{"fetched":"2026-09-12T14:00:00Z","sources":[],"items":[]}')
-    STATE["root"] = site
-    threading.Thread(target=serve, daemon=True).start()
-    base = f"http://127.0.0.1:{PORT}"
+    r = subprocess.run(["node", os.path.join(ROOT, "build.mjs"), site2, "--content", cf], capture_output=True, text=True)
+    if r.returncode: print(r.stdout, r.stderr); sys.exit("fixture build failed")
+    for d in (site, site2):
+        os.makedirs(os.path.join(d, "data")); open(os.path.join(d, "data", "feed.json"), "w").write(stub)
+    STATE["root"] = site; STATE["root2"] = site2
+    threading.Thread(target=serve, args=(PORT, Pages), daemon=True).start()
+    threading.Thread(target=serve, args=(PORT2, Pages2), daemon=True).start()
+    base = f"http://127.0.0.1:{PORT}"; base2 = f"http://127.0.0.1:{PORT2}"
     rd = lambda *p: open(os.path.join(site, *p), encoding="utf-8").read()
+    rd2 = lambda *p: open(os.path.join(site2, *p), encoding="utf-8").read()
 
     # ---- the built pages
     sw = rd("sw.js")
@@ -71,8 +84,10 @@ async def main():
        im["url"] == f"{SITE_URL}/assets/editorial/{WITH}/hero-1200.jpg" and im["width"] == 1200 and im["creditText"] == "The Ledger" and "trainedAlgorithmicMedia" in im["digitalSourceType"])
     ok("story with a picture: sharing preview is the piece's own picture, large card",
        f'property="og:image" content="{SITE_URL}/assets/editorial/{WITH}/hero-1200.jpg"' in html and 'twitter:card" content="summary_large_image"' in html and 'og:image:alt' in html)
-    html2 = rd("story", WITHOUT, "index.html"); L2 = lds(html2)
-    ok("story without a picture: no NewsArticle.image, icon only as the sharing preview, no figure",
+    ok("as published, every piece carries a picture",
+       all("image" in lds(rd("story", a, "index.html"))[0] for a in [WITH, FEATURE, WITHOUT, "led-20260817-record", "led-20260817-fed"]))
+    html2 = rd2("story", WITHOUT, "index.html"); L2 = lds(html2)
+    ok("fixture, story without a picture: no NewsArticle.image, icon only as the sharing preview, no figure",
        "image" not in L2[0] and f'property="og:image" content="{SITE_URL}/icon-512.png"' in html2 and '<figure class="fig' not in re.search(r'<div id="static">[\s\S]*?</div>\s*</main>', html2).group(0))
     ok("every derivative a piece names is served", all(
         subprocess.run(["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", base + u], capture_output=True, text=True).stdout == "200"
@@ -101,9 +116,12 @@ async def main():
         ok("static story: caption is editorial, credit names the maker, disclosure says AI-generated",
            info["cap"].startswith("Cash savings") and "AI-generated" not in info["cap"] and "The Ledger" in info["credit"] and info["ai"])
         ok("static story at 390px, 2x: the picture fills the viewport and the 1200px derivative is chosen", info["rendered"] == 390 and info["chosen"] == "hero-1200.webp", info)
-        await page.goto(base + f"/story/{WITHOUT}/")
+        await page.goto(base2 + f"/story/{WITHOUT}/")
         order = await page.evaluate("[...document.querySelectorAll('#static .kicker, #static h1, #static .rstand, #static figure, #static .rmeta, #static .rbody')].map(e=>e.matches('figure')?'figure':e.className||e.tagName.toLowerCase())")
-        ok("static story without a picture: text-led, same order, nothing left empty", order == ["kicker", "h1", "rstand", "rmeta", "rbody"], order)
+        ok("fixture, static story without a picture: text-led, same order, nothing left empty", order == ["kicker", "h1", "rstand", "rmeta", "rbody"], order)
+        await page.goto(base2 + "/")
+        ok("fixture, front page: the row whose story lost its picture stays text-led; lead, two thumbnails and the feature are unchanged",
+           await page.evaluate("[...document.querySelectorAll('#static article.card figure.fig')].map(f=>f.className.replace('fig ',''))") == ["fig-lead", "fig-thumb", "fig-thumb", "fig-feature"])
         os.makedirs(os.path.join(ROOT, "docs", "design", "shots"), exist_ok=True)
         await page.screenshot(path=os.path.join(ROOT, "docs", "design", "shots", "no-image-390-nojs.png"), full_page=False)
         await page.goto(base + "/")
@@ -143,9 +161,9 @@ async def main():
         ok("the weekly feature's headline is the italic display face, with the drop cap reserved for it",
            await page.evaluate("getComputedStyle(document.querySelector('#rwrap h1')).fontStyle") == "italic"
            and await page.evaluate("parseFloat(getComputedStyle(document.querySelector('#rwrap .rbody>p:first-of-type'),'::first-letter').fontSize) > 40"))
-        await page.goto(base + f"/story/{WITHOUT}/", wait_until="load"); await page.wait_for_selector("#reader.on"); await page.wait_for_timeout(400)
+        await page.goto(base2 + f"/story/{WITHOUT}/", wait_until="load"); await page.wait_for_selector("#reader.on"); await page.wait_for_timeout(400)
         await page.screenshot(path=os.path.join(ROOT, "docs", "design", "shots", "no-image-390.png"), full_page=False)
-        ok("a story without a picture reads text-led in the reader, no figure, no drop cap, byline after the deck",
+        ok("fixture: a story without a picture reads text-led in the reader, no figure, no drop cap, byline after the deck",
            await page.locator("#rwrap figure").count() == 0 and await page.evaluate("parseFloat(getComputedStyle(document.querySelector('#rwrap .rbody>p:first-of-type'),'::first-letter').fontSize) < 40"))
         # Listen dock leaves the article's end readable
         await page.click("#rListen"); await page.wait_for_timeout(1200)
