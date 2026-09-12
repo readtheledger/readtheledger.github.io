@@ -239,6 +239,7 @@ async def main():
         os.makedirs(os.path.join(siteb, "data")); open(os.path.join(siteb, "data", "feed.json"), "w").write(stub)
         stampB = re.search(r'const BUILD = "([0-9a-f]{8})"', open(os.path.join(siteb, "sw.js")).read()).group(1) if rb.returncode == 0 else ""
         ok("a replaced picture alone gives the build a new stamp", rb.returncode == 0 and stampB and stampB != stampA, (stampA, stampB, rb.stderr[-200:]))
+        before_hits = STATE["hits"][f"/assets/editorial/{WITH}/hero-1200.webp"]
         STATE["root"] = siteb
         await page.reload(wait_until="load")
         await page.wait_for_function("s => caches.keys().then(ks => ks.some(k => k.includes(s)))", arg=stampB, timeout=20000)
@@ -247,8 +248,9 @@ async def main():
         newlen = os.path.getsize(os.path.join(siteb, "assets", "editorial", WITH, "hero-1200.webp"))
         got = await page.evaluate(f"fetch('/assets/editorial/{WITH}/hero-1200.webp').then(r=>r.arrayBuffer()).then(b=>b.byteLength)")
         keys2 = await page.evaluate("caches.keys()")
-        ok("after the new build installs, a reader gets the replaced picture and the old image cache is gone",
-           got == newlen and not any(stampA in k for k in keys2) and any(stampB in k for k in keys2), (got, newlen, keys2))
+        after_hits = STATE["hits"][f"/assets/editorial/{WITH}/hero-1200.webp"]
+        ok("after the new build installs, a reader gets the replaced picture at the same address, fetched from the server past the HTTP cache's max-age, and the old image cache is gone",
+           got == newlen and after_hits > before_hits and not any(stampA in k for k in keys2) and any(stampB in k for k in keys2), (got, newlen, before_hits, after_hits, keys2))
         STATE["root"] = site
         await ctx.close()
 

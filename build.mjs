@@ -459,10 +459,16 @@ nav{border-top:1px solid var(--rule);margin-top:28px;padding-top:14px;font-famil
 // told exactly which addresses the app can render offline: the front page, the
 // sections and the stories that exist in this edition, and nothing else
 const sourcesSrc = read("sources.js");
-// the stamp covers the pictures too, so a replaced picture is a new build to the
-// worker and its image cache is started afresh
+// the stamp covers the pictures too — hashed from their source files, before
+// they are copied — so a replaced picture is a new build to the worker and its
+// image cache is started afresh
 const assetHash = crypto.createHash("sha256");
-for (const rel of written.filter(f => f.startsWith("assets/")).sort()) assetHash.update(rel).update(fs.readFileSync(path.join(OUT, rel)));
+if (fs.existsSync(ASSETS_DIR)) {
+  for (const f of fs.readdirSync(ASSETS_DIR, { recursive: true }).map(String).sort()) {
+    const src = path.join(ASSETS_DIR, f);
+    if (fs.statSync(src).isFile()) assetHash.update(f.replace(/\\/g, "/")).update(fs.readFileSync(src));
+  }
+}
 const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(read("topics.js")).update(read("context.js")).update(aboutSrc).update(mediaSrc).update(swSrc).update(assetHash.digest()).digest("hex").slice(0, 8);
 const routes = ["/", "/index.html", ABOUT_PATH].concat(PAGE_SECTIONS.map(sectionPath), articles.map(storyPath));
 const sw = swSrc

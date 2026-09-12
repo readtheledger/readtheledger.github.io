@@ -140,7 +140,10 @@ self.addEventListener("fetch", e => {
   // they are never precached, so an offline story without its picture still reads
   if (url.origin === location.origin && url.pathname.startsWith("/assets/editorial/")) {
     e.respondWith(
-      caches.open(IMAGES).then(c => c.match(req).then(hit => hit || fetch(req).then(res => {
+      // a miss is fetched with revalidation, never straight from the browser's HTTP
+      // cache: after a new build a still-fresh entry at the same address could
+      // otherwise hand back the picture the build replaced
+      caches.open(IMAGES).then(c => c.match(req).then(hit => hit || fetch(req, {cache:"no-cache"}).then(res => {
         // the write is attached to the event, so the worker is not stopped before it lands
         if (res && res.ok) e.waitUntil(c.put(req, res.clone()).then(() => trimImages(c)));
         return res;
