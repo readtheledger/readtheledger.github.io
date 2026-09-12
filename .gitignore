@@ -13,3 +13,8 @@ _site_unstamped/
 
 # the gathered Newsstand (fetch_feeds.mjs writes it; the workflow gathers a fresh one)
 data/
+
+# Cloudflare delivery consumes the already-published Pages artifact.
+_cloudflare_site/
+.github/cloudflare/node_modules/
+.wrangler/

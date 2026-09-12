@@ -21,8 +21,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -31,15 +29,23 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    outputs:
+      artifact_id: ${{ steps.pages_artifact.outputs.artifact_id }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
 
       # enablement: true switches Pages on the first time this runs, so the site
       # does not have to be turned on by hand in the repository settings
-      - uses: actions/configure-pages@v6
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
         with:
           enablement: true
 
@@ -107,9 +113,55 @@ jobs:
       - name: Check the artifact is complete
         run: sh check_site.sh _site
 
-      - uses: actions/upload-pages-artifact@v5
+      - id: pages_artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
         with:
           path: _site
 
       - id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5
+
+  cloudflare-preview:
+    # Same run, artifact and global `pages` concurrency lock; no second gather or clock.
+    needs: deploy
+    if: >-
+      needs.deploy.result == 'success' &&
+      vars.CLOUDFLARE_PREVIEW_ENABLED == 'true' &&
+      github.repository == 'readtheledger/readtheledger.github.io' &&
+      github.ref == 'refs/heads/main' &&
+      contains(fromJSON('["push","schedule","workflow_dispatch"]'), github.event_name)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+    env:
+      PAGES_ARTIFACT_ID: ${{ needs.deploy.outputs.artifact_id }}
+      WRANGLER_SEND_METRICS: 'false'
+      CI: 'true'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Test publisher protections without deployment credentials
+        run: python3 -m unittest discover -s .github/cloudflare -p test_publish.py -v
+      - name: Validate the successful Pages job and its exact artifact
+        id: artifact
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 .github/cloudflare/publish.py prepare
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        if: steps.artifact.outputs.eligible == 'true'
+        with:
+          node-version: '24.13.0'
+      - name: Install locked deployment tooling without deployment credentials
+        if: steps.artifact.outputs.eligible == 'true'
+        run: npm ci --prefix .github/cloudflare --no-audit --no-fund
+      - name: Publish the validated edition to the free static preview
+        if: steps.artifact.outputs.eligible == 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: python3 .github/cloudflare/publish.py deploy
