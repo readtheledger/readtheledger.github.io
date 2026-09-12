@@ -131,6 +131,9 @@ python3 qa_seo.py        # 45 checks: what a crawler is served — headings, tit
 python3 qa_production.py # archive attribution on all eight static/reader pages,
                          # explicit production categories and rejection cases;
                          # every browser request is served locally or blocked
+python3 qa_cache_update.py # gated worker installation, old-client request, image
+                           # replacement, scoped cleanup, saved state and offline
+                           # reading across two updates; local disposable browser
 node eval_topics.mjs --edition data/feed.json   # the classifier against the labelled sample
 python3 qa_feed.py       # 21 checks: the gatherer against synthetic RSS and Atom
                          # feeds — validation and dropped-item reasons, excerpts
