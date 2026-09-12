@@ -154,7 +154,19 @@ def validate_static_files(files):
         if name.startswith('story/') and name.endswith('/index.html'):
             expected = ('<link rel="canonical" href="https://readtheledger.github.io/' + name[:-10] + '">').encode()
             require(expected in body, 'Story canonical changed before migration')
-    require(re.search(rb'const GC_SITE\s*=\s*[\'"][\'"]', files['index.html']), 'Collection must remain off for the test target')
+    # The shared artifact enables one collector only on the canonical origin.
+    # Pin the adapter to the reviewed checkout so standby exclusions cannot be
+    # replaced by an unguarded beacon inside an otherwise valid artifact.
+    normalize = lambda body: body.replace(b'\r\n', b'\n').lstrip(b'\xef\xbb\xbf')
+    require(normalize(files['analytics.js']) == normalize((ROOT/'analytics.js').read_bytes()),
+            'Analytics guard differs from the reviewed checkout')
+    for name, body in files.items():
+        if name.endswith('index.html'):
+            require(re.search(rb'const GC_SITE\s*=\s*[\'"][\'"]', body), 'GoatCounter must remain inactive')
+            require(b'const CF_ANALYTICS_TOKEN = "e1563ba6decb4bfcae56ce3d7c2d3366";' in body,
+                    'Unexpected Cloudflare analytics property')
+            require(not re.search(rb'<script[^>]+src=[\'"]https://static.cloudflareinsights.com', body),
+                    'Cloudflare beacon must load through the origin and exclusion guards')
     return feed
 
 def output(name, value):

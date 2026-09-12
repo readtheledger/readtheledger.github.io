@@ -33,8 +33,13 @@ def static_files():
             'sitemap.xml':b'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://readtheledger.github.io/</loc></url><url><loc>https://readtheledger.github.io/story/example/</loc></url></urlset>',
             'robots.txt':b'Allow: /','about/index.html':b'About',
             'story/example/index.html':b'<link rel="canonical" href="https://readtheledger.github.io/story/example/">'}
-    files.update({n:b'fixture' for n in ['sources.js','topics.js','context.js','about.js','analytics.js','media.js','production.js','manifest.webmanifest',
+    files.update({n:b'fixture' for n in ['sources.js','topics.js','context.js','about.js','media.js','production.js','manifest.webmanifest',
         'icon-180.png','icon-192.png','icon-512.png','icon-maskable-512.png','sitemap-news.xml','feed.xml']})
+    files['analytics.js'] = (p.ROOT/'analytics.js').read_bytes()
+    for name in list(files):
+        if name.endswith('index.html'):
+            if name != 'index.html': files[name] += b'const GC_SITE = "";'
+            files[name] += b'const CF_ANALYTICS_TOKEN = "e1563ba6decb4bfcae56ce3d7c2d3366";'
     return files
 
 def archive(files, extra=None):
@@ -114,13 +119,22 @@ class ArchiveTests(unittest.TestCase):
     def test_feed_worker_canonical_and_measurement_guards(self):
         cases=[('data/feed.json',None),('data/feed.json',b'{"items":[],"sources":[]}'),
                ('sw.js',b'const BUILD = "dev";'),('story/example/index.html',b'<link rel="canonical" href="https://other.example/">'),
-               ('index.html',b'const GC_SITE = "enabled";'),('production.js',None),
+               ('index.html',b'const GC_SITE = "enabled";'),('production.js',None),('analytics.js',b'unguarded'),
                ('sitemap.xml',b'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://readtheledger.github.io/missing/</loc></url></urlset>')]
         for name,body in cases:
             files=static_files()
             if body is None: del files[name]
             else: files[name]=body
             with self.subTest(name=name,body=body),self.assertRaises(p.InvalidEvidence): self.unpack(files)
+
+    def test_analytics_property_and_guarded_loading_on_every_head(self):
+        for name in ['index.html','about/index.html','story/example/index.html']:
+            for bad in ['property','second_collector','direct_script']:
+                files=static_files()
+                if bad == 'property': files[name]=files[name].replace(b'e1563ba6decb4bfcae56ce3d7c2d3366',b'0'*32)
+                elif bad == 'second_collector': files[name]=files[name].replace(b'const GC_SITE = "";',b'const GC_SITE = "other";')
+                else: files[name]+=b'<script src="https://static.cloudflareinsights.com/beacon.min.js"></script>'
+                with self.subTest(name=name,bad=bad),self.assertRaises(p.InvalidEvidence): self.unpack(files)
 
     def test_existing_directory_and_unexpected_zip_rejected(self):
         data=archive(static_files())
@@ -135,6 +149,7 @@ class DeliveryTests(unittest.TestCase):
         self.root=Path(self.temp.name); self.site=self.root/'site'; self.receipt=self.root/'receipt.json'
         config=self.root/'.github/cloudflare';config.mkdir(parents=True)
         for name in ['wrangler.json','_headers']:(config/name).write_bytes((p.ROOT/'.github/cloudflare'/name).read_bytes())
+        (self.root/'analytics.js').write_bytes((p.ROOT/'analytics.js').read_bytes())
         self.f=fixture();self.data=archive(static_files());self.f[3]['digest']='sha256:'+p.sha(self.data)
         self.env=dict(GITHUB_TOKEN='github-test-secret',CLOUDFLARE_API_TOKEN='cf-test-secret',CLOUDFLARE_ACCOUNT_ID='test-account')
         for target,value in [('ROOT',self.root),('SITE',self.site),('RECEIPT',self.receipt)]:
