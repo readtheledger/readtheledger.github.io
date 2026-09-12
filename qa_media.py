@@ -7,7 +7,7 @@ and under the reader's text-size setting; the Listen dock's reserved space; no
 horizontal overflow from 320 to 1440px; Save, Copy and Share unchanged; and
 the worker's bounded image cache. Two builds: the real content.js as
 published, for everything about the production pages and their pace; and a
-fixture with one piece's picture removed (the consumer story, a text-led row on
+fixture with one piece's picture removed (the AI-trade story, a text-led row on
 the front page either way), served on a second port, for the text-led state.
 
     python3 qa_media.py            # needs playwright (chromium) and node
@@ -37,7 +37,8 @@ class Pages(http.server.BaseHTTPRequestHandler):
             self.send_response(404); self.send_header("Content-Type", "text/html; charset=utf-8"); self.send_header("Content-Length", str(len(body))); self.end_headers(); self.wfile.write(body); return
         body = open(fp, "rb").read()
         self.send_response(200); self.send_header("Content-Type", TYPES.get(os.path.splitext(fp)[1], "application/octet-stream"))
-        self.send_header("Cache-Control", "no-store"); self.send_header("Content-Length", str(len(body))); self.end_headers(); self.wfile.write(body)
+        self.send_header("Cache-Control", "max-age=600" if p.startswith("/assets/") else "no-store")   # as GitHub Pages serves them
+        self.send_header("Content-Length", str(len(body))); self.end_headers(); self.wfile.write(body)
 class Pages2(Pages): rootkey = "root2"
 def serve(port, handler):
     socketserver.ThreadingTCPServer.allow_reuse_address = True
@@ -49,7 +50,9 @@ def ok(name, cond, note=""):
 def lds(html): return [json.loads(m) for m in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S)]
 def hits(prefix): return {k: v for k, v in STATE["hits"].items() if k.startswith(prefix)}
 
-WITH = "led-20260817-savers"; FEATURE = "led-20260817-weekly"; WITHOUT = "led-20260817-consumer"
+# the fixture removes the picture from a piece that is a text-led row on the front
+# page in both orders — the static page's (by date) and the app's composed one
+WITH = "led-20260817-savers"; FEATURE = "led-20260817-weekly"; WITHOUT = "led-20260817-aitrade"
 
 async def main():
     work = tempfile.mkdtemp(prefix="ledger-media-"); site = os.path.join(work, "site"); site2 = os.path.join(work, "site-noimage")

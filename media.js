@@ -24,7 +24,7 @@
      a lead or feature card fills the feed column, a compact card shows a thumbnail */
   const SIZES = {
     hero:    "(min-width: 756px) 684px, 100vw",
-    lead:    "(min-width: 1128px) 738px, (min-width: 820px) calc(100vw - 362px), calc(100vw - 28px)",
+    lead:    "(min-width: 1128px) 382px, (min-width: 820px) calc((100vw - 362px) * 0.52), calc(100vw - 28px)",
     feature: "(min-width: 1128px) 738px, (min-width: 820px) calc(100vw - 362px), calc(100vw - 28px)",
     thumb:   "112px"
   };

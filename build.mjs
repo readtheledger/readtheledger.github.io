@@ -460,7 +460,9 @@ const sw = swSrc
 if (!sw.includes('const BUILD = "' + stamp + '"') || !sw.includes('"/story/' + articles[0].id + '/"')) fail("sw.js was not stamped");
 write("sw.js", sw);
 for (const f of ["content.js", "sources.js", "topics.js", "context.js", "about.js", "media.js", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]) {
-  fs.copyFileSync(path.join(ROOT, f), path.join(OUT, f));
+  // the publication the pages were written from is the one the app loads, so a
+  // build from another content file (the tests do this) is consistent with itself
+  fs.copyFileSync(f === "content.js" ? CONTENT_FILE : path.join(ROOT, f), path.join(OUT, f));
   written.push(f);
 }
 write(".nojekyll", "");

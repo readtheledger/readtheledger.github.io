@@ -414,6 +414,11 @@ html.js #static{display:none}
   .grid{display:grid;grid-template-columns:1fr 300px;gap:34px;align-items:start}
   .railcol{position:sticky;top:150px}
   article.card.lead .hl{font-size:2.6rem}
+  /* on a desktop the lead's picture sits beside its words, so the headline is on
+     the first screen; on a phone it sits above them */
+  article.card.lead.has-image{display:grid;grid-template-columns:1.15fr 1fr;gap:24px;align-items:start}
+  article.card.lead.has-image .fig-lead{margin:0}
+  article.card.lead.has-image .hl{font-size:clamp(1.6rem,2.2vw,2.1rem)}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
