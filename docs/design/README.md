@@ -48,8 +48,8 @@ the browser downloads what the slot actually renders:
 | Placement | `sizes` | Loading |
 |---|---|---|
 | Story hero (static page and reader) | 684 px in the column, else 100vw | eager, high priority |
-| Lead card | the feed column (738 px at 1440, minus the rail at 820 and above, full width below) | eager |
-| Feature card (weekly) | as the lead card | lazy |
+| Lead card | 325 px at 1128 and above; roughly 45.5% of the feed column from 820px; full width below | eager |
+| Feature card (weekly) | the feed column (738 px at 1128 and above, minus the rail from 820px, full width below) | lazy |
 | Compact thumbnail | 112 px | lazy |
 
 Derivatives are made by `make_derivatives.py` from a master that stays
@@ -158,8 +158,8 @@ no functional failure was found in any completed check. The reviewer's local
 runs cover the behaviour the two incomplete cloud runs would have covered.
 
 Not done here: a physical iPhone Safari check (outstanding; the owner can do
-it on the deployed page), and field performance data (none exists for this
-origin; lab measurements are in the pull request). The section-page
+it on the deployed page), and field performance measurements (not collected
+in this review). The section-page
 screenshot shows a *Live feeds unreachable* notice: the build sandbox serves a
 stub Newsstand edition with no items and cannot reach the relays; production
 serves a gathered edition and the notice does not appear.
