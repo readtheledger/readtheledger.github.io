@@ -13,6 +13,12 @@ const BUILD = "dev";   // build.mjs stamps a hash of the app and the edition her
                        // so a new article or a changed page installs a fresh shell
 const SHELL   = "ledger-shell-v"   + VERSION + "-" + BUILD;
 const RUNTIME = "ledger-runtime-v" + VERSION + "-" + BUILD;
+const IMAGES  = "ledger-images-v" + VERSION;   // survives a new build: a picture does not change with the edition
+const IMAGE_KEEP = 40;
+async function trimImages(c) {
+  const keys = await c.keys();
+  for (const k of keys.slice(0, Math.max(0, keys.length - IMAGE_KEEP))) await c.delete(k);
+}
 const FILES = [
   "/",
   "/index.html",
@@ -20,6 +26,7 @@ const FILES = [
   "/topics.js",
   "/context.js",
   "/about.js",
+  "/media.js",
   "/content.js",
   "/manifest.webmanifest",
   "/icon-192.png",
@@ -55,7 +62,7 @@ self.addEventListener("install", e => {
 self.addEventListener("activate", e => {
   e.waitUntil(
     caches.keys()
-      .then(ks => Promise.all(ks.filter(k => k !== SHELL && k !== RUNTIME).map(k => caches.delete(k))))
+      .then(ks => Promise.all(ks.filter(k => k !== SHELL && k !== RUNTIME && k !== IMAGES).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
@@ -122,6 +129,18 @@ self.addEventListener("fetch", e => {
         if (res && res.ok) { const copy = res.clone(); caches.open(RUNTIME).then(c => c.put(req, copy)); }
         return res;
       }).catch(() => caches.match(req).then(hit => hit || Response.error()))
+    );
+    return;
+  }
+
+  // editorial pictures: cache first, at most IMAGE_KEEP of them, oldest out;
+  // they are never precached, so an offline story without its picture still reads
+  if (url.origin === location.origin && url.pathname.startsWith("/assets/editorial/")) {
+    e.respondWith(
+      caches.open(IMAGES).then(c => c.match(req).then(hit => hit || fetch(req).then(res => {
+        if (res && res.ok) { c.put(req, res.clone()).then(() => trimImages(c)); }
+        return res;
+      })))
     );
     return;
   }

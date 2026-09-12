@@ -1,0 +1,51 @@
+{
+  "articleId": "led-20260817-consumer",
+  "master": {
+    "sha256": "dbe7c314d8cb282965d9767a908dba78a5a233644bfbfae5325597a8abff2e0b",
+    "bytes": 2512318,
+    "w": 1536,
+    "h": 1024,
+    "committed": false
+  },
+  "aiGenerated": true,
+  "credit": "The Ledger",
+  "crop": "none \u2014 full 3:2 composition at every size",
+  "derived": "2026-09-12",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 320,
+      "bytes": 13330,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 512,
+      "bytes": 32726,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 800,
+      "bytes": 79462,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 800,
+      "bytes": 134460,
+      "type": "image/jpeg"
+    }
+  ],
+  "generationDate": "2026-09-12",
+  "method": "Built-in Image Generation",
+  "prompt": "Revise this consumer-spending illustration. Keep its original warm ivory paper, navy shopping trolley with ochre grocery bag, muted teal, restrained textured editorial print style and 3:2 landscape composition. Change the message from a dangerous drop to a mild slowdown: remove the cliff entirely and remove the steep falling receipt. Put the trolley safely on a continuous flat tabletop/paper surface with a small folded receipt acting as a gentle wheel chock in front of its wheel. The trolley is pausing, not falling. Keep ample quiet space and a complete recognizable trolley; subtle burgundy attention marks by wheel are fine. No abyss, broken bridge, crash, extreme slump, people, logos, readable text or numbers. This illustrates consumer caution, not an economic collapse.",
+  "kind": "conceptual_illustration",
+  "alt": "A grocery trolley pauses at a small folded receipt placed against its front wheel.",
+  "caption": "A pause in household spending, represented by a shopping trolley meeting a small obstacle.",
+  "editorialReview": "Accepted revision reduces implied severity from a cliff to a pause. Original cliff draft rejected."
+}

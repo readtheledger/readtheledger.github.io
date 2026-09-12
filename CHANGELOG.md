@@ -4,6 +4,48 @@ All notable changes to The Ledger. Dates are UTC.
 
 ## Unreleased
 
+### Editorial design — pictures, hierarchy and the phone page
+
+The first design release: an editorial feel on a phone — expressive
+headlines, a relevant original picture on every piece, clear attribution and
+a visible hierarchy — with The Ledger's identity, warm paper and typefaces
+unchanged. `docs/design/README.md` has the decisions, the contract and the
+evidence.
+
+- **A piece's own picture, rendered once.** `media.js` is the single contract
+  and renderer for the optional `image` on a piece in `content.js`, run by the
+  build for the static page and loaded by the app for the reader, so both
+  produce the same figure and the browser fetches it once. The static copy is
+  kept (hidden) until the reader's picture has loaded, so the handover does
+  not repeat the request. The build refuses a piece whose picture fails the
+  contract; the app renders such a piece text-led.
+- **Caption, credit and disclosure are three things.** The caption is the
+  editorial line and adds no factual claim; the credit names the maker; a
+  picture a model generated carries a visible **AI-generated illustration**
+  label and IPTC's `trainedAlgorithmicMedia` source type in the structured
+  data. The story's production label is unrelated and unchanged.
+- **Eight illustrations, full 3:2 at every size, no crops.** Web derivatives
+  (480, 768 and 1200 px WebP with a 1200 px JPEG fallback) are made by
+  `make_derivatives.py` from masters that stay outside the repository; each
+  `assets/editorial/<id>/manifest.json` records the master's hash, the prompt,
+  the method and the date. `sizes` reflect each placement's rendered width.
+- **The article page** reads kicker, headline, deck, picture with caption and
+  credit, byline and date, body. Headline 30–34 px on a phone, deck 18–19 px,
+  body 20 px, all scaling with the reader's text-size setting; the hero bleeds
+  to the viewport edge on a phone. The weekly feature uses the italic display
+  face and keeps the drop cap; news reports open with an ordinary paragraph.
+- **The front page keeps its pace and its order.** The lead carries its
+  picture above the words; the two stories after it a 112 px thumbnail with
+  the summary and meta below at full width; the rows after are text-led; the
+  weekly feature carries its picture above an italic headline. Section pages
+  follow the same rule. No story moved.
+- The worker caches editorial pictures in a bounded cache of their own (40 at
+  most, oldest out), never precached, so offline text never depends on them.
+- `qa_media.py`: 29 checks, including the text-led state from a fixture with
+  one piece's picture removed, one server fetch of the hero across the
+  handover, lazy pictures loading on scroll, the Listen dock's space, Back and
+  Forward from a direct story load, and no overflow from 320 to 1440 px.
+
 ### Search — what a crawler is served, and what it is told
 
 Audited against Google Search Central's current guidance (the audit, with

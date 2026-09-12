@@ -1,0 +1,50 @@
+{
+  "articleId": "led-20260817-savers",
+  "master": {
+    "sha256": "510397c778eb26d302c2e4fd94e000d1406a93a598832c82c24e5c0309ca54b1",
+    "bytes": 2600157,
+    "w": 1536,
+    "h": 1024,
+    "committed": false
+  },
+  "aiGenerated": true,
+  "credit": "The Ledger",
+  "crop": "none \u2014 full 3:2 composition at every size",
+  "derived": "2026-09-12",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 320,
+      "bytes": 15562,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 512,
+      "bytes": 34534,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 800,
+      "bytes": 82094,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 800,
+      "bytes": 137748,
+      "type": "image/jpeg"
+    }
+  ],
+  "method": "Built-in Image Generation",
+  "prompt": "Create one original editorial illustration for The Ledger, an independent financial publication. Article topic: how inflation can reduce the purchasing power of household cash savings. Elegant tactile cut-paper collage with fine ink detail, light screenprint texture, generous warm ivory negative space; ink navy and muted teal objects with limited ochre and dusty red accents. A substantial stack of unmarked everyday coins on the left casts a long shadow to the right; the shadow gradually turns into a small diminishing shopping basket containing a loaf and simple groceries. Clear intelligent visual metaphor for cash buying less, grounded and humane rather than frightening. One focal group centered, no people. Professional newspaper visual essay, not stock finance advertising. No exact currency designs, real banknotes, logos, numbers, percentages, chart axes, written text, symbols or watermark. Obviously illustration, not factual documentary photography. Landscape 3:2 composition with essential subject in central 65 percent, designed to crop well to 4:3 on an iPhone and square thumbnail. Full frame art with no border and no embedded headline. This draft concept illustrates the existing Ledger savings and expected-inflation article; it does not assert a current inflation rate or offer financial advice.",
+  "kind": "conceptual_illustration",
+  "alt": "A stack of coins casts a long shadow toward a basket containing bread and groceries.",
+  "caption": "Cash savings and the everyday purchases they support, shown as a conceptual illustration.",
+  "editorialReview": "Readable cash-and-shopping metaphor. The image does not independently prove declining purchasing power or depict a numerical relationship. It did not meet the requested central safe-crop zone, so full composition is the accepted draft treatment."
+}

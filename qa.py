@@ -358,7 +358,7 @@ async def main():
           // inspectable because ping() is the sole sender
           return ping.toString().includes(".goatcounter.com/count") &&
                  ping.toString().includes("new Image()") &&
-                 !document.querySelector('script[src]:not([src="/content.js"]):not([src="/sources.js"]):not([src="/topics.js"]):not([src="/context.js"]):not([src="/about.js"])');
+                 !document.querySelector('script[src]:not([src="/content.js"]):not([src="/sources.js"]):not([src="/topics.js"]):not([src="/context.js"]):not([src="/about.js"]):not([src="/media.js"])');
         }""")
         ok("analytics is an image ping to goatcounter only, no scripts", pixel_only)
 

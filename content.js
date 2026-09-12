@@ -13,6 +13,7 @@ window.LEDGER_CONTENT = {
 
   {
     id: "led-20260817-record",
+    image:{u:"/assets/editorial/led-20260817-record/hero-1200.jpg", alt:"A rising staircase of teal blocks is connected by a pulley and cord to an ochre counterweight.", w:1200, h:800, widths:[480,768,1200], ai:true, credit:"The Ledger", caption:"Rising markets and the counterweight of interest-rate uncertainty, shown conceptually."},
     kind: "news", section: "Markets",
     date: "2026-08-17T09:00:00Z",
     title: "Stocks sit at records while the Fed debates a hike — the strangest bull market in years",
@@ -31,6 +32,7 @@ window.LEDGER_CONTENT = {
 
   {
     id: "led-20260817-fed",
+    image:{u:"/assets/editorial/led-20260817-fed/hero-1200.jpg", alt:"Two folded arrows point in opposing directions across an empty conference table, with mountains behind it.", w:1200, h:800, widths:[480,768,1200], ai:true, credit:"The Ledger", caption:"Opposing policy directions meet around a conference table, in a conceptual illustration."},
     kind: "news", section: "Central Banks",
     date: "2026-08-17T08:30:00Z",
     title: "A Fed at war with itself heads for Jackson Hole",
@@ -48,6 +50,7 @@ window.LEDGER_CONTENT = {
 
   {
     id: "led-20260817-consumer",
+    image:{u:"/assets/editorial/led-20260817-consumer/hero-1200.jpg", alt:"A grocery trolley pauses at a small folded receipt placed against its front wheel.", w:1200, h:800, widths:[480,768,1200], ai:true, credit:"The Ledger", caption:"A pause in household spending, represented by a shopping trolley meeting a small obstacle."},
     kind: "news", section: "Economics",
     date: "2026-08-17T08:00:00Z",
     title: "The American consumer just blinked",
@@ -65,6 +68,7 @@ window.LEDGER_CONTENT = {
 
   {
     id: "led-20260817-river",
+    image:{u:"/assets/editorial/led-20260817-river/hero-1200.jpg", alt:"Coins pour from a watering can beside a sapling with circuit-like leaves growing from a microchip planter.", w:1200, h:800, widths:[480,768,1200], ai:true, credit:"The Ledger", caption:"Capital flows toward a young AI venture, shown as a conceptual illustration."},
     kind: "news", section: "Tech & Finance",
     date: "2026-08-17T07:30:00Z",
     title: "A two-month-old startup just raised $1.1bn — inside the week AI funding lost its speed limit",
@@ -83,6 +87,7 @@ window.LEDGER_CONTENT = {
 
   {
     id: "led-20260817-aitrade",
+    image:{u:"/assets/editorial/led-20260817-aitrade/hero-1200.jpg", alt:"A microchip and a stack of coins sit on a desk as a long receipt unfurls into the foreground.", w:1200, h:800, widths:[480,768,1200], ai:true, credit:"The Ledger", caption:"AI hardware earnings and the investment costs still coming due, illustrated conceptually."},
     kind: "news", section: "Markets",
     date: "2026-08-17T07:00:00Z",
     title: "The AI trade passed its earnings exam — the bill arrives later",
@@ -101,6 +106,7 @@ window.LEDGER_CONTENT = {
 
   {
     id: "led-20260817-badnews",
+    image:{u:"/assets/editorial/led-20260817-badnews/hero-1200.jpg", alt:"A newspaper weighs down one side of a seesaw while three ascending blocks rise on the other side.", w:1200, h:800, widths:[480,768,1200], ai:true, credit:"The Ledger", caption:"Economic news and market expectations in a shifting balance, shown conceptually."},
     kind: "analysis", section: "Markets",
     date: "2026-08-17T06:30:00Z",
     title: "Why 'bad news is good news' is back — and how to tell when it stops working",
@@ -117,6 +123,7 @@ window.LEDGER_CONTENT = {
 
   {
     id: "led-20260817-savers",
+    image:{u:"/assets/editorial/led-20260817-savers/hero-1200.jpg", alt:"A stack of coins casts a long shadow toward a basket containing bread and groceries.", w:1200, h:800, widths:[480,768,1200], ai:true, credit:"The Ledger", caption:"Cash savings and the everyday purchases they support, shown as a conceptual illustration."},
     kind: "analysis", section: "Personal Finance",
     date: "2026-08-17T06:00:00Z",
     title: "What 4.3% expected inflation means for your cash",
@@ -133,6 +140,7 @@ window.LEDGER_CONTENT = {
 
   {
     id: "led-20260817-weekly",
+    image:{u:"/assets/editorial/led-20260817-weekly/hero-1200.jpg", alt:"A server cabinet imagined as a building under construction, with a crane above and power cables flowing toward it.", w:1200, h:800, widths:[480,768,1200], ai:true, credit:"The Ledger", caption:"A conceptual view of the infrastructure and financial commitments behind AI expansion."},
     kind: "deep", section: "Tech & Finance", weekly: true,
     date: "2026-08-17T05:30:00Z",
     title: "The capex ledger: what a $700bn AI build-out does to the market's balance sheet",

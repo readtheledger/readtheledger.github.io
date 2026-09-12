@@ -1,0 +1,51 @@
+{
+  "articleId": "led-20260817-record",
+  "master": {
+    "sha256": "d01cb9d4a4b5710d2bea3fabc9ea54ecdf08612c4c8b14dff70ea60704201730",
+    "bytes": 3052341,
+    "w": 1536,
+    "h": 1024,
+    "committed": false
+  },
+  "aiGenerated": true,
+  "credit": "The Ledger",
+  "crop": "none \u2014 full 3:2 composition at every size",
+  "derived": "2026-09-12",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 320,
+      "bytes": 20380,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 512,
+      "bytes": 52850,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 800,
+      "bytes": 132660,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 800,
+      "bytes": 186004,
+      "type": "image/jpeg"
+    }
+  ],
+  "generationDate": "2026-09-12",
+  "method": "Built-in Image Generation",
+  "prompt": "Create an original sophisticated editorial illustration for The Ledger financial newspaper, landscape 3:2, 1536x1024. Article theme: a stock market at record highs despite central-bank interest-rate uncertainty; conceptual tension, not a factual chart. An ascending staircase of dark teal and navy market-like blocks reaches a high ledge. At its foot, a weighty ochre counterweight hangs from a thin burgundy cord over a modest mechanical pulley, creating a subtle sense of balance and constraint. One precise, legible central metaphor; warm ivory paper background, restrained ink engraving and textured cut-paper editorial print, rich navy, muted teal, ochre accents, softly grainy shadows. Elegant spacious composition that remains readable at 390px phone width; important forms comfortably inside frame, complete composition at full 3:2. No text, numbers, ticks, labels, logos, flags, people, currency symbols, literal data chart, photojournalism or screenshot. Clearly illustration, not a photograph; match the warm-paper restrained financial editorial art family. Do not include NYT branding.",
+  "kind": "conceptual_illustration",
+  "alt": "A rising staircase of teal blocks is connected by a pulley and cord to an ochre counterweight.",
+  "caption": "Rising markets and the counterweight of interest-rate uncertainty, shown conceptually.",
+  "editorialReview": "Accepted as conceptual editorial artwork; not evidence for article data."
+}
