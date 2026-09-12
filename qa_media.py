@@ -14,6 +14,7 @@ the front page either way), served on a second port, for the text-led state.
 """
 import asyncio, http.server, socketserver, threading, os, sys, json, subprocess, re, urllib.parse, tempfile, shutil, collections
 from playwright.async_api import async_playwright
+from qa_worker_helpers import update_and_wait_for_controller, wait_for_active_controller, wait_for_cached_response
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 PORT = 8943          # the publication as it is
@@ -218,12 +219,12 @@ async def main():
         ctx = await b.new_context(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True, device_scale_factor=2)
         page = await ctx.new_page()
         await page.goto(base + f"/story/{WITH}/", wait_until="load")
-        await page.wait_for_function("navigator.serviceWorker && navigator.serviceWorker.controller !== null", timeout=20000)
+        await wait_for_active_controller(page, timeout=20000)
         await page.reload(wait_until="load"); await page.wait_for_selector("#reader.on")
         # the 1200px derivative, requested through the worker in this very context, is the one the test follows
         await page.evaluate("u => fetch(u).then(r => r.arrayBuffer())", HERO)
         stampA = re.search(r'const BUILD = "([0-9a-f]{8})"', rd("sw.js")).group(1)
-        await page.wait_for_function("([s, u]) => caches.keys().then(async ks => { const k = ks.find(k => k.startsWith('ledger-images-v') && k.includes(s)); if (!k) return false; const c = await caches.open(k); return !!(await c.match(u)); })", arg=[stampA, HERO], timeout=15000)
+        await wait_for_cached_response(page, "ledger-images-v4-" + stampA, HERO)
         img_caches = [k for k in await page.evaluate("caches.keys()") if k.startswith("ledger-images-v")]
         held = await page.evaluate("async k => (await (await caches.open(k)).keys()).map(r=>new URL(r.url).pathname)", img_caches[0]) if img_caches else []
         ok("worker: one image cache, named for this build, holding the 1200px hero after a controlled load",
@@ -248,15 +249,11 @@ async def main():
         STATE["root"] = siteb
         # the app asks for a worker update on every return to the page and hourly; the
         # simulated deployment asks for one now, so the new worker is fetched at once
-        await page.evaluate("navigator.serviceWorker.getRegistration().then(r => r.update())")
-        await page.reload(wait_until="load")
-        # the new worker must install, activate, claim the page and clear the old caches — a
-        # bounded wait for that state, not a pause; if it never happens, that is the failure
-        try:
-            await page.wait_for_function("([a, b]) => navigator.serviceWorker.controller && caches.keys().then(ks => ks.some(k => k.includes(b)) && !ks.some(k => k.includes(a)))", arg=[stampA, stampB], timeout=25000)
-            activated = True
-        except Exception as ex:
-            activated = False
+        # Wait for the different worker itself to activate and control this client.
+        # A Promise-returning wait_for_function predicate could resolve false once
+        # and still be mistaken for success. Cleanup is checked separately below.
+        update = await update_and_wait_for_controller(page)
+        activated = update["changed"] and update["state"] == "activated"
         await page.reload(wait_until="load"); await page.wait_for_selector("#reader.on")
         newlen = os.path.getsize(os.path.join(siteb, "assets", "editorial", WITH, "hero-1200.webp"))
         got = await page.evaluate("u => fetch(u).then(r=>r.arrayBuffer()).then(b=>b.byteLength)", HERO)

@@ -8,6 +8,7 @@ addresses, lets a real 404 through while online, and upgrades cleanly from the
 previously released service worker (the one installed readers have now)."""
 import asyncio, http.server, socketserver, threading, os, sys, json, subprocess, shutil, re, urllib.parse, tempfile
 from playwright.async_api import async_playwright
+from qa_worker_helpers import wait_for_active_controller
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE = os.path.join(ROOT, "_site")
@@ -396,7 +397,7 @@ async def main():
         await page.evaluate("document.querySelector('#settings').classList.remove('on'); S.section='Front page'; render();")
 
         # ============ 3. the service worker ============
-        await page.wait_for_function("navigator.serviceWorker && navigator.serviceWorker.controller !== null", timeout=15000)
+        await wait_for_active_controller(page, timeout=15000)
         names = await page.evaluate("caches.keys()")
         ok("service worker installs a stamped v4 shell", any(re.match(r"ledger-shell-v4-[0-9a-f]{8}$", n) for n in names), names)
 
@@ -452,7 +453,7 @@ async def main():
         ctx = await b.new_context(viewport={"width":440,"height":956})
         page = await ctx.new_page(); watch(page)
         await page.goto(base + "/", wait_until="load")
-        await page.wait_for_function("navigator.serviceWorker && navigator.serviceWorker.controller !== null", timeout=15000)
+        await wait_for_active_controller(page, timeout=15000)
         old_names = await page.evaluate("caches.keys()")
         ok("previous release installs its v3 worker", "ledger-shell-v3" in old_names, old_names)
         # the release lands; the next launch finds the new worker, installs it and

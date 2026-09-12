@@ -62,12 +62,12 @@ self.addEventListener("install", e => {
   );
 });
 
-/* Every earlier cache goes — including the v3 shell that kept a single index.html
-   under a relative key — so an upgrade from the installed app starts clean. */
+/* Retire only recognized Ledger cache generations, including the old v3 shell.
+   CacheStorage is shared by the origin; other apps' caches are not ours to delete. */
 self.addEventListener("activate", e => {
   e.waitUntil(
     caches.keys()
-      .then(ks => Promise.all(ks.filter(k => k !== SHELL && k !== RUNTIME && k !== IMAGES).map(k => caches.delete(k))))
+      .then(ks => Promise.all(ks.filter(k => /^ledger-(shell|runtime|images)-v\d+(-(dev|[0-9a-f]{8}))?$/.test(k) && k !== SHELL && k !== RUNTIME && k !== IMAGES).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
