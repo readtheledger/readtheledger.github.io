@@ -323,7 +323,7 @@ async def main():
                   wimbox: !!document.querySelector('#rwrap .wimbox'),
                   cta: !!document.querySelector('#rwrap .srccta a'),
                   attr: ((document.querySelector('#rwrap .attrline')||{}).textContent||"").includes('a summary by The Ledger'),
-                  label: (document.querySelector('#rwrap .wimbox h3')||{}).textContent||"",
+                  label: (document.querySelector('#rwrap .wimbox h2')||{}).textContent||"",
                   copied: plainText(it), spoken: speechText(it)};
         }""")
         ok("unlicensed article shown as summary, not reprint",
@@ -358,7 +358,7 @@ async def main():
           // inspectable because ping() is the sole sender
           return ping.toString().includes(".goatcounter.com/count") &&
                  ping.toString().includes("new Image()") &&
-                 !document.querySelector('script[src]:not([src="/content.js"]):not([src="/sources.js"]):not([src="/topics.js"]):not([src="/context.js"])');
+                 !document.querySelector('script[src]:not([src="/content.js"]):not([src="/sources.js"]):not([src="/topics.js"]):not([src="/context.js"]):not([src="/about.js"])');
         }""")
         ok("analytics is an image ping to goatcounter only, no scripts", pixel_only)
 

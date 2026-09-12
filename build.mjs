@@ -36,7 +36,14 @@ const productionLine = produced => produced === "assisted"
   : "Reported and written by <strong>The Ledger</strong>.";
 const SITE = "https://readtheledger.github.io";
 const SITE_TITLE = "The Ledger — Finance, read properly";
-const SITE_DESC  = "A quiet reader for high-quality, free-to-read financial journalism.";
+const SITE_DESC  = "The Ledger's own financial reporting and analysis — markets, central banks, the economy, tech and personal finance — every source credited and linked.";
+const ABOUT_PATH = "/about/";
+const FEED_PATH  = "/feed.xml";
+const NEWS_SITEMAP = "/sitemap-news.xml";
+const REPO = "https://github.com/readtheledger/readtheledger.github.io";
+/* a news sitemap lists what was published in the last two days, and nothing older */
+const NEWS_WINDOW_MS = 48 * 3600 * 1000;
+const NOW = Date.parse(opt("now", "")) || Date.now();   // the tests build "as of" a date
 
 /* mirrors the app (index.html, "1b. addresses"); the build checks they agree */
 const PAGE_SECTIONS = ["Markets","Companies","Economics","Central Banks","Opinion","Tech & Finance","Personal Finance"];
@@ -53,8 +60,9 @@ const read = f => fs.readFileSync(path.join(ROOT, f), "utf8");
 const index = read("index.html");
 const contentSrc = fs.readFileSync(CONTENT_FILE, "utf8");
 const swSrc = read("sw.js");
+const aboutSrc = read("about.js");
 
-for (const marker of ["<!-- meta:start", "<!-- meta:end -->", "<!-- static:slot", '<p class="datestrip" id="datestrip"']) {
+for (const marker of ["<!-- meta:start", "<!-- meta:end -->", "<!-- static:slot", '<p class="datestrip" id="datestrip"', '<meta name="robots" id="robotsMeta" content="index,follow">']) {
   if (!index.includes(marker)) fail("index.html is missing the " + marker + " marker");
 }
 if (!swSrc.includes('const BUILD = "dev";')) fail("sw.js is missing the BUILD stamp");
@@ -73,6 +81,9 @@ vm.runInNewContext(contentSrc, ctx);
 const content = ctx.window.LEDGER_CONTENT;
 if (!content || !Array.isArray(content.articles) || !content.articles.length) fail("content.js carries no articles");
 const articles = content.articles;
+vm.runInNewContext(aboutSrc, ctx);
+const about = ctx.window.LEDGER_ABOUT;
+if (!about || !about.title || !about.standfirst || !about.html) fail("about.js carries no About page (title, standfirst, html)");
 
 /* ---------------------------------------------------------------- checking */
 /* The article bodies are The Ledger's own, but a static page has no runtime
@@ -92,12 +103,21 @@ for (const a of articles) {
   if (!a.standfirst || !a.standfirst.trim()) fail(where + ": missing standfirst");
   if (!a.html || !a.html.trim()) fail(where + ": missing body");
   for (const re of RISKY) if (re.test(a.html)) fail(where + ": body contains markup the static page will not carry (" + re + ")");
+  if (a.updated !== undefined && (isNaN(Date.parse(a.updated)) || Date.parse(a.updated) < Date.parse(a.date))) fail(where + ": updated must be an ISO 8601 date on or after date");
+  // an optional representative image: an https address, alt text, and its size
+  // in pixels; the logo is not an article image and is never used as one
+  if (a.image !== undefined) {
+    const im = a.image;
+    if (!im || typeof im !== "object" || !/^https:\/\/[^\s"<>]+$/.test(im.u || "") || !im.alt || !(im.w > 0) || !(im.h > 0)) fail(where + ": image needs u (https), alt, w and h");
+    if (/icon-\d+\.png$/.test(im.u)) fail(where + ": the site icon is not an article image");
+  }
   if (!Array.isArray(a.sources) || !a.sources.length) fail(where + ": needs at least one source");
   for (const s of a.sources) {
     if (!s.t || !s.p || !/^https:\/\/[^\s"<>]+$/.test(s.u || "")) fail(where + ": every source needs a title, an https URL and a publisher");
   }
 }
 if (articles.filter(a => a.weekly).length > 1) fail("more than one article is marked weekly");
+for (const re of RISKY) if (re.test(about.html)) fail("about.js: body contains markup the static page will not carry (" + re + ")");
 
 /* ----------------------------------------------------------------- helpers */
 const words = html => html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(Boolean).length;
@@ -107,27 +127,38 @@ const descOf = s => { const t = plain(s); return t.length <= 300 ? t : t.slice(0
 const dateLong = iso => new Date(iso).toLocaleString("en-GB", {day:"numeric", month:"long", year:"numeric", timeZone:"UTC"});
 const dateShort = iso => new Date(iso).toLocaleString("en-GB", {day:"numeric", month:"short", year:"numeric", timeZone:"UTC"});
 const dateTime = iso => dateLong(iso) + ", " + new Date(iso).toLocaleString("en-GB", {hour:"2-digit", minute:"2-digit", timeZone:"UTC"}) + " UTC";
-const jsonLd = obj => '<script type="application/ld+json">' + JSON.stringify(obj).replace(/</g, "\\u003c") + "</script>";
+const jsonLd = obj => [].concat(obj).map(o => '<script type="application/ld+json">' + JSON.stringify(o).replace(/</g, "\\u003c") + "</script>").join("\n");
 const byDate = (x, y) => Date.parse(y.date) - Date.parse(x.date);
 
-const ORG = { "@type":"Organization", "name":"The Ledger", "url": SITE + "/", "logo": { "@type":"ImageObject", "url": SITE + "/icon-512.png" } };
+/* the publisher, with only what the publication has stated about itself: its
+   name, its address, its logo and its public source repository */
+const ORG = { "@type":"Organization", "@id": SITE + "/#organization", "name":"The Ledger", "url": SITE + "/", "logo": { "@type":"ImageObject", "url": SITE + "/icon-512.png", "width": 512, "height": 512 }, "sameAs": [REPO] };
+/* Home › Section › Story, as structured data, so the page's place in the site is stated */
+const crumbs = items => ({ "@context":"https://schema.org", "@type":"BreadcrumbList",
+  "itemListElement": items.map((it, i) => ({ "@type":"ListItem", "position": i + 1, "name": it.name, "item": it.url })) });
+const HOME = { name: "The Ledger", url: SITE + "/" };
 
-function metaBlock({ title, ogTitle, description, canonical, ogType, extra, ld }) {
+function metaBlock({ title, ogTitle, description, canonical, ogType, extra, ld, image }) {
+  // the sharing image: the piece's own when it has one, otherwise the icon
+  // (a sharing preview, not a claim that the icon is the article's image)
+  const share = image ? image.u : SITE + "/icon-512.png";
   return [
     "<!-- meta:start — written by build.mjs -->",
     `<title>${esc(title)}</title>`,
     `<meta name="description" content="${esc(description)}">`,
     `<link rel="canonical" href="${esc(canonical)}">`,
+    `<link rel="alternate" type="application/atom+xml" title="The Ledger" href="${FEED_PATH}">`,
     `<meta property="og:type" content="${ogType}">`,
     `<meta property="og:site_name" content="The Ledger">`,
     `<meta property="og:title" content="${esc(ogTitle || title)}">`,
     `<meta property="og:description" content="${esc(description)}">`,
     `<meta property="og:url" content="${esc(canonical)}">`,
-    `<meta property="og:image" content="${SITE}/icon-512.png">`,
-    `<meta name="twitter:card" content="summary">`,
+    `<meta property="og:image" content="${esc(share)}">`,
+    ...(image ? [`<meta property="og:image:width" content="${image.w}">`, `<meta property="og:image:height" content="${image.h}">`, `<meta property="og:image:alt" content="${esc(image.alt)}">`] : []),
+    `<meta name="twitter:card" content="${image ? "summary_large_image" : "summary"}">`,
     `<meta name="twitter:title" content="${esc(ogTitle || title)}">`,
     `<meta name="twitter:description" content="${esc(description)}">`,
-    `<meta name="twitter:image" content="${SITE}/icon-512.png">`,
+    `<meta name="twitter:image" content="${esc(share)}">`,
     ...(extra || []),
     jsonLd(ld),
     "<!-- meta:end -->"
@@ -138,6 +169,7 @@ function navHTML(current) {
   return '<nav class="static-nav" aria-label="Sections">' +
     ["Front page", ...PAGE_SECTIONS].map(s =>
       `<a class="seclink" href="${sectionPath(s)}"${s === current ? ' aria-current="page"' : ""}>${esc(s)}</a>`).join("") +
+    `<a class="seclink" href="${ABOUT_PATH}"${current === "About" ? ' aria-current="page"' : ""}>About</a>` +
     "</nav>";
 }
 
@@ -153,10 +185,46 @@ function cardHTML(a, lead) {
     </article>`;
 }
 
+/* the About card at the foot of the front page, as the app shows it: no date */
+function aboutCardHTML() {
+  return `<article class="card about">
+      <div class="cardtop"><div>
+        <p class="kicker">About</p>
+        <h2 class="hl"><a href="${ABOUT_PATH}">${esc(about.title)}</a></h2>
+        <p class="standfirst">${esc(about.standfirst)}</p>
+        <div class="meta"><span class="badge">The Ledger</span><span class="dot">Part of the app · no date</span></div>
+      </div></div>
+    </article>`;
+}
+
+/* every page opens with one h1: the front page's is for readers of the structure
+   (the wordmark is the visible one), a section's is the heading the app shows */
 function listHTML(current, list, emptyText) {
+  const n = list.length;
+  const head = current === "Front page"
+    ? `<h1 class="sr">${esc(SITE_TITLE)}</h1>`
+    : `<header class="viewhead"><h1>${esc(current)}</h1><p class="viewnote">${n} ${n === 1 ? "story" : "stories"}</p></header>`;
   return `<div id="static">${navHTML(current)}
-    ${list.length ? list.map((a, i) => cardHTML(a, i === 0)).join("\n") : `<div class="notice"><h3>Nothing here yet</h3><p style="margin:0">${esc(emptyText)}</p></div>`}
+    ${head}
+    ${n ? list.map((a, i) => cardHTML(a, i === 0)).join("\n") : `<div class="notice"><h2>Nothing here yet</h2><p style="margin:0">${esc(emptyText)}</p></div>`}
+    ${current === "Front page" ? aboutCardHTML() : ""}
   </div>`;
+}
+
+/* up to four other pieces, the same desk first, then the newest: real links
+   between the Ledger's own pages, so no story is a dead end */
+function relatedHTML(a) {
+  const others = sorted.filter(x => x.id !== a.id);
+  const pick = others.filter(x => x.section === a.section).concat(others.filter(x => x.section !== a.section)).slice(0, 4);
+  if (!pick.length) return "";
+  return `<nav class="related" aria-label="More from The Ledger"><h2>More from The Ledger</h2><ul>${
+    pick.map(x => `<li><a href="${storyPath(x)}">${esc(x.title)}</a> <span class="dot">${esc(x.section)} · <time datetime="${esc(x.date)}">${dateShort(x.date)}</time></span></li>`).join("")
+  }</ul></nav>`;
+}
+
+function ledeImageHTML(a) {
+  if (!a.image) return "";
+  return `<figure class="lede"><img src="${esc(a.image.u)}" alt="${esc(a.image.alt)}" width="${a.image.w}" height="${a.image.h}">${a.image.caption ? `<figcaption>${esc(a.image.caption)}</figcaption>` : ""}</figure>`;
 }
 
 function storyHTML(a) {
@@ -169,9 +237,25 @@ function storyHTML(a) {
       <h1>${esc(a.title)}</h1>
       <p class="rstand">${esc(a.standfirst)}</p>
       <div class="rmeta"><span class="badge">The Ledger</span><time class="dot" datetime="${esc(a.date)}">${dateTime(a.date)}</time><span class="dot">${readMins(w)} min read</span></div>
+      ${ledeImageHTML(a)}
       <div class="rbody">${a.html}</div>
-      <aside class="sourcesbox"><h3>Sources &amp; further reading</h3><ul>${srcs}</ul></aside>
+      <aside class="sourcesbox"><h2>Sources &amp; further reading</h2><ul>${srcs}</ul></aside>
       <p class="attrline">${productionLine(a.produced)} Material sources are credited and linked above; quotations are brief and attributed.</p>
+      ${relatedHTML(a)}
+      <p class="static-home"><a href="/">← The Ledger front page</a></p>
+    </article>
+  </div>`;
+}
+
+function aboutHTML() {
+  return `<div id="static">${navHTML("About")}
+    <article class="rwrap">
+      <p class="kicker">About</p>
+      <h1>${esc(about.title)}</h1>
+      <p class="rstand">${esc(about.standfirst)}</p>
+      <div class="rmeta"><span class="badge">The Ledger</span><span class="dot">Part of the app · no date</span></div>
+      <div class="rbody">${about.html}</div>
+      <p class="attrline">This page is part of the app and is not an article; it carries no publication date.</p>
       <p class="static-home"><a href="/">← The Ledger front page</a></p>
     </article>
   </div>`;
@@ -180,6 +264,9 @@ function storyHTML(a) {
 function page(meta, staticHtml) {
   return index
     .replace(/<!-- meta:start[\s\S]*?<!-- meta:end -->/, metaBlock(meta))
+    // a section with no stories yet is a real page with nothing to index; the
+    // app keeps whatever value the build wrote here
+    .replace('<meta name="robots" id="robotsMeta" content="index,follow">', `<meta name="robots" id="robotsMeta" content="${meta.robots || "index,follow"}">`)
     .replace(/<!-- static:slot[^>]*-->/, staticHtml)
     // the edition line comes from the publication, never from a clock: the
     // newest date in content.js, written here so it reads without JavaScript
@@ -204,19 +291,42 @@ const newest = sorted[0].date;
 // front page
 write("index.html", page({
   title: SITE_TITLE, description: SITE_DESC, canonical: SITE + "/", ogType: "website",
-  ld: { "@context":"https://schema.org", "@type":"WebSite", "name":"The Ledger", "url": SITE + "/", "description": SITE_DESC, "publisher": ORG }
+  ld: [
+    { "@context":"https://schema.org", "@type":"WebSite", "name":"The Ledger", "url": SITE + "/", "description": SITE_DESC, "publisher": ORG },
+    Object.assign({ "@context":"https://schema.org" }, ORG)
+  ]
 }, listHTML("Front page", frontList, "")));
+
+// about
+write(ABOUT_PATH.slice(1) + "index.html", page({
+  title: "About — The Ledger", ogTitle: "About The Ledger",
+  description: descOf(about.standfirst), canonical: SITE + ABOUT_PATH, ogType: "website",
+  ld: [
+    { "@context":"https://schema.org", "@type":"AboutPage", "name":"About The Ledger", "url": SITE + ABOUT_PATH, "description": descOf(about.standfirst), "isPartOf": { "@type":"WebSite", "name":"The Ledger", "url": SITE + "/" }, "mainEntity": ORG },
+    crumbs([HOME, { name: "About", url: SITE + ABOUT_PATH }])
+  ]
+}, aboutHTML()));
 
 // sections
 const sectionUrls = [];
 for (const s of PAGE_SECTIONS) {
   const list = sorted.filter(a => a.section === s);
   const canonical = SITE + sectionPath(s);
+  // the description says what is actually on the page: how many pieces, and the
+  // latest one; an empty section says so, and is noindex until it has a story
+  const description = list.length
+    ? `${list.length} original ${list.length === 1 ? "piece" : "pieces"} from The Ledger's ${s} desk, every source credited and linked. Latest: ${plain(list[0].title)} (${dateLong(list[0].date)}).`
+    : `The Ledger has not published in ${s} yet. The front page carries the latest edition.`;
   write(sectionPath(s).slice(1) + "index.html", page({
     title: s + " — The Ledger", ogTitle: s + " — The Ledger",
-    description: "The Ledger's " + s + " desk: original reporting and analysis, every source credited and linked.",
+    description: descOf(description),
     canonical, ogType: "website",
-    ld: { "@context":"https://schema.org", "@type":"CollectionPage", "name": s + " — The Ledger", "url": canonical, "isPartOf": { "@type":"WebSite", "name":"The Ledger", "url": SITE + "/" } }
+    robots: list.length ? "index,follow" : "noindex,follow",
+    ld: [
+      { "@context":"https://schema.org", "@type":"CollectionPage", "name": s + " — The Ledger", "url": canonical, "description": descOf(description), "isPartOf": { "@type":"WebSite", "name":"The Ledger", "url": SITE + "/" },
+        ...(list.length ? { "hasPart": list.map(a => ({ "@type":"NewsArticle", "headline": a.title, "url": SITE + storyPath(a), "datePublished": a.date })) } : {}) },
+      crumbs([HOME, { name: s, url: canonical }])
+    ]
   }, listHTML(s, list, "The Ledger has not published in " + s + " yet. The front page carries the latest edition.")));
   if (list.length) sectionUrls.push({ loc: canonical, lastmod: list[0].date });
 }
@@ -226,38 +336,65 @@ for (const a of articles) {
   const canonical = SITE + storyPath(a);
   const description = descOf(a.standfirst);
   write("story/" + a.id + "/index.html", page({
-    title: a.title + " — The Ledger", ogTitle: a.title, description, canonical, ogType: "article",
+    title: a.title + " — The Ledger", ogTitle: a.title, description, canonical, ogType: "article", image: a.image,
     extra: [
       `<meta property="article:published_time" content="${esc(a.date)}">`,
       `<meta property="article:section" content="${esc(a.section)}">`,
       `<meta property="article:author" content="${SITE}/">`
     ],
-    ld: {
+    ld: [{
       "@context":"https://schema.org", "@type":"NewsArticle",
       "headline": a.title, "description": description,
-      "datePublished": a.date, "dateModified": a.date,
+      "datePublished": a.date, "dateModified": a.updated || a.date,
       "articleSection": a.section, "wordCount": words(a.html),
       "isAccessibleForFree": true, "inLanguage": "en",
       "url": canonical, "mainEntityOfPage": { "@type":"WebPage", "@id": canonical },
-      "image": [SITE + "/icon-512.png"],
+      // image only when the piece has a representative one of its own: Google's
+      // Article guidance asks for an image of the article, not a logo, and has
+      // no required properties, so a piece without one simply carries none
+      ...(a.image ? { "image": [{ "@type":"ImageObject", "url": a.image.u, "width": a.image.w, "height": a.image.h, "caption": a.image.alt }] } : {}),
       "author": { "@type":"Organization", "name":"The Ledger", "url": SITE + "/" },
       "publisher": ORG,
       "citation": a.sources.map(s => ({ "@type":"CreativeWork", "name": s.t, "url": s.u, "publisher": { "@type":"Organization", "name": s.p } }))
-    }
+    },
+    crumbs([HOME, { name: a.section, url: SITE + sectionPath(a.section) }, { name: a.title, url: canonical }])]
   }, storyHTML(a)));
 }
 
-// sitemap and robots
+// sitemap and robots. The About page has no date of its own, so it carries none.
 const urls = [{ loc: SITE + "/", lastmod: newest }]
   .concat(sectionUrls)
-  .concat(articles.map(a => ({ loc: SITE + storyPath(a), lastmod: a.date })));
+  .concat(articles.map(a => ({ loc: SITE + storyPath(a), lastmod: a.updated || a.date })))
+  .concat([{ loc: SITE + ABOUT_PATH }]);
 write("sitemap.xml",
   '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-  urls.map(u => `  <url><loc>${esc(u.loc)}</loc><lastmod>${esc(u.lastmod)}</lastmod></url>`).join("\n") +
+  urls.map(u => `  <url><loc>${esc(u.loc)}</loc>${u.lastmod ? `<lastmod>${esc(u.lastmod)}</lastmod>` : ""}</url>`).join("\n") +
   "\n</urlset>\n");
-// the app-only views and searches live on the front page's address with a query;
-// they are personal or transient, and are not pages to index
-write("robots.txt", "User-agent: *\nAllow: /\nDisallow: /*?view=\nDisallow: /*?q=\n\nSitemap: " + SITE + "/sitemap.xml\n");
+
+// the news sitemap: only what was published in the last two days, which is what
+// Google reads one for; an archive does not qualify, and the file says so by
+// listing nothing. Whether to submit it is the owner's decision in Search Console.
+const fresh = sorted.filter(a => NOW - Date.parse(a.date) <= NEWS_WINDOW_MS && Date.parse(a.date) <= NOW);
+write(NEWS_SITEMAP.slice(1),
+  '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">\n' +
+  fresh.map(a => `  <url><loc>${esc(SITE + storyPath(a))}</loc><news:news><news:publication><news:name>The Ledger</news:name><news:language>en</news:language></news:publication><news:publication_date>${esc(a.date)}</news:publication_date><news:title>${esc(a.title)}</news:title></news:news></url>`).join("\n") +
+  (fresh.length ? "\n" : "") + "</urlset>\n");
+
+// nothing is disallowed: the app-only views (?view=, ?q=) are marked noindex on
+// the page itself, and a crawler can only read that if it is allowed to fetch them
+write("robots.txt", "User-agent: *\nAllow: /\n\nSitemap: " + SITE + "/sitemap.xml\nSitemap: " + SITE + NEWS_SITEMAP + "\n");
+
+// an Atom feed of The Ledger's own pieces, in full: they are its own work, and a
+// feed reader is a legitimate place to read them
+const atomDate = iso => new Date(iso).toISOString();
+write(FEED_PATH.slice(1),
+  '<?xml version="1.0" encoding="UTF-8"?>\n<feed xmlns="http://www.w3.org/2005/Atom">\n' +
+  `  <title>The Ledger</title>\n  <subtitle>${esc(SITE_DESC)}</subtitle>\n  <id>${SITE}/</id>\n` +
+  `  <link href="${SITE}/"/>\n  <link rel="self" type="application/atom+xml" href="${SITE}${FEED_PATH}"/>\n` +
+  `  <updated>${atomDate(sorted.reduce((m, a) => Math.max(m, Date.parse(a.updated || a.date)), 0))}</updated>\n` +
+  `  <author><name>The Ledger</name><uri>${SITE}/</uri></author>\n` +
+  sorted.map(a => `  <entry>\n    <title>${esc(a.title)}</title>\n    <id>${esc(SITE + storyPath(a))}</id>\n    <link href="${esc(SITE + storyPath(a))}"/>\n    <published>${atomDate(a.date)}</published>\n    <updated>${atomDate(a.updated || a.date)}</updated>\n    <category term="${esc(a.section)}"/>\n    <summary>${esc(plain(a.standfirst))}</summary>\n    <content type="html">${esc(a.html)}</content>\n  </entry>`).join("\n") +
+  "\n</feed>\n");
 
 // a real not-found page: no app, no service-worker registration, plain links out
 write("404.html", `<!DOCTYPE html>
@@ -287,7 +424,7 @@ nav{border-top:1px solid var(--rule);margin-top:28px;padding-top:14px;font-famil
   <h1>That page isn't in this edition.</h1>
   <p>The address may have been mistyped, or the story it pointed to is no longer published. Everything The Ledger has written is on the front page.</p>
   <p><a href="/">Go to the front page →</a></p>
-  <nav aria-label="Sections">${PAGE_SECTIONS.map(s => `<a href="${sectionPath(s)}">${esc(s)}</a>`).join("")}</nav>
+  <nav aria-label="Sections">${PAGE_SECTIONS.map(s => `<a href="${sectionPath(s)}">${esc(s)}</a>`).join("")}<a href="${ABOUT_PATH}">About</a></nav>
 </main>
 </body>
 </html>
@@ -297,14 +434,14 @@ nav{border-top:1px solid var(--rule);margin-top:28px;padding-top:14px;font-famil
 // told exactly which addresses the app can render offline: the front page, the
 // sections and the stories that exist in this edition, and nothing else
 const sourcesSrc = read("sources.js");
-const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(read("topics.js")).update(read("context.js")).update(swSrc).digest("hex").slice(0, 8);
-const routes = ["/", "/index.html"].concat(PAGE_SECTIONS.map(sectionPath), articles.map(storyPath));
+const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(read("topics.js")).update(read("context.js")).update(aboutSrc).update(swSrc).digest("hex").slice(0, 8);
+const routes = ["/", "/index.html", ABOUT_PATH].concat(PAGE_SECTIONS.map(sectionPath), articles.map(storyPath));
 const sw = swSrc
   .replace('const BUILD = "dev";', 'const BUILD = "' + stamp + '";')
   .replace(/^const ROUTES = \[[^\n]*\];$/m, "const ROUTES = " + JSON.stringify(routes) + ";");
 if (!sw.includes('const BUILD = "' + stamp + '"') || !sw.includes('"/story/' + articles[0].id + '/"')) fail("sw.js was not stamped");
 write("sw.js", sw);
-for (const f of ["content.js", "sources.js", "topics.js", "context.js", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]) {
+for (const f of ["content.js", "sources.js", "topics.js", "context.js", "about.js", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]) {
   fs.copyFileSync(path.join(ROOT, f), path.join(OUT, f));
   written.push(f);
 }
@@ -357,4 +494,4 @@ for (const list of ["FILES", "ROUTES"]) {
 for (const m of fs.readFileSync(path.join(OUT, "manifest.webmanifest"), "utf8").matchAll(/"src": *"([^"]+)"/g)) check("", m[1]);
 if (missing.size) fail("references to files that are not in the output:\n  " + [...missing].join("\n  "));
 
-console.log("build: " + written.filter(f => f.endsWith(".html")).length + " pages, " + articles.length + " stories, " + sectionUrls.length + " sections with content, shell " + stamp + " → " + OUT);
+console.log("build: " + written.filter(f => f.endsWith(".html")).length + " pages, " + articles.length + " stories, " + sectionUrls.length + " sections with content, " + fresh.length + " in the news sitemap, shell " + stamp + " → " + OUT);

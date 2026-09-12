@@ -20,7 +20,9 @@ Every article has two buttons that matter. **Listen** reads the piece aloud — 
 
 ## Every story has an address
 
-Each Ledger article is published at `/story/<id>/` and each editorial section at its own path (`/markets/`, `/central-banks/`, `/tech-and-finance/` and so on). Those pages are written by `build.mjs`: each one is the app, with that page's title, description, canonical URL, Open Graph and Twitter Card metadata and `NewsArticle` structured data in its head, and a static copy of the content inside `<main>` so the story reads in full — headline, standfirst, body, sources, date — with JavaScript off. When the app boots on one of those pages it removes the static copy and opens the same story in the reader, so the address keeps meaning what it meant; a refresh, a bookmark or a shared link all come back to the story. Headlines on the front page are ordinary links to those addresses, section tabs are links to the section pages, and Share hands the system a Ledger story's own URL (a Newsstand item still shares the publisher's original). The build also writes `sitemap.xml`, `robots.txt` and a real `404.html`.
+Each Ledger article is published at `/story/<id>/` and each editorial section at its own path (`/markets/`, `/central-banks/`, `/tech-and-finance/` and so on). Those pages are written by `build.mjs`: each one is the app, with that page's title, description, canonical URL, Open Graph and Twitter Card metadata and `NewsArticle` structured data in its head, and a static copy of the content inside `<main>` so the story reads in full — headline, standfirst, body, sources, date — with JavaScript off. When the app boots on one of those pages it removes the static copy and opens the same story in the reader, so the address keeps meaning what it meant; a refresh, a bookmark or a shared link all come back to the story. Headlines on the front page are ordinary links to those addresses, section tabs are links to the section pages, and Share hands the system a Ledger story's own URL (a Newsstand item still shares the publisher's original). The About page is `/about/`, written from `about.js`, which the app and the build share. The build also writes `sitemap.xml`, a news sitemap (`sitemap-news.xml`, listing only what was published in the last 48 hours — empty otherwise), an Atom feed of The Ledger's own pieces (`feed.xml`), `robots.txt` and a real `404.html`.
+
+Every page opens with one `h1` and has a skip link; a section with no stories yet is served and linked but marked `noindex` until it has one; a story page carries `NewsArticle` and `BreadcrumbList` structured data, with The Ledger (the organisation) as author — no person is named because none has been stated — and links to four other pieces. The app-only views (`/?view=newsstand`, `/?view=saved`, `?q=`) are `noindex` with a canonical of their own, and nothing is blocked in `robots.txt`, so a crawler can read that instruction. `docs/seo/README.md` is the audit behind this, with the before-and-after evidence.
 
 ```
 node build.mjs            # writes the site into ./_site
@@ -82,7 +84,7 @@ A note on the *Long reads* rail: it is ranked by depth and source quality, not b
 
 ## Files
 
-`index.html` is the entire application — markup, styles and logic in one file. `content.js` is the publication: The Ledger's own articles, loaded at boot. `sw.js` is the offline shell. `manifest.webmanifest` plus the PNG icons make it installable. `sources.js` is the list of public feeds, read by the app and the gatherer alike; `topics.js` is the filing rule they share; `context.js` holds reviewed story-specific context. `fetch_feeds.mjs` gathers those feeds into `data/feed.json`. `build.mjs` writes the story and section pages, the sitemap, `robots.txt` and the 404 page into `_site` and copies the gathered Newsstand in; `check_site.sh` is the artifact check the deploy runs on that folder. `qa.py`, `qa_live.py`, `qa_pages.py` and `qa_feed.py` are the test suites, and `fetch_fixtures.sh` captures the feeds the live suite reads.
+`index.html` is the entire application — markup, styles and logic in one file. `content.js` is the publication: The Ledger's own articles, loaded at boot. `about.js` is the About page, shared by the app and the build. `sw.js` is the offline shell. `manifest.webmanifest` plus the PNG icons make it installable. `sources.js` is the list of public feeds, read by the app and the gatherer alike; `topics.js` is the filing rule they share; `context.js` holds reviewed story-specific context. `fetch_feeds.mjs` gathers those feeds into `data/feed.json`. `build.mjs` writes the story, section and About pages, the sitemaps, the Atom feed, `robots.txt` and the 404 page into `_site` and copies the gathered Newsstand in; `check_site.sh` is the artifact check the deploy runs on that folder. `qa.py`, `qa_live.py`, `qa_pages.py`, `qa_feed.py`, `qa_package1.py` and `qa_seo.py` are the test suites, and `fetch_fixtures.sh` captures the feeds the live suite reads.
 
 Only `_site` is deployed — the workflow in `.github/workflows/pages.yml` runs the build and publishes that folder, and the build fails if anything a page references is missing from the output. The tests and this README stay behind.
 
@@ -109,6 +111,10 @@ python3 qa_pages.py      # 90 checks: builds the site, runs the deploy's own art
                          # released worker
 python3 qa_package1.py   # package 1: freshness, filing, labels, the masthead and
                          # menu at 360/390/768/1440, restorable views, sharing outcomes
+python3 qa_seo.py        # 45 checks: what a crawler is served — headings, titles,
+                         # descriptions, canonicals, robots, both sitemaps, the Atom
+                         # feed, structured data, the About page, related links, the
+                         # skip link — and that the app keeps those signals honest
 node eval_topics.mjs --edition data/feed.json   # the classifier against the labelled sample
 python3 qa_feed.py       # 21 checks: the gatherer against synthetic RSS and Atom
                          # feeds — validation and dropped-item reasons, excerpts
