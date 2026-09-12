@@ -24,6 +24,7 @@
   media-src 'self' blob:;
   connect-src 'self' https://api.openai.com https://api.allorigins.win https://corsproxy.io https://api.codetabs.com">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+<meta name="google-site-verification" content="HRTi_4B1AL_3WZcrRViVq4onwxlfSPT4fSQpbqtaT2c" />
 <!-- meta:start — build.mjs replaces this block per page (story, section, front) -->
 <title>The Ledger — Finance, read properly</title>
 <meta name="description" content="A quiet reader for high-quality, free-to-read financial journalism.">
@@ -374,6 +375,8 @@ ol.rail .hl{font-size:1rem;line-height:1.25}
 .menulist a[aria-current="page"]{color:var(--accent-2)}
 .menu-about{margin:12px 0 0;font-family:var(--ui);font-size:.86rem}
 .menu-about a{display:inline-flex;align-items:center;min-height:44px;color:var(--accent);font-weight:600;text-decoration:none}
+.analytics-choice{display:flex;align-items:center;gap:.7em;min-height:44px;font-family:var(--ui);font-size:1rem;cursor:pointer}
+.analytics-choice input{width:22px;height:22px;accent-color:var(--accent);flex-shrink:0}
 .menu-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
 .menu-actions .btn{width:100%}
 @media (min-width:600px){.sheet .panel.menu{left:auto;right:12px;top:12px;bottom:auto;width:360px;border-radius:16px;max-height:calc(100dvh - 24px)}}
@@ -615,6 +618,7 @@ html.js #static{display:none}
 <audio id="player" preload="auto" playsinline></audio>
 
 <script src="/about.js"></script>
+<script src="/analytics.js"></script>
 <script src="/media.js"></script>
 <script src="/sources.js"></script>
 <script src="/topics.js"></script>
@@ -680,19 +684,9 @@ function viewFromParam(v){ return Object.keys(VIEW_PARAM).find(k=>VIEW_PARAM[k]=
 
 /* CORS relays, tried in order, only when the gathered edition cannot be read.
    RSS is public, but browsers block cross-origin XML. */
-/* Privacy-respecting analytics, off by default. Create a free GoatCounter
-   account (goatcounter.com), then put your site code here — e.g. "theledger"
-   for theledger.goatcounter.com. Counting uses a plain image request: no
-   script is loaded, no cookies are set, nothing runs on the visitor's device,
-   and with the code empty not a single request leaves the page. */
-const GC_SITE = "theledger";
-function ping(path){
-  if(!GC_SITE) return;
-  try{
-    new Image().src = "https://"+GC_SITE+".goatcounter.com/count?p="+
-      encodeURIComponent(path)+"&rnd="+Date.now();
-  }catch(e){}
-}
+/* Collection is off. Set a site code only for a verified owner-controlled
+   account. analytics.js also applies the production/owner/QA guards. */
+const GC_SITE = "";
 
 const RELAYS = [
   u => "https://api.allorigins.win/raw?url=" + encodeURIComponent(u),
@@ -877,6 +871,40 @@ function productionLine(produced){
     : "Reported and written by <strong>The Ledger</strong>.";
 }
 const EDITORIAL = ((window.LEDGER_CONTENT && window.LEDGER_CONTENT.articles) || []).map(makeEditorial);
+const ANALYTICS = window.LEDGER_ANALYTICS ? window.LEDGER_ANALYTICS.create({
+  site: GC_SITE, origin: SITE,
+  paths: ["/", ABOUT_PATH, "/newsstand/", "/saved/", "/newsstand/reader/"]
+    .concat(PAGE_SECTIONS.map(sectionPath), EDITORIAL.map(storyPath))
+}) : null;
+function trackVisiblePage(){
+  if(!ANALYTICS) return;
+  if($("#reader").classList.contains("on") && S.current){
+    const it = S.current;
+    // Newsstand previews have no public page of their own. Count that view in
+    // aggregate; its local item identity is used only to distinguish navigation.
+    ANALYTICS.visit("reader:"+it.id, storyPath(it) || "/newsstand/reader/");
+  }else{
+    const path = sectionPath(S.section) || (S.section==="Newsstand" ? "/newsstand/" : "/saved/");
+    ANALYTICS.visit("view:"+S.section, path);
+  }
+}
+function bindAnalyticsPreference(){
+  const wrap = $("#rwrap");
+  const control = $("[data-analytics-exclude]", wrap);
+  const status = $("[data-analytics-status]", wrap);
+  if(!control || !status) return;
+  function update(){
+    if(!ANALYTICS){ control.disabled=true; status.textContent="Pageview counting is unavailable."; return; }
+    control.disabled=false; control.checked=ANALYTICS.excluded();
+    status.textContent = ANALYTICS.storageFailed()
+      ? "Counting is paused because this browser could not save or read your choice. Allow site storage to save it across reloads."
+      : !GC_SITE ? (control.checked ? "Pageview collection is off. Your choice to exclude this browser is saved for any future enablement." : "Pageview collection is off. You can still save a choice to exclude this browser.")
+      : control.checked ? "Your visits are excluded in this browser. Uncheck to include future page visits."
+      : "Your future page visits may be counted. Check to exclude them in this browser.";
+  }
+  control.onchange=()=>{ ANALYTICS.setExcluded(control.checked); update(); };
+  update();
+}
 function weeklyItem(){ return EDITORIAL.find(a=>a.weekly) || null; }
 
 /* ------------------------- 4. feed loading ------------------------- */
@@ -1540,7 +1568,6 @@ function openReader(it, opts){
   opts = opts||{};
   S.current = it;
   S.read[it.id]=1; store.set(LS.read,S.read);
-  ping(storyPath(it) || "/article/"+it.id);
 
   // checked again here rather than trusted: this item may have been read back from a
   // cache written by an older build, before links were vetted on the way in
@@ -1628,6 +1655,8 @@ function openReader(it, opts){
   document.title = (it.demo ? "About — The Ledger" : it.title + " — The Ledger");
   updateProgress();
   render();
+  if(it.demo) bindAnalyticsPreference();
+  trackVisiblePage();
 }
 function closeReader(){
   const r=$("#reader"); r.classList.remove("on"); r.setAttribute("aria-hidden","true");
@@ -1637,6 +1666,7 @@ function closeReader(){
   // closed without going back through history (Escape with no entry, a test, a
   // direct call): the address must not keep naming a story that is no longer open
   if(storyIdFromPath(location.pathname)) history.replaceState({}, "", viewAddress());
+  trackVisiblePage();
 }
 
 /* ------------------------- 6b. addresses at boot ------------------------- */
@@ -2034,6 +2064,7 @@ function updateSecCue(){
 function showSection(sec){
   S.section = sec; renderSecNav(); render();
   syncAddress();
+  trackVisiblePage();
 }
 function openMenu(){
   renderSecNav();
@@ -2195,9 +2226,18 @@ function boot(){
     }).catch(()=>{});
   }
 
-  ping(location.pathname);
   route();
   render();
+  trackVisiblePage();
+  window.addEventListener("storage", ev=>{
+    if(ev.key===null || ev.key===window.LEDGER_ANALYTICS?.EXCLUDE_KEY || ev.key==="skipgc") bindAnalyticsPreference();
+  });
+  window.addEventListener("pageshow", ev=>{
+    if(ev.persisted && ANALYTICS){ ANALYTICS.resetNavigation(); trackVisiblePage(); }
+  });
+  document.addEventListener("prerenderingchange", ()=>{
+    if(!document.prerendering && ANALYTICS){ ANALYTICS.resetNavigation(); trackVisiblePage(); }
+  });
   loadFeeds();
   setInterval(()=>loadFeeds({silent:true}), 30*60*1000);
   document.addEventListener("visibilitychange",()=>{
