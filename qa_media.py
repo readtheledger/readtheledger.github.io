@@ -156,8 +156,9 @@ async def main():
            await page.locator("#static").count() == 0 and await page.locator("figure.fig-hero").count() == 1 and await page.evaluate("location.pathname") == f"/story/{WITH}/")
         ok("handover: the hero is fetched from the server once, one derivative, for the static page and the reader together", sum(h.values()) == 1 and list(h)[0].endswith("hero-1200.webp"), h)
         await page.goto(base + "/story/led-20260817-record/", wait_until="load"); await page.wait_for_selector("#reader.on"); await page.wait_for_timeout(300)
+        meta = await page.locator("#rwrap .rmeta").text_content()
         ok("reader: the archive label sits above a news headline past a week, and the true date is shown",
-           "From the archive" in await page.locator("#rwrap .kicker").text_content() and "August 17, 2026" in await page.locator("#rwrap .rmeta").text_content())
+           "From the archive" in await page.locator("#rwrap .kicker").text_content() and re.search(r"August 17, 2026|17 August 2026", meta) is not None, meta)
         await page.goto(base + f"/story/{WITH}/", wait_until="load"); await page.wait_for_selector("#reader.on"); await page.wait_for_timeout(300)
         ok("reader: the figure follows the deck and precedes the byline; caption, credit and disclosure present",
            await page.evaluate("(()=>{const w=document.querySelector('#rwrap');const o=[...w.querySelectorAll('h1,.rstand,figure.fig-hero,.rmeta,.rbody')].map(e=>e.matches('figure')?'figure':e.className||'h1');return JSON.stringify(o)})()") == '["h1","rstand","figure","rmeta","rbody"]'
@@ -213,16 +214,20 @@ async def main():
         await ctx.close()
 
         # ---- the worker's picture cache: scoped to the build, bounded, refreshed by a replaced picture
-        ctx = await b.new_context(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True)
+        HERO = f"/assets/editorial/{WITH}/hero-1200.webp"
+        ctx = await b.new_context(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True, device_scale_factor=2)
         page = await ctx.new_page()
         await page.goto(base + f"/story/{WITH}/", wait_until="load")
         await page.wait_for_function("navigator.serviceWorker && navigator.serviceWorker.controller !== null", timeout=20000)
-        await page.reload(wait_until="load"); await page.wait_for_selector("#reader.on"); await page.wait_for_timeout(1500)
+        await page.reload(wait_until="load"); await page.wait_for_selector("#reader.on")
+        # the 1200px derivative, requested through the worker in this very context, is the one the test follows
+        await page.evaluate("u => fetch(u).then(r => r.arrayBuffer())", HERO)
         stampA = re.search(r'const BUILD = "([0-9a-f]{8})"', rd("sw.js")).group(1)
+        await page.wait_for_function("([s, u]) => caches.keys().then(async ks => { const k = ks.find(k => k.startsWith('ledger-images-v') && k.includes(s)); if (!k) return false; const c = await caches.open(k); return !!(await c.match(u)); })", arg=[stampA, HERO], timeout=15000)
         img_caches = [k for k in await page.evaluate("caches.keys()") if k.startswith("ledger-images-v")]
         held = await page.evaluate("async k => (await (await caches.open(k)).keys()).map(r=>new URL(r.url).pathname)", img_caches[0]) if img_caches else []
-        ok("worker: one image cache, named for this build, holding the hero after a controlled load",
-           len(img_caches) == 1 and stampA in img_caches[0] and any(p.startswith(f"/assets/editorial/{WITH}/hero-") for p in held), (img_caches, held))
+        ok("worker: one image cache, named for this build, holding the 1200px hero after a controlled load",
+           len(img_caches) == 1 and stampA in img_caches[0] and HERO in held, (img_caches, held))
         os.makedirs(os.path.join(site, "assets", "editorial", "limit"))
         small = open(os.path.join(site, "assets", "editorial", WITH, "hero-480.webp"), "rb").read()
         for i in range(45): open(os.path.join(site, "assets", "editorial", "limit", f"hero-{i}.webp"), "wb").write(small)
@@ -239,18 +244,23 @@ async def main():
         os.makedirs(os.path.join(siteb, "data")); open(os.path.join(siteb, "data", "feed.json"), "w").write(stub)
         stampB = re.search(r'const BUILD = "([0-9a-f]{8})"', open(os.path.join(siteb, "sw.js")).read()).group(1) if rb.returncode == 0 else ""
         ok("a replaced picture alone gives the build a new stamp", rb.returncode == 0 and stampB and stampB != stampA, (stampA, stampB, rb.stderr[-200:]))
-        before_hits = STATE["hits"][f"/assets/editorial/{WITH}/hero-1200.webp"]
+        before_hits = STATE["hits"][HERO]
         STATE["root"] = siteb
         await page.reload(wait_until="load")
-        await page.wait_for_function("s => caches.keys().then(ks => ks.some(k => k.includes(s)))", arg=stampB, timeout=20000)
-        await page.wait_for_timeout(800)
-        await page.reload(wait_until="load"); await page.wait_for_selector("#reader.on"); await page.wait_for_timeout(1500)
+        # the new worker must install, activate, claim the page and clear the old caches — a
+        # bounded wait for that state, not a pause; if it never happens, that is the failure
+        try:
+            await page.wait_for_function("([a, b]) => navigator.serviceWorker.controller && caches.keys().then(ks => ks.some(k => k.includes(b)) && !ks.some(k => k.includes(a)))", arg=[stampA, stampB], timeout=25000)
+            activated = True
+        except Exception as ex:
+            activated = False
+        await page.reload(wait_until="load"); await page.wait_for_selector("#reader.on")
         newlen = os.path.getsize(os.path.join(siteb, "assets", "editorial", WITH, "hero-1200.webp"))
-        got = await page.evaluate(f"fetch('/assets/editorial/{WITH}/hero-1200.webp').then(r=>r.arrayBuffer()).then(b=>b.byteLength)")
+        got = await page.evaluate("u => fetch(u).then(r=>r.arrayBuffer()).then(b=>b.byteLength)", HERO)
         keys2 = await page.evaluate("caches.keys()")
-        after_hits = STATE["hits"][f"/assets/editorial/{WITH}/hero-1200.webp"]
-        ok("after the new build installs, a reader gets the replaced picture at the same address, fetched from the server past the HTTP cache's max-age, and the old image cache is gone",
-           got == newlen and after_hits > before_hits and not any(stampA in k for k in keys2) and any(stampB in k for k in keys2), (got, newlen, before_hits, after_hits, keys2))
+        after_hits = STATE["hits"][HERO]
+        ok("after the new build, the worker activates and drops every old cache; the same 1200px address then yields the replaced picture, fetched from the server past the HTTP cache's max-age",
+           activated and got == newlen and after_hits > before_hits and not any(stampA in k for k in keys2) and all(stampB in k for k in keys2 if k.startswith("ledger-")), (activated, got, newlen, before_hits, after_hits, keys2))
         STATE["root"] = site
         await ctx.close()
 
