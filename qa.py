@@ -72,7 +72,9 @@ async def main():
           const p=document.querySelector('.rbody p'); if(!p) return null;
           return getComputedStyle(p,'::first-letter').fontSize;
         }""")
-        ok("drop cap applied", bool(drop) and float(str(drop).replace("px","")) > 40, f"first-letter={drop}")
+        # the drop cap is the weekly feature's flourish (qa_media checks it there); a news
+        # report opens with an ordinary paragraph
+        ok("news report opens with an ordinary paragraph, no drop cap", bool(drop) and float(str(drop).replace("px","")) < 40, f"first-letter={drop}")
 
         # copy
         await page.locator("#rCopy").click()
@@ -358,7 +360,7 @@ async def main():
           // inspectable because ping() is the sole sender
           return ping.toString().includes(".goatcounter.com/count") &&
                  ping.toString().includes("new Image()") &&
-                 !document.querySelector('script[src]:not([src="/content.js"]):not([src="/sources.js"]):not([src="/topics.js"]):not([src="/context.js"]):not([src="/about.js"])');
+                 !document.querySelector('script[src]:not([src="/content.js"]):not([src="/sources.js"]):not([src="/topics.js"]):not([src="/context.js"]):not([src="/about.js"]):not([src="/media.js"])');
         }""")
         ok("analytics is an image ping to goatcounter only, no scripts", pixel_only)
 

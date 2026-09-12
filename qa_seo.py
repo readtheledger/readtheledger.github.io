@@ -171,10 +171,10 @@ async def main():
         ok("story page with an image of its own: NewsArticle.image is that image, with its size; sharing preview uses it; the page shows it",
            L2[0]["image"][0]["url"] == "https://example.com/photos/recent-1600x900.jpg" and L2[0]["image"][0]["width"] == 1600
            and 'property="og:image" content="https://example.com/photos/recent-1600x900.jpg"' in html2 and 'twitter:card" content="summary_large_image"' in html2
-           and await page.evaluate("(()=>{const f=document.querySelector('#static figure.lede img');return !!f && f.alt.startsWith('A chart') && f.getAttribute('width')==='1600'})()"))
+           and await page.evaluate("(()=>{const f=document.querySelector('#static figure.fig img');return !!f && f.alt.startsWith('A chart') && f.getAttribute('width')==='1600'})()"))
         bad = os.path.join(work, "bad.js"); open(bad, "w").write(content_js().replace("https://example.com/photos/recent-1600x900.jpg", "https://readtheledger.github.io/icon-512.png"))
         rb = subprocess.run(["node", os.path.join(ROOT, "build.mjs"), site + "-bad", "--content", bad, "--now", NOW], capture_output=True, text=True)
-        ok("the build refuses the site icon as an article image", rb.returncode == 1 and "not an article image" in rb.stdout + rb.stderr)
+        ok("the build refuses the site icon as a piece's image", rb.returncode == 1 and "the site icon is not a piece's image" in rb.stdout + rb.stderr)
 
         r = await page.goto(base + "/about/")
         hs = await heads(); html = rd("about", "index.html"); L = lds(html)

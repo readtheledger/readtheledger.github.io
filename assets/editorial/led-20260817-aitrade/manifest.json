@@ -1,0 +1,51 @@
+{
+  "articleId": "led-20260817-aitrade",
+  "master": {
+    "sha256": "b0c7db87707533f14c3e02465330fbf5e0b5993cd2ec38263a040a345d70fc87",
+    "bytes": 3579584,
+    "w": 1536,
+    "h": 1024,
+    "committed": false
+  },
+  "aiGenerated": true,
+  "credit": "The Ledger",
+  "crop": "none \u2014 full 3:2 composition at every size",
+  "derived": "2026-09-12",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 320,
+      "bytes": 28196,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 512,
+      "bytes": 79226,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 800,
+      "bytes": 221310,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 800,
+      "bytes": 248018,
+      "type": "image/jpeg"
+    }
+  ],
+  "generationDate": "2026-09-12",
+  "method": "Built-in Image Generation",
+  "prompt": "Original sophisticated conceptual editorial illustration for The Ledger financial newspaper, landscape 3:2 1536x1024. Theme: AI hardware earnings now versus the large future investment bill. A detailed navy microchip and a small neat stack of ochre coins sit on one side of a long accounting desk; from underneath the chip unfurls a very long blank receipt ribbon that loops gracefully into the foreground, suggesting costs still coming due. Warm ivory textured paper background, muted teal desk shadows, deep navy engraved linework, ochre accents, restrained financial editorial cut-paper print aesthetic. One clear metaphor with plenty of quiet space, no repeat server-building scene. Entire composition visible at 3:2, understandable at 390px. Receipt has only nonverbal abstract short ink strokes, no readable words or numbers; no logos, real stock charts, people or photographic style.",
+  "kind": "conceptual_illustration",
+  "alt": "A microchip and a stack of coins sit on a desk as a long receipt unfurls into the foreground.",
+  "caption": "AI hardware earnings and the investment costs still coming due, illustrated conceptually.",
+  "editorialReview": "Accepted as conceptual editorial artwork; not evidence for article data."
+}

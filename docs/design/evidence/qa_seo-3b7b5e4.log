@@ -1,0 +1,54 @@
+build: no data/feed.json — the app will gather the Newsstand in the browser
+build: 13 pages, 3 stories, 2 sections with content, 1 in the news sitemap, shell 3c8f9967 → /tmp/ledger-seo-w0nrfdsx/site
+PASS robots.txt blocks nothing and names both sitemaps
+PASS sitemap: front page, sections with stories, every story, About; no empty section
+PASS sitemap: the About page carries no lastmod (it has no date)
+PASS news sitemap lists only the piece published within 48 hours of the build
+PASS news sitemap names the publication, language, date and title
+PASS news sitemap is empty once nothing is within 48 hours (an archive does not qualify)
+PASS Atom feed carries every piece with its address, dates, section and full text
+PASS feed's own updated time is the newest piece
+PASS worker precaches about.js and can render /about/ offline
+PASS front page: exactly one h1, the site's title
+PASS front page: headings in order, stories as h2
+PASS front page: skip link is the first thing in the body and targets main
+PASS front page: About card links to /about/ and says it has no date
+PASS front page: WebSite and Organization structured data, publisher with logo and repository
+PASS front page: description names what the publication is
+PASS every page links the Atom feed
+PASS fonts stylesheet does not block first paint and has a no-script fallback
+PASS fonts request only the weights the stylesheet uses
+PASS section page: h1 is the section, with a count, headings in order
+PASS section page: CollectionPage listing its pieces and a two-step breadcrumb
+PASS section page: description states the count and the latest piece
+PASS section page: indexable
+PASS empty section: served, noindex,follow, one h1 and an h2 notice, still linked from the nav
+PASS empty section: description says so, no fabricated content
+PASS story page: h1 is the headline, body h2, sources and related as h2 — in order
+PASS story page: related links to the other pieces, same desk first, never itself
+PASS story page: NewsArticle with a three-step breadcrumb Home › Section › Story
+PASS story page: no author is invented (the organisation is the author, no person named)
+PASS story page without an image of its own carries no NewsArticle image (the logo is not one); sharing preview is the icon
+PASS story page with an image of its own: NewsArticle.image is that image, with its size; sharing preview uses it; the page shows it
+PASS the build refuses the site icon as a piece's image
+PASS About page: served at /about/, h1 is its title, headings in order
+PASS About page: canonical, indexable, AboutPage with the organisation as its subject and a breadcrumb
+PASS About page: the schedule is a target, the labels are the standard rather than a review record, and every data flow is named
+PASS About page: says it has no date and where corrections go, names no person
+PASS unknown story is a 404 that links the front page and About
+PASS app on the front page keeps index,follow and the front page canonical
+PASS Newsstand view is noindex with a canonical of its own, not the front page's
+PASS back on the front page the build's values return
+PASS a search is noindex with its own canonical
+PASS app on an empty section keeps the build's noindex,follow
+PASS app on /about/ opens the About page in the reader, at /about/, titled
+PASS Escape leaves the About page for the front page
+PASS the menu has an About link, outside the topic list
+PASS the menu's About link opens the About page at /about/
+PASS the About card opens the About page at /about/, with no date
+PASS Tab first reaches the skip link, which becomes visible
+PASS the skip link moves focus into main
+PASS badge text meets 4.5:1 on paper in light mode
+
+49/49 passed
+exit 0

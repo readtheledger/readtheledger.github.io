@@ -1,0 +1,50 @@
+{
+  "articleId": "led-20260817-weekly",
+  "master": {
+    "sha256": "7981930b770585385fec042c770e1b756a4342ee63ecad11c4b3ee6034b3b251",
+    "bytes": 3221102,
+    "w": 1536,
+    "h": 1024,
+    "committed": false
+  },
+  "aiGenerated": true,
+  "credit": "The Ledger",
+  "crop": "none \u2014 full 3:2 composition at every size",
+  "derived": "2026-09-12",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 320,
+      "bytes": 29976,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 512,
+      "bytes": 74710,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 800,
+      "bytes": 177592,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 800,
+      "bytes": 230456,
+      "type": "image/jpeg"
+    }
+  ],
+  "method": "Built-in Image Generation",
+  "prompt": "Create one original editorial illustration for The Ledger, an independent financial publication. Article topic: the physical infrastructure, electricity demand and long-lived financial commitments behind an AI data-centre construction boom. Sophisticated hand-crafted magazine illustration, collage of cut paper with delicate ink detail and restrained screenprint texture; deep ink navy, warm ivory, muted teal, small ochre and brick-red accents. A monumental dark server cabinet at center becomes an architectural building under construction, with one small crane on its roof and power cables flowing into the lower foreground like financial ledger lines. A tiny human figure supplies scale, no identifiable person. Clear one-subject composition legible on an iPhone and at thumbnail size. Editorial and contemplative, not glossy technology marketing, not cyberpunk, no glowing brains, robots, neon, logos, flags, money symbols, numbers, charts, written text or watermark. It must clearly be a conceptual illustration, not a photograph of an actual facility. Landscape 3:2 composition, subject inside central 65 percent so 4:3 or square crops can preserve it. Full frame art, no border, no headline baked into pixels. This is a draft art-direction sample for the existing Ledger AI capital-expenditure article; it is not evidence for its financial figures.",
+  "kind": "conceptual_illustration",
+  "alt": "A server cabinet imagined as a building under construction, with a crane above and power cables flowing toward it.",
+  "caption": "A conceptual view of the infrastructure and financial commitments behind AI expansion.",
+  "editorialReview": "Clear infrastructure metaphor, consistent palette, no embedded figures or factual chart. Does not depict an actual facility."
+}

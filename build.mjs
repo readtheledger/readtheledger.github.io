@@ -28,6 +28,7 @@ const argv = process.argv.slice(2);
 const opt  = (name, dflt) => { const i = argv.indexOf("--" + name); return i >= 0 ? argv[i + 1] : dflt; };
 const OUT  = path.resolve(argv.find(a => !a.startsWith("--") && !argv[argv.indexOf(a) - 1]?.startsWith("--")) || path.join(ROOT, "_site"));
 const CONTENT_FILE = path.resolve(opt("content", path.join(ROOT, "content.js")));   // the tests build from a content file of their own
+const ASSETS_DIR   = path.resolve(opt("assets", path.join(ROOT, "assets", "editorial")));   // and, for the worker's cache test, from pictures of their own
 const PRODUCED = ["reported", "assisted"];
 /* the attribution line says how a piece was actually produced, per piece, and
    never by default; index.html prints the same words in the reader */
@@ -61,6 +62,7 @@ const index = read("index.html");
 const contentSrc = fs.readFileSync(CONTENT_FILE, "utf8");
 const swSrc = read("sw.js");
 const aboutSrc = read("about.js");
+const mediaSrc = read("media.js");
 
 for (const marker of ["<!-- meta:start", "<!-- meta:end -->", "<!-- static:slot", '<p class="datestrip" id="datestrip"', '<meta name="robots" id="robotsMeta" content="index,follow">']) {
   if (!index.includes(marker)) fail("index.html is missing the " + marker + " marker");
@@ -83,6 +85,9 @@ if (!content || !Array.isArray(content.articles) || !content.articles.length) fa
 const articles = content.articles;
 vm.runInNewContext(aboutSrc, ctx);
 const about = ctx.window.LEDGER_ABOUT;
+vm.runInNewContext(mediaSrc, ctx);
+const M = ctx.window.LEDGER_MEDIA;
+if (!M || !M.figureHTML) fail("media.js carries no LEDGER_MEDIA");
 if (!about || !about.title || !about.standfirst || !about.html) fail("about.js carries no About page (title, standfirst, html)");
 
 /* ---------------------------------------------------------------- checking */
@@ -104,13 +109,11 @@ for (const a of articles) {
   if (!a.html || !a.html.trim()) fail(where + ": missing body");
   for (const re of RISKY) if (re.test(a.html)) fail(where + ": body contains markup the static page will not carry (" + re + ")");
   if (a.updated !== undefined && (isNaN(Date.parse(a.updated)) || Date.parse(a.updated) < Date.parse(a.date))) fail(where + ": updated must be an ISO 8601 date on or after date");
-  // an optional representative image: an https address, alt text, and its size
-  // in pixels; the logo is not an article image and is never used as one
-  if (a.image !== undefined) {
-    const im = a.image;
-    if (!im || typeof im !== "object" || !/^https:\/\/[^\s"<>]+$/.test(im.u || "") || !im.alt || !(im.w > 0) || !(im.h > 0)) fail(where + ": image needs u (https), alt, w and h");
-    if (/icon-\d+\.png$/.test(im.u)) fail(where + ": the site icon is not an article image");
-  }
+  // an optional representative image, checked by the same contract the app
+  // uses (media.js): fallback address, alt text, size, derivatives; never the logo
+  const v = M.validate(a.image);
+  if (!v.ok) fail(where + ": " + v.error);
+  a.image = v.image;
   if (!Array.isArray(a.sources) || !a.sources.length) fail(where + ": needs at least one source");
   for (const s of a.sources) {
     if (!s.t || !s.p || !/^https:\/\/[^\s"<>]+$/.test(s.u || "")) fail(where + ": every source needs a title, an https URL and a publisher");
@@ -141,7 +144,7 @@ const HOME = { name: "The Ledger", url: SITE + "/" };
 function metaBlock({ title, ogTitle, description, canonical, ogType, extra, ld, image }) {
   // the sharing image: the piece's own when it has one, otherwise the icon
   // (a sharing preview, not a claim that the icon is the article's image)
-  const share = image ? image.u : SITE + "/icon-512.png";
+  const share = image ? absUrl(image.u) : SITE + "/icon-512.png";
   return [
     "<!-- meta:start — written by build.mjs -->",
     `<title>${esc(title)}</title>`,
@@ -173,15 +176,27 @@ function navHTML(current) {
     "</nav>";
 }
 
-function cardHTML(a, lead) {
+/* pace, as the app keeps it: the lead's picture, thumbnails on the two stories after
+   it, then text-led rows, then the feature's picture */
+const THUMBS_AFTER_LEAD = 2;
+function cardHTML(a, lead, pos) {
   const w = words(a.html);
-  return `<article class="card${lead ? " lead" : ""}${a.weekly ? " weekly" : ""}">
+  const variant = a.weekly ? "feature" : lead ? "lead" : "compact";
+  const image = a.image && (variant !== "compact" || pos <= THUMBS_AFTER_LEAD) ? a.image : null;
+  const fig = image ? M.figureHTML(image, { variant: variant === "compact" ? "thumb" : variant, eager: variant === "lead", caption: false }) : "";
+  const cls = "card " + variant + (a.weekly ? " weekly" : "") + (image ? " has-image" : "");
+  const meta = `<div class="meta"><span class="badge">The Ledger</span><time class="dot" datetime="${esc(a.date)}">${dateShort(a.date)}</time><span class="dot">${readMins(w)} min read</span></div>`;
+  const thumb = variant === "compact" && !!image;
+  const below = `<p class="standfirst">${esc(a.standfirst)}</p>
+        ${meta}`;
+  return `<article class="${cls}">
+      ${variant !== "compact" ? fig : ""}
       <div class="cardtop"><div>
-        ${a.weekly ? '<p class="weeklylabel">The Ledger Weekly · Deep dive</p>' : `<p class="kicker">${esc(a.section)}</p>`}
-        <h2 class="hl"><a href="${storyPath(a)}">${esc(a.title)}</a></h2>
-        <p class="standfirst">${esc(a.standfirst)}</p>
-        <div class="meta"><span class="badge">The Ledger</span><time class="dot" datetime="${esc(a.date)}">${dateShort(a.date)}</time><span class="dot">${readMins(w)} min read</span></div>
-      </div></div>
+        ${a.weekly ? '<p class="weeklylabel">The Ledger Weekly · Deep dive</p>' : kickerHTML(a)}
+        <h2 class="hl${a.weekly ? " feature-hl" : ""}"><a href="${storyPath(a)}">${esc(a.title)}</a></h2>
+        ${thumb ? "" : below}
+      </div>${thumb ? fig : ""}</div>
+      ${thumb ? `<div class="cardbelow">${below}</div>` : ""}
     </article>`;
 }
 
@@ -206,7 +221,7 @@ function listHTML(current, list, emptyText) {
     : `<header class="viewhead"><h1>${esc(current)}</h1><p class="viewnote">${n} ${n === 1 ? "story" : "stories"}</p></header>`;
   return `<div id="static">${navHTML(current)}
     ${head}
-    ${n ? list.map((a, i) => cardHTML(a, i === 0)).join("\n") : `<div class="notice"><h2>Nothing here yet</h2><p style="margin:0">${esc(emptyText)}</p></div>`}
+    ${n ? list.map((a, i) => cardHTML(a, i === 0, i)).join("\n") : `<div class="notice"><h2>Nothing here yet</h2><p style="margin:0">${esc(emptyText)}</p></div>`}
     ${current === "Front page" ? aboutCardHTML() : ""}
   </div>`;
 }
@@ -222,22 +237,29 @@ function relatedHTML(a) {
   }</ul></nav>`;
 }
 
+/* the story's own picture, rendered by media.js exactly as the reader renders it */
 function ledeImageHTML(a) {
-  if (!a.image) return "";
-  return `<figure class="lede"><img src="${esc(a.image.u)}" alt="${esc(a.image.alt)}" width="${a.image.w}" height="${a.image.h}">${a.image.caption ? `<figcaption>${esc(a.image.caption)}</figcaption>` : ""}</figure>`;
+  return a.image ? M.figureHTML(a.image, { variant: "hero", eager: true }) : "";
 }
+const absUrl = u => /^https?:/.test(u) ? u : SITE + u;
+
+/* as the app labels it: a news story more than a week old at build time is from
+   the archive; analysis and deep work carry their date and are not expired by age */
+const ARCHIVE_MS = 7 * 24 * 3600 * 1000;
+const isArchive = a => (a.kind || "news") === "news" && NOW - Date.parse(a.date) > ARCHIVE_MS;
+const kickerHTML = (a, link) => `<p class="kicker">${isArchive(a) ? '<span class="arch">From the archive · </span>' : ""}${link ? `<a href="${sectionPath(a.section)}">${esc(a.section)}</a>` : esc(a.section)}</p>`;
 
 function storyHTML(a) {
   const w = words(a.html);
   const srcs = a.sources.map(s =>
     `<li><a href="${esc(s.u)}" target="_blank" rel="noopener noreferrer">${esc(s.t)}</a> — ${esc(s.p)}</li>`).join("");
   return `<div id="static">${navHTML(a.section)}
-    <article class="rwrap">
-      <p class="kicker"><a href="${sectionPath(a.section)}">${esc(a.section)}</a></p>
+    <article class="rwrap${a.kind === "deep" ? " feature" : ""}">
+      ${kickerHTML(a, true)}
       <h1>${esc(a.title)}</h1>
       <p class="rstand">${esc(a.standfirst)}</p>
-      <div class="rmeta"><span class="badge">The Ledger</span><time class="dot" datetime="${esc(a.date)}">${dateTime(a.date)}</time><span class="dot">${readMins(w)} min read</span></div>
       ${ledeImageHTML(a)}
+      <div class="rmeta"><span class="badge">The Ledger</span><time class="dot" datetime="${esc(a.date)}">${dateTime(a.date)}</time><span class="dot">${readMins(w)} min read</span></div>
       <div class="rbody">${a.html}</div>
       <aside class="sourcesbox"><h2>Sources &amp; further reading</h2><ul>${srcs}</ul></aside>
       <p class="attrline">${productionLine(a.produced)} Material sources are credited and linked above; quotations are brief and attributed.</p>
@@ -352,7 +374,10 @@ for (const a of articles) {
       // image only when the piece has a representative one of its own: Google's
       // Article guidance asks for an image of the article, not a logo, and has
       // no required properties, so a piece without one simply carries none
-      ...(a.image ? { "image": [{ "@type":"ImageObject", "url": a.image.u, "width": a.image.w, "height": a.image.h, "caption": a.image.alt }] } : {}),
+      ...(a.image ? { "image": [Object.assign({ "@type":"ImageObject", "url": absUrl(a.image.u), "width": a.image.w, "height": a.image.h, "caption": a.image.caption || a.image.alt },
+                                              a.image.credit ? { "creditText": a.image.credit } : {},
+                                              // IPTC's digital source type, the vocabulary Google reads for AI-generated images
+                                              a.image.ai ? { "digitalSourceType": "https://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia" } : {})] } : {}),
       "author": { "@type":"Organization", "name":"The Ledger", "url": SITE + "/" },
       "publisher": ORG,
       "citation": a.sources.map(s => ({ "@type":"CreativeWork", "name": s.t, "url": s.u, "publisher": { "@type":"Organization", "name": s.p } }))
@@ -434,18 +459,45 @@ nav{border-top:1px solid var(--rule);margin-top:28px;padding-top:14px;font-famil
 // told exactly which addresses the app can render offline: the front page, the
 // sections and the stories that exist in this edition, and nothing else
 const sourcesSrc = read("sources.js");
-const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(read("topics.js")).update(read("context.js")).update(aboutSrc).update(swSrc).digest("hex").slice(0, 8);
+// the stamp covers the pictures too — hashed from their source files, before
+// they are copied — so a replaced picture is a new build to the worker and its
+// image cache is started afresh
+const assetHash = crypto.createHash("sha256");
+if (fs.existsSync(ASSETS_DIR)) {
+  for (const f of fs.readdirSync(ASSETS_DIR, { recursive: true }).map(String).sort()) {
+    const src = path.join(ASSETS_DIR, f);
+    if (fs.statSync(src).isFile()) assetHash.update(f.replace(/\\/g, "/")).update(fs.readFileSync(src));
+  }
+}
+const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(read("topics.js")).update(read("context.js")).update(aboutSrc).update(mediaSrc).update(swSrc).update(assetHash.digest()).digest("hex").slice(0, 8);
 const routes = ["/", "/index.html", ABOUT_PATH].concat(PAGE_SECTIONS.map(sectionPath), articles.map(storyPath));
 const sw = swSrc
   .replace('const BUILD = "dev";', 'const BUILD = "' + stamp + '";')
   .replace(/^const ROUTES = \[[^\n]*\];$/m, "const ROUTES = " + JSON.stringify(routes) + ";");
 if (!sw.includes('const BUILD = "' + stamp + '"') || !sw.includes('"/story/' + articles[0].id + '/"')) fail("sw.js was not stamped");
 write("sw.js", sw);
-for (const f of ["content.js", "sources.js", "topics.js", "context.js", "about.js", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]) {
-  fs.copyFileSync(path.join(ROOT, f), path.join(OUT, f));
+for (const f of ["content.js", "sources.js", "topics.js", "context.js", "about.js", "media.js", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]) {
+  // the publication the pages were written from is the one the app loads, so a
+  // build from another content file (the tests do this) is consistent with itself
+  fs.copyFileSync(f === "content.js" ? CONTENT_FILE : path.join(ROOT, f), path.join(OUT, f));
   written.push(f);
 }
 write(".nojekyll", "");
+
+// the editorial pictures: web derivatives and their provenance, never a master
+const assetsDir = ASSETS_DIR;
+if (fs.existsSync(assetsDir)) {
+  for (const f of fs.readdirSync(assetsDir, { recursive: true })) {
+    const src = path.join(assetsDir, String(f));
+    if (!fs.statSync(src).isFile()) continue;
+    if (!/\.(webp|jpe?g|png|avif|json)$/i.test(src)) fail("assets/editorial carries a file the site does not serve: " + f);
+    if (fs.statSync(src).size > 600 * 1024) fail("assets/editorial/" + f + " is larger than 600 KB — a master, not a web derivative");
+    const rel = path.posix.join("assets", "editorial", String(f).replace(/\\/g, "/"));
+    fs.mkdirSync(path.dirname(path.join(OUT, rel)), { recursive: true });
+    fs.copyFileSync(src, path.join(OUT, rel));
+    written.push(rel);
+  }
+}
 
 // the gathered Newsstand, when fetch_feeds.mjs has run before the build; the app
 // falls back to gathering in the browser when the file is absent
@@ -492,6 +544,8 @@ for (const list of ["FILES", "ROUTES"]) {
   for (const ref of JSON.parse(m[1].replace(/\/\/[^\n]*/g, ""))) check("", ref);
 }
 for (const m of fs.readFileSync(path.join(OUT, "manifest.webmanifest"), "utf8").matchAll(/"src": *"([^"]+)"/g)) check("", m[1]);
+// every address a piece's picture needs must be in the output
+for (const a of articles) if (a.image) for (const u of M.urlsOf(a.image)) if (!/^https?:/.test(u)) check("", u);
 if (missing.size) fail("references to files that are not in the output:\n  " + [...missing].join("\n  "));
 
 console.log("build: " + written.filter(f => f.endsWith(".html")).length + " pages, " + articles.length + " stories, " + sectionUrls.length + " sections with content, " + fresh.length + " in the news sitemap, shell " + stamp + " → " + OUT);

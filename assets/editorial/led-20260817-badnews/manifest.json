@@ -1,0 +1,51 @@
+{
+  "articleId": "led-20260817-badnews",
+  "master": {
+    "sha256": "a47de6d22f2ce39c9e09bdced1bb418de6545f1b16f4950d59907e54d5223d8e",
+    "bytes": 3083406,
+    "w": 1536,
+    "h": 1024,
+    "committed": false
+  },
+  "aiGenerated": true,
+  "credit": "The Ledger",
+  "crop": "none \u2014 full 3:2 composition at every size",
+  "derived": "2026-09-12",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 320,
+      "bytes": 18660,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 512,
+      "bytes": 53242,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 800,
+      "bytes": 140528,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 800,
+      "bytes": 191863,
+      "type": "image/jpeg"
+    }
+  ],
+  "generationDate": "2026-09-12",
+  "method": "Built-in Image Generation",
+  "prompt": "Create an original sophisticated conceptual editorial illustration for The Ledger financial newspaper. Landscape 3:2 1536x1024. Theme: the paradox that weak economic news can lift markets, until the relationship reverses. A simple mechanical seesaw on a triangular fulcrum: on its lower left platform a closed plain newspaper with abstract non-readable ink lines; on the raised right platform three small dark teal blocks step upward. A subtle reversible pivot at the center makes the balance look temporary. One clear conceptual metaphor, not a data visualization. Warm ivory paper with restrained textured navy engraving, muted teal, ochre fulcrum, tiny burgundy accents. Elegant financial editorial print, roomy balanced composition, full apparatus inside frame, legible at phone size. No readable headlines, text, amounts, charts with axes, logos, photographs, people, or dramatic disaster imagery.",
+  "kind": "conceptual_illustration",
+  "alt": "A newspaper weighs down one side of a seesaw while three ascending blocks rise on the other side.",
+  "caption": "Economic news and market expectations in a shifting balance, shown conceptually.",
+  "editorialReview": "Accepted as conceptual editorial artwork; not evidence for article data."
+}

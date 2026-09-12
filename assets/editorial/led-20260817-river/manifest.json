@@ -1,0 +1,51 @@
+{
+  "articleId": "led-20260817-river",
+  "master": {
+    "sha256": "1ad3d0ddf688415325f75f41505c7c2a8505f305940547723b34b515eb211184",
+    "bytes": 3756442,
+    "w": 1536,
+    "h": 1024,
+    "committed": false
+  },
+  "aiGenerated": true,
+  "credit": "The Ledger",
+  "crop": "none \u2014 full 3:2 composition at every size",
+  "derived": "2026-09-12",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 320,
+      "bytes": 41314,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 512,
+      "bytes": 109676,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 800,
+      "bytes": 273356,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 800,
+      "bytes": 301254,
+      "type": "image/jpeg"
+    }
+  ],
+  "generationDate": "2026-09-12",
+  "method": "Built-in Image Generation",
+  "prompt": "Original high-quality conceptual editorial illustration for The Ledger financial newspaper, landscape 3:2 1536x1024. Theme: enormous venture funding flows into very young AI startups, capital arriving before infrastructure matures. A small delicate sapling with leaves shaped subtly like circuit traces grows from a compact microchip planter; a large elegant ochre watering can releases a stream of plain coin-shaped disks beside it, with some disks forming an oversized reservoir. Keep metaphor understandable and restrained, do not make a cute cartoon. Warm ivory textured paper, engraved navy ink, muted teal leaves, ochre and subtle burgundy highlights, sophisticated financial magazine cut-paper print. Spacious balanced full 3:2 composition, legible at phone size, no cropped essential objects. No text, amounts, logos, people, charts, brand references, photorealism or fabricated documentary scene.",
+  "kind": "conceptual_illustration",
+  "alt": "Coins pour from a watering can beside a sapling with circuit-like leaves growing from a microchip planter.",
+  "caption": "Capital flows toward a young AI venture, shown as a conceptual illustration.",
+  "editorialReview": "Accepted as conceptual editorial artwork; not evidence for article data."
+}

@@ -1,0 +1,51 @@
+{
+  "articleId": "led-20260817-fed",
+  "master": {
+    "sha256": "9f8095471c1f68f4b673fb4d030d50784c9f581c80e9d560c2091ce0a066612d",
+    "bytes": 3785970,
+    "w": 1536,
+    "h": 1024,
+    "committed": false
+  },
+  "aiGenerated": true,
+  "credit": "The Ledger",
+  "crop": "none \u2014 full 3:2 composition at every size",
+  "derived": "2026-09-12",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 320,
+      "bytes": 33468,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 512,
+      "bytes": 95218,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 800,
+      "bytes": 257600,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 800,
+      "bytes": 282319,
+      "type": "image/jpeg"
+    }
+  ],
+  "generationDate": "2026-09-12",
+  "method": "Built-in Image Generation",
+  "prompt": "Original editorial illustration for The Ledger financial newspaper. Landscape 3:2 1536x1024. Theme: disagreement over central bank interest-rate direction. A dignified circular conference table seen from a slightly elevated angle, empty chairs around it, two paper-fold arrows laid across the table pointing in different directions, restrained mountain silhouettes far behind as a conceptual nod to a policy symposium. No real official building or meeting, no people. Warm ivory paper, textured engraved ink and cut-paper collage, deep navy, muted teal, ochre, small burgundy accents. Beautiful spare financial editorial print, clearly conceptual and not photojournalism. One legible central composition, full frame, all essential forms within safe margins, readable at phone size. No writing, numbers, seals, flags, logos, recognizable politician likenesses or real data.",
+  "kind": "conceptual_illustration",
+  "alt": "Two folded arrows point in opposing directions across an empty conference table, with mountains behind it.",
+  "caption": "Opposing policy directions meet around a conference table, in a conceptual illustration.",
+  "editorialReview": "Accepted as conceptual editorial artwork; not evidence for article data."
+}

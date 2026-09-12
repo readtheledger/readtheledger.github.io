@@ -60,8 +60,8 @@
      Source Serif 400/600 and its italic, Inter 400/600/700), and loaded so the
      first paint does not wait for it: the text shows in the fallback face and
      swaps when the fonts arrive -->
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,500;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,500;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 <style>
 /* ---------- tokens ---------- */
 :root{
@@ -193,6 +193,23 @@ article.card.lead .hl{font-size:clamp(1.55rem,6vw,2.3rem)}
 article.card.lead .standfirst{font-size:1.06rem}
 article.card:not(.lead) .hl{font-size:clamp(1.15rem,4.6vw,1.4rem)}
 article.card.read .hl,article.card.read .standfirst{opacity:.75}
+/* the lead carries its picture above the words; a compact story a 3:2 thumbnail at the
+   right; the weekly feature its picture above an italic headline; a story with no
+   picture is text-led on purpose and keeps the same rhythm */
+article.card.lead .fig-lead{margin:0 0 14px}
+article.card .fig-thumb{flex:0 0 112px;width:112px;margin:2px 0 0}
+article.card.compact.has-image .cardtop{align-items:flex-start}
+article.card.compact.has-image .cardbelow .standfirst{margin-top:8px}
+article.card.weekly .fig-feature{margin:0 0 14px}
+.hl.feature-hl{font-style:italic}
+article.card.lead.has-image .hl{font-size:clamp(1.5rem,5.6vw,2.1rem)}
+/* on a phone a front-page summary is a glimpse, not the deck: four lines on the lead,
+   three on a supporting story; the headline link and the article's own deck are whole */
+@media (max-width:819px){
+  article.card .standfirst{display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden;-webkit-line-clamp:3}
+  article.card.lead .standfirst{-webkit-line-clamp:4}
+  article.card.about .standfirst,article.card.wim .wimnote{-webkit-line-clamp:unset;display:block}
+}
 /* a news story past its week is labelled as archive; analysis and deep work are
    not news and carry only their date */
 .kicker .arch{color:var(--ink-3);font-weight:600}
@@ -254,16 +271,27 @@ ol.rail .hl{font-size:1rem;line-height:1.25}
 .rbtn .lbl{white-space:nowrap}
 .preview-tag{font-family:var(--ui);font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin:0 0 6px}
 .rwrap{max-width:var(--maxw);margin:0 auto;padding:22px 18px calc(150px + var(--safe-b))}
-.rwrap h1{font-family:var(--display);font-weight:700;font-size:clamp(1.75rem,7vw,2.45rem);line-height:1.13;letter-spacing:-.015em;margin:6px 0 0}
-.rstand{font-size:1.1rem;color:var(--ink-2);margin:14px 0 0;line-height:1.5}
-figure.lede{margin:22px 0 0}
-figure.lede img{display:block;width:100%;height:auto;border-radius:6px}
-figure.lede figcaption{font-family:var(--ui);font-size:.74rem;color:var(--ink-3);margin-top:6px}
+/* the article: headline 30–34px on a phone (up to 48px on a desktop), deck 18–19px,
+   body 20px at the regular text size — all scaled by the reader's text-size setting */
+.rwrap h1{font-family:var(--display);font-weight:700;font-size:clamp(calc(var(--fs) * 1.9),8vw,calc(var(--fs) * 3));line-height:1.1;letter-spacing:-.015em;margin:6px 0 0}
+.rwrap.feature h1{font-style:italic;font-weight:700;letter-spacing:-.01em}
+.rstand{font-size:calc(var(--fs) * 1.15);color:var(--ink-2);margin:14px 0 0;line-height:1.45}
+/* a piece's own picture: square-cornered, full 3:2 composition, to the viewport edge on
+   a phone; the caption is the editorial line, the credit names the maker and, for
+   an illustration a model generated, says so */
+.fig{margin:0}
+.fig img{display:block;width:100%;height:auto;background:var(--paper-2)}
+.fig figcaption{font-family:var(--ui);font-size:.8rem;line-height:1.45;color:var(--ink-3);margin:10px 0 0}
+.fig-credit{display:block;margin-top:2px;font-size:.72rem;color:var(--ink-3)}
+.fig-ai{font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.62rem}
+.rwrap .fig-hero{margin:20px -18px 0}
+.rwrap .fig-hero figcaption{padding:0 18px}
+@media (min-width:756px){.rwrap .fig-hero{margin:22px 0 0}.rwrap .fig-hero figcaption{padding:0}}
 .rmeta{font-family:var(--ui);font-size:.72rem;color:var(--ink-3);margin:16px 0;padding:14px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .byline{font-family:var(--ui);font-weight:600;color:var(--ink);font-size:.8rem}
-.rbody{font-size:calc(var(--fs) * 1.08);line-height:1.75}
+.rbody{font-size:calc(var(--fs) * 1.25);line-height:1.6}
 .rbody p{margin:0 0 1.15em}
-.rbody>p:first-of-type::first-letter{
+.feature .rbody>p:first-of-type::first-letter{
   font-family:var(--display);font-weight:700;float:left;font-size:3.6em;line-height:.82;
   margin:.06em .1em 0 0;color:var(--ink)
 }
@@ -371,6 +399,10 @@ html.js #static{display:none}
 #static .static-nav{display:flex;flex-wrap:wrap;gap:4px;padding:0;border-bottom:1px solid var(--rule)}
 #static .static-nav a{text-decoration:none;display:inline-flex;align-items:center}
 #static .rwrap{padding-left:0;padding-right:0}
+#static .rwrap .fig-hero{margin-left:-14px;margin-right:-14px}
+#static .rwrap .fig-hero figcaption{padding:0 14px}
+@media (min-width:756px){#static .rwrap .fig-hero{margin-left:0;margin-right:0}#static .rwrap .fig-hero figcaption{padding:0}}
+/* the static page sits inside main's 14px gutter, so the picture bleeds by that much */
 #static .kicker a{text-decoration:none}
 #static .static-home{font-family:var(--ui);font-size:.82rem;margin:26px 0 0}
 #static .static-home a{color:var(--accent);font-weight:600;text-decoration:none}
@@ -386,6 +418,11 @@ html.js #static{display:none}
   .grid{display:grid;grid-template-columns:1fr 300px;gap:34px;align-items:start}
   .railcol{position:sticky;top:150px}
   article.card.lead .hl{font-size:2.6rem}
+  /* on a desktop the lead's picture sits beside its words, so the headline is on
+     the first screen; on a phone it sits above them */
+  article.card.lead.has-image{display:grid;grid-template-columns:1fr 1.2fr;gap:24px;align-items:start}
+  article.card.lead.has-image .fig-lead{margin:0}
+  article.card.lead.has-image .hl{font-size:clamp(1.6rem,2.2vw,2.1rem)}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -578,6 +615,7 @@ html.js #static{display:none}
 <audio id="player" preload="auto" playsinline></audio>
 
 <script src="/about.js"></script>
+<script src="/media.js"></script>
 <script src="/sources.js"></script>
 <script src="/topics.js"></script>
 <script src="/context.js"></script>
@@ -825,8 +863,9 @@ function makeEditorial(a){
     date:a.date, ts:Date.parse(a.date),   // NaN if the date does not parse: shown as unknown, never as now
     html:clean, text, words:text.trim().split(/\s+/).length,
     sources:(a.sources||[]).map(x=>({t:x.t, u:safeUrl(x.u), p:x.p})).filter(x=>x.u),
-    // a representative image of the piece's own, when it has one (never the logo)
-    image:(a.image && safeUrl(a.image.u) && a.image.alt) ? {u:safeUrl(a.image.u), alt:a.image.alt, w:a.image.w, h:a.image.h, caption:a.image.caption||""} : null,
+    // a representative image of the piece's own, when it has one, checked by the
+    // contract the build checks (media.js); anything else renders text-led
+    image:(window.LEDGER_MEDIA && LEDGER_MEDIA.validate(a.image).ok) ? LEDGER_MEDIA.validate(a.image).image : null,
     fullText:true, republish:true, lic:"", weight:1.4
   };
 }
@@ -1268,7 +1307,8 @@ function kickerHTML(it){
   const sec = it.section || "Newsstand";
   return `<p class="kicker">${isArchive(it) ? '<span class="arch">From the archive · </span>' : ''}${esc(sec)}</p>`;
 }
-function cardHTML(it, lead){
+const THUMBS_AFTER_LEAD = 2;
+function cardHTML(it, lead, pos){
   const savedOn = !!S.saved[it.id];
   if(it.demo){
     return `<article class="card about" data-id="${it.id}" tabindex="0">
@@ -1280,23 +1320,30 @@ function cardHTML(it, lead){
       </div></div>
     </article>`;
   }
-  return `<article class="card ${lead?"lead":""} ${S.read[it.id]?"read":""}" data-id="${it.id}" tabindex="0">
-    <div class="cardtop">
-      <div>
-        ${kickerHTML(it)}
-        <h2 class="hl">${linkHTML(it)}</h2>
-        ${it.standfirst?`<p class="standfirst">${esc(it.standfirst)}</p>`:""}
+  const im = it.ledger && it.image && (lead || pos === undefined || pos <= THUMBS_AFTER_LEAD) ? it.image : null;
+  const fig = im ? LEDGER_MEDIA.figureHTML(im, {variant: lead ? "lead" : "thumb", eager: !!lead, caption:false}) : "";
+  const thumb = !lead && im;
+  const below = `${it.standfirst?`<p class="standfirst">${esc(it.standfirst)}</p>`:""}
         <div class="meta">
           <span class="badge">${esc(it.source)}</span>
           ${sameName(it.author,it.source)?"":`<span>${esc(it.author)}</span>`}
           <span class="dot">${when(it.ts)}</span>
           ${it.words?`<span class="dot">${readMins(it.words)} min read</span>`:""}
-        </div>
+        </div>`;
+  return `<article class="card ${lead?"lead":"compact"} ${S.read[it.id]?"read":""} ${im?"has-image":""}" data-id="${it.id}" tabindex="0">
+    ${lead ? fig : ""}
+    <div class="cardtop">
+      <div>
+        ${kickerHTML(it)}
+        <h2 class="hl">${linkHTML(it)}</h2>
+        ${thumb ? "" : below}
       </div>
+      ${thumb ? fig : ""}
       <button class="icobtn tap savebtn" data-save="${it.id}" aria-pressed="${savedOn}" aria-label="${savedOn?"Remove bookmark":"Save article"}">
         <svg viewBox="0 0 24 24" fill="${savedOn?"currentColor":"none"}" stroke="currentColor" stroke-width="1.7"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg>
       </button>
     </div>
+    ${thumb ? `<div class="cardbelow">${below}</div>` : ""}
   </article>`;
 }
 
@@ -1319,9 +1366,11 @@ function wimCardHTML(it){
 function weeklyCardHTML(){
   const it = weeklyItem();
   if(!it) return "";
-  return `<article class="card weekly" data-id="${it.id}" tabindex="0">
+  const fig = it.image ? LEDGER_MEDIA.figureHTML(it.image, {variant:"feature", caption:false}) : "";
+  return `<article class="card weekly feature${it.image?" has-image":""}" data-id="${it.id}" tabindex="0">
+    ${fig}
     <p class="weeklylabel">The Ledger Weekly · Deep dive</p>
-    <h2 class="hl">${linkHTML(it)}</h2>
+    <h2 class="hl feature-hl">${linkHTML(it)}</h2>
     <p class="standfirst">${esc(it.standfirst)}</p>
     <div class="meta"><span class="badge">The Ledger</span><span class="dot">${readMins(it.words)} min read</span><span class="dot">Original analysis</span></div>
   </article>`;
@@ -1365,7 +1414,7 @@ function render(){
   let wimDone = !(extras && S.wim), weeklyDone = !extras;
   let html = head + (S.section==="Front page" ? "" : bannerHTML()) + cardHTML(lead,true);
   rest.forEach((i,idx)=>{
-    html += cardHTML(i,false);
+    html += cardHTML(i,false,idx+1);
     if(!wimDone && idx>=2){ html += wimCardHTML(S.wim); wimDone = true; }
     if(!weeklyDone && idx>=4){ html += weeklyCardHTML(); weeklyDone = true; }
   });
@@ -1542,11 +1591,13 @@ function openReader(it, opts){
   const dateLine = it.demo ? "" : (isNaN(it.ts) ? "Publication date unknown"
                    : new Date(it.ts).toLocaleString(undefined,{day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit"}));
   const filed = (!own && it.desk && it.desk!==(it.section||"")) ? `<span class="dot">filed by ${esc(it.source)} under ${esc(it.desk)}</span>` : "";
+  $("#rwrap").classList.toggle("feature", !!(it.ledger && it.kind==="deep"));
   $("#rwrap").innerHTML =
     `${own ? "" : `<p class="preview-tag">Newsstand preview</p>`}
      ${kickerHTML(it)}
      <h1>${esc(it.title)}</h1>
      ${it.standfirst && mode!=="summary" ? `<p class="rstand">${esc(it.standfirst)}</p>`:""}
+     ${it.ledger && it.image ? LEDGER_MEDIA.figureHTML(it.image, {variant:"hero", eager:true}) : ""}
      <div class="rmeta">
        <span class="badge">${esc(it.source)}</span>
        ${sameName(it.author,it.source)?"":`<span class="byline">${esc(it.author)}</span>`}
@@ -1555,7 +1606,6 @@ function openReader(it, opts){
        ${filed}
      </div>
      ${own?"":`<p class="srcbox" style="margin:-4px 0 20px">${mode==="licensed"?"Republished with permission":"Preview by The Ledger"}${link?` · <a href="${esc(link)}" target="_blank" rel="noopener noreferrer">read the original at ${esc(it.source)} →</a>`:""}</p>`}
-     ${it.ledger && it.image ? `<figure class="lede"><img src="${esc(it.image.u)}" alt="${esc(it.image.alt)}" width="${esc(it.image.w)}" height="${esc(it.image.h)}">${it.image.caption?`<figcaption>${esc(it.image.caption)}</figcaption>`:""}</figure>` : ""}
      <div class="rbody">${body}</div>
      ${wimBox}
      ${attr}`;
@@ -1595,17 +1645,29 @@ function closeReader(){
    the same thing in the reader, so the address in the bar keeps meaning what it
    meant. A story landed on directly is given a front page to go back to. */
 function route(){
-  const st = $("#static"); if(st) st.remove();
+  const st = $("#static");
   const path = location.pathname;
-  if(path === ABOUT_PATH){ history.replaceState({home:true}, "", "/"); openReader(DEMO); return; }
+  // The static copy is already hidden (html.js). It is removed once the reader's
+  // picture has loaded rather than at once: removing it first cancels the
+  // picture's request, which the reader then repeats — two fetches of one file.
+  const drop = ()=>{ if(st && st.parentNode) st.remove(); };
+  const afterImage = ()=>{
+    const img = $("#rwrap .fig-hero img");
+    if(!img || img.complete){ drop(); return; }
+    img.addEventListener("load", drop, {once:true}); img.addEventListener("error", drop, {once:true});
+    setTimeout(drop, 2500);
+  };
+  if(path === ABOUT_PATH){ drop(); history.replaceState({home:true}, "", "/"); openReader(DEMO); return; }
   const id = storyIdFromPath(path);
   if(id){
     const it = EDITORIAL.find(a=>a.id===id) || S.savedItems[id] || null;
     history.replaceState({home:true}, "", "/");
-    if(it){ openReader(it); return; }
+    if(it){ openReader(it); afterImage(); return; }
+    drop();
     toast("That story isn't in this edition", 2600);
     return;
   }
+  drop();
   const sec = sectionFromPath(path);
   if(sec){ S.section = sec; renderSecNav(); }
   // an app-only view or a search, restored from the address

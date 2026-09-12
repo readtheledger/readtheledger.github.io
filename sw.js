@@ -13,6 +13,15 @@ const BUILD = "dev";   // build.mjs stamps a hash of the app and the edition her
                        // so a new article or a changed page installs a fresh shell
 const SHELL   = "ledger-shell-v"   + VERSION + "-" + BUILD;
 const RUNTIME = "ledger-runtime-v" + VERSION + "-" + BUILD;
+/* the pictures' cache is scoped to the build like the shell: the build stamp
+   covers the pictures' bytes, so a replaced picture arrives with a new stamp and
+   the old cache goes on activation; an installed reader never keeps old artwork */
+const IMAGES  = "ledger-images-v" + VERSION + "-" + BUILD;
+const IMAGE_KEEP = 40;
+async function trimImages(c) {
+  const keys = await c.keys();
+  for (const k of keys.slice(0, Math.max(0, keys.length - IMAGE_KEEP))) await c.delete(k);
+}
 const FILES = [
   "/",
   "/index.html",
@@ -20,6 +29,7 @@ const FILES = [
   "/topics.js",
   "/context.js",
   "/about.js",
+  "/media.js",
   "/content.js",
   "/manifest.webmanifest",
   "/icon-192.png",
@@ -55,7 +65,7 @@ self.addEventListener("install", e => {
 self.addEventListener("activate", e => {
   e.waitUntil(
     caches.keys()
-      .then(ks => Promise.all(ks.filter(k => k !== SHELL && k !== RUNTIME).map(k => caches.delete(k))))
+      .then(ks => Promise.all(ks.filter(k => k !== SHELL && k !== RUNTIME && k !== IMAGES).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
@@ -122,6 +132,22 @@ self.addEventListener("fetch", e => {
         if (res && res.ok) { const copy = res.clone(); caches.open(RUNTIME).then(c => c.put(req, copy)); }
         return res;
       }).catch(() => caches.match(req).then(hit => hit || Response.error()))
+    );
+    return;
+  }
+
+  // editorial pictures: cache first, at most IMAGE_KEEP of them, oldest out;
+  // they are never precached, so an offline story without its picture still reads
+  if (url.origin === location.origin && url.pathname.startsWith("/assets/editorial/")) {
+    e.respondWith(
+      // a miss is fetched with revalidation, never straight from the browser's HTTP
+      // cache: after a new build a still-fresh entry at the same address could
+      // otherwise hand back the picture the build replaced
+      caches.open(IMAGES).then(c => c.match(req).then(hit => hit || fetch(req, {cache:"no-cache"}).then(res => {
+        // the write is attached to the event, so the worker is not stopped before it lands
+        if (res && res.ok) e.waitUntil(c.put(req, res.clone()).then(() => trimImages(c)));
+        return res;
+      })))
     );
     return;
   }
