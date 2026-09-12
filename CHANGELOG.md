@@ -32,10 +32,11 @@ says about itself.
   since the published pieces carry the default label and predate any kept
   review record — what the Newsstand is (a half-hour target that scheduled
   runs have missed by hours, with the real gathering time shown), where
-  corrections go (an issue on the public repository), and every destination
-  data can go to (GoatCounter, the feed relays as a fallback, OpenAI only with
-  a key). It names no person, because the publication has not stated one, and
-  still carries no date.
+  corrections go (an issue on the public repository), and the destinations
+  the app actually requests (GoatCounter, Google Fonts, the feed relays as a
+  fallback, publishers' image hosts, and OpenAI — with the locally stored key —
+  only when the optional authenticated speech is used). It names no person,
+  because the publication has not stated one, and still carries no date.
 - **Structured data:** `BreadcrumbList` on every section, story and About page
   (Home › Section › Story); `Organization` on the front page with the logo and
   the repository as `sameAs`; a section's `CollectionPage` lists its pieces.

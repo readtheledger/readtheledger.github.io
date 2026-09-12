@@ -87,8 +87,12 @@ Not changed, on purpose:
   review record (`REVIEW.md` is the policy; no review record exists for them),
   so the page describes the labels as the intended editorial standard, not as
   completed human review. It gives the half-hour gathering as a target that
-  scheduled runs have missed by hours, and names every destination data can
-  go to (GoatCounter, the feed relays as a fallback, OpenAI only with a key).
+  scheduled runs have missed by hours, and names the destinations the app
+  actually requests: GoatCounter, Google Fonts, this site's gathered edition,
+  the feed relays as a fallback, publishers' image hosts for Newsstand images,
+  and OpenAI only when the optional authenticated speech is used (the locally
+  stored key goes with that request). It makes no "nothing else is sent" or
+  "offline" promise.
 - **The four same-origin scripts stay parser-blocking.** Deferring them would
   mean turning the inline app into a module (or a separate file), which the
   test suites drive through page globals; that is a larger change than this
