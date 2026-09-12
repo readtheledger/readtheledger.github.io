@@ -64,7 +64,9 @@ Open `sources.js`. Each entry looks like this:
 
 If the gathered file cannot be read, the app gathers in the browser as it always did, through public CORS relays, so an installed reader is never left with nothing.
 
-The Ledger's own articles live in `content.js`, not in `index.html`: each entry carries its `kind` (`"news"`, `"analysis"` or `"deep"`), section, headline, body and a `sources` array crediting every piece of research behind it — replace or add an entry and redeploy to publish. Mark the current deep-dive feature with `weekly:true`. Each entry may carry an `image` — its own picture, with alt text, size, caption, credit, an `ai` flag and the derivative widths; `media.js` documents the contract and `docs/design/README.md` the policy (full 3:2 compositions, no crops, the caption adds no claim). Each entry may also carry `produced`: `"reported"` (the default — a person wrote it) or `"assisted"` (a model drafted it from the credited sources and a person checked every claim before publication). The attribution line under the piece says which, in the reader and on the static page alike, and the build refuses any other value. `REVIEW.md` is the process that makes that label true; `drafts/` is where a piece waits for it. `index.html` still holds `WIM_NOTES`, the short "Why it matters" context notes shown on the front-page card, by desk.
+The Ledger's own articles live in `content.js`, not in `index.html`: each entry carries its `kind` (`"news"`, `"analysis"` or `"deep"`), section, headline, body and a `sources` array crediting every piece of research behind it. Follow `REVIEW.md` before publishing an addition or substantive revision. Mark the current deep-dive feature with `weekly:true`. Each entry may carry an `image` — its own picture, with alt text, size, caption, credit, an `ai` flag and the derivative widths; `media.js` documents the contract and `docs/design/README.md` the policy (full 3:2 compositions, no crops, the caption adds no claim).
+
+Every entry must explicitly set `produced`: `"reported"` (a person wrote it) or `"assisted"` (a model drafted it from credited sources and a person checked every claim before publication). Both require the human factual-source and read-aloud checklist, recorded in the publication pull request. The eight original August 17 articles instead carry `"legacy-unrecorded"`: their retained evidence does not establish their production history or a recorded factual review. `production.js` limits that category to their pinned IDs and original dates and shares the attribution with the build and reader. Omitted, unsupported or new-article legacy values fail the build. Validation checks metadata, not whether a person really performed a review. The archive status also accompanies Listen and Copy. `drafts/` is where new work waits for actual review. `index.html` holds `WIM_NOTES`, the standing background notes by desk.
 
 Every feed shipped here was checked by hand: public, free, no login and no paywall. The Financial Times, WSJ, Bloomberg and The Economist are deliberately absent. Settings shows a live list of which feeds answered on the last gathering and how many items each returned.
 
@@ -126,6 +128,9 @@ python3 qa_seo.py        # 45 checks: what a crawler is served — headings, tit
                          # descriptions, canonicals, robots, both sitemaps, the Atom
                          # feed, structured data, the About page, related links, the
                          # skip link — and that the app keeps those signals honest
+python3 qa_production.py # archive attribution on all eight static/reader pages,
+                         # explicit production categories and rejection cases;
+                         # every browser request is served locally or blocked
 node eval_topics.mjs --edition data/feed.json   # the classifier against the labelled sample
 python3 qa_feed.py       # 21 checks: the gatherer against synthetic RSS and Atom
                          # feeds — validation and dropped-item reasons, excerpts

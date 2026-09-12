@@ -31,6 +31,7 @@ const FILES = [
   "/about.js",
   "/analytics.js",
   "/media.js",
+  "/production.js",
   "/content.js",
   "/manifest.webmanifest",
   "/icon-192.png",

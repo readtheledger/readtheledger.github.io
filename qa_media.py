@@ -63,7 +63,7 @@ async def main():
     print(r.stdout.strip().splitlines()[-1])
     # and the same with one piece's picture taken away, for the text-led state
     src = open(os.path.join(ROOT, "content.js"), encoding="utf-8").read()
-    stripped = re.sub(r'(id:\s*"%s",\n\s*)image:\{[^\n]*\},\n' % WITHOUT, r"\1", src)
+    stripped = re.sub(r'(id:\s*"%s",\n(?:\s*produced:[^\n]+\n)?\s*)image:\{[^\n]*\},\n' % WITHOUT, r"\1", src)
     assert stripped != src, "fixture: could not remove the picture from " + WITHOUT
     cf = os.path.join(work, "content.js"); open(cf, "w", encoding="utf-8").write(stripped)
     r = subprocess.run(["node", os.path.join(ROOT, "build.mjs"), site2, "--content", cf], capture_output=True, text=True)

@@ -1,15 +1,34 @@
 # Editorial review
 
-The Ledger publishes two kinds of piece, and the attribution line on each says
-which it is. That line has to be true, so this is the process that makes it true.
+New Ledger pieces use one of two explicit production categories. The existing
+archive has a separate, limited status for missing records. The attribution
+line must describe the evidence honestly; this process makes new labels true.
 
 | `produced` | Attribution line | Meaning |
 |---|---|---|
-| `"reported"` (the default) | Reported and written by The Ledger. | A person wrote it from the credited sources. |
+| `"reported"` | Reported and written by The Ledger. | A person wrote it from the credited sources. |
 | `"assisted"` | Drafted with AI assistance from the credited sources and reviewed by The Ledger's editor before publication. | A model drafted it from the credited sources; a person checked every claim before it went out. |
+| `"legacy-unrecorded"` | From The Ledger archive. A factual review record is not available for this article. | The eight original August 17, 2026 articles lack retained factual-review records and have incomplete production evidence. |
 
-The label is set per piece in `content.js`, never by default. `build.mjs` refuses
-any other value.
+The label is set explicitly per piece in `content.js`, never by default.
+`production.js` shares validation and attribution between the build and reader.
+The build rejects omitted or unsupported values. It also rejects the legacy
+category for an ID/date outside the eight pinned originals, or for a new edition
+date. This validation cannot verify that a person performed a factual review:
+the actual source checks and pull-request record below are still required.
+
+## Existing archive
+
+The legacy inventory is `led-20260817-record`, `led-20260817-fed`,
+`led-20260817-consumer`, `led-20260817-river`, `led-20260817-aitrade`,
+`led-20260817-badnews`, `led-20260817-savers` and `led-20260817-weekly`, with
+their original timestamps pinned in `production.js`. Do not add new articles to
+that inventory or reuse its IDs/dates to bypass review. The status is an honest
+record limitation, not evidence that nobody reviewed a piece or that it is false.
+These editions must not be described as previously approved without evidence.
+The attribution correction preserves their reporting, sources and article dates.
+A substantive revision follows the full checklist and records its actual review;
+the archive status is not a review exemption for new reporting or revisions.
 
 ## The loop for an assisted piece
 
@@ -31,8 +50,9 @@ any other value.
 5. **Publish.** The push builds and deploys the page and, when audio is
    enabled, the recording.
 
-Until a draft passes the check, the previously approved edition stays visible
-with its original date. Nothing publishes straight from a model to the page.
+Until a draft passes the check, the existing published edition stays visible
+with its original date and truthful attribution status. Nothing publishes
+straight from a model to the page.
 
 ## The checklist
 
@@ -66,5 +86,6 @@ the draft's pull request so the drafting instructions can be improved.
 
 ## Human-written pieces
 
-A piece a person wrote from the sources keeps `produced: "reported"` (or omits
-it). It goes through the same checklist; the label simply says how it was made.
+A piece a person wrote from the sources explicitly sets `produced: "reported"`.
+It goes through the same checklist, with the production-label item checked
+against `reported` rather than `assisted`; the label says how it was made.

@@ -276,7 +276,7 @@ async def main():
                   attr: (document.querySelector('#rwrap .attrline')||{}).textContent||""};
         }""")
         ok("Ledger reader shows a sources box with attribution",
-           srcbox["links"] >= 1 and "Reported and written by The Ledger" in srcbox["attr"], str(srcbox))
+           srcbox["links"] >= 1 and "A factual review record is not available for this article." in srcbox["attr"], str(srcbox))
         await page.evaluate("closeReader()")
 
         badges = await page.evaluate("""() => {

@@ -29,12 +29,6 @@ const opt  = (name, dflt) => { const i = argv.indexOf("--" + name); return i >= 
 const OUT  = path.resolve(argv.find(a => !a.startsWith("--") && !argv[argv.indexOf(a) - 1]?.startsWith("--")) || path.join(ROOT, "_site"));
 const CONTENT_FILE = path.resolve(opt("content", path.join(ROOT, "content.js")));   // the tests build from a content file of their own
 const ASSETS_DIR   = path.resolve(opt("assets", path.join(ROOT, "assets", "editorial")));   // and, for the worker's cache test, from pictures of their own
-const PRODUCED = ["reported", "assisted"];
-/* the attribution line says how a piece was actually produced, per piece, and
-   never by default; index.html prints the same words in the reader */
-const productionLine = produced => produced === "assisted"
-  ? "Drafted with AI assistance from the credited sources and reviewed by <strong>The Ledger</strong>'s editor before publication."
-  : "Reported and written by <strong>The Ledger</strong>.";
 const SITE = "https://readtheledger.github.io";
 const SITE_TITLE = "The Ledger — Finance, read properly";
 const SITE_DESC  = "The Ledger's own financial reporting and analysis — markets, central banks, the economy, tech and personal finance — every source credited and linked.";
@@ -64,6 +58,7 @@ const swSrc = read("sw.js");
 const aboutSrc = read("about.js");
 const analyticsSrc = read("analytics.js");
 const mediaSrc = read("media.js");
+const productionSrc = read("production.js");
 
 for (const marker of ["<!-- meta:start", "<!-- meta:end -->", "<!-- static:slot", '<p class="datestrip" id="datestrip"', '<meta name="robots" id="robotsMeta" content="index,follow">']) {
   if (!index.includes(marker)) fail("index.html is missing the " + marker + " marker");
@@ -80,6 +75,8 @@ for (const s of PAGE_SECTIONS) {
 }
 
 const ctx = { window: {} };
+vm.runInNewContext(productionSrc, ctx);
+const production = ctx.window.LEDGER_PRODUCTION;
 vm.runInNewContext(contentSrc, ctx);
 const content = ctx.window.LEDGER_CONTENT;
 if (!content || !Array.isArray(content.articles) || !content.articles.length) fail("content.js carries no articles");
@@ -105,7 +102,8 @@ for (const a of articles) {
   if (!PAGE_SECTIONS.includes(a.section)) fail(where + ": section '" + a.section + "' has no page");
   if (!a.date || isNaN(Date.parse(a.date))) fail(where + ": date must be ISO 8601");
   if (!a.title || !a.title.trim()) fail(where + ": missing title");
-  if (a.produced !== undefined && !PRODUCED.includes(a.produced)) fail(where + ": produced must be one of " + PRODUCED.join(", "));
+  const productionError = production.error(a);
+  if (productionError) fail(where + ": " + productionError);
   if (!a.standfirst || !a.standfirst.trim()) fail(where + ": missing standfirst");
   if (!a.html || !a.html.trim()) fail(where + ": missing body");
   for (const re of RISKY) if (re.test(a.html)) fail(where + ": body contains markup the static page will not carry (" + re + ")");
@@ -263,7 +261,7 @@ function storyHTML(a) {
       <div class="rmeta"><span class="badge">The Ledger</span><time class="dot" datetime="${esc(a.date)}">${dateTime(a.date)}</time><span class="dot">${readMins(w)} min read</span></div>
       <div class="rbody">${a.html}</div>
       <aside class="sourcesbox"><h2>Sources &amp; further reading</h2><ul>${srcs}</ul></aside>
-      <p class="attrline">${productionLine(a.produced)} Material sources are credited and linked above; quotations are brief and attributed.</p>
+      <p class="attrline">${production.line(a)} Material sources are credited and linked above; quotations are brief and attributed.</p>
       ${relatedHTML(a)}
       <p class="static-home"><a href="/">← The Ledger front page</a></p>
     </article>
@@ -470,14 +468,14 @@ if (fs.existsSync(ASSETS_DIR)) {
     if (fs.statSync(src).isFile()) assetHash.update(f.replace(/\\/g, "/")).update(fs.readFileSync(src));
   }
 }
-const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(read("topics.js")).update(read("context.js")).update(aboutSrc).update(analyticsSrc).update(mediaSrc).update(swSrc).update(assetHash.digest()).digest("hex").slice(0, 8);
+const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(read("topics.js")).update(read("context.js")).update(aboutSrc).update(analyticsSrc).update(mediaSrc).update(productionSrc).update(swSrc).update(assetHash.digest()).digest("hex").slice(0, 8);
 const routes = ["/", "/index.html", ABOUT_PATH].concat(PAGE_SECTIONS.map(sectionPath), articles.map(storyPath));
 const sw = swSrc
   .replace('const BUILD = "dev";', 'const BUILD = "' + stamp + '";')
   .replace(/^const ROUTES = \[[^\n]*\];$/m, "const ROUTES = " + JSON.stringify(routes) + ";");
 if (!sw.includes('const BUILD = "' + stamp + '"') || !sw.includes('"/story/' + articles[0].id + '/"')) fail("sw.js was not stamped");
 write("sw.js", sw);
-for (const f of ["content.js", "sources.js", "topics.js", "context.js", "about.js", "analytics.js", "media.js", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]) {
+for (const f of ["content.js", "sources.js", "topics.js", "context.js", "about.js", "analytics.js", "media.js", "production.js", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]) {
   // the publication the pages were written from is the one the app loads, so a
   // build from another content file (the tests do this) is consistent with itself
   fs.copyFileSync(f === "content.js" ? CONTENT_FILE : path.join(ROOT, f), path.join(OUT, f));

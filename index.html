@@ -620,6 +620,7 @@ html.js #static{display:none}
 <script src="/about.js"></script>
 <script src="/analytics.js"></script>
 <script src="/media.js"></script>
+<script src="/production.js"></script>
 <script src="/sources.js"></script>
 <script src="/topics.js"></script>
 <script src="/context.js"></script>
@@ -848,10 +849,8 @@ function makeEditorial(a){
   const text  = htmlToText(clean);
   return {
     id:a.id, ledger:true, weekly:!!a.weekly, kind:a.kind||"news",
-    // how the piece was produced, which decides the attribution line it carries:
-    // "reported" (written by a person) or "assisted" (drafted with AI assistance
-    // from the credited sources, then reviewed by a person before publication)
-    produced: a.produced==="assisted" ? "assisted" : "reported",
+    // Preserve the explicit category; never infer human writing from its absence.
+    produced: a.produced, updated:a.updated,
     source:"The Ledger", author:"The Ledger", section:a.section||"Markets",
     title:a.title, standfirst:a.standfirst||"", link:"",
     date:a.date, ts:Date.parse(a.date),   // NaN if the date does not parse: shown as unknown, never as now
@@ -862,13 +861,6 @@ function makeEditorial(a){
     image:(window.LEDGER_MEDIA && LEDGER_MEDIA.validate(a.image).ok) ? LEDGER_MEDIA.validate(a.image).image : null,
     fullText:true, republish:true, lic:"", weight:1.4
   };
-}
-/* The attribution line says how a piece was actually produced, per piece, and
-   never by default. build.mjs prints the same words on the static page. */
-function productionLine(produced){
-  return produced==="assisted"
-    ? "Drafted with AI assistance from the credited sources and reviewed by <strong>The Ledger</strong>'s editor before publication."
-    : "Reported and written by <strong>The Ledger</strong>.";
 }
 const EDITORIAL = ((window.LEDGER_CONTENT && window.LEDGER_CONTENT.articles) || []).map(makeEditorial);
 const ANALYTICS = window.LEDGER_ANALYTICS ? window.LEDGER_ANALYTICS.create({
@@ -1598,7 +1590,7 @@ function openReader(it, opts){
       `<li><a href="${esc(s.u)}" target="_blank" rel="noopener noreferrer">${esc(s.t)}</a> — ${esc(s.p)}</li>`).join("");
     wimBox = srcs ? `<aside class="sourcesbox"><h2>Sources & further reading</h2><ul>${srcs}</ul></aside>` : "";
     attr = it.demo ? `<p class="attrline">This page is part of the app and is not an article; it carries no publication date.</p>`
-                   : `<p class="attrline">${productionLine(it.produced)} Material sources are credited and linked above; quotations are brief and attributed.</p>`;
+                   : `<p class="attrline">${LEDGER_PRODUCTION.line(it)} Material sources are credited and linked above; quotations are brief and attributed.</p>`;
   }else if(mode==="licensed"){
     body = it.html;
     wimBox = ctxBox();
@@ -1735,6 +1727,10 @@ function plainText(it){
   const lines=[it.title,"",it.source + (it.author&&it.author!==it.source?" — "+it.author:""),
     it.demo ? "Part of the app — no publication date" : (isNaN(it.ts) ? "Publication date unknown" : new Date(it.ts).toLocaleString(undefined,{dateStyle:"long",timeStyle:"short"}))];
   if(link) lines.push(link);
+  if(it.ledger && !it.demo){
+    const notice = LEDGER_PRODUCTION.archiveNotice(it);
+    if(notice) lines.push("", notice);
+  }
   if(it.demo || it.ledger || it.republish){
     lines.push("", it.text || it.standfirst || "");
     if(it.republish && it.lic) lines.push("", "[Republished in full from "+it.source+" — "+it.lic+" — with attribution.]");
@@ -1799,8 +1795,9 @@ const player = $("#player");
 
 function speechText(it){
   const head = it.title + ". " + (it.author && it.author!==it.source ? "By "+it.author+", " : "") + it.source + ". ";
+  const notice = it.ledger && !it.demo ? LEDGER_PRODUCTION.archiveNotice(it) : "";
   const body = presentedText(it) || it.standfirst || "";
-  return (head + body).replace(/\s+/g," ").trim();
+  return (head + (notice ? notice + " " : "") + body).replace(/\s+/g," ").trim();
 }
 function chunkText(t, limit){
   limit = limit||3800;
