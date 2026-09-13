@@ -13,6 +13,44 @@ window.LEDGER_CONTENT = {
   articles: [
 
   {
+    id: "led-grocery-property-controls-canada",
+    kind: "analysis",
+    section: "Markets",
+    produced: "ai-source-reviewed",
+    date: "2026-09-13T16:40:53Z",
+    title: "The supermarket can leave. Its ban on a rival can stay.",
+    standfirst: "A grocery chain can leave a property while a land restriction or lease clause still limits a rival. Major chains are rolling some controls back—but removal creates an opportunity to compete, not a guaranteed new store or lower price.",
+    html: `<p>A supermarket can leave a property and still help keep another grocer from taking its place. The shelves can disappear while a restriction attached to the land survives. For shoppers waiting for a cheaper alternative, the obstacle may be a document they never see.</p>
+<p>That mechanism is part of the grocery competition fight described in the Competition Bureau’s <a href="https://competition-bureau.canada.ca/en/how-we-foster-competition/education-and-outreach/publications/assessing-progress-competition-bureaus-retail-grocery-recommendations" target="_blank" rel="noopener noreferrer">September 3 progress report</a>. The report also records progress: major chains have taken steps to give up property controls. The useful question is which barriers are being removed—and what that actually allows a rival to do.</p>
+<h2>Two ways to keep a competitor off the map</h2>
+<p>A restrictive covenant can attach a restriction to land, limiting what a later owner may do with it. In grocery retail, that can stop the site being used by a competing food business even after ownership changes.</p>
+<p>An exclusivity clause works through a lease. A supermarket tenant can restrict the landlord’s ability to rent other space to a competitor, or limit which products another tenant sells.</p>
+<p>Those are different tools, with different scopes. The Bureau’s <a href="https://competition-bureau.canada.ca/en/how-we-foster-competition/education-and-outreach/publications/competitor-property-controls-and-competition-act" target="_blank" rel="noopener noreferrer">enforcement guidance</a> says land restrictions can be long-lasting and affect future owners. It also recognizes that a limited exclusivity clause can sometimes support investment: an anchor tenant might need protection to justify opening in a new shopping centre. Not every restriction meets the legal test for enforcement.</p>
+<p>The argument is over how much protection is justified, across how much land, for which products and for how long.</p>
+<h2>A real barrier, followed by a carefully worded win</h2>
+<p>In <a href="https://www.canada.ca/en/competition-bureau/news/2025/01/competition-bureau-takes-action-to-protect-competition-in-the-grocery-industry-in-an-alberta-community.html" target="_blank" rel="noopener noreferrer">January 2025</a>, the Bureau said Empire had agreed to remove a property control in Crowsnest Pass, Alberta. According to that announcement, the restriction had been imposed in 2017 and protected Empire’s IGA from competition. At the time, the Bureau described it as the community’s only grocery store.</p>
+<p>The announcement said a rival could move forward with plans for a second store. It did not establish that the second store had opened or that prices had fallen. This article has not independently verified either outcome.</p>
+<p>That distinction matters. Removing a legal barrier gives a rival a chance to enter. A business still needs premises, financing, staff, suppliers and enough customers to make the store viable.</p>
+<h2>Empire’s current promises change the story</h2>
+<p>Empire’s <a href="https://www.empireco.ca/propertycontrols" target="_blank" rel="noopener noreferrer">published commitments</a> say it will not enforce restrictive covenants on properties, including those previously sold, or register new ones. It also says it will stop enforcing specified categories of exclusivity, including restrictions on specialty food retailers such as butchers and bakeries, and will limit the geography, products and duration covered by future grocery lease exclusivity.</p>
+<p>That is meaningful movement. It would be inaccurate to describe the company’s current position as an unchanged commitment to enforce every old restriction. It would also be inaccurate to say every form of exclusivity has disappeared: the company’s commitments distinguish between categories.</p>
+<p>Empire argues that property controls can support investment and development, particularly in underserved communities. Its position deserves to be read alongside the Bureau’s concern that restrictions can prevent competitors from entering.</p>
+<p>The Bureau <a href="https://www.canada.ca/en/competition-bureau/news/2026/06/competition-bureau-advances-investigation-into-sobeys-use-of-property-controls-across-canada.html" target="_blank" rel="noopener noreferrer">expanded its investigation in June 2026</a>, obtaining court orders for documents, information and testimony. That announcement explicitly reported no conclusion of wrongdoing. The September follow-up says the Bureau continues investigating property controls and monitoring changes by grocers.</p>
+<p>For shoppers, a store closing is visible. A clause that limits its next use is much harder to see. For a prospective rival, permission to compete on paper and a workable site are both essential. Removing restrictions is progress; a new store with competitive prices is the outcome people can actually shop at.</p>
+<p>The next grocery price war might begin with a change to a land title.</p>
+<h2>Related reading</h2>
+<ul><li><a href="https://readtheledger.github.io/story/led-lower-inflation-grocery-bill/" target="_blank" rel="noopener noreferrer">Does lower inflation mean my grocery bill should fall?</a></li><li><a href="https://readtheledger.github.io/story/led-ai-data-centre-power-bills-canada-2026/" target="_blank" rel="noopener noreferrer">AI giants promise to pay their own power bills. Show Canadians the receipts.</a></li></ul>
+<p>Analysis based on the linked public records and company commitments.</p>`,
+    sources: [
+      { t: "Assessing progress on the Competition Bureau’s retail grocery recommendations", u: "https://competition-bureau.canada.ca/en/how-we-foster-competition/education-and-outreach/publications/assessing-progress-competition-bureaus-retail-grocery-recommendations", p: "Competition Bureau Canada" },
+      { t: "Competitor property controls and the Competition Act", u: "https://competition-bureau.canada.ca/en/how-we-foster-competition/education-and-outreach/publications/competitor-property-controls-and-competition-act", p: "Competition Bureau Canada" },
+      { t: "Competition Bureau takes action to protect competition in the grocery industry in an Alberta community", u: "https://www.canada.ca/en/competition-bureau/news/2025/01/competition-bureau-takes-action-to-protect-competition-in-the-grocery-industry-in-an-alberta-community.html", p: "Competition Bureau Canada" },
+      { t: "Property Controls Commitments", u: "https://www.empireco.ca/propertycontrols", p: "Empire Company Limited" },
+      { t: "Competition Bureau advances investigation into Sobeys’ use of property controls across Canada", u: "https://www.canada.ca/en/competition-bureau/news/2026/06/competition-bureau-advances-investigation-into-sobeys-use-of-property-controls-across-canada.html", p: "Competition Bureau Canada" }
+    ]
+  },
+
+  {
     id: "led-ai-data-centre-power-bills-canada-2026",
     kind: "analysis",
     section: "Tech & Finance",
