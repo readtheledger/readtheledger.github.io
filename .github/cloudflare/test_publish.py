@@ -30,9 +30,9 @@ def static_files():
     files = {'index.html':b'const GC_SITE = "";', '404.html':b'404', 'content.js':b'[]',
             'sw.js':b'const BUILD = "12345678";\nconst ROUTES = ["/story/example/"];',
             'data/feed.json':json.dumps(dict(fetched='2026-09-12T19:00:10Z',items=[{'title':'Gathered'}],sources=[])).encode(),
-            'sitemap.xml':b'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://readtheledger.github.io/</loc></url><url><loc>https://readtheledger.github.io/story/example/</loc></url></urlset>',
+            'sitemap.xml':b'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://imperiumpost.com/</loc></url><url><loc>https://imperiumpost.com/story/example/</loc></url></urlset>',
             'robots.txt':b'Allow: /','about/index.html':b'About','privacy/index.html':b'Privacy',
-            'story/example/index.html':b'<link rel="canonical" href="https://readtheledger.github.io/story/example/">'}
+            'story/example/index.html':b'<link rel="canonical" href="https://imperiumpost.com/story/example/">'}
     files.update({n:b'fixture' for n in ['sources.js','topics.js','context.js','about.js','privacy.js','consent.js','media.js','production.js','manifest.webmanifest',
         'icon-180.png','icon-192.png','icon-512.png','icon-maskable-512.png','sitemap-news.xml','feed.xml']})
     files['analytics.js'] = (p.ROOT/'analytics.js').read_bytes()
@@ -121,7 +121,7 @@ class ArchiveTests(unittest.TestCase):
                ('sw.js',b'const BUILD = "dev";'),('story/example/index.html',b'<link rel="canonical" href="https://other.example/">'),
                ('index.html',b'const GC_SITE = "enabled";'),('production.js',None),('analytics.js',b'unguarded'),
                ('privacy/index.html',None),('privacy.js',None),('consent.js',None),
-               ('sitemap.xml',b'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://readtheledger.github.io/missing/</loc></url></urlset>')]
+               ('sitemap.xml',b'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://imperiumpost.com/missing/</loc></url></urlset>')]
         for name,body in cases:
             files=static_files()
             if body is None: del files[name]

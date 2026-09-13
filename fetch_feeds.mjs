@@ -43,7 +43,7 @@ const argv = process.argv.slice(2);
 const opt = (name, dflt) => { const i = argv.indexOf("--" + name); return i >= 0 ? argv[i + 1] : dflt; };
 const SOURCES_FILE = path.resolve(opt("sources", path.join(ROOT, "sources.js")));
 const OUT          = path.resolve(opt("out", path.join(ROOT, "data", "feed.json")));
-const PREVIOUS     = opt("previous", "https://readtheledger.github.io/data/feed.json");
+const PREVIOUS     = opt("previous", "https://imperiumpost.com/data/feed.json");
 const NOW          = new Date(opt("now", new Date().toISOString()));
 const TIMEOUT      = Number(opt("timeout", 15000));
 const PER_SOURCE   = 15;        // items kept per source
@@ -53,7 +53,7 @@ const FUTURE_SLACK = 24 * 3600 * 1000;
 const RIGHTS = ["summary", "full"];
 /* The conventional form for a feed reader: says what it is and where to find
    out more. Some hosts refuse anything that does not begin "Mozilla/5.0". */
-const UA = "Mozilla/5.0 (compatible; TheLedger/1.0; +https://readtheledger.github.io/)";
+const UA = "Mozilla/5.0 (compatible; TheLedger/1.0; +https://imperiumpost.com/)";
 
 const fail = msg => { console.error("fetch_feeds: " + msg); process.exit(1); };
 

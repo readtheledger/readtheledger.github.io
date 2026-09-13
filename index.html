@@ -29,17 +29,17 @@
 <!-- meta:start — build.mjs replaces this block per page (story, section, front) -->
 <title>The Ledger — Finance, read properly</title>
 <meta name="description" content="A quiet reader for high-quality, free-to-read financial journalism.">
-<link rel="canonical" href="https://readtheledger.github.io/">
+<link rel="canonical" href="https://imperiumpost.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="The Ledger">
 <meta property="og:title" content="The Ledger — Finance, read properly">
 <meta property="og:description" content="A quiet reader for high-quality, free-to-read financial journalism.">
-<meta property="og:url" content="https://readtheledger.github.io/">
-<meta property="og:image" content="https://readtheledger.github.io/icon-512.png">
+<meta property="og:url" content="https://imperiumpost.com/">
+<meta property="og:image" content="https://imperiumpost.com/icon-512.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The Ledger — Finance, read properly">
 <meta name="twitter:description" content="A quiet reader for high-quality, free-to-read financial journalism.">
-<meta name="twitter:image" content="https://readtheledger.github.io/icon-512.png">
+<meta name="twitter:image" content="https://imperiumpost.com/icon-512.png">
 <!-- meta:end -->
 <!-- app-only views (Newsstand, Saved, search) are addressed by ?view= and ?q=;
      the app marks them noindex, with a canonical of their own so the two do not
@@ -690,7 +690,7 @@ const CONTEXT = window.LEDGER_CONTEXT || {};
    by build.mjs; these helpers are the one place the shape of those addresses is
    decided, and build.mjs mirrors them. Newsstand and Saved are app-only views
    (live feeds and this device's bookmarks), so they have no page. */
-const SITE = "https://readtheledger.github.io";
+const SITE = "https://imperiumpost.com";
 const PAGE_SECTIONS = SECTIONS.filter(s=>s!=="Front page" && s!=="Newsstand" && s!=="Saved");
 function slugOf(section){ return String(section).toLowerCase().replace(/&/g,"and").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""); }
 function sectionPath(section){ return section==="Front page" ? "/" : (PAGE_SECTIONS.includes(section) ? "/"+slugOf(section)+"/" : ""); }

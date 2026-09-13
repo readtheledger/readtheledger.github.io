@@ -3,7 +3,7 @@
 (function(){
   "use strict";
   const EXCLUDE_KEY = "ledger.analytics.exclude";
-  const CANONICAL_ORIGIN = "https://readtheledger.github.io";
+  const CANONICAL_ORIGIN = "https://imperiumpost.com";
   const BEACON_SRC = "https://static.cloudflareinsights.com/beacon.min.js";
   function create({token, origin}){
     let storageFailed = false, sessionExcluded = false, started = false;

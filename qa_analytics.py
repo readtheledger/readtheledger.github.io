@@ -5,7 +5,7 @@ import argparse, asyncio, hashlib, json, mimetypes, pathlib, subprocess, urllib.
 from playwright.async_api import async_playwright
 ROOT=pathlib.Path(__file__).resolve().parent
 OUT=ROOT/'.qa'/'analytics-site'
-PUBLIC='https://readtheledger.github.io'
+PUBLIC='https://imperiumpost.com'
 SCRIPT='https://static.cloudflareinsights.com/beacon.min.js'
 COLLECTOR='https://cloudflareinsights.com/cdn-cgi/rum'
 SPEECH_PROBE='https://api.openai.com/v1/audio/speech'

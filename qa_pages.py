@@ -210,7 +210,7 @@ async def main():
                f"status={r.status} paras={paras} sources={srcs}/{len(a['sources'])}")
             ok(f"{a['id']}: own title, canonical and sharing metadata",
                title == a["title"] + " — The Ledger"
-               and canon == "https://readtheledger.github.io" + path and ogurl == canon and ogtype == "article",
+               and canon == "https://imperiumpost.com" + path and ogurl == canon and ogtype == "article",
                f"title={title[:40]!r} canonical={canon}")
             ok(f"{a['id']}: publication date preserved",
                pub == a["date"] and ld.get("datePublished") == a["date"] and ld.get("headline") == a["title"]
@@ -262,14 +262,14 @@ async def main():
         sm = await (await ctx.request.get(base + "/sitemap.xml")).text()
         locs = re.findall(r"<loc>([^<]+)</loc>", sm)
         ok("sitemap lists the front page, sections with content and every story",
-           "https://readtheledger.github.io/" in locs
-           and all(f"https://readtheledger.github.io/story/{a['id']}/" in locs for a in arts)
-           and all(("https://readtheledger.github.io/%s/" % slug(s) in locs) == any(a["section"] == s for a in arts) for s in PAGE_SECTIONS),
+           "https://imperiumpost.com/" in locs
+           and all(f"https://imperiumpost.com/story/{a['id']}/" in locs for a in arts)
+           and all(("https://imperiumpost.com/%s/" % slug(s) in locs) == any(a["section"] == s for a in arts) for s in PAGE_SECTIONS),
            f"{len(locs)} urls")
         ok("sitemap lastmod carries the publication dates",
            all(f"<lastmod>{a['date']}</lastmod>" in sm for a in arts))
         rb = await (await ctx.request.get(base + "/robots.txt")).text()
-        ok("robots.txt allows crawling and names the sitemap", "Allow: /" in rb and "Sitemap: https://readtheledger.github.io/sitemap.xml" in rb)
+        ok("robots.txt allows crawling and names the sitemap", "Allow: /" in rb and "Sitemap: https://imperiumpost.com/sitemap.xml" in rb)
         r = await page.goto(base + "/story/no-such-story/", wait_until="load")
         ok("unknown story is a real 404", r.status == 404 and await page.locator("#static").count() == 0
            and "isn't in this edition" in await page.content(), f"status={r.status}")
@@ -448,7 +448,7 @@ async def main():
         await page.wait_for_selector("#reader.on", timeout=8000)
         ok("offline, a visited story loads from its own cached page",
            r.status == 200 and (await page.locator("#rwrap h1").inner_text()).strip() == a1["title"]
-           and await page.evaluate("document.querySelector('link[rel=canonical]').href") == "https://readtheledger.github.io" + p1, f"status={r.status}")
+           and await page.evaluate("document.querySelector('link[rel=canonical]').href") == "https://imperiumpost.com" + p1, f"status={r.status}")
         # ...and an unvisited story falls back to the shell, which renders it from content.js
         a2 = arts[2]; p2 = f"/story/{a2['id']}/"
         r = await page.goto(base + p2, wait_until="load")
