@@ -1,6 +1,6 @@
 # Editorial review
 
-New Ledger pieces use one of two explicit production categories. The existing
+New Ledger pieces use one of three explicit production categories. The existing
 archive has a separate, limited status for missing records. The attribution
 line must describe the evidence honestly; this process makes new labels true.
 
@@ -8,14 +8,16 @@ line must describe the evidence honestly; this process makes new labels true.
 |---|---|---|
 | `"reported"` | Reported and written by The Ledger. | A person wrote it from the credited sources. |
 | `"assisted"` | Drafted with AI assistance from the credited sources and reviewed by The Ledger's editor before publication. | A model drafted it from the credited sources; a person checked every claim before it went out. |
+| `"ai-source-reviewed"` | Drafted with AI assistance from the credited sources and source-checked by AI before publication. No human factual review is claimed. | AI systems drafted the piece and checked its claims against the credited sources; no person is claimed to have completed the factual review. |
 | `"legacy-unrecorded"` | From The Ledger archive. A factual review record is not available for this article. | The eight original August 17, 2026 articles lack retained factual-review records and have incomplete production evidence. |
 
 The label is set explicitly per piece in `content.js`, never by default.
 `production.js` shares validation and attribution between the build and reader.
 The build rejects omitted or unsupported values. It also rejects the legacy
 category for an ID/date outside the eight pinned originals, or for a new edition
-date. This validation cannot verify that a person performed a factual review:
-the actual source checks and pull-request record below are still required.
+date. This validation cannot verify that a person or AI system performed a
+factual review: the actual source checks and pull-request record below are still
+required.
 
 ## Existing archive
 
@@ -53,6 +55,25 @@ the archive status is not a review exemption for new reporting or revisions.
 Until a draft passes the check, the existing published edition stays visible
 with its original date and truthful attribution status. Nothing publishes
 straight from a model to the page.
+
+## The loop for an AI-source-reviewed piece
+
+**Fetch → draft → two AI source checks → record → approve → publish.**
+
+Use `produced: "ai-source-reviewed"` only when AI drafted the piece and both the
+root AI and Claude checked the exact final text against every credited source.
+The publication pull request records the displayed reviewer identities where
+available, their roles, the final article hash, every source opened, each
+material claim's outcome, arithmetic rechecks, corrections, and the final
+recheck after any edit. Unknown runtime identity stays unverified. The record
+must say that no human factual review occurred; two AI passes are not described
+as independent review. A failed or unsupported claim is fixed or removed, and
+the changed final hash is checked again before publication.
+
+This route does not change the human checklist or make `assisted` available
+without a person's completed review. At release, check that the built static and
+interactive pages show the `ai-source-reviewed` line and that the publication
+date is the actual first-publication time.
 
 ## The checklist
 

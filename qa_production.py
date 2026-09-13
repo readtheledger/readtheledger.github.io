@@ -6,6 +6,7 @@ import asyncio
 import copy
 import json
 import mimetypes
+import os
 import pathlib
 import subprocess
 import tempfile
@@ -18,8 +19,14 @@ PUBLIC = "https://readtheledger.github.io"
 NOTICE = "From The Ledger archive. A factual review record is not available for this article."
 HUMAN = "Reported and written by The Ledger."
 ASSISTED = "Drafted with AI assistance from the credited sources and reviewed by The Ledger's editor before publication."
+AI_SOURCE_REVIEWED = "Drafted with AI assistance from the credited sources and source-checked by AI before publication. No human factual review is claimed."
 SUFFIXES = ["record", "fed", "consumer", "river", "aitrade", "badnews", "savers", "weekly"]
 EXPECTED = {"led-20260817-" + suffix for suffix in SUFFIXES}
+EXPECTED_AI_SOURCE_REVIEWED = {
+    "led-tfsa-withdrawal-recontribution",
+    "led-lower-inflation-grocery-bill",
+}
+PUBLICATION_CONTENT = pathlib.Path(os.environ.get("LEDGER_QA_CONTENT", ROOT / "content.js"))
 checks = []
 
 
@@ -38,15 +45,19 @@ def build(out, content_file=None):
 async def main():
     original = json.loads(subprocess.check_output([
         "node", "-e", 'global.window={};require(process.argv[1]);console.log(JSON.stringify(window.LEDGER_CONTENT));',
-        str(ROOT / "content.js")], text=True, encoding="utf-8"))
+        str(PUBLICATION_CONTENT)], text=True, encoding="utf-8"))
     legacy = [a for a in original["articles"] if a["id"] in EXPECTED]
+    real_ai_source_reviewed = [a for a in original["articles"] if a["id"] in EXPECTED_AI_SOURCE_REVIEWED]
     ok("all eight audited originals have an explicit legacy category",
        {a["id"] for a in legacy} == EXPECTED and all(a.get("produced") == "legacy-unrecorded" for a in legacy))
+    ok("the two real new articles have the explicit AI-source-reviewed category",
+       {a["id"] for a in real_ai_source_reviewed} == EXPECTED_AI_SOURCE_REVIEWED and
+       all(a.get("produced") == "ai-source-reviewed" for a in real_ai_source_reviewed))
 
     with tempfile.TemporaryDirectory(prefix="ledger-attribution-") as tmp:
         work = pathlib.Path(tmp)
         site = work / "site"
-        built = build(site)
+        built = build(site, PUBLICATION_CONTENT)
         if built.returncode:
             raise RuntimeError(built.stdout + built.stderr)
         ok("real publication builds with the shared attribution asset", (site / "production.js").is_file())
@@ -57,8 +68,9 @@ async def main():
         fixture.pop("updated", None)
         fixture.pop("weekly", None)
         assisted = dict(fixture, id="test-assisted", produced="assisted")
+        ai_source_reviewed = dict(fixture, id="test-ai-source-reviewed", produced="ai-source-reviewed")
         fixture_file = work / "fixtures.js"
-        fixture_file.write_text("window.LEDGER_CONTENT=" + json.dumps({"articles": [fixture, assisted]}) + ";", encoding="utf-8")
+        fixture_file.write_text("window.LEDGER_CONTENT=" + json.dumps({"articles": [fixture, assisted, ai_source_reviewed]}) + ";", encoding="utf-8")
         fixture_site = work / "fixtures"
         built = build(fixture_site, fixture_file)
         if built.returncode:
@@ -84,6 +96,13 @@ async def main():
             rejected = build(work / f"invalid-{i}", cf)
             ok(name + " fails the build", rejected.returncode == 1 and
                ("produced must be explicitly set" in rejected.stderr or "legacy-unrecorded is limited" in rejected.stderr))
+
+        null_date = dict(ai_source_reviewed, date=None)
+        null_file = work / "null-date.js"
+        null_file.write_text("window.LEDGER_CONTENT=" + json.dumps({"articles": [null_date]}) + ";", encoding="utf-8")
+        rejected = build(work / "null-date", null_file)
+        ok("a private null publication date fails the production build",
+           rejected.returncode == 1 and "date must be ISO 8601" in rejected.stderr)
 
         async with async_playwright() as pw:
             browser = await pw.chromium.launch()
@@ -121,12 +140,28 @@ async def main():
                     await page.locator(selector + " .attrline").wait_for(state="visible")
                     line = await page.locator(selector + " .attrline").inner_text()
                     ok(f"{a['id']} {'reader' if js else 'static'} truthful attribution",
-                       line.startswith(NOTICE) and HUMAN not in line and ASSISTED not in line and
+                       line.startswith(NOTICE) and HUMAN not in line and ASSISTED not in line and AI_SOURCE_REVIEWED not in line and
                        await page.locator(selector + ' .attrline a[href="/about/"]').count() == 1)
                     if js:
                         texts = await page.evaluate("id => {const a=EDITORIAL.find(x=>x.id===id); return [plainText(a),speechText(a)];}", a["id"])
                         ok(a["id"] + " Copy and Listen carry the archive status", all(t.count(NOTICE) == 1 for t in texts))
                     else:
+                        ld = await page.locator('script[type="application/ld+json"]').first.text_content()
+                        data = json.loads(ld)
+                        if isinstance(data, list):
+                            data = next(x for x in data if x.get("@type") == "NewsArticle")
+                        ok(a["id"] + " dates/headline/sources preserved in static output",
+                           data["datePublished"] == a["date"] and data["dateModified"] == a.get("updated", a["date"]) and
+                           await page.locator(selector + " h1").inner_text() == a["title"] and
+                           await page.locator(selector + " .rstand").inner_text() == a["standfirst"] and
+                           await page.locator(selector + " .sourcesbox a").evaluate_all("nodes=>nodes.map(n=>n.href)") == [s["u"] for s in a["sources"]])
+                for a in real_ai_source_reviewed:
+                    await page.goto(PUBLIC + f"/story/{a['id']}/")
+                    await page.locator(selector + " .attrline").wait_for(state="visible")
+                    line = await page.locator(selector + " .attrline").inner_text()
+                    ok(f"{a['id']} {'reader' if js else 'static'} truthful AI-source-reviewed attribution",
+                       line.startswith(AI_SOURCE_REVIEWED) and HUMAN not in line and ASSISTED not in line and NOTICE not in line)
+                    if not js:
                         ld = await page.locator('script[type="application/ld+json"]').first.text_content()
                         data = json.loads(ld)
                         if isinstance(data, list):
@@ -144,7 +179,7 @@ async def main():
                     for name, article in invalid:
                         line = await page.evaluate("a=>{const it=makeEditorial(a);openReader(it);return document.querySelector('#rwrap .attrline').textContent;}", article)
                         ok(name + " stays neutral in runtime reader", "Production status is unavailable." in line and
-                           HUMAN not in line and ASSISTED not in line and NOTICE not in line)
+                           HUMAN not in line and ASSISTED not in line and AI_SOURCE_REVIEWED not in line and NOTICE not in line)
                     await page.goto(PUBLIC + "/")
                     await page.wait_for_function("typeof EDITORIAL !== 'undefined'")
                     ok("archive notice does not clutter front-page cards", NOTICE not in await page.locator("#main").inner_text())
@@ -155,7 +190,7 @@ async def main():
             for js in [False, True]:
                 ctx, page, attempts, errors = await context_for(fixture_site, js)
                 selector = "#rwrap" if js else "#static"
-                for a, wanted in [(fixture, HUMAN), (assisted, ASSISTED)]:
+                for a, wanted in [(fixture, HUMAN), (assisted, ASSISTED), (ai_source_reviewed, AI_SOURCE_REVIEWED)]:
                     await page.goto(PUBLIC + f"/story/{a['id']}/")
                     await page.locator(selector + " .attrline").wait_for(state="visible")
                     line = await page.locator(selector + " .attrline").inner_text()

@@ -15,8 +15,8 @@ window.LEDGER_PRODUCTION = (() => {
   const legacyText = "From The Ledger archive. A factual review record is not available for this article.";
   const more = ' <a href="/about/">About our editorial standards</a>.';
   function error(a) {
-    if (!a || !["reported", "assisted", "legacy-unrecorded"].includes(a.produced)) {
-      return "produced must be explicitly set to reported, assisted or legacy-unrecorded";
+    if (!a || !["reported", "assisted", "ai-source-reviewed", "legacy-unrecorded"].includes(a.produced)) {
+      return "produced must be explicitly set to reported, assisted, ai-source-reviewed or legacy-unrecorded";
     }
     if (a.produced === "legacy-unrecorded" &&
         (!Object.hasOwn(legacyDates, a.id) || a.date !== legacyDates[a.id] ||
@@ -31,6 +31,7 @@ window.LEDGER_PRODUCTION = (() => {
     if (error(a)) return "The Ledger. Production status is unavailable." + more;
     if (a.produced === "legacy-unrecorded") return legacyText + more;
     if (a.produced === "assisted") return "Drafted with AI assistance from the credited sources and reviewed by <strong>The Ledger</strong>'s editor before publication.";
+    if (a.produced === "ai-source-reviewed") return "Drafted with AI assistance from the credited sources and source-checked by AI before publication. No human factual review is claimed.";
     return "Reported and written by <strong>The Ledger</strong>.";
   }
   function archiveNotice(a) {

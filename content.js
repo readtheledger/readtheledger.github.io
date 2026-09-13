@@ -9,8 +9,84 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-08-17",
+  updated: "2026-09-13",
   articles: [
+
+  {
+    id: "led-tfsa-withdrawal-recontribution",
+    kind: "analysis",
+    section: "Personal Finance",
+    produced: "ai-source-reviewed",
+    date: "2026-09-13T13:06:00Z",
+    title: "Can I put money back into my TFSA in the same year I withdraw it?",
+    standfirst: "Only if you are a resident of Canada and still have unused TFSA contribution room. A withdrawal is restored as room on January 1 of the next calendar year, not when you take the money out.",
+    html: `<p>Yes, if you are a resident of Canada, but only to the extent that you still have otherwise unused TFSA contribution room. Taking money out does not give you that room back immediately. The amount withdrawn is added to your available room on January 1 of the next calendar year. If your room is already zero, a September 2026 withdrawal does not let you replace that money in 2026. A same-year deposit would create an excess contribution. The CRA taxes an excess at 1% per month for as long as it remains in the account. Its guidance is direct: <a href="https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/withdraw.html" target="_blank" rel="noopener noreferrer">check that you already have enough room before replacing a withdrawal</a>.</p>
+<h2>Two cases on one calendar</h2>
+<p>Assume each person is an adult resident of Canada, withdraws <strong>CAD 5,000 in September 2026</strong>, and makes no other relevant transaction. The withdrawal itself has no effect on 2026 room. The final column is a counterfactual showing what would happen if the person deposited the full CAD 5,000 that year; it is not a recommended transaction.</p>
+<table><thead><tr><th>Starting point before withdrawal</th><th>Room available for the rest of 2026</th><th>Counterfactual: full CAD 5,000 deposited in 2026</th></tr></thead><tbody><tr><td>Otherwise unused room: <strong>CAD 0</strong></td><td><strong>CAD 0</strong></td><td><strong>CAD 5,000 excess</strong></td></tr><tr><td>Otherwise unused room: <strong>CAD 2,000</strong></td><td><strong>CAD 2,000</strong></td><td><strong>CAD 3,000 excess</strong></td></tr></tbody></table>
+<p>The first case is the cleanest example. With no room left, withdrawing CAD 5,000 in September leaves the person's 2026 room at zero. Depositing that CAD 5,000 back during 2026 would create a CAD 5,000 excess.</p>
+<p>The second case shows why the answer can sometimes be “partly.” The person may contribute up to CAD 2,000 during 2026 because that room already existed. Depositing the full CAD 5,000 would exceed the available room by CAD 3,000.</p>
+<p>If the person leaves the withdrawn money outside every TFSA for the rest of 2026, the CAD 5,000 withdrawal is added to the contribution-room calculation on January 1, 2027. It is added alongside the new year's annual limit and any unused room carried forward. That does not create room during 2026, and this example makes no assumption about the 2027 annual limit. Calculate the person's actual available room before making any new contribution.</p>
+<p>If you have already contributed too much, the CRA says to <a href="https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/contributing/overcontribute.html" target="_blank" rel="noopener noreferrer">withdraw the excess as soon as possible and file a TFSA Return</a>.</p>
+<h2>The annual limit is only one part of your room</h2>
+<p>The annual TFSA dollar limit for 2026 is <strong>CAD 7,000</strong>, but that is not necessarily what you can contribute now. The CRA calculates available room from the current year's limit, unused room carried forward, withdrawals made in the previous year, and contributions already made this year. The limit applies across all of your TFSAs, rather than separately to each account. The CRA sets out the formula in its guide to <a href="https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/contributing/calculate-room.html" target="_blank" rel="noopener noreferrer">calculating TFSA contribution room</a>.</p>
+<p>Your CRA account is not a live ledger. TFSA issuers must report the previous calendar year's transactions by the end of February of the following year, and the CRA says account information is updated once a year in the spring. A recent contribution can reduce your room immediately without appearing online yet. Use your own complete records from every institution and compare them with the transactions the CRA has processed.</p>
+<h2>Moving a TFSA is a different transaction</h2>
+<p>If your goal is to move money from one TFSA or institution to another, ask the <strong>receiving financial institution</strong> to arrange a direct transfer. The CRA says a direct transfer does not affect contribution room, although an institution may charge a transfer fee. Its <a href="https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/transfer.html" target="_blank" rel="noopener noreferrer">TFSA transfer guidance</a> explains the distinction.</p>
+<p>Withdrawing the money yourself and depositing it into another TFSA is not a direct transfer. The new deposit counts as a contribution and needs available room. The withdrawal is added back only in the next calendar year.</p>
+<h2>Frequently asked questions</h2>
+<h3>Can I replace part of a withdrawal in the same year?</h3>
+<p>Yes, if you already have enough unused contribution room. In the CAD 2,000 case above, up to CAD 2,000 can be contributed in 2026; the withdrawal does not expand that amount during 2026.</p>
+<h3>Does opening another TFSA give me more room?</h3>
+<p>No. Your available contribution room is shared across all of your TFSAs. Contributions to each account count against the same total.</p>
+<h3>Is the room shown in my CRA account enough to make the decision?</h3>
+<p>No. It may not include recent transactions. Reconcile the CRA information with your own records from every TFSA before contributing.</p>
+<h2>Related reading</h2>
+<ul><li><a href="https://readtheledger.github.io/story/led-lower-inflation-grocery-bill/">Does lower inflation mean my grocery bill should fall?</a> — a plain-language guide to price levels and grocery inflation.</li><li><a href="https://readtheledger.github.io/story/led-20260817-savers/">What 4.3% expected inflation means for your cash</a> — The Ledger's August 17 analysis of inflation expectations and cash purchasing power.</li></ul>
+<p>This article provides general information, not personal tax advice. Use your complete records to calculate your room and ask the CRA or a qualified tax professional about your circumstances if you are unsure.</p>`,
+    sources: [
+      { t: "Withdrawing from a TFSA", u: "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/withdraw.html", p: "Canada Revenue Agency" },
+      { t: "Calculate your TFSA contribution room", u: "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/contributing/calculate-room.html", p: "Canada Revenue Agency" },
+      { t: "Requesting a TFSA transfer", u: "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/transfer.html", p: "Canada Revenue Agency" },
+      { t: "If you over-contribute to a TFSA", u: "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/contributing/overcontribute.html", p: "Canada Revenue Agency" }
+    ]
+  },
+
+  {
+    id: "led-lower-inflation-grocery-bill",
+    kind: "analysis",
+    section: "Personal Finance",
+    produced: "ai-source-reviewed",
+    date: "2026-09-13T13:06:00Z",
+    title: "Does lower inflation mean my grocery bill should fall?",
+    standfirst: "Lower headline inflation does not show whether groceries became cheaper. Even slower food inflation leaves the measured food basket dearer when its rate remains positive.",
+    html: `<p>Lower headline inflation does not tell you whether groceries became cheaper. Headline CPI combines food with shelter, transportation and other categories, so food can move differently. Even if food inflation itself slows, a positive food inflation rate means the measured food basket still became more expensive over the comparison period. To tell whether grocery prices fell, you need the change for the relevant food items or food basket, using the same quantities over the same period.</p>
+<p>The confusion comes from treating inflation like a price tag. The price level is what the basket costs; inflation is the rate at which that cost changes. The <a href="https://www.bankofcanada.ca/2025/10/difference-between-price-level-and-inflation/" target="_blank" rel="noopener noreferrer">Bank of Canada explains</a> that lower positive inflation means the price level rises more slowly. A slowing positive rate is disinflation. A falling price level requires a negative rate of change.</p>
+<h2>One fixed-basket calculation</h2>
+<p>Imagine a weekly list with the same quantities and quality each time: the same size carton of milk, loaf of bread, dozen eggs and bag of rice, plus fixed weights of chicken and produce. Suppose this basket costs CAD 100 at the starting point. The rates below are hypothetical and use consecutive one-year comparison periods; they are not current Canadian grocery data.</p>
+<table><thead><tr><th>Point in time</th><th>Calculation</th><th>Basket price</th></tr></thead><tbody><tr><td>Starting point</td><td>—</td><td>CAD 100.00</td></tr><tr><td>After hypothetical 5% inflation</td><td>CAD 100 × 1.05</td><td>CAD 105.00</td></tr><tr><td>After hypothetical 2% inflation</td><td>CAD 105 × 1.02</td><td>CAD 107.10</td></tr></tbody></table>
+<p>The inflation rate slowed from 5% to 2%, but the basket became CAD 2.10 dearer in the second year. It is 7.1% above its starting price: <code>(107.10 ÷ 100 − 1) × 100 = 7.1%</code>.</p>
+<p>For comparison, a hypothetical 2% price decline after the first year would produce <code>CAD 105 × 0.98 = CAD 102.90</code>. The basket would become cheaper than in the prior year, yet remain above its original CAD 100 price.</p>
+<h2>Why your receipt can differ from headline CPI</h2>
+<p><a href="https://www.statcan.gc.ca/en/subjects-start/prices_and_price_indexes/consumer_price_indexes/faq" target="_blank" rel="noopener noreferrer">Statistics Canada describes CPI</a> as the change in the cost of a fixed basket of goods and services. The national basket represents average Canadian household spending and covers eight broad components. Those components are weighted by their share of consumer spending.</p>
+<p>Headline CPI therefore summarizes many prices; it does not say that food moved by the headline percentage. Food prices can rise faster than headline CPI, rise more slowly, stay flat or fall while the overall index rises.</p>
+<p>Your household also buys a different mix from the representative national basket. The stores, brands, quantities and products you choose affect your bill. Statistics Canada accounts for quantity and quality when comparing equivalent products: a smaller package at the same sticker price represents an effective increase, even though the amount printed on the shelf label did not change.</p>
+<p>A practical personal check is to compare a short, consistent grocery list over time. Use the same product sizes and a clearly defined period. That will not replace CPI, but it will show whether your own repeat purchases became dearer or cheaper.</p>
+<h2>FAQ</h2>
+<h3>Can monthly grocery prices fall while year-over-year grocery prices still rise?</h3>
+<p>Yes. The comparison periods have different starting points. In a hypothetical example, a basket costs CAD 100 a year ago, CAD 106 last month and CAD 105.50 this month. It fell about 0.5% from last month but remains 5.5% higher than a year ago.</p>
+<h3>Can some grocery items get cheaper while food inflation remains positive?</h3>
+<p>Yes. An index combines many products. Individual items can fall while increases elsewhere leave the total food basket above its earlier price.</p>
+<h3>Is lower inflation the same as a lower cost of living?</h3>
+<p>No. Positive inflation still raises the measured price level. Statistics Canada also distinguishes CPI from a full cost-of-living index: CPI prices a fixed basket, while a cost-of-living measure asks what is needed to maintain a given standard of living.</p>
+<h2>Related reading</h2>
+<ul><li><a href="https://readtheledger.github.io/story/led-20260817-savers/">What 4.3% expected inflation means for your cash</a> — The Ledger's August 17 analysis of inflation expectations and cash purchasing power.</li><li><a href="https://readtheledger.github.io/story/led-tfsa-withdrawal-recontribution/">Can I put money back into my TFSA in the same year I withdraw it?</a> — a practical guide to TFSA withdrawal and recontribution timing.</li></ul>
+<p>This article provides general information, not personal financial advice.</p>`,
+    sources: [
+      { t: "Consumer Price Index: Frequently asked questions", u: "https://www.statcan.gc.ca/en/subjects-start/prices_and_price_indexes/consumer_price_indexes/faq", p: "Statistics Canada" },
+      { t: "The difference between the price level and inflation", u: "https://www.bankofcanada.ca/2025/10/difference-between-price-level-and-inflation/", p: "Bank of Canada" }
+    ]
+  },
 
   {
     id: "led-20260817-record",
