@@ -13,6 +13,7 @@ from qa_worker_helpers import wait_for_active_controller
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE = os.path.join(ROOT, "_site")
 OLD  = os.path.join(ROOT, "_old")
+PUBLICATION_CONTENT = os.environ.get("LEDGER_QA_CONTENT", os.path.join(ROOT, "content.js"))
 PORT = 8933
 PREVIOUS_RELEASE = "e4aaf95"   # the last main with the v3 service worker
 
@@ -62,7 +63,7 @@ def serve():
 
 # ------------------------------------------------------------------ the build
 def build():
-    r = subprocess.run(["node", os.path.join(ROOT, "build.mjs"), SITE], capture_output=True, text=True)
+    r = subprocess.run(["node", os.path.join(ROOT, "build.mjs"), SITE, "--content", PUBLICATION_CONTENT], capture_output=True, text=True)
     if r.returncode != 0:
         print(r.stdout); print(r.stderr); sys.exit("build failed")
     print(r.stdout.strip())
@@ -84,9 +85,9 @@ def artifact_check(results):
     results.append(("PASS" if code == 1 and "sw.js" in out else "FAIL", "workflow artifact check rejects an unstamped worker", f"exit={code}"))
     shutil.rmtree(bad, ignore_errors=True)
 
-def assisted_piece_check(results):
-    """A piece marked produced:"assisted" must carry the line that says so, on the
-    static page and nowhere else; an unknown value must stop the build."""
+def production_piece_check(results):
+    """Supported production values carry their exact static attribution; an
+    unknown value or private null date must stop the production build."""
     work = tempfile.mkdtemp(prefix="ledger-produced-")
     def content(produced):
         return ('window.LEDGER_CONTENT = {updated:"2026-09-09", articles:[{id:"led-test-assisted", kind:"news", section:"Markets", '
@@ -95,11 +96,11 @@ def assisted_piece_check(results):
                 'html:`<p>First paragraph of the test piece.</p><p>Second paragraph.</p>`, '
                 'sources:[{t:"A source", u:"https://example.com/s", p:"Example"}]}]};')
     def build_with(produced):
-        cf = os.path.join(work, "content.js"); open(cf, "w").write(content(produced))
+        cf = os.path.join(work, "content.js"); open(cf, "w", encoding="utf-8").write(content(produced))
         out = os.path.join(work, "site-" + str(produced))
         r = subprocess.run(["node", os.path.join(ROOT, "build.mjs"), out, "--content", cf], capture_output=True, text=True)
         page = os.path.join(out, "story", "led-test-assisted", "index.html")
-        html = open(page).read() if os.path.exists(page) else ""
+        html = open(page, encoding="utf-8").read() if os.path.exists(page) else ""
         # the static page's own attribution line, not the app script (which carries both wordings)
         m = re.search(r'<div id="static">[\s\S]*?<p class="attrline">([\s\S]*?)</p>', html)
         return r.returncode, r.stdout + r.stderr, (m.group(1) if m else "")
@@ -109,11 +110,20 @@ def assisted_piece_check(results):
     code, log, line = build_with("reported")
     results.append(("PASS" if code == 0 and line.startswith("Reported and written by <strong>The Ledger</strong>.") else "FAIL",
                     "an explicitly reported piece carries the human-writing attribution", f"exit={code} line={line[:50]!r}"))
+    code, log, line = build_with("ai-source-reviewed")
+    results.append(("PASS" if code == 0 and line.startswith("Drafted with AI assistance from the credited sources and source-checked by AI before publication. No human factual review is claimed.")
+                    else "FAIL", "an AI-source-reviewed piece carries the non-human-review attribution", f"exit={code} line={line[:50]!r}"))
     code, log, line = build_with(None)
     results.append(("PASS" if code == 1 and "produced must be explicitly set" in log else "FAIL",
                     "an omitted produced value stops the build", f"exit={code}"))
     code, log, html = build_with("automated")
     results.append(("PASS" if code == 1 and "produced must be explicitly set" in log else "FAIL", "an unknown produced value stops the build", f"exit={code}"))
+    cf = os.path.join(work, "content-null-date.js")
+    open(cf, "w", encoding="utf-8").write(content("ai-source-reviewed").replace('date:"2026-09-09T06:00:00Z"', 'date:null'))
+    out = os.path.join(work, "site-null-date")
+    r = subprocess.run(["node", os.path.join(ROOT, "build.mjs"), out, "--content", cf], capture_output=True, text=True)
+    results.append(("PASS" if r.returncode == 1 and "date must be ISO 8601" in r.stderr else "FAIL",
+                    "a private null publication date stops the build", f"exit={r.returncode}"))
     shutil.rmtree(work, ignore_errors=True)
 
 def previous_release():
@@ -147,7 +157,7 @@ def edition():
     js = ('const vm=require("vm"),fs=require("fs");const c={window:{}};'
           'vm.runInNewContext(fs.readFileSync(process.argv[1],"utf8"),c);'
           'console.log(JSON.stringify(c.window.LEDGER_CONTENT))')
-    return json.loads(subprocess.run(["node", "-e", js, os.path.join(ROOT, "content.js")], capture_output=True, text=True).stdout)
+    return json.loads(subprocess.run(["node", "-e", js, PUBLICATION_CONTENT], capture_output=True, text=True).stdout)
 
 def slug(s): return re.sub(r"^-|-$", "", re.sub(r"[^a-z0-9]+", "-", s.lower().replace("&", "and")))
 PAGE_SECTIONS = ["Markets","Companies","Economics","Central Banks","Opinion","Tech & Finance","Personal Finance"]
@@ -164,7 +174,7 @@ async def main():
     def ok(name, cond, extra=""):
         results.append((("PASS" if cond else "FAIL"), name, str(extra)))
     artifact_check(results)
-    assisted_piece_check(results)
+    production_piece_check(results)
     routes = re.search(r'^const ROUTES = (\[.*\]);$', open(os.path.join(SITE, "sw.js")).read(), re.M)
     routes = json.loads(routes.group(1)) if routes else []
     ok("service worker carries exactly this edition's addresses",
@@ -209,12 +219,25 @@ async def main():
 
         # The original archive has no retained factual-review records; do not
         # infer human writing from the original omitted production metadata.
+        legacy_ids = {"led-20260817-record", "led-20260817-fed", "led-20260817-consumer", "led-20260817-river",
+                      "led-20260817-aitrade", "led-20260817-badnews", "led-20260817-savers", "led-20260817-weekly"}
+        legacy = [a for a in arts if a["id"] in legacy_ids]
         lines = []
-        for a in arts:
+        for a in legacy:
             await page.goto(base + f"/story/{a['id']}/", wait_until="load")
             lines.append((await page.locator("#static .attrline").inner_text()).strip())
         ok("every original archive piece carries the missing-record attribution",
-           all(l.startswith("From The Ledger archive. A factual review record is not available for this article.") for l in lines) and len(lines) == len(arts), lines[0][:60])
+           all(l.startswith("From The Ledger archive. A factual review record is not available for this article.") for l in lines)
+           and {a["id"] for a in legacy} == legacy_ids, lines[0][:60])
+
+        new_ids = {"led-tfsa-withdrawal-recontribution", "led-lower-inflation-grocery-bill"}
+        new_lines = []
+        for a in [item for item in arts if item["id"] in new_ids]:
+            await page.goto(base + f"/story/{a['id']}/", wait_until="load")
+            new_lines.append((await page.locator("#static .attrline").inner_text()).strip())
+        ok("both real new pieces carry the AI-source-reviewed attribution",
+           len(new_lines) == 2 and all(l.startswith("Drafted with AI assistance from the credited sources and source-checked by AI before publication. No human factual review is claimed.") for l in new_lines),
+           new_lines[0][:60] if new_lines else "missing")
 
         # every asset the page asks for is rooted at /, so it resolves from /story/<id>/
         rel = await page.evaluate("""() => [...document.querySelectorAll('script[src],link[href]')]
