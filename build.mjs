@@ -29,7 +29,7 @@ const opt  = (name, dflt) => { const i = argv.indexOf("--" + name); return i >= 
 const OUT  = path.resolve(argv.find(a => !a.startsWith("--") && !argv[argv.indexOf(a) - 1]?.startsWith("--")) || path.join(ROOT, "_site"));
 const CONTENT_FILE = path.resolve(opt("content", path.join(ROOT, "content.js")));   // the tests build from a content file of their own
 const ASSETS_DIR   = path.resolve(opt("assets", path.join(ROOT, "assets", "editorial")));   // and, for the worker's cache test, from pictures of their own
-const SITE = "https://readtheledger.github.io";
+const SITE = "https://imperiumpost.com";
 const SITE_TITLE = "The Ledger — Finance, read properly";
 const SITE_DESC  = "The Ledger's own financial reporting and analysis — markets, central banks, the economy, tech and personal finance — every source credited and linked.";
 const ABOUT_PATH = "/about/";

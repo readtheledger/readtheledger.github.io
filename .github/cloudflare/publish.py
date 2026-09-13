@@ -143,7 +143,7 @@ def validate_static_files(files):
     sitemap = ET.fromstring(files['sitemap.xml'])
     locations = [n.text for n in sitemap.iter() if n.tag == '{http://www.sitemaps.org/schemas/sitemap/0.9}loc']
     require(bool(locations), 'Empty sitemap')
-    origin = 'https://readtheledger.github.io/'
+    origin = 'https://imperiumpost.com/'
     for location in locations:
         require(location and location.startswith(origin) and location.endswith('/'), 'Unexpected sitemap address')
         require(location[len(origin):] + 'index.html' in files, 'Sitemap page missing from artifact')
@@ -152,8 +152,8 @@ def validate_static_files(files):
     stamp(feed['fetched'])
     for name, body in files.items():
         if name.startswith('story/') and name.endswith('/index.html'):
-            expected = ('<link rel="canonical" href="https://readtheledger.github.io/' + name[:-10] + '">').encode()
-            require(expected in body, 'Story canonical changed before migration')
+            expected = ('<link rel="canonical" href="https://imperiumpost.com/' + name[:-10] + '">').encode()
+            require(expected in body, 'Unexpected story canonical')
     # The shared artifact enables one collector only on the canonical origin.
     # Pin the adapter to the reviewed checkout so standby exclusions cannot be
     # replaced by an unguarded beacon inside an otherwise valid artifact.

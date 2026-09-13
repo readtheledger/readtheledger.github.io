@@ -17,7 +17,7 @@ from playwright.async_api import async_playwright
 ROOT = os.path.dirname(os.path.abspath(__file__))
 PORT = 8941
 NOW = "2026-09-12T12:00:00Z"
-SITE_URL = "https://readtheledger.github.io"
+SITE_URL = "https://imperiumpost.com"
 PAGE_SECTIONS = ["Markets","Companies","Economics","Central Banks","Opinion","Tech & Finance","Personal Finance"]
 def slug(s): return re.sub(r"^-|-$", "", re.sub(r"[^a-z0-9]+", "-", s.lower().replace("&", "and")))
 
@@ -169,14 +169,14 @@ async def main():
            and [i["item"] for i in L[1]["itemListElement"]] == [f"{SITE_URL}/", f"{SITE_URL}/markets/", f"{SITE_URL}/story/seo-fresh/"])
         ok("story page: no author is invented (the organisation is the author, no person named)", "Person" not in json.dumps(L))
         ok("story page without an image of its own carries no NewsArticle image (the logo is not one); sharing preview is the icon",
-           "image" not in L[0] and 'property="og:image" content="https://readtheledger.github.io/icon-512.png"' in html and 'twitter:card" content="summary"' in html)
+           "image" not in L[0] and 'property="og:image" content="https://imperiumpost.com/icon-512.png"' in html and 'twitter:card" content="summary"' in html)
         html2 = rd("story", "seo-recent", "index.html"); L2 = lds(html2)
         await page.goto(base + "/story/seo-recent/")
         ok("story page with an image of its own: NewsArticle.image is that image, with its size; sharing preview uses it; the page shows it",
            L2[0]["image"][0]["url"] == "https://example.com/photos/recent-1600x900.jpg" and L2[0]["image"][0]["width"] == 1600
            and 'property="og:image" content="https://example.com/photos/recent-1600x900.jpg"' in html2 and 'twitter:card" content="summary_large_image"' in html2
            and await page.evaluate("(()=>{const f=document.querySelector('#static figure.fig img');return !!f && f.alt.startsWith('A chart') && f.getAttribute('width')==='1600'})()"))
-        bad = os.path.join(work, "bad.js"); open(bad, "w").write(content_js().replace("https://example.com/photos/recent-1600x900.jpg", "https://readtheledger.github.io/icon-512.png"))
+        bad = os.path.join(work, "bad.js"); open(bad, "w").write(content_js().replace("https://example.com/photos/recent-1600x900.jpg", "https://imperiumpost.com/icon-512.png"))
         rb = subprocess.run(["node", os.path.join(ROOT, "build.mjs"), site + "-bad", "--content", bad, "--now", NOW], capture_output=True, text=True)
         ok("the build refuses the site icon as a piece's image", rb.returncode == 1 and "the site icon is not a piece's image" in rb.stdout + rb.stderr)
 

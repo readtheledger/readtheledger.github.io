@@ -19,7 +19,7 @@ from qa_worker_helpers import update_and_wait_for_controller, wait_for_active_co
 ROOT = os.path.dirname(os.path.abspath(__file__))
 PORT = 8943          # the publication as it is
 PORT2 = 8944         # the fixture with one picture removed
-SITE_URL = "https://readtheledger.github.io"
+SITE_URL = "https://imperiumpost.com"
 STATE = {"root": None, "root2": None, "hits": collections.Counter()}
 TYPES = {".html":"text/html; charset=utf-8", ".js":"text/javascript; charset=utf-8", ".json":"application/json", ".webp":"image/webp", ".jpg":"image/jpeg",
          ".webmanifest":"application/manifest+json", ".png":"image/png", ".xml":"application/xml; charset=utf-8", ".txt":"text/plain; charset=utf-8"}

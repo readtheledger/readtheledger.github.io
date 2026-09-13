@@ -15,7 +15,7 @@ import urllib.parse
 from playwright.async_api import async_playwright
 
 ROOT = pathlib.Path(__file__).resolve().parent
-PUBLIC = "https://readtheledger.github.io"
+PUBLIC = "https://imperiumpost.com"
 NOTICE = "From The Ledger archive. A factual review record is not available for this article."
 HUMAN = "Reported and written by The Ledger."
 ASSISTED = "Drafted with AI assistance from the credited sources and reviewed by The Ledger's editor before publication."

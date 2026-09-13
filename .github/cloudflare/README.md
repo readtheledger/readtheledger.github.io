@@ -1,6 +1,6 @@
 # Recurring static standby publishing
 
-The public address remains **https://readtheledger.github.io/**. The owner is still choosing a future name; naming is not a prerequisite for launch/setup work. This change updates the existing `ledger-static-preview` standby, retaining `X-Robots-Tag: noindex, nofollow`. It does not migrate the public site.
+The production address is **https://imperiumpost.com/**, while the masthead remains **The Ledger**. This change updates the existing `ledger-static-preview` standby, retaining `X-Robots-Tag: noindex, nofollow`. It does not migrate the public site.
 
 ## Delivery contract
 

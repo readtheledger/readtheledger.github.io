@@ -27,7 +27,7 @@ echo "story pages: $stories"
 [ "$stories" -ge 1 ] || say "MISSING: no story pages were generated"
 for p in $(find "$dir/story" -name index.html 2>/dev/null); do
   id=$(basename "$(dirname "$p")")
-  grep -q "<link rel=\"canonical\" href=\"https://readtheledger.github.io/story/$id/\">" "$p" \
+  grep -q "<link rel=\"canonical\" href=\"https://imperiumpost.com/story/$id/\">" "$p" \
     || say "MISSING: canonical address in story/$id/index.html"
 done
 
@@ -48,7 +48,7 @@ else
 fi
 
 # every page in the sitemap exists in the output
-for loc in $(grep -o '<loc>[^<]*</loc>' "$dir/sitemap.xml" 2>/dev/null | sed 's|<loc>https://readtheledger.github.io||; s|</loc>||'); do
+for loc in $(grep -o '<loc>[^<]*</loc>' "$dir/sitemap.xml" 2>/dev/null | sed 's|<loc>https://imperiumpost.com||; s|</loc>||'); do
   [ -f "$dir${loc}index.html" ] || say "MISSING: sitemap names $loc but $dir${loc}index.html does not exist"
 done
 

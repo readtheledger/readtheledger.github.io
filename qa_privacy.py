@@ -54,7 +54,7 @@ async def main():
             ctx,page,errors,external=await context(js=False)
             response=await page.goto(base+'/privacy/')
             ok('privacy readable without JavaScript or advertising consent',response.status==200 and await page.locator('#static h1').inner_text()=='Privacy at The Ledger')
-            ok('privacy canonical and title are correct',await page.title()=='Privacy — The Ledger' and await page.locator('link[rel=canonical]').get_attribute('href')=='https://readtheledger.github.io/privacy/')
+            ok('privacy canonical and title are correct',await page.title()=='Privacy — The Ledger' and await page.locator('link[rel=canonical]').get_attribute('href')=='https://imperiumpost.com/privacy/')
             static_text=await page.locator('#static').inner_text()
             ok('static privacy retains actual analytics/speech/conditional-ad disclosures',all(t in static_text for t in ['OpenAI','Cloudflare Web Analytics','Advertising is currently disabled','under review','Posts there are public']))
             ok('no-JS advertising control is hidden',not await page.locator('#siteFooter [data-ad-settings]').is_visible())
