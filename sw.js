@@ -30,6 +30,7 @@ const FILES = [
   "/context.js",
   "/about.js",
   "/privacy.js",
+  "/support.js",
   "/consent.js",
   "/analytics.js",
   "/media.js",
