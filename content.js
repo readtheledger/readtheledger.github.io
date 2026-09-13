@@ -148,21 +148,26 @@ window.LEDGER_CONTENT = {
 
   {
     id: "led-20260817-river",
-    produced: "legacy-unrecorded",
+    produced: "ai-source-reviewed",
     image:{u:"/assets/editorial/led-20260817-river/hero-1200.jpg", alt:"Coins pour from a watering can beside a sapling with circuit-like leaves growing from a microchip planter.", w:1200, h:800, widths:[480,768,1200], ai:true, credit:"The Ledger", caption:"Capital flows toward a young AI venture, shown as a conceptual illustration."},
     kind: "news", section: "Tech & Finance",
     date: "2026-08-17T07:30:00Z",
-    title: "A two-month-old startup just raised $1.1bn — inside the week AI funding lost its speed limit",
-    standfirst: "River AI, founded weeks ago by an xAI co-founder, closed a billion-dollar first round. Lovable tripled its valuation to $13.3bn in eight months. The venture market is now pricing AI teams the way public markets price proven companies.",
-    html: `<p>The week's venture headlines read like a decimal-point error. River AI, founded this summer by xAI co-founder Igor Babuschkin, raised $1.1 billion in a combined seed and Series A led by General Catalyst and AMP PBC, with Nvidia, AMD Ventures, Y Combinator and Temasek participating — TechCrunch reports the company is two months old. Sweden's Lovable confirmed a $400 million Series C at a $13.3 billion valuation, double its December mark of $6.6 billion, on the back of reaching $500 million in annualised revenue in June. Dictation startup Wispr raised $280 million at $2 billion on Monday, and code-testing firm Blacksmith's $45 million round valued it at $550 million — up almost tenfold in under a year.</p>
-    <p>Three things distinguish this from the 2021 vintage of venture excess. First, some of these companies have real revenue growing at rates venture capital has rarely seen — Lovable's $500 million run rate is months old. Second, the buyers are different: strategic capital from Nvidia and AMD sits inside rounds like River's, which makes funding partly a supply-chain decision by chipmakers seeding their own future demand. Third, the size of a "seed" round now reflects the entry price of frontier AI — talent and compute are so expensive that a credible attempt costs a billion dollars before product exists.</p>
-    <p>That last point is the risk. TechCrunch's own reporting flags River's round as "perhaps another indication of the overheated AI atmosphere" — when the ante is $1 billion, the venture model's tolerance for failure, its whole design principle, gets expensive. And when a company is priced at twenty-plus times a months-old run rate, the valuation assumes not just success but uncontested success.</p>
-    <p>The Ledger's read: watch what the round <em>buys</em>, not what it says. Rounds that purchase compute capacity are converging with infrastructure finance and should be judged like it — on utilisation and pricing power, the same tests facing the hyperscalers, not on the software multiples their decks borrow.</p>`,
+    updated: "2026-09-13T14:50:56Z",
+    title: "River’s $1.1bn financing and Lovable’s $13.3bn valuation: what August’s AI funding numbers show",
+    standfirst: "River AI said it raised $1.1 billion across Series Seed and Series A. Lovable said it raised $400 million at a $13.3 billion valuation—approximately twice its December 2025 valuation. Funding raised and company valuation are different measures.",
+    html: `<p><strong>Correction and revision note — September 13, 2026:</strong> The original standfirst said Lovable’s valuation had tripled. Lovable’s announcements show that it rose from $6.6 billion on December 18, 2025, to $13.3 billion on August 12, 2026—about 2.02 times, or approximately double. Wispr’s credited report postdates this article’s original timestamp; its announcement appears here as part of this revision. This revision uses sources now publicly available and does not represent a human factual review of the original article.</p>
+<p>Three AI companies announced large financings in August 2026. The numbers landed close together, but they describe different transactions and should not be treated as interchangeable measures of company performance.</p>
+<p>River AI announced on August 11 that it had raised $1.1 billion across what it called its Series Seed and Series A. The company said General Catalyst and AMP PBC led the financing, with strategic investment from Nvidia and AMD Ventures and participation from Y Combinator and Temasek. River had introduced itself publicly on June 10 and shared an API for training and adapting open models. Those public records do not establish the company’s founding date.</p>
+<p>Lovable announced a $400 million Series C on August 12 at a $13.3 billion valuation. Its previous announcement, dated December 18, 2025, said it had raised a $330 million Series B at a $6.6 billion valuation. Dividing 13.3 by 6.6 gives about 2.02, so the later valuation was approximately double the earlier one. The $400 million is the amount Lovable said it raised in the Series C; $13.3 billion is the valuation attached to that round.</p>
+<p>Wispr’s own August 17 announcement said the voice-software company had raised a $280 million Series B at a $2 billion valuation, led by Menlo Ventures. Wispr said the round brought its total capital raised to $361 million.</p>
+<p>The distinction between these figures matters. An amount raised is the capital committed in a financing; a valuation is the value assigned to the company in that transaction. Neither number alone establishes revenue, profitability, how the money will be spent or what investors will earn. The supported conclusion is narrower: River, Lovable and Wispr each announced substantial financing in a six-day span, while the disclosed amounts and valuations measured different parts of those deals.</p>`,
     sources: [
-      {t:"General Catalyst leads $1.1B round into 2-month-old River AI", u:"https://techcrunch.com/2026/08/11/general-catalyst-leads-1-1b-round-into-2-month-old-river-ai/", p:"TechCrunch"},
-      {t:"Lovable confirms new $13.3B valuation, raises another $400M", u:"https://techcrunch.com/2026/08/12/lovable-confirms-new-13-3b-valuation-raises-another-400m/", p:"TechCrunch"},
-      {t:"Wispr raises $280M at $2B valuation as it looks beyond dictation", u:"https://techcrunch.com/2026/08/17/wispr-raises-280m-at-2b-valuation-as-it-looks-beyond-dictation/", p:"TechCrunch"},
-      {t:"Blacksmith's valuation jumps 10x to $550M as AI coding fuels software validation", u:"https://techcrunch.com/2026/08/12/blacksmiths-valuation-jumps-10x-to-550m-as-ai-coding-fuels-software-validation/", p:"TechCrunch"}
+      {t:"River AI, funding announcement, August 11, 2026", u:"https://river.ai/series-seed-series-a-funding", p:"River AI"},
+      {t:"River AI, public introduction, June 10, 2026", u:"https://river.ai/introducing-river-ai", p:"River AI"},
+      {t:"Lovable, Series B announcement, December 18, 2025", u:"https://lovable.dev/blog/series-b", p:"Lovable"},
+      {t:"Lovable, Series C announcement, August 12, 2026", u:"https://lovable.dev/blog/series-c", p:"Lovable"},
+      {t:"Wispr Flow, Series B announcement, August 17, 2026", u:"https://wisprflow.ai/post/series-b", p:"Wispr Flow"},
+      {t:"TechCrunch, Wispr funding report, August 17, 2026", u:"https://techcrunch.com/2026/08/17/wispr-raises-280m-at-2b-valuation-as-it-looks-beyond-dictation/", p:"TechCrunch"}
     ]
   },
 

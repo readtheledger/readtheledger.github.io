@@ -20,11 +20,12 @@ NOTICE = "From The Ledger archive. A factual review record is not available for 
 HUMAN = "Reported and written by The Ledger."
 ASSISTED = "Drafted with AI assistance from the credited sources and reviewed by The Ledger's editor before publication."
 AI_SOURCE_REVIEWED = "Drafted with AI assistance from the credited sources and source-checked by AI before publication. No human factual review is claimed."
-SUFFIXES = ["record", "fed", "consumer", "river", "aitrade", "badnews", "savers", "weekly"]
+SUFFIXES = ["record", "fed", "consumer", "aitrade", "badnews", "savers", "weekly"]
 EXPECTED = {"led-20260817-" + suffix for suffix in SUFFIXES}
 EXPECTED_AI_SOURCE_REVIEWED = {
     "led-tfsa-withdrawal-recontribution",
     "led-lower-inflation-grocery-bill",
+    "led-20260817-river",
 }
 PUBLICATION_CONTENT = pathlib.Path(os.environ.get("LEDGER_QA_CONTENT", ROOT / "content.js"))
 checks = []
@@ -48,9 +49,9 @@ async def main():
         str(PUBLICATION_CONTENT)], text=True, encoding="utf-8"))
     legacy = [a for a in original["articles"] if a["id"] in EXPECTED]
     real_ai_source_reviewed = [a for a in original["articles"] if a["id"] in EXPECTED_AI_SOURCE_REVIEWED]
-    ok("all eight audited originals have an explicit legacy category",
+    ok("the seven unrevised originals retain the explicit legacy category",
        {a["id"] for a in legacy} == EXPECTED and all(a.get("produced") == "legacy-unrecorded" for a in legacy))
-    ok("the two real new articles have the explicit AI-source-reviewed category",
+    ok("the reviewed articles have the explicit AI-source-reviewed category",
        {a["id"] for a in real_ai_source_reviewed} == EXPECTED_AI_SOURCE_REVIEWED and
        all(a.get("produced") == "ai-source-reviewed" for a in real_ai_source_reviewed))
 
