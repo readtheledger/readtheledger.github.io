@@ -58,6 +58,7 @@ const contentSrc = fs.readFileSync(CONTENT_FILE, "utf8");
 const swSrc = read("sw.js");
 const aboutSrc = read("about.js");
 const privacySrc = read("privacy.js");
+const supportSrc = read("support.js");
 const consentSrc = read("consent.js");
 const analyticsSrc = read("analytics.js");
 const mediaSrc = read("media.js");
@@ -88,11 +89,14 @@ vm.runInNewContext(aboutSrc, ctx);
 const about = ctx.window.LEDGER_ABOUT;
 vm.runInNewContext(privacySrc, ctx);
 const privacy = ctx.window.LEDGER_PRIVACY;
+vm.runInNewContext(supportSrc, ctx);
+const infoPages = ctx.window.LEDGER_INFO_PAGES;
 vm.runInNewContext(mediaSrc, ctx);
 const M = ctx.window.LEDGER_MEDIA;
 if (!M || !M.figureHTML) fail("media.js carries no LEDGER_MEDIA");
 if (!about || !about.title || !about.standfirst || !about.html) fail("about.js carries no About page (title, standfirst, html)");
 if (!privacy || !privacy.title || !privacy.standfirst || !privacy.html) fail("privacy.js carries no Privacy page (title, standfirst, html)");
+if (!Array.isArray(infoPages) || infoPages.length !== 2) fail("support.js must carry both informational pages");
 
 /* ---------------------------------------------------------------- checking */
 /* The article bodies are The Ledger's own, but a static page has no runtime
@@ -127,6 +131,10 @@ for (const a of articles) {
 if (articles.filter(a => a.weekly).length > 1) fail("more than one article is marked weekly");
 for (const re of RISKY) if (re.test(about.html)) fail("about.js: body contains markup the static page will not carry (" + re + ")");
 for (const re of RISKY) if (re.test(privacy.html)) fail("privacy.js: body contains markup the static page will not carry (" + re + ")");
+for (const info of infoPages) {
+  if (!info.id || !info.title || !info.standfirst || !info.section || !/^\/(?:[a-z0-9-]+\/)+$/.test(info.infoPath || "") || !info.html) fail("support.js: incomplete informational page");
+  for (const re of RISKY) if (re.test(info.html)) fail("support.js: body contains unsafe markup");
+}
 
 /* ----------------------------------------------------------------- helpers */
 const words = html => html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().split(" ").filter(Boolean).length;
@@ -345,6 +353,18 @@ write(PRIVACY_PATH.slice(1) + "index.html", page({
   ]
 }, infoHTML(privacy, "Privacy")));
 
+// Free resources and sponsorship information are WebPages, not news articles.
+for (const info of infoPages) {
+  const canonical = SITE + info.infoPath;
+  write(info.infoPath.slice(1) + "index.html", page({
+    title: info.title + " — The Ledger", description: descOf(info.standfirst), canonical, ogType: "website",
+    ld: [
+      { "@context":"https://schema.org", "@type":"WebPage", "name":info.title, "url":canonical, "description":descOf(info.standfirst), "isPartOf":{ "@type":"WebSite", "name":"The Ledger", "url":SITE + "/" } },
+      crumbs([HOME, { name:info.title, url:canonical }])
+    ]
+  }, infoHTML(info, info.section)));
+}
+
 // sections
 const sectionUrls = [];
 for (const s of PAGE_SECTIONS) {
@@ -406,7 +426,7 @@ for (const a of articles) {
 const urls = [{ loc: SITE + "/", lastmod: newest }]
   .concat(sectionUrls)
   .concat(articles.map(a => ({ loc: SITE + storyPath(a), lastmod: a.updated || a.date })))
-  .concat([{ loc: SITE + ABOUT_PATH }, { loc: SITE + PRIVACY_PATH }]);
+  .concat([{ loc: SITE + ABOUT_PATH }, { loc: SITE + PRIVACY_PATH }], infoPages.map(info => ({ loc: SITE + info.infoPath })));
 write("sitemap.xml",
   '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
   urls.map(u => `  <url><loc>${esc(u.loc)}</loc>${u.lastmod ? `<lastmod>${esc(u.lastmod)}</lastmod>` : ""}</url>`).join("\n") +
@@ -485,14 +505,14 @@ if (fs.existsSync(ASSETS_DIR)) {
     if (fs.statSync(src).isFile()) assetHash.update(f.replace(/\\/g, "/")).update(fs.readFileSync(src));
   }
 }
-const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(read("topics.js")).update(read("context.js")).update(aboutSrc).update(privacySrc).update(consentSrc).update(analyticsSrc).update(mediaSrc).update(productionSrc).update(swSrc).update(assetHash.digest()).digest("hex").slice(0, 8);
-const routes = ["/", "/index.html", ABOUT_PATH, PRIVACY_PATH].concat(PAGE_SECTIONS.map(sectionPath), articles.map(storyPath));
+const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(read("topics.js")).update(read("context.js")).update(aboutSrc).update(privacySrc).update(supportSrc).update(consentSrc).update(analyticsSrc).update(mediaSrc).update(productionSrc).update(swSrc).update(assetHash.digest()).digest("hex").slice(0, 8);
+const routes = ["/", "/index.html", ABOUT_PATH, PRIVACY_PATH].concat(infoPages.map(info => info.infoPath), PAGE_SECTIONS.map(sectionPath), articles.map(storyPath));
 const sw = swSrc
   .replace('const BUILD = "dev";', 'const BUILD = "' + stamp + '";')
   .replace(/^const ROUTES = \[[^\n]*\];$/m, "const ROUTES = " + JSON.stringify(routes) + ";");
 if (!sw.includes('const BUILD = "' + stamp + '"') || !sw.includes('"/story/' + articles[0].id + '/"')) fail("sw.js was not stamped");
 write("sw.js", sw);
-for (const f of ["content.js", "sources.js", "topics.js", "context.js", "about.js", "privacy.js", "consent.js", "analytics.js", "media.js", "production.js", "manifest.webmanifest", "ads.txt", "57f030f659d1e0f7e96c9aae12333a48.txt", "icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]) {
+for (const f of ["content.js", "sources.js", "topics.js", "context.js", "about.js", "privacy.js", "support.js", "consent.js", "analytics.js", "media.js", "production.js", "manifest.webmanifest", "ads.txt", "57f030f659d1e0f7e96c9aae12333a48.txt", "icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]) {
   // the publication the pages were written from is the one the app loads, so a
   // build from another content file (the tests do this) is consistent with itself
   fs.copyFileSync(f === "content.js" ? CONTENT_FILE : path.join(ROOT, f), path.join(OUT, f));

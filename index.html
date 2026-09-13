@@ -388,6 +388,30 @@ ol.rail .hl{font-size:1rem;line-height:1.25}
 .privacy-controls [hidden]{display:none}
 .site-footer{max-width:var(--maxw);margin:20px auto;padding:12px 16px;border-top:1px solid var(--rule)}
 .site-footer nav{display:flex;flex-wrap:wrap;gap:8px}
+.rbody .support-cta{color:var(--paper);text-decoration:none;white-space:normal}
+.rbody .support-note,.print-instructions{font-family:var(--ui);font-size:.88rem;line-height:1.55;overflow-wrap:anywhere}
+.rbody .worksheet{padding-left:1.5em}
+.worksheet li{margin:0 0 1.5em;padding-left:.25em;break-inside:avoid}
+.rbody .worksheet h2{font-size:1.15em;margin:0 0 .35em}
+.rbody .worksheet p{font-size:.9em;margin:0}
+.worksheet-space{min-height:80px;border-bottom:1px solid var(--rule-2)}
+@media print{
+  @page{margin:14mm}
+  body:has(.worksheet){background:#fff!important;color:#000!important;height:auto!important;overflow:visible!important;padding:0}
+  body:has(#reader.on .worksheet)>:not(#reader),body:has(#static .worksheet)>:not(main){display:none!important}
+  body:has(#static .worksheet) main>:not(#static){display:none!important}
+  body:has(.worksheet) #reader{position:static!important;height:auto!important;overflow:visible!important;background:#fff!important}
+  body:has(.worksheet) .rbar,body:has(.worksheet) .rmeta,body:has(.worksheet) .kicker,body:has(.worksheet) .attrline,body:has(.worksheet) .static-nav,body:has(.worksheet) .static-home,body:has(.worksheet) .site-footer,.no-print{display:none!important}
+  body:has(.worksheet) .rwrap{max-width:none;padding:0!important;margin:0}
+  body:has(.worksheet) .rwrap h1{font-size:20pt;line-height:1.1;margin:0 0 4mm}
+  body:has(.worksheet) .rstand{font-size:10pt;line-height:1.3;margin:0 0 5mm}
+  body:has(.worksheet) .rbody{font-size:10pt;line-height:1.3}
+  .rbody .worksheet{margin:0;padding-left:1.5em}
+  .worksheet li{margin:0 0 4mm}
+  .rbody .worksheet h2{font-size:11pt;margin:0 0 1mm}
+  .worksheet-space{min-height:14mm;border-color:#777}
+  .worksheet-purpose{font-size:9pt;margin:0!important}
+}
 .privacy-controls [data-consent-status]{font-size:.85rem}
 .menu-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
 .menu-actions .btn{width:100%}
@@ -478,7 +502,7 @@ html.js #static{display:none}
   </div>
 </main>
 <footer class="site-footer privacy-controls" id="siteFooter" data-privacy-controls>
-  <nav aria-label="Privacy"><a href="/privacy/" data-open-privacy>Privacy</a><button type="button" data-ad-settings hidden disabled>Privacy and cookie settings</button></nav>
+  <nav aria-label="Publication and privacy"><a href="/work-with-us/" data-open-info>Work with us</a><a href="/resources/money-headline-checklist/" data-open-info>Resources</a><a href="/privacy/" data-open-privacy>Privacy</a><button type="button" data-ad-settings hidden disabled>Privacy and cookie settings</button></nav>
   <p data-consent-status role="status" tabindex="-1" hidden></p>
 </footer>
 
@@ -640,6 +664,7 @@ html.js #static{display:none}
 
 <script src="/about.js"></script>
 <script src="/privacy.js"></script>
+<script src="/support.js"></script>
 <script src="/consent.js"></script>
 <script src="/analytics.js"></script>
 <script src="/media.js"></script>
@@ -745,6 +770,8 @@ const S = {
    piece is kept, not just its id. */
 function itemById(id){
   if(id === PRIVACY.id) return PRIVACY;
+  const info = INFO_PAGES.find(page=>page.id===id);
+  if(info) return info;
   return S.items.find(i=>i.id===id) || S.savedItems[id] || null;
 }
 function persistSaved(){
@@ -806,6 +833,13 @@ const PRIVACY = Object.assign({
 PRIVACY.text = htmlToText(PRIVACY.html);
 PRIVACY.words = PRIVACY.text.split(/\s+/).filter(Boolean).length;
 PRIVACY.ts = NaN;
+const INFO_PAGES = (window.LEDGER_INFO_PAGES || []).map(info=>{
+  const page = Object.assign({source:"The Ledger", author:"The Ledger", date:"", link:"", demo:true, fullText:true}, info);
+  page.text = htmlToText(page.html);
+  page.words = page.text.split(/\s+/).filter(Boolean).length;
+  page.ts = NaN;
+  return page;
+});
 
 /* ------------------------- 3b. the Ledger's editorial voice -------------------
    Two things here are written by The Ledger itself, in this file, and are the
@@ -1670,10 +1704,15 @@ function openReader(it, opts){
   // shared link all name the story; a feed item keeps the page it was opened from.
   // popstate re-opens a story from history and asks not to push it again.
   if(!opts.nopush) history.pushState({reader:true, id:it.id}, "", storyPath(it) || location.pathname + location.search);
-  document.title = (it.demo ? (it.section || "About") + " — The Ledger" : it.title + " — The Ledger");
+  document.title = (it.demo && !it.infoPath ? (it.section || "About") + " — The Ledger" : it.title + " — The Ledger");
   updateProgress();
   render();
   if(it.demo) bindAnalyticsPreference();
+  if(INFO_PAGES.some(page=>page.id===it.id)){
+    const heading = $("#rwrap h1");
+    heading.setAttribute("tabindex", "-1");
+    heading.focus({preventScroll:true});
+  }
   window.LEDGER_CONSENT?.refresh();
   trackVisiblePage();
 }
@@ -1684,7 +1723,7 @@ function closeReader(){
   document.title = viewTitle();
   // closed without going back through history (Escape with no entry, a test, a
   // direct call): the address must not keep naming a story that is no longer open
-  if(storyIdFromPath(location.pathname) || location.pathname === PRIVACY_PATH) history.replaceState({}, "", viewAddress());
+  if(storyIdFromPath(location.pathname) || location.pathname === PRIVACY_PATH || INFO_PAGES.some(page=>page.infoPath===location.pathname)) history.replaceState({}, "", viewAddress());
   trackVisiblePage();
 }
 
@@ -1707,6 +1746,8 @@ function route(){
     setTimeout(drop, 2500);
   };
   if(path === ABOUT_PATH || path === PRIVACY_PATH){ drop(); history.replaceState({home:true}, "", "/"); openReader(path === PRIVACY_PATH ? PRIVACY : DEMO); return; }
+  const info = INFO_PAGES.find(page=>page.infoPath === path || page.infoPath === path + "/");
+  if(info){ drop(); history.replaceState({home:true}, "", "/"); openReader(info); return; }
   const id = storyIdFromPath(path);
   if(id){
     const it = EDITORIAL.find(a=>a.id===id) || S.savedItems[id] || null;
@@ -2134,6 +2175,13 @@ function boot(){
     const link = ev.target.closest?.("a[data-open-privacy]");
     if(!link || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
     ev.preventDefault(); closeMenu(); openReader(PRIVACY);
+  });
+  document.addEventListener("click", ev=>{
+    const link = ev.target.closest?.("a[data-open-info]");
+    if(!link || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+    const info = INFO_PAGES.find(page=>page.infoPath===link.getAttribute("href"));
+    if(!info) return;
+    ev.preventDefault(); closeMenu(); openReader(info);
   });
   $$("[data-close-menu]").forEach(el=>el.onclick=closeMenu);
   $("#btnSaved").onclick = ()=>{ closeMenu(); showSection("Saved"); window.scrollTo({top:0}); };
