@@ -13,6 +13,39 @@ window.LEDGER_CONTENT = {
   articles: [
 
   {
+    id: "led-ai-data-centre-power-bills-canada-2026",
+    kind: "analysis",
+    section: "Tech & Finance",
+    produced: "ai-source-reviewed",
+    date: "2026-09-13T16:28:02Z",
+    title: "AI giants promise to pay their own power bills. Show Canadians the receipts.",
+    standfirst: "Canada’s new data-centre principles say project-driven electricity costs should not land on households or existing businesses. The real test is who pays for grid upgrades—and who carries the cost if demand falls short.",
+    html: `<p>A new data centre needs more than chips. It needs power—and someone to pay for the grid around it. Ottawa says that someone should not be Canadian households or existing businesses. Amazon, Google, Microsoft and other tech companies have signed on. The promise is worth having. But a signatory list cannot tell you who pays for a specific substation—or who carries the cost if a project uses less electricity than expected.</p>
+<h2>A national promise meets a local power bill</h2>
+<p>On September 3, Ottawa released <a href="https://www.canada.ca/en/innovation-science-economic-development/news/2026/09/government-of-canada-launches-canadas-responsible-data-centre-development-principles.html" target="_blank" rel="noopener noreferrer">five Responsible Data Centre Development Principles</a>. Amazon Web Services, Anthropic, Bell, Google, Meta, Microsoft and OpenAI are among the signatories. One principle says project-driven electricity costs should not shift to households and existing businesses.</p>
+<p>The detailed framework says developers should pay the costs of connecting and serving their projects, including directly attributable generation, transmission, substations and grid upgrades, in proportion to their scale and impact. It also calls for <a href="https://ised-isde.canada.ca/site/ised/en/canadas-responsible-data-centre-development-principles" target="_blank" rel="noopener noreferrer">independently verifiable local-impact information and tracking of material commitments</a>, while allowing confidential commercial, security and privacy information to remain protected.</p>
+<p>The crucial jurisdictional sentence sits in Ottawa’s own release: data-centre decisions are fundamentally local, and the national framework complements provincial, territorial, municipal and Indigenous processes. The principles set an expectation. Local approvals decide how that expectation meets an actual grid and an actual rate structure.</p>
+<h2>Buying electricity is only the first receipt</h2>
+<p>Three questions are easy to blur together. First: who pays for the electricity a facility consumes? Second: who pays for the new wires, substations, generation or storage needed to serve it? Third: what happens to those costs if a project arrives late, runs below forecast or is cancelled? The third is an analytical question for contracts and regulators, not an allegation that a company has already stranded costs.</p>
+<p>Consider a hypothetical substation built only because one large facility is approved. Paying the monthly electricity bill answers the first question. Paying for that substation answers part of the second. A public record explaining who carries the remaining cost if the facility never reaches its forecast demand would answer the third.</p>
+<p>The scale makes these questions worth asking. In its <a href="https://www.ieso.ca/Sector-Participants/Planning-and-Forecasting/Annual-Planning-Outlook/2026-APO-Summary" target="_blank" rel="noopener noreferrer">2026 reference scenario</a>, Ontario’s Independent Electricity System Operator expects data centres—not all of them necessarily AI facilities—to represent 8.6% of provincial electricity demand in 2050, about 60% more than its previous forecast. That is a long-range scenario, not current demand or a measured household bill increase. The IESO also models substantial uncertainty. It says most capacity needs can be met with existing and recently procured resources until the mid-2030s, although energy needs emerge earlier.</p>
+<h2>Where the promise gets tested</h2>
+<p>British Columbia offers a concrete example of the decisions below the national headline. A January 30 provincial release says <a href="https://news.gov.bc.ca/releases/2026ECS0005-000095" target="_blank" rel="noopener noreferrer">prospective AI and data-centre projects must compete for clean-electricity access</a>. B.C. planned allocations of up to 400 megawatts over the first two years, with projects assessed on price and economic, community, data-sovereignty and environmental benefits. Well-advanced projects with specified agreements or deposits continue through the existing interconnection process; traditional industries are outside this competition.</p>
+<p>That selection process does not itself show whether other electricity customers will bear any project costs. It shows where project-specific conditions can be examined. Google says it supports paying for all power it uses and infrastructure needs directly driven by its growth. Meta says its Sturgeon County, Alberta project will fund required generation and grid infrastructure with no local ratepayer impact. Those are attributed company commitments. The next step is evidence that the approval, contract and later performance match the promise.</p>
+<p>There is a fair upside. More domestic compute can support Canadian services, research and businesses; supplier-funded generation or grid additions can strengthen capacity; host communities may gain jobs, procurement and tax revenue. The national principles give communities a common standard for demanding those benefits.</p>
+<p>The public test should be simple: for every major project, show the expected load, the connection and serving costs, who pays each major upgrade, who bears cancellation or underuse risk, and how regulators concluded existing customers are protected. The companies have signed the promise. Now put the cost breakdown where Canadians can inspect it.</p>
+<h2>Related reading</h2>
+<ul><li><a href="https://readtheledger.github.io/story/led-20260817-river/" target="_blank" rel="noopener noreferrer">River’s $1.1bn financing and Lovable’s $13.3bn valuation: what August’s AI funding numbers show</a></li><li><a href="https://readtheledger.github.io/story/led-lower-inflation-grocery-bill/" target="_blank" rel="noopener noreferrer">Does lower inflation mean my grocery bill should fall?</a></li></ul>
+<p>This is analysis based on public government, system-operator and company statements. It does not establish that a specific data-centre project has increased or will increase household electricity bills.</p>`,
+    sources: [
+      { t: "Government of Canada launches Canada’s Responsible Data Centre Development Principles", u: "https://www.canada.ca/en/innovation-science-economic-development/news/2026/09/government-of-canada-launches-canadas-responsible-data-centre-development-principles.html", p: "Innovation, Science and Economic Development Canada" },
+      { t: "Canada’s Responsible Data Centre Development Principles", u: "https://ised-isde.canada.ca/site/ised/en/canadas-responsible-data-centre-development-principles", p: "Innovation, Science and Economic Development Canada" },
+      { t: "2026 Annual Planning Outlook in 5 Graphs and a Map", u: "https://www.ieso.ca/Sector-Participants/Planning-and-Forecasting/Annual-Planning-Outlook/2026-APO-Summary", p: "Independent Electricity System Operator" },
+      { t: "B.C. launching competitive process for clean power in high-demand sectors", u: "https://news.gov.bc.ca/releases/2026ECS0005-000095", p: "Government of British Columbia" }
+    ]
+  },
+
+  {
     id: "led-tfsa-withdrawal-recontribution",
     kind: "analysis",
     section: "Personal Finance",
