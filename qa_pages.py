@@ -217,26 +217,26 @@ async def main():
                and ld.get("@type") == "NewsArticle", f"published={pub} ld={ld.get('datePublished')}")
             ok(f"{a['id']}: links home and to its section", home >= 1 and kick == f"/{slug(a['section'])}/", f"kicker={kick}")
 
-        # The original archive has no retained factual-review records; do not
-        # infer human writing from the original omitted production metadata.
-        legacy_ids = {"led-20260817-record", "led-20260817-fed", "led-20260817-consumer", "led-20260817-river",
+        # The seven unrevised originals have no retained factual-review records;
+        # River now follows the recorded AI-source-reviewed revision route.
+        legacy_ids = {"led-20260817-record", "led-20260817-fed", "led-20260817-consumer",
                       "led-20260817-aitrade", "led-20260817-badnews", "led-20260817-savers", "led-20260817-weekly"}
         legacy = [a for a in arts if a["id"] in legacy_ids]
         lines = []
         for a in legacy:
             await page.goto(base + f"/story/{a['id']}/", wait_until="load")
             lines.append((await page.locator("#static .attrline").inner_text()).strip())
-        ok("every original archive piece carries the missing-record attribution",
+        ok("every unrevised archive piece carries the missing-record attribution",
            all(l.startswith("From The Ledger archive. A factual review record is not available for this article.") for l in lines)
            and {a["id"] for a in legacy} == legacy_ids, lines[0][:60])
 
-        new_ids = {"led-tfsa-withdrawal-recontribution", "led-lower-inflation-grocery-bill"}
+        reviewed_ids = {"led-tfsa-withdrawal-recontribution", "led-lower-inflation-grocery-bill", "led-20260817-river"}
         new_lines = []
-        for a in [item for item in arts if item["id"] in new_ids]:
+        for a in [item for item in arts if item["id"] in reviewed_ids]:
             await page.goto(base + f"/story/{a['id']}/", wait_until="load")
             new_lines.append((await page.locator("#static .attrline").inner_text()).strip())
-        ok("both real new pieces carry the AI-source-reviewed attribution",
-           len(new_lines) == 2 and all(l.startswith("Drafted with AI assistance from the credited sources and source-checked by AI before publication. No human factual review is claimed.") for l in new_lines),
+        ok("every reviewed piece carries the AI-source-reviewed attribution",
+           len(new_lines) == 3 and all(l.startswith("Drafted with AI assistance from the credited sources and source-checked by AI before publication. No human factual review is claimed.") for l in new_lines),
            new_lines[0][:60] if new_lines else "missing")
 
         # every asset the page asks for is rooted at /, so it resolves from /story/<id>/
