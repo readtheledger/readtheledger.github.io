@@ -13,6 +13,39 @@ window.LEDGER_CONTENT = {
   articles: [
 
 {
+  "id": "led-tokenized-deposits-cdic-insurance",
+  "kind": "analysis",
+  "section": "Personal Finance",
+  "produced": "ai-source-reviewed",
+  "date": "2026-09-14T04:41:01Z",
+  "title": "Tokenized deposits and the $100,000 question",
+  "standfirst": "A tokenized deposit may qualify for CDIC insurance. The answer depends on the legal product, the institution and how the account is held.",
+  "html": "<p>Does turning a bank deposit into a token change its protection? Canada's banking supervisor supplied part of the answer on <strong>September 10, 2026</strong>: tokenized deposits are not legally distinct from traditional deposits. The technology does not determine the product's legal nature. <a href=\"https://www.osfi-bsif.gc.ca/en/news/statement-tokenized-other-digitally-represented-deposits\" target=\"_blank\" rel=\"noopener\">OSFI's statement</a>.</p>\n<p>Deposit insurance is a separate question. The Canada Deposit Insurance Corporation (CDIC) explicitly says tokenized deposits <strong>may be eligible</strong>, depending on how they are designed and offered. Eligibility is assessed case by case. <a href=\"https://www.cdic.ca/financial-professionals/member-institutions/innovative-deposit-products/\" target=\"_blank\" rel=\"noopener\">CDIC's guidance</a>.</p>\n<p>For a Canadian considering such a product, the useful work begins after the word <em>tokenized</em>: identify the institution, the legal product and whose name appears on the account.</p>\n<h2>What the announcement changes</h2>\n<p>OSFI has clarified how it approaches innovative financial products under federal financial-institution legislation. Institutions remain responsible for compliance, including activities performed by third parties on their behalf. Technology, cybersecurity and third-party risk requirements still apply, and institutions should engage their supervisors before launching novel products. The statement announces no particular bank product, interest rate or consumer savings. <a href=\"https://www.osfi-bsif.gc.ca/en/news/statement-tokenized-other-digitally-represented-deposits\" target=\"_blank\" rel=\"noopener\">OSFI</a>.</p>\n<p>The practical significance is clarity about the rules a product must satisfy. It does not tell a customer whether a particular offer is worth buying.</p>\n<h2>Insurance follows the product and the account</h2>\n<p>CDIC's guidance on innovative deposits goes beyond a general assurance about digital finance. It says eligibility depends on requirements in the CDIC Act, including the legal definition of a deposit. It also encourages member institutions to discuss new products early, including protection when an intermediary makes the deposit. <a href=\"https://www.cdic.ca/financial-professionals/member-institutions/innovative-deposit-products/\" target=\"_blank\" rel=\"noopener\">Innovative-deposit guidance</a>.</p>\n<p>The ordinary coverage framework remains essential: CDIC insures eligible deposits if a member institution fails, up to <strong>$100,000, including principal and interest, per insurance category at each member institution</strong>. Categories include deposits in one name, joint deposits, TFSAs and RRSPs. <a href=\"https://www.cdic.ca/depositors/whats-covered/\" target=\"_blank\" rel=\"noopener\">What's covered</a>.</p>\n<p>That same page lists cryptocurrencies, including stablecoins, as ineligible. Read alongside the tokenized-deposit guidance, the distinction matters: a digital label cannot establish that something is an eligible deposit, or settle its classification as a cryptocurrency. The product's legal characteristics require examination.</p>\n<h2>Follow the account, not just the app</h2>\n<p>CDIC's fintech guidance makes the holding arrangement concrete. Customer coverage requires eligible deposits at a member institution, held in the customer's name or through a qualifying trust arrangement with required beneficiary disclosures. Protection concerns the member institution's failure; it does not insure the fintech itself. <a href=\"https://www.cdic.ca/depositors/whats-covered/fintechs/\" target=\"_blank\" rel=\"noopener\">CDIC on fintechs</a>.</p>\n<p>Applying this general intermediary guidance, ask the provider:</p>\n<ul><li>Which institution holds the deposit, and is it a CDIC member?</li><li>Is the account in my name, held in trust for me, or held only in the intermediary's name?</li><li>What confirms this product's eligibility, and which insurance category and limit apply?</li></ul>\n<p>Request the account documents and a specific coverage explanation. A bank's name alone is only the beginning of the answer.</p>\n<p><strong>Does another app give me another $100,000 of protection?</strong> Not automatically. CDIC combines eligible deposits placed in your name through a fintech with your other eligible deposits in the same category at the same member institution. A different interface does not create a separate institution. <a href=\"https://www.cdic.ca/depositors/whats-covered/fintechs/\" target=\"_blank\" rel=\"noopener\">CDIC's account example</a>.</p>\n<p>The September statement makes the legal principle clearer. The consumer question remains concrete: who holds your money, under what arrangement, and what protection applies to that exact claim?</p>\n<p>Related reading: <a href=\"https://imperiumpost.com/story/led-tfsa-withdrawal-recontribution/\" target=\"_blank\" rel=\"noopener\">Can I put money back into my TFSA in the same year I withdraw it?</a> and <a href=\"https://imperiumpost.com/story/led-lower-inflation-grocery-bill/\" target=\"_blank\" rel=\"noopener\">Does lower inflation mean my grocery bill should fall?</a>.</p>\n<p><em>Written and source-checked with AI using the official records linked above.</em></p>",
+  "sources": [
+    {
+      "t": "Statement on Tokenized and Other Digitally Represented Deposits",
+      "u": "https://www.osfi-bsif.gc.ca/en/news/statement-tokenized-other-digitally-represented-deposits",
+      "p": "Office of the Superintendent of Financial Institutions"
+    },
+    {
+      "t": "Innovative deposit products and CDIC deposit insurance eligibility",
+      "u": "https://www.cdic.ca/financial-professionals/member-institutions/innovative-deposit-products/",
+      "p": "Canada Deposit Insurance Corporation"
+    },
+    {
+      "t": "What’s covered",
+      "u": "https://www.cdic.ca/depositors/whats-covered/",
+      "p": "Canada Deposit Insurance Corporation"
+    },
+    {
+      "t": "Fintechs",
+      "u": "https://www.cdic.ca/depositors/whats-covered/fintechs/",
+      "p": "Canada Deposit Insurance Corporation"
+    }
+  ]
+},
+
+{
   "id": "led-missed-september-15-tax-instalment",
   "kind": "analysis",
   "section": "Personal Finance",
