@@ -1,4 +1,4 @@
-/* The Ledger — topic classification for the Newsstand.
+/* Imperium Post — topic classification for the Newsstand.
 
    One file, read by the gatherer (fetch_feeds.mjs, at build time) and by the
    app (index.html, only when it has to gather in the browser), so a story is

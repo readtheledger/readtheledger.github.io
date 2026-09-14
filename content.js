@@ -1,5 +1,5 @@
-/* The Ledger — editorial content.
-   Every article here is original writing by The Ledger, researched from the
+/* Imperium Post — editorial content.
+   Every article here is original writing by Imperium Post, researched from the
    credited sources listed with each piece. This file is the publication:
    replace or add articles and redeploy to publish. Nothing in here is copied
    from another outlet; quotations are brief and attributed.
@@ -9,8 +9,81 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-09-13",
+  updated: "2026-09-14",
   articles: [
+
+{
+  "id": "led-missed-september-15-tax-instalment",
+  "kind": "analysis",
+  "section": "Personal Finance",
+  "produced": "ai-source-reviewed",
+  "date": "2026-09-14T04:01:11Z",
+  "title": "Tax comes off your paycheque. You may still owe the CRA on September 15.",
+  "standfirst": "A salary does not rule out instalments. Check the CRA threshold, an August-only reminder and the date your payment method counts as paid before Tuesday’s deadline.",
+  "html": "<p>A salary does not rule out tax instalments. Too little tax withheld across jobs, or extra income from rentals, investments or self-employment, can bring you into <a href=\"https://www.canada.ca/en/revenue-agency/services/payments/payments-cra/individual-payments/income-tax-instalments/who-pays-instalments.html\" target=\"_blank\" rel=\"noopener noreferrer\">the CRA's instalment rules</a>.</p>\n<p>The next general deadline is <strong>Tuesday, September 15, 2026</strong>. The practical question is whether your income and tax history meet the test below. If they do, check your reminder and payment method before the deadline: paying late or too little can create an interest charge.</p>\n<h2>Does the September deadline apply to you?</h2>\n<p>The <a href=\"https://www.canada.ca/en/revenue-agency/services/payments/payments-cra/individual-payments/income-tax-instalments/due-dates.html\" target=\"_blank\" rel=\"noopener noreferrer\">general schedule</a> is March 15, June 15, September 15 and December 15. If a date falls on a weekend or CRA-recognized holiday, payment received the next business day is on time. People whose main income is self-employment from farming or fishing have one annual instalment date, December 31.</p>\n<p>For the <a href=\"https://www.canada.ca/en/revenue-agency/services/payments/payments-cra/individual-payments/income-tax-instalments/who-pays-instalments.html\" target=\"_blank\" rel=\"noopener noreferrer\">CRA threshold test</a>, your <strong>2026 net tax owing must exceed CAD 3,000</strong>, and it must also have exceeded CAD 3,000 in <strong>2025 or 2024</strong>. For Quebec residents, both thresholds are CAD 1,800. Residence on December 31 determines which applies. A reminder does not require instalments if your 2026 net tax owing is at or below the applicable threshold.</p>\n<h2>Why an August-only reminder can make September larger</h2>\n<p>If your August reminder mentions no March or June payment, the <a href=\"https://www.canada.ca/en/revenue-agency/services/payments/payments-cra/individual-payments/income-tax-instalments/who-pays-instalments.html\" target=\"_blank\" rel=\"noopener noreferrer\">August-only rules</a> matter. The no-calculation option follows box 2. The prior-year and current-year options put <strong>75% of the calculated total in September and 25% in December</strong>.</p>\n<p>Those <a href=\"https://www.canada.ca/en/revenue-agency/services/payments/payments-cra/individual-payments/income-tax-instalments/options-calculate.html\" target=\"_blank\" rel=\"noopener noreferrer\">calculation options</a> use the relevant year's net tax owing plus applicable CPP contributions and voluntary EI premiums. Suppose that correctly calculated total is <strong>CAD 4,000</strong>. This is a hypothetical illustration:</p>\n<table><thead><tr><th scope=\"col\">August-only prior-year or current-year example</th><th scope=\"col\">Calculation</th><th scope=\"col\">Amount</th></tr></thead><tbody><tr><td>September 15</td><td>4,000 × 75%</td><td>CAD 3,000</td></tr><tr><td>December 15</td><td>4,000 × 25%</td><td>CAD 1,000</td></tr></tbody></table>\n<p>For that taxpayer, setting aside only a quarter would leave September CAD 2,000 short. The cash-flow lesson is to read the reminder's schedule before dividing an annual estimate into four equal payments.</p>\n<h2>How the CRA calculates a late-payment charge</h2>\n<p>The CRA <a href=\"https://www.canada.ca/en/revenue-agency/services/payments/payments-cra/individual-payments/income-tax-instalments/interest-penalty-charges.html\" target=\"_blank\" rel=\"noopener noreferrer\">charges instalment interest when all three conditions apply</a>: you must pay 2026 instalments, you received a 2026 reminder showing an amount, and a payment was missing, late or too small.</p>\n<p>Interest compounds daily; the annual rate can change quarterly. The announced overdue-tax rate is <a href=\"https://www.canada.ca/en/revenue-agency/services/tax/prescribed-interest-rates/2026-q3.html\" target=\"_blank\" rel=\"noopener noreferrer\">7% for July–September 2026</a> and <a href=\"https://www.canada.ca/en/revenue-agency/services/tax/prescribed-interest-rates/2026-q4.html\" target=\"_blank\" rel=\"noopener noreferrer\">7% for October–December 2026</a>. Those rates do not establish a 2027 rate.</p>\n<p>The final calculation compares interest on required instalments through the balance-due date with credit interest on payments through that date, using the calculation option producing the least interest. A charge applies when the difference exceeds CAD 25.</p>\n<p>An early or excess payment can offset interest for the same tax year through non-refundable credit interest. Cancellation is not guaranteed. A separate instalment penalty can apply only if 2026 instalment-interest charges exceed CAD 1,000; that figure is not an automatic late-payment fine.</p>\n<h2>Pay using the method that fits the deadline</h2>\n<p>Check the date your chosen method counts as paid, not just when the transaction appears in My Account:</p>\n<ul><li><strong><a href=\"https://www.canada.ca/en/revenue-agency/services/about-canada-revenue-agency-cra/pay-online-banking.html\" target=\"_blank\" rel=\"noopener noreferrer\">Online banking</a>:</strong> considered paid the same or next business day, depending on the institution. Select its CRA tax-instalment payee option; wording varies.</li><li><strong><a href=\"https://www.canada.ca/en/revenue-agency/services/e-services/payment-save-time-pay-online.html\" target=\"_blank\" rel=\"noopener noreferrer\">CRA My Payment</a>:</strong> accepts Visa Debit or Debit Mastercard, not credit cards. Usually dated the same business day; after 10 p.m. local time, on weekends or statutory holidays, the next business day applies, subject to bank variation.</li><li><strong><a href=\"https://www.canada.ca/en/revenue-agency/services/about-canada-revenue-agency-cra/pay-your-canadian-financial-institution.html\" target=\"_blank\" rel=\"noopener noreferrer\">Bank or credit-union teller</a>:</strong> bring a valid remittance voucher. The employee's date stamp establishes the payment date.</li></ul>\n<p>Setting up a new <a href=\"https://www.canada.ca/en/revenue-agency/services/payments/payments-cra/individual-payments/make-payment.html\" target=\"_blank\" rel=\"noopener noreferrer\">pre-authorized debit</a> requires at least five business days before the first withdrawal, so it cannot solve a last-minute September 15 payment.</p>\n<p>Keep proof. The <a href=\"https://www.canada.ca/en/revenue-agency/services/payments/payments-cra/individual-payments/income-tax-instalments/how-pay.html\" target=\"_blank\" rel=\"noopener noreferrer\">CRA's confirmation guidance</a> says to allow three business days before checking an online payment, or ten for a cheque or money order. Those account-processing waits do not extend the deadline.</p>\n<h2>Plan future withholding through payroll</h2>\n<p>If you are employed, you can <a href=\"https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/set-up-new-employee/increase-reduce-income-tax-deducted-source.html\" target=\"_blank\" rel=\"noopener noreferrer\">ask for more income tax to be deducted by completing revised TD1 forms</a>. That can help manage a future tax balance through your paycheques. It does not retroactively fix a missed instalment or automatically remove an existing payment obligation; check the current-year threshold, reminder and calculation rules above.</p>\n<h2>Frequently asked questions</h2>\n<h3>I received a reminder, but my income fell. Must I pay it?</h3>\n<p>If your income changed, use the CRA’s <a href=\"https://www.canada.ca/en/revenue-agency/services/payments/payments-cra/individual-payments/income-tax-instalments/options-calculate.html\" target=\"_blank\" rel=\"noopener noreferrer\">calculation options</a> to check your 2026 estimate and payment schedule. A low estimate can lead to interest.</p>\n<h3>I missed September 15. Should I wait until December?</h3>\n<p>Check the missing amount and an available payment method promptly. Daily compounding makes timing matter; the CRA's credit-interest calculation also takes payment dates into account. Do not assume catching up in December erases earlier interest.</p>\n<h3>Can I change or skip the December amount?</h3>\n<p>Use your chosen method, reminder and timing rules. Paying an annual total at any time does not automatically prove the schedule was satisfied; current-year facts may support a different calculation.</p>\n<h2>Related reading</h2>\n<ul><li>Using TFSA savings to cover a bill? <a href=\"https://imperiumpost.com/story/led-tfsa-withdrawal-recontribution/\" target=\"_blank\" rel=\"noopener noreferrer\">Check withdrawal and recontribution timing before replacing the money</a>.</li><li>Reworking the household budget? <a href=\"https://imperiumpost.com/story/led-lower-inflation-grocery-bill/\" target=\"_blank\" rel=\"noopener noreferrer\">Understand what lower grocery inflation does to prices</a>.</li></ul>\n<p>This article provides general information, not personal tax advice. Check your CRA reminder, calculation method and account before acting.</p>\n<p>Drafted with AI assistance from the credited sources and source-checked by AI before publication. No human factual review is claimed.</p>",
+  "sources": [
+    {
+      "t": "CRA — Who has to pay",
+      "u": "https://www.canada.ca/en/revenue-agency/services/payments/payments-cra/individual-payments/income-tax-instalments/who-pays-instalments.html",
+      "p": "Canada Revenue Agency"
+    },
+    {
+      "t": "CRA — Options to calculate",
+      "u": "https://www.canada.ca/en/revenue-agency/services/payments/payments-cra/individual-payments/income-tax-instalments/options-calculate.html",
+      "p": "Canada Revenue Agency"
+    },
+    {
+      "t": "CRA — Payment due dates",
+      "u": "https://www.canada.ca/en/revenue-agency/services/payments/payments-cra/individual-payments/income-tax-instalments/due-dates.html",
+      "p": "Canada Revenue Agency"
+    },
+    {
+      "t": "CRA — Interest and penalty charges",
+      "u": "https://www.canada.ca/en/revenue-agency/services/payments/payments-cra/individual-payments/income-tax-instalments/interest-penalty-charges.html",
+      "p": "Canada Revenue Agency"
+    },
+    {
+      "t": "CRA — How to pay",
+      "u": "https://www.canada.ca/en/revenue-agency/services/payments/payments-cra/individual-payments/income-tax-instalments/how-pay.html",
+      "p": "Canada Revenue Agency"
+    },
+    {
+      "t": "CRA — 2026 third-quarter prescribed rates",
+      "u": "https://www.canada.ca/en/revenue-agency/services/tax/prescribed-interest-rates/2026-q3.html",
+      "p": "Canada Revenue Agency"
+    },
+    {
+      "t": "CRA — 2026 fourth-quarter prescribed rates",
+      "u": "https://www.canada.ca/en/revenue-agency/services/tax/prescribed-interest-rates/2026-q4.html",
+      "p": "Canada Revenue Agency"
+    },
+    {
+      "t": "CRA — Make a payment",
+      "u": "https://www.canada.ca/en/revenue-agency/services/payments/payments-cra/individual-payments/make-payment.html",
+      "p": "Canada Revenue Agency"
+    },
+    {
+      "t": "CRA — Online banking",
+      "u": "https://www.canada.ca/en/revenue-agency/services/about-canada-revenue-agency-cra/pay-online-banking.html",
+      "p": "Canada Revenue Agency"
+    },
+    {
+      "t": "CRA — My Payment",
+      "u": "https://www.canada.ca/en/revenue-agency/services/e-services/payment-save-time-pay-online.html",
+      "p": "Canada Revenue Agency"
+    },
+    {
+      "t": "CRA — Teller payments",
+      "u": "https://www.canada.ca/en/revenue-agency/services/about-canada-revenue-agency-cra/pay-your-canadian-financial-institution.html",
+      "p": "Canada Revenue Agency"
+    },
+    {
+      "t": "CRA — Increase income tax deducted at source",
+      "u": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/set-up-new-employee/increase-reduce-income-tax-deducted-source.html",
+      "p": "Canada Revenue Agency"
+    }
+  ]
+},
 
   {
     id: "led-grocery-property-controls-canada",

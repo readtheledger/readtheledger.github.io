@@ -1,4 +1,4 @@
-/* The Ledger — editorial media.
+/* Imperium Post — editorial media.
    One contract and one renderer for a piece's own image, shared by the app
    (index.html) and the build (build.mjs), so the static page and the reader
    produce the same markup and the browser fetches the picture once.
@@ -9,7 +9,7 @@
        alt:     "what is visible in the picture",         // required
        w, h:    1200, 800,                                // the fallback's pixel size; required
        caption: "editorial caption — what the picture means for the story",   // optional
-       credit:  "The Ledger",                             // who made it; optional
+       credit:  "Imperium Post",                             // who made it; optional
        ai:      true,                                     // an AI-generated illustration; rendered as a visible disclosure
        widths:  [480, 768, 1200]                          // WebP derivatives beside u, named hero-<w>.webp; optional
      }

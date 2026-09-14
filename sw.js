@@ -1,4 +1,4 @@
-/* The Ledger — offline shell.
+/* Imperium Post — offline shell.
    Caches the app itself and the pages you have opened, so a dropped signal
    doesn't cost you your reading. Feeds and audio are cached separately
    (localStorage / IndexedDB) by the app.
@@ -39,7 +39,11 @@ const FILES = [
   "/manifest.webmanifest",
   "/icon-192.png",
   "/icon-512.png",
-  "/icon-180.png"
+  "/icon-180.png",
+  "/icon-maskable-512.png",
+  "/icon-mono.svg",
+  "/favicon.ico",
+  "/og-default.png"
 ];
 
 /* The addresses the app can render from content.js when a page has never been
@@ -65,7 +69,7 @@ self.addEventListener("install", e => {
   );
 });
 
-/* Retire only recognized Ledger cache generations, including the old v3 shell.
+/* Retire only recognized Imperium Post cache generations, including the old v3 shell.
    CacheStorage is shared by the origin; other apps' caches are not ours to delete. */
 self.addEventListener("activate", e => {
   e.waitUntil(
@@ -107,7 +111,7 @@ async function navigate(req) {
       if (shell) return shell;
     }
     return new Response(
-      "<!doctype html><meta charset=\"utf-8\"><title>Offline — The Ledger</title>" +
+      "<!doctype html><meta charset=\"utf-8\"><title>Offline — Imperium Post</title>" +
       "<p style=\"font-family:Georgia,serif;padding:2em\">You're offline and this page hasn't been saved on this device.</p>",
       {status:503, headers:{"Content-Type":"text/html; charset=utf-8"}});
   }

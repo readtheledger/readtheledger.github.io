@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-/* The Ledger — build.
+/* Imperium Post — build.
 
    The app is still one file, index.html, and the publication is still content.js.
-   This script gives every Ledger story and every editorial section a page of its
+   This script gives every Imperium Post story and every editorial section a page of its
    own: the app, with that page's title, description, canonical address and
    sharing metadata in its head, and a static copy of the content inside <main>
    so the page reads in full without JavaScript. When the app boots on one of
@@ -30,8 +30,8 @@ const OUT  = path.resolve(argv.find(a => !a.startsWith("--") && !argv[argv.index
 const CONTENT_FILE = path.resolve(opt("content", path.join(ROOT, "content.js")));   // the tests build from a content file of their own
 const ASSETS_DIR   = path.resolve(opt("assets", path.join(ROOT, "assets", "editorial")));   // and, for the worker's cache test, from pictures of their own
 const SITE = "https://imperiumpost.com";
-const SITE_TITLE = "The Ledger — Finance, read properly";
-const SITE_DESC  = "The Ledger's own financial reporting and analysis — markets, central banks, the economy, tech and personal finance — every source credited and linked.";
+const SITE_TITLE = "Imperium Post — Read what matters.";
+const SITE_DESC  = "Imperium Post's own financial reporting and analysis — markets, central banks, the economy, tech and personal finance — every source credited and linked.";
 const ABOUT_PATH = "/about/";
 const PRIVACY_PATH = "/privacy/";
 const FEED_PATH  = "/feed.xml";
@@ -99,7 +99,7 @@ if (!privacy || !privacy.title || !privacy.standfirst || !privacy.html) fail("pr
 if (!Array.isArray(infoPages) || infoPages.length !== 2) fail("support.js must carry both informational pages");
 
 /* ---------------------------------------------------------------- checking */
-/* The article bodies are The Ledger's own, but a static page has no runtime
+/* The article bodies are Imperium Post's own, but a static page has no runtime
    sanitiser in front of it, so the build refuses anything that could run. */
 const RISKY = [/<\s*(script|iframe|object|embed|style|form|link|meta|base)\b/i, /\son[a-z]+\s*=/i, /javascript\s*:/i, /srcdoc\s*=/i];
 const ids = new Set();
@@ -149,30 +149,30 @@ const byDate = (x, y) => Date.parse(y.date) - Date.parse(x.date);
 
 /* the publisher, with only what the publication has stated about itself: its
    name, its address, its logo and its public source repository */
-const ORG = { "@type":"Organization", "@id": SITE + "/#organization", "name":"The Ledger", "url": SITE + "/", "logo": { "@type":"ImageObject", "url": SITE + "/icon-512.png", "width": 512, "height": 512 }, "sameAs": [REPO] };
+const ORG = { "@type":"Organization", "@id": SITE + "/#organization", "name":"Imperium Post", "url": SITE + "/", "logo": { "@type":"ImageObject", "url": SITE + "/icon-512.png", "width": 512, "height": 512 }, "sameAs": [REPO] };
 /* Home › Section › Story, as structured data, so the page's place in the site is stated */
 const crumbs = items => ({ "@context":"https://schema.org", "@type":"BreadcrumbList",
   "itemListElement": items.map((it, i) => ({ "@type":"ListItem", "position": i + 1, "name": it.name, "item": it.url })) });
-const HOME = { name: "The Ledger", url: SITE + "/" };
+const HOME = { name: "Imperium Post", url: SITE + "/" };
 
 function metaBlock({ title, ogTitle, description, canonical, ogType, extra, ld, image }) {
-  // the sharing image: the piece's own when it has one, otherwise the icon
-  // (a sharing preview, not a claim that the icon is the article's image)
-  const share = image ? absUrl(image.u) : SITE + "/icon-512.png";
+  // the sharing image: the piece's own when it has one, otherwise the publication share card
+  // (a sharing preview, not a claim that the share card is the article's image)
+  const share = image ? absUrl(image.u) : SITE + "/og-default.png";
   return [
     "<!-- meta:start — written by build.mjs -->",
     `<title>${esc(title)}</title>`,
     `<meta name="description" content="${esc(description)}">`,
     `<link rel="canonical" href="${esc(canonical)}">`,
-    `<link rel="alternate" type="application/atom+xml" title="The Ledger" href="${FEED_PATH}">`,
+    `<link rel="alternate" type="application/atom+xml" title="Imperium Post" href="${FEED_PATH}">`,
     `<meta property="og:type" content="${ogType}">`,
-    `<meta property="og:site_name" content="The Ledger">`,
+    `<meta property="og:site_name" content="Imperium Post">`,
     `<meta property="og:title" content="${esc(ogTitle || title)}">`,
     `<meta property="og:description" content="${esc(description)}">`,
     `<meta property="og:url" content="${esc(canonical)}">`,
     `<meta property="og:image" content="${esc(share)}">`,
-    ...(image ? [`<meta property="og:image:width" content="${image.w}">`, `<meta property="og:image:height" content="${image.h}">`, `<meta property="og:image:alt" content="${esc(image.alt)}">`] : []),
-    `<meta name="twitter:card" content="${image ? "summary_large_image" : "summary"}">`,
+    ...(image ? [`<meta property="og:image:width" content="${image.w}">`, `<meta property="og:image:height" content="${image.h}">`, `<meta property="og:image:alt" content="${esc(image.alt)}">`] : [`<meta property="og:image:width" content="1200">`, `<meta property="og:image:height" content="630">`, `<meta property="og:image:alt" content="Imperium Post — Read what matters.">`]),
+    `<meta name="twitter:card" content="summary_large_image">`,
     `<meta name="twitter:title" content="${esc(ogTitle || title)}">`,
     `<meta name="twitter:description" content="${esc(description)}">`,
     `<meta name="twitter:image" content="${esc(share)}">`,
@@ -199,14 +199,14 @@ function cardHTML(a, lead, pos) {
   const image = a.image && (variant !== "compact" || pos <= THUMBS_AFTER_LEAD) ? a.image : null;
   const fig = image ? M.figureHTML(image, { variant: variant === "compact" ? "thumb" : variant, eager: variant === "lead", caption: false }) : "";
   const cls = "card " + variant + (a.weekly ? " weekly" : "") + (image ? " has-image" : "");
-  const meta = `<div class="meta"><span class="badge">The Ledger</span><time class="dot" datetime="${esc(a.date)}">${dateShort(a.date)}</time><span class="dot">${readMins(w)} min read</span></div>`;
+  const meta = `<div class="meta"><span class="badge">Imperium Post</span><time class="dot" datetime="${esc(a.date)}">${dateShort(a.date)}</time><span class="dot">${readMins(w)} min read</span></div>`;
   const thumb = variant === "compact" && !!image;
   const below = `<p class="standfirst">${esc(a.standfirst)}</p>
         ${meta}`;
   return `<article class="${cls}">
       ${variant !== "compact" ? fig : ""}
       <div class="cardtop"><div>
-        ${a.weekly ? '<p class="weeklylabel">The Ledger Weekly · Deep dive</p>' : kickerHTML(a)}
+        ${a.weekly ? '<p class="weeklylabel">Imperium Post Weekly · Deep dive</p>' : kickerHTML(a)}
         <h2 class="hl${a.weekly ? " feature-hl" : ""}"><a href="${storyPath(a)}">${esc(a.title)}</a></h2>
         ${thumb ? "" : below}
       </div>${thumb ? fig : ""}</div>
@@ -221,7 +221,7 @@ function aboutCardHTML() {
         <p class="kicker">About</p>
         <h2 class="hl"><a href="${ABOUT_PATH}">${esc(about.title)}</a></h2>
         <p class="standfirst">${esc(about.standfirst)}</p>
-        <div class="meta"><span class="badge">The Ledger</span><span class="dot">Part of the app · no date</span></div>
+        <div class="meta"><span class="badge">Imperium Post</span><span class="dot">Part of the app · no date</span></div>
       </div></div>
     </article>`;
 }
@@ -241,12 +241,12 @@ function listHTML(current, list, emptyText) {
 }
 
 /* up to four other pieces, the same desk first, then the newest: real links
-   between the Ledger's own pages, so no story is a dead end */
+   between Imperium Post's own pages, so no story is a dead end */
 function relatedHTML(a) {
   const others = sorted.filter(x => x.id !== a.id);
   const pick = others.filter(x => x.section === a.section).concat(others.filter(x => x.section !== a.section)).slice(0, 4);
   if (!pick.length) return "";
-  return `<nav class="related" aria-label="More from The Ledger"><h2>More from The Ledger</h2><ul>${
+  return `<nav class="related" aria-label="More from Imperium Post"><h2>More from Imperium Post</h2><ul>${
     pick.map(x => `<li><a href="${storyPath(x)}">${esc(x.title)}</a> <span class="dot">${esc(x.section)} · <time datetime="${esc(x.date)}">${dateShort(x.date)}</time></span></li>`).join("")
   }</ul></nav>`;
 }
@@ -273,12 +273,12 @@ function storyHTML(a) {
       <h1>${esc(a.title)}</h1>
       <p class="rstand">${esc(a.standfirst)}</p>
       ${ledeImageHTML(a)}
-      <div class="rmeta"><span class="badge">The Ledger</span><time class="dot" datetime="${esc(a.date)}">${dateTime(a.date)}</time><span class="dot">${readMins(w)} min read</span></div>
+      <div class="rmeta"><span class="badge">Imperium Post</span><time class="dot" datetime="${esc(a.date)}">${dateTime(a.date)}</time><span class="dot">${readMins(w)} min read</span></div>
       <div class="rbody">${a.html}</div>
       <aside class="sourcesbox"><h2>Sources &amp; further reading</h2><ul>${srcs}</ul></aside>
       <p class="attrline">${production.line(a)} Material sources are credited and linked above; quotations are brief and attributed.</p>
       ${relatedHTML(a)}
-      <p class="static-home"><a href="/">← The Ledger front page</a></p>
+      <p class="static-home"><a href="/">← Imperium Post front page</a></p>
     </article>
   </div>`;
 }
@@ -289,10 +289,10 @@ function infoHTML(info, label) {
       <p class="kicker">${esc(label)}</p>
       <h1>${esc(info.title)}</h1>
       <p class="rstand">${esc(info.standfirst)}</p>
-      <div class="rmeta"><span class="badge">The Ledger</span><span class="dot">Part of the app · no date</span></div>
+      <div class="rmeta"><span class="badge">Imperium Post</span><span class="dot">Part of the app · no date</span></div>
       <div class="rbody">${info.html}</div>
       <p class="attrline">This page is part of the app and is not an article; it carries no publication date.</p>
-      <p class="static-home"><a href="/">← The Ledger front page</a></p>
+      <p class="static-home"><a href="/">← Imperium Post front page</a></p>
     </article>
   </div>`;
 }
@@ -328,27 +328,27 @@ const newest = sorted[0].date;
 write("index.html", page({
   title: SITE_TITLE, description: SITE_DESC, canonical: SITE + "/", ogType: "website",
   ld: [
-    { "@context":"https://schema.org", "@type":"WebSite", "name":"The Ledger", "url": SITE + "/", "description": SITE_DESC, "publisher": ORG },
+    { "@context":"https://schema.org", "@type":"WebSite", "name":"Imperium Post", "url": SITE + "/", "description": SITE_DESC, "publisher": ORG },
     Object.assign({ "@context":"https://schema.org" }, ORG)
   ]
 }, listHTML("Front page", frontList, "")));
 
 // about
 write(ABOUT_PATH.slice(1) + "index.html", page({
-  title: "About — The Ledger", ogTitle: "About The Ledger",
+  title: "About — Imperium Post", ogTitle: "About Imperium Post",
   description: descOf(about.standfirst), canonical: SITE + ABOUT_PATH, ogType: "website",
   ld: [
-    { "@context":"https://schema.org", "@type":"AboutPage", "name":"About The Ledger", "url": SITE + ABOUT_PATH, "description": descOf(about.standfirst), "isPartOf": { "@type":"WebSite", "name":"The Ledger", "url": SITE + "/" }, "mainEntity": ORG },
+    { "@context":"https://schema.org", "@type":"AboutPage", "name":"About Imperium Post", "url": SITE + ABOUT_PATH, "description": descOf(about.standfirst), "isPartOf": { "@type":"WebSite", "name":"Imperium Post", "url": SITE + "/" }, "mainEntity": ORG },
     crumbs([HOME, { name: "About", url: SITE + ABOUT_PATH }])
   ]
 }, infoHTML(about, "About")));
 
 // Privacy is an informational WebPage, never an article or a dated edition.
 write(PRIVACY_PATH.slice(1) + "index.html", page({
-  title: "Privacy — The Ledger", ogTitle: privacy.title,
+  title: "Privacy — Imperium Post", ogTitle: privacy.title,
   description: descOf(privacy.standfirst), canonical: SITE + PRIVACY_PATH, ogType: "website",
   ld: [
-    { "@context":"https://schema.org", "@type":"WebPage", "name":privacy.title, "url":SITE + PRIVACY_PATH, "description":descOf(privacy.standfirst), "isPartOf":{ "@type":"WebSite", "name":"The Ledger", "url":SITE + "/" } },
+    { "@context":"https://schema.org", "@type":"WebPage", "name":privacy.title, "url":SITE + PRIVACY_PATH, "description":descOf(privacy.standfirst), "isPartOf":{ "@type":"WebSite", "name":"Imperium Post", "url":SITE + "/" } },
     crumbs([HOME, { name:"Privacy", url:SITE + PRIVACY_PATH }])
   ]
 }, infoHTML(privacy, "Privacy")));
@@ -357,9 +357,9 @@ write(PRIVACY_PATH.slice(1) + "index.html", page({
 for (const info of infoPages) {
   const canonical = SITE + info.infoPath;
   write(info.infoPath.slice(1) + "index.html", page({
-    title: info.title + " — The Ledger", description: descOf(info.standfirst), canonical, ogType: "website",
+    title: info.title + " — Imperium Post", description: descOf(info.standfirst), canonical, ogType: "website",
     ld: [
-      { "@context":"https://schema.org", "@type":"WebPage", "name":info.title, "url":canonical, "description":descOf(info.standfirst), "isPartOf":{ "@type":"WebSite", "name":"The Ledger", "url":SITE + "/" } },
+      { "@context":"https://schema.org", "@type":"WebPage", "name":info.title, "url":canonical, "description":descOf(info.standfirst), "isPartOf":{ "@type":"WebSite", "name":"Imperium Post", "url":SITE + "/" } },
       crumbs([HOME, { name:info.title, url:canonical }])
     ]
   }, infoHTML(info, info.section)));
@@ -373,19 +373,19 @@ for (const s of PAGE_SECTIONS) {
   // the description says what is actually on the page: how many pieces, and the
   // latest one; an empty section says so, and is noindex until it has a story
   const description = list.length
-    ? `${list.length} original ${list.length === 1 ? "piece" : "pieces"} from The Ledger's ${s} desk, every source credited and linked. Latest: ${plain(list[0].title)} (${dateLong(list[0].date)}).`
-    : `The Ledger has not published in ${s} yet. The front page carries the latest edition.`;
+    ? `${list.length} original ${list.length === 1 ? "piece" : "pieces"} from Imperium Post's ${s} desk, every source credited and linked. Latest: ${plain(list[0].title)} (${dateLong(list[0].date)}).`
+    : `Imperium Post has not published in ${s} yet. The front page carries the latest edition.`;
   write(sectionPath(s).slice(1) + "index.html", page({
-    title: s + " — The Ledger", ogTitle: s + " — The Ledger",
+    title: s + " — Imperium Post", ogTitle: s + " — Imperium Post",
     description: descOf(description),
     canonical, ogType: "website",
     robots: list.length ? "index,follow" : "noindex,follow",
     ld: [
-      { "@context":"https://schema.org", "@type":"CollectionPage", "name": s + " — The Ledger", "url": canonical, "description": descOf(description), "isPartOf": { "@type":"WebSite", "name":"The Ledger", "url": SITE + "/" },
+      { "@context":"https://schema.org", "@type":"CollectionPage", "name": s + " — Imperium Post", "url": canonical, "description": descOf(description), "isPartOf": { "@type":"WebSite", "name":"Imperium Post", "url": SITE + "/" },
         ...(list.length ? { "hasPart": list.map(a => ({ "@type":"NewsArticle", "headline": a.title, "url": SITE + storyPath(a), "datePublished": a.date })) } : {}) },
       crumbs([HOME, { name: s, url: canonical }])
     ]
-  }, listHTML(s, list, "The Ledger has not published in " + s + " yet. The front page carries the latest edition.")));
+  }, listHTML(s, list, "Imperium Post has not published in " + s + " yet. The front page carries the latest edition.")));
   if (list.length) sectionUrls.push({ loc: canonical, lastmod: list[0].date });
 }
 
@@ -394,7 +394,7 @@ for (const a of articles) {
   const canonical = SITE + storyPath(a);
   const description = descOf(a.standfirst);
   write("story/" + a.id + "/index.html", page({
-    title: a.title + " — The Ledger", ogTitle: a.title, description, canonical, ogType: "article", image: a.image,
+    title: a.title + " — Imperium Post", ogTitle: a.title, description, canonical, ogType: "article", image: a.image,
     extra: [
       `<meta property="article:published_time" content="${esc(a.date)}">`,
       `<meta property="article:section" content="${esc(a.section)}">`,
@@ -414,7 +414,7 @@ for (const a of articles) {
                                               a.image.credit ? { "creditText": a.image.credit } : {},
                                               // IPTC's digital source type, the vocabulary Google reads for AI-generated images
                                               a.image.ai ? { "digitalSourceType": "https://cv.iptc.org/newscodes/digitalsourcetype/trainedAlgorithmicMedia" } : {})] } : {}),
-      "author": { "@type":"Organization", "name":"The Ledger", "url": SITE + "/" },
+      "author": { "@type":"Organization", "name":"Imperium Post", "url": SITE + "/" },
       "publisher": ORG,
       "citation": a.sources.map(s => ({ "@type":"CreativeWork", "name": s.t, "url": s.u, "publisher": { "@type":"Organization", "name": s.p } }))
     },
@@ -438,22 +438,22 @@ write("sitemap.xml",
 const fresh = sorted.filter(a => NOW - Date.parse(a.date) <= NEWS_WINDOW_MS && Date.parse(a.date) <= NOW);
 write(NEWS_SITEMAP.slice(1),
   '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">\n' +
-  fresh.map(a => `  <url><loc>${esc(SITE + storyPath(a))}</loc><news:news><news:publication><news:name>The Ledger</news:name><news:language>en</news:language></news:publication><news:publication_date>${esc(a.date)}</news:publication_date><news:title>${esc(a.title)}</news:title></news:news></url>`).join("\n") +
+  fresh.map(a => `  <url><loc>${esc(SITE + storyPath(a))}</loc><news:news><news:publication><news:name>Imperium Post</news:name><news:language>en</news:language></news:publication><news:publication_date>${esc(a.date)}</news:publication_date><news:title>${esc(a.title)}</news:title></news:news></url>`).join("\n") +
   (fresh.length ? "\n" : "") + "</urlset>\n");
 
 // nothing is disallowed: the app-only views (?view=, ?q=) are marked noindex on
 // the page itself, and a crawler can only read that if it is allowed to fetch them
 write("robots.txt", "User-agent: *\nAllow: /\n\nSitemap: " + SITE + "/sitemap.xml\nSitemap: " + SITE + NEWS_SITEMAP + "\n");
 
-// an Atom feed of The Ledger's own pieces, in full: they are its own work, and a
+// an Atom feed of Imperium Post's own pieces, in full: they are its own work, and a
 // feed reader is a legitimate place to read them
 const atomDate = iso => new Date(iso).toISOString();
 write(FEED_PATH.slice(1),
   '<?xml version="1.0" encoding="UTF-8"?>\n<feed xmlns="http://www.w3.org/2005/Atom">\n' +
-  `  <title>The Ledger</title>\n  <subtitle>${esc(SITE_DESC)}</subtitle>\n  <id>${SITE}/</id>\n` +
+  `  <title>Imperium Post</title>\n  <subtitle>${esc(SITE_DESC)}</subtitle>\n  <id>${SITE}/</id>\n` +
   `  <link href="${SITE}/"/>\n  <link rel="self" type="application/atom+xml" href="${SITE}${FEED_PATH}"/>\n` +
   `  <updated>${atomDate(sorted.reduce((m, a) => Math.max(m, Date.parse(a.updated || a.date)), 0))}</updated>\n` +
-  `  <author><name>The Ledger</name><uri>${SITE}/</uri></author>\n` +
+  `  <author><name>Imperium Post</name><uri>${SITE}/</uri></author>\n` +
   sorted.map(a => `  <entry>\n    <title>${esc(a.title)}</title>\n    <id>${esc(SITE + storyPath(a))}</id>\n    <link href="${esc(SITE + storyPath(a))}"/>\n    <published>${atomDate(a.date)}</published>\n    <updated>${atomDate(a.updated || a.date)}</updated>\n    <category term="${esc(a.section)}"/>\n    <summary>${esc(plain(a.standfirst))}</summary>\n    <content type="html">${esc(a.html)}</content>\n  </entry>`).join("\n") +
   "\n</feed>\n");
 
@@ -464,7 +464,8 @@ write("404.html", `<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Page not found — The Ledger</title>
+<title>Page not found — Imperium Post</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800;900&amp;display=swap" rel="stylesheet">
 <link rel="icon" href="/icon-192.png">
 <style>
 :root{--paper:#FFF1E5;--ink:#12100E;--ink-3:#6B6560;--rule:#DCCFC4;--claret:#990F3D;--accent:#0F5499}
@@ -472,7 +473,8 @@ write("404.html", `<!DOCTYPE html>
 body{margin:0;background:var(--paper);color:var(--ink);font-family:"Source Serif 4",Charter,Georgia,serif;line-height:1.6}
 main{max-width:720px;margin:0 auto;padding:40px 18px}
 .wordmark{font-family:"Playfair Display",Georgia,serif;font-weight:800;font-size:1.4rem;letter-spacing:-.02em;text-decoration:none;color:inherit}
-.wordmark span{color:var(--claret)}
+.wordmark{display:inline-flex;align-items:center;gap:.4em}
+.wordmark .mono{display:inline-grid;place-items:center;width:1.55em;height:1.55em;background:#12100E;color:#FFF1E5;font-weight:900;font-size:.72em;letter-spacing:-.06em;line-height:1;flex:none}
 h1{font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:2rem;line-height:1.15;margin:28px 0 12px}
 p{margin:0 0 14px;color:var(--ink-3)}
 a{color:var(--accent)}
@@ -481,9 +483,10 @@ nav{border-top:1px solid var(--rule);margin-top:28px;padding-top:14px;font-famil
 </head>
 <body>
 <main>
-  <a class="wordmark" href="/">The Ledger<span>.</span></a>
+  <a class="wordmark" href="/" aria-label="Imperium Post — front page"><span class="mono" aria-hidden="true">IP</span>Imperium Post</a>
+  <p>Read what matters.</p>
   <h1>That page isn't in this edition.</h1>
-  <p>The address may have been mistyped, or the story it pointed to is no longer published. Everything The Ledger has written is on the front page.</p>
+  <p>The address may have been mistyped, or the story it pointed to is no longer published. Everything Imperium Post has written is on the front page.</p>
   <p><a href="/">Go to the front page →</a></p>
   <nav aria-label="Sections">${PAGE_SECTIONS.map(s => `<a href="${sectionPath(s)}">${esc(s)}</a>`).join("")}<a href="${ABOUT_PATH}">About</a><a href="${PRIVACY_PATH}">Privacy</a></nav>
 </main>
@@ -512,7 +515,7 @@ const sw = swSrc
   .replace(/^const ROUTES = \[[^\n]*\];$/m, "const ROUTES = " + JSON.stringify(routes) + ";");
 if (!sw.includes('const BUILD = "' + stamp + '"') || !sw.includes('"/story/' + articles[0].id + '/"')) fail("sw.js was not stamped");
 write("sw.js", sw);
-for (const f of ["content.js", "sources.js", "topics.js", "context.js", "about.js", "privacy.js", "support.js", "consent.js", "analytics.js", "media.js", "production.js", "manifest.webmanifest", "ads.txt", "57f030f659d1e0f7e96c9aae12333a48.txt", "icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"]) {
+for (const f of ["content.js", "sources.js", "topics.js", "context.js", "about.js", "privacy.js", "support.js", "consent.js", "analytics.js", "media.js", "production.js", "manifest.webmanifest", "ads.txt", "57f030f659d1e0f7e96c9aae12333a48.txt", "icon-180.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png", "icon-mono.svg", "favicon.ico", "og-default.png"]) {
   // the publication the pages were written from is the one the app loads, so a
   // build from another content file (the tests do this) is consistent with itself
   fs.copyFileSync(f === "content.js" ? CONTENT_FILE : path.join(ROOT, f), path.join(OUT, f));
