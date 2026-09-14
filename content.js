@@ -49,7 +49,7 @@ window.LEDGER_CONTENT = {
   "id": "led-missed-september-15-tax-instalment",
   "kind": "analysis",
   "section": "Personal Finance",
-  "produced": "ai-source-reviewed",
+  "produced": "ai-codex-checked",
   "date": "2026-09-14T04:01:11Z",
   "title": "Tax comes off your paycheque. You may still owe the CRA on September 15.",
   "standfirst": "A salary does not rule out instalments. Check the CRA threshold, an August-only reminder and the date your payment method counts as paid before Tuesday’s deadline.",
