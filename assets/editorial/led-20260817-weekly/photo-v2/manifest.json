@@ -1,0 +1,64 @@
+{
+  "articleId": "led-20260817-weekly",
+  "master": {
+    "sha256": "6cd7900ba23879ff5823d4eea11b1086f3204cc44627923df2e72eee68980c0d",
+    "bytes": 2814141,
+    "w": 1536,
+    "h": 1024,
+    "committed": false
+  },
+  "aiGenerated": true,
+  "credit": "Imperium Post",
+  "crop": "none — full 3:2 composition at every size",
+  "derived": "2026-09-14",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 320,
+      "bytes": 30030,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 512,
+      "bytes": 71160,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 800,
+      "bytes": 152132,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 800,
+      "bytes": 202889,
+      "type": "image/jpeg"
+    }
+  ],
+  "version": 2,
+  "assetBase": "/assets/editorial/led-20260817-weekly/photo-v2",
+  "generationDate": "2026-09-14",
+  "method": "Built-in Image Generation",
+  "modelSelection": "not exposed",
+  "prompt": "Use case: photorealistic-natural. Create one landscape 3:2 editorial photographic illustration for Imperium Post's article about the cost of building AI data centres and why a company's capital expenditure forecast can move when lease assumptions change. Subject: a plausible unbranded data-centre construction site on the outskirts of a North American city, viewed from ground level beside a chainlink fence. A long low industrial building partially clad, exposed steel roof trusses, one stationary crane, stacked conduit and electrical switchgear under protective wrapping. Composition: visually strong diagonal from foreground rough concrete to the unfinished building; ordinary physical scale, restrained cool daylight, fine real-world texture, slightly imperfect incidental framing, 35mm professional documentary photograph appearance. Concrete and steel have wear, mud and dust, overcast sky, no dramatic cinematic grading. This is a fictional illustrative site, not an actual Microsoft facility. No logos, signs, readable text, charts, money, giant cables, glowing servers, collage, illustration texture, engraving, artificial sunset or watermark. One coherent photographic scene, not multiple panels. Main subject must remain legible in small 3:2 article cards.",
+  "kind": "photographic_illustration",
+  "alt": "An unfinished industrial building with steel framing, a crane and electrical equipment beside a muddy access road.",
+  "caption": "A fictional data-centre construction scene illustrating the physical build-out behind capital-spending forecasts; not a Microsoft facility.",
+  "editorialReview": "Root approved master for integration subject to final on-page visual review.",
+  "documentaryStatus": "Generated photographic illustration; fictional scene; not a licensed or documentary photo.",
+  "replaces": {
+    "version": 1,
+    "derivativeSha256": {
+      "hero-1200.jpg": "d79b014561bbafc32153523997cbf366dbfd114aa78af2d3397d2e82653f65c7",
+      "hero-1200.webp": "5a0f56a18d8b2e2b27666c7698d6edb2444594e0e2bfe09e0885ba82146fda0e",
+      "hero-480.webp": "5d088ba73494a747b145007f207f7083378c837087bcf266b62474bdefc27631",
+      "hero-768.webp": "ae9ce956f031423aa4fd6df275a62fd0f264a917fd0c01ea612e646e756d870c"
+    }
+  }
+}

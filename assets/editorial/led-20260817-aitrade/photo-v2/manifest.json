@@ -1,0 +1,64 @@
+{
+  "articleId": "led-20260817-aitrade",
+  "master": {
+    "sha256": "65a8faa670912acdde72b28937aec453a06dd66e54607768598b1198d244b7d9",
+    "bytes": 2460379,
+    "w": 1536,
+    "h": 1024,
+    "committed": false
+  },
+  "aiGenerated": true,
+  "credit": "Imperium Post",
+  "crop": "none — full 3:2 composition at every size",
+  "derived": "2026-09-14",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 320,
+      "bytes": 25720,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 512,
+      "bytes": 54232,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 800,
+      "bytes": 100794,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 800,
+      "bytes": 161462,
+      "type": "image/jpeg"
+    }
+  ],
+  "version": 2,
+  "assetBase": "/assets/editorial/led-20260817-aitrade/photo-v2",
+  "generationDate": "2026-09-14",
+  "method": "Built-in Image Generation",
+  "modelSelection": "not exposed",
+  "prompt": "Use case: photorealistic-natural. Create one landscape 3:2 editorial photographic illustration for an article asking whether AI earnings justify the enormous hardware investment and depreciation bill. Subject: close, believable photograph of a real-world server maintenance bay: an unbranded rack-mounted compute server slid partway out on sturdy metal service rails, ordinary cooling fans and dense properly routed cables, neighboring matte black racks receding softly. Capture the physical equipment that costs money, not a symbolic AI brain or futuristic fantasy. Composition: oblique eye-level view with the server chassis in center foreground; strong readable hardware silhouette, practical white ceiling light, moderate depth of field, honest metal scratches and dust, neutral color, natural photographic detail. Fictional generic facility, not a claim to show any named company's equipment. No people needed, no logos, no readable serial numbers, neon glow, coins, diagrams, text, exposed impossible circuit patterns, floating objects, glossy CGI or watermark. Not perfectly symmetrical. One coherent photographic scene.",
+  "kind": "photographic_illustration",
+  "alt": "A server chassis pulled out on service rails beside rows of equipment racks.",
+  "caption": "A fictional server-maintenance scene illustrating the hardware behind AI investment.",
+  "editorialReview": "Root approved master for integration subject to final on-page visual review.",
+  "documentaryStatus": "Generated photographic illustration; fictional scene; not a licensed or documentary photo.",
+  "replaces": {
+    "version": 1,
+    "derivativeSha256": {
+      "hero-1200.jpg": "4397588c2dafd3feab2c877122c213cc06f13ae94438c09a5a34c76fc8688133",
+      "hero-1200.webp": "bce08109de1587ee2e48237ca0ccbf80530e461422d13e8d7b640d42561f28c8",
+      "hero-480.webp": "30de9ddb3b897e365854af2b82db1da15069397558f3e9f41fcbe1aa7f3422fb",
+      "hero-768.webp": "ac939efaa75e15b3934d29a671ef1ef836f6a2c91b191a075dfc6d94ee5bf2b7"
+    }
+  }
+}

@@ -54,6 +54,8 @@ def hits(prefix): return {k: v for k, v in STATE["hits"].items() if k.startswith
 # the fixture removes the picture from a piece that is a text-led row on the front
 # page in both orders — the static page's (by date) and the app's composed one
 WITH = "led-20260817-savers"; FEATURE = "led-20260817-weekly"; WITHOUT = "led-20260817-aitrade"
+MEDIA_VERSION = "photo-v2"
+def media_url(aid, name): return f"/assets/editorial/{aid}/{MEDIA_VERSION}/{name}"
 
 async def main():
     work = tempfile.mkdtemp(prefix="ledger-media-"); site = os.path.join(work, "site"); site2 = os.path.join(work, "site-noimage")
@@ -90,20 +92,20 @@ async def main():
     html = rd("story", WITH, "index.html"); L = lds(html)
     im = L[0]["image"][0]
     ok("story with a picture: NewsArticle.image is the piece's own derivative with size, credit and AI source type",
-       im["url"] == f"{SITE_URL}/assets/editorial/{WITH}/hero-1200.jpg" and im["width"] == 1200 and im["creditText"] == "The Ledger" and "trainedAlgorithmicMedia" in im["digitalSourceType"])
+       im["url"] == SITE_URL + media_url(WITH, "hero-1200.jpg") and im["width"] == 1200 and im["creditText"] == "Imperium Post" and "trainedAlgorithmicMedia" in im["digitalSourceType"])
     ok("story with a picture: sharing preview is the piece's own picture, large card",
-       f'property="og:image" content="{SITE_URL}/assets/editorial/{WITH}/hero-1200.jpg"' in html and 'twitter:card" content="summary_large_image"' in html and 'og:image:alt' in html)
-    ok("as published, every piece carries a picture",
+       f'property="og:image" content="{SITE_URL}{media_url(WITH, "hero-1200.jpg")}"' in html and 'twitter:card" content="summary_large_image"' in html and 'og:image:alt' in html)
+    ok("all eight legacy image-mapped pieces still carry a picture",
        all("image" in lds(rd("story", a, "index.html"))[0] for a in [WITH, FEATURE, WITHOUT, "led-20260817-record", "led-20260817-fed"]))
     html2 = rd2("story", WITHOUT, "index.html"); L2 = lds(html2)
-    ok("fixture, story without a picture: no NewsArticle.image, icon only as the sharing preview, no figure",
-       "image" not in L2[0] and f'property="og:image" content="{SITE_URL}/icon-512.png"' in html2 and '<figure class="fig' not in re.search(r'<div id="static">[\s\S]*?</div>\s*</main>', html2).group(0))
+    ok("fixture, story without a picture: no NewsArticle.image, branded fallback sharing preview, no figure",
+       "image" not in L2[0] and f'property="og:image" content="{SITE_URL}/og-default.png"' in html2 and '<figure class="fig' not in re.search(r'<div id="static">[\s\S]*?</div>\s*</main>', html2).group(0))
     ok("every derivative a piece names is served", all(
         subprocess.run(["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", base + u], capture_output=True, text=True).stdout == "200"
-        for u in [f"/assets/editorial/{WITH}/hero-{w}.webp" for w in (480, 768, 1200)] + [f"/assets/editorial/{WITH}/hero-1200.jpg", f"/assets/editorial/{FEATURE}/hero-1200.jpg"]))
+        for u in [media_url(WITH, f"hero-{w}.webp") for w in (480, 768, 1200)] + [media_url(WITH, "hero-1200.jpg"), media_url(FEATURE, "hero-1200.jpg")]))
     ok("no master is shipped: every editorial file under 600 KB, provenance carries the master's hash only",
        all(os.path.getsize(os.path.join(dp, f)) < 600 * 1024 for dp, _, fs in os.walk(os.path.join(site, "assets", "editorial")) for f in fs)
-       and json.load(open(os.path.join(site, "assets", "editorial", WITH, "manifest.json")))["master"]["committed"] is False)
+       and json.load(open(os.path.join(site, "assets", "editorial", WITH, MEDIA_VERSION, "manifest.json")))["master"]["committed"] is False)
 
     async with async_playwright() as pw:
         b = await pw.chromium.launch()
@@ -121,29 +123,33 @@ async def main():
         ok("static story: kicker, headline, deck, picture, byline/date, body — in that order",
            info["order"] == ["kicker", "h1", "rstand", "figure", "rmeta", "rbody"], info["order"])
         ok("static story: one figure with alt text, reserved size, three WebP candidates, sizes, eager and high priority",
-           info["figs"] == 1 and info["alt"].startswith("A stack of coins") and info["w"] == "1200" and info["h"] == "800" and info["srcset"].count("w,") == 2 and "100vw" in info["sizes"] and info["loading"] == "eager" and info["prio"] == "high", info)
+           info["figs"] == 1 and info["alt"].startswith("A calculator, receipts") and info["w"] == "1200" and info["h"] == "800" and info["srcset"].count("w,") == 2 and "100vw" in info["sizes"] and info["loading"] == "eager" and info["prio"] == "high", info)
         ok("static story: caption is editorial, credit names the maker, disclosure says AI-generated",
-           info["cap"].startswith("Cash savings") and "AI-generated" not in info["cap"] and "The Ledger" in info["credit"] and info["ai"])
+           info["cap"].startswith("An illustrative household-budgeting") and "AI-generated" not in info["cap"] and "Imperium Post" in info["credit"] and info["ai"])
         ok("static story at 390px, 2x: the picture fills the viewport and the 1200px derivative is chosen", info["rendered"] == 390 and info["chosen"] == "hero-1200.webp", info)
         await page.goto(base2 + f"/story/{WITHOUT}/")
         order = await page.evaluate("[...document.querySelectorAll('#static .kicker, #static h1, #static .rstand, #static figure, #static .rmeta, #static .rbody')].map(e=>e.matches('figure')?'figure':e.className||e.tagName.toLowerCase())")
         ok("fixture, static story without a picture: text-led, same order, nothing left empty", order == ["kicker", "h1", "rstand", "rmeta", "rbody"], order)
         await page.goto(base2 + "/")
-        ok("fixture, front page: the row whose story lost its picture stays text-led; lead, two thumbnails and the feature are unchanged",
-           await page.evaluate("[...document.querySelectorAll('#static article.card figure.fig')].map(f=>f.className.replace('fig ',''))") == ["fig-lead", "fig-thumb", "fig-thumb", "fig-feature"])
+        ok("fixture, front page: the row whose story lost its picture stays text-led; current image-less lead/supporting rows and the feature are unchanged",
+           await page.evaluate("[...document.querySelectorAll('#static article.card figure.fig')].map(f=>f.className.replace('fig ',''))") == ["fig-feature"])
         os.makedirs(os.path.join(ROOT, "docs", "design", "shots"), exist_ok=True)
         await page.screenshot(path=os.path.join(ROOT, "docs", "design", "shots", "no-image-390-nojs.png"), full_page=False)
         await page.goto(base + "/")
         cards = await page.evaluate("""() => [...document.querySelectorAll('#static article.card')].map(c=>({cls:c.className, fig:(c.querySelector('figure.fig')||{}).className||'', cap:!!c.querySelector('figcaption'), lazy:(c.querySelector('img')||{}).getAttribute?c.querySelector('img').getAttribute('loading'):null, below:!!c.querySelector('.cardbelow'), italic:!!c.querySelector('.feature-hl')}))""")
-        lead, comp, feat = cards[0], next(c for c in cards if "compact" in c["cls"] and "has-image" in c["cls"]), next(c for c in cards if "feature" in c["cls"])
-        ok("static front: the lead keeps editorial order and carries its own picture above the words, eager",
-           "lead" in lead["cls"] and lead["fig"] == "fig fig-lead" and lead["lazy"] == "eager" and not lead["cap"])
+        lead, feat = cards[0], next(c for c in cards if "feature" in c["cls"])
+        ok("static front: the current image-less lead keeps editorial order and stays text-led",
+           "lead" in lead["cls"] and lead["fig"] == "" and "has-image" not in lead["cls"])
         thumbs = [i for i, c in enumerate(cards) if "fig-thumb" in c["fig"]]
-        ok("static front: thumbnails on the two stories after the lead only; the rows after are text-led although their stories have pictures",
-           thumbs == [1, 2] and all(c["fig"] == "" for c in cards[3:] if "compact" in c["cls"]), thumbs)
-        ok("static front: a compact story shows a lazy 3:2 thumbnail with no caption, summary and meta below at full width",
-           comp["fig"] == "fig fig-thumb" and not comp["cap"] and comp["lazy"] == "lazy" and comp["below"])
+        ok("static front: the current image-less supporting stories stay text-led and later image-mapped rows remain text-led",
+           thumbs == [] and all(c["fig"] == "" for c in cards if "compact" in c["cls"]), thumbs)
         ok("static front: the weekly feature shows its picture above an italic headline", feat["fig"] == "fig fig-feature" and feat["italic"] and feat["lazy"] == "lazy")
+
+        await page.goto(base + "/markets/")
+        market = await page.evaluate("""() => [...document.querySelectorAll('#static article.card')].map(c=>({cls:c.className, fig:(c.querySelector('figure.fig')||{}).className||'', cap:!!c.querySelector('figcaption'), lazy:(c.querySelector('img')||{}).getAttribute?c.querySelector('img').getAttribute('loading'):null, below:!!c.querySelector('.cardbelow'), width:(c.querySelector('img')||{}).getBoundingClientRect?Math.round(c.querySelector('img').getBoundingClientRect().width):0}))""")
+        mthumbs = [c for c in market if c["fig"] == "fig fig-thumb"]
+        ok("static Markets section: the first two image-mapped supporting stories use lazy 3:2 thumbnails without captions",
+           len(mthumbs) == 2 and all(not c["cap"] and c["lazy"] == "lazy" and c["below"] and c["width"] == 112 for c in mthumbs), mthumbs)
         await ctx.close()
 
         # ---- JavaScript on: the handover, navigation, loading, reading tools
@@ -152,7 +158,7 @@ async def main():
         page = await ctx.new_page()
         STATE["hits"].clear()
         await page.goto(base + f"/story/{WITH}/", wait_until="load"); await page.wait_for_selector("#reader.on"); await page.wait_for_timeout(800)
-        h = hits(f"/assets/editorial/{WITH}/")
+        h = hits(f"/assets/editorial/{WITH}/{MEDIA_VERSION}/")
         ok("direct navigation: the reader opens on the story, the static copy is gone once the picture has loaded, exactly one hero figure is visible",
            await page.locator("#static").count() == 0 and await page.locator("figure.fig-hero").count() == 1 and await page.evaluate("location.pathname") == f"/story/{WITH}/")
         ok("handover: the hero is fetched from the server once, one derivative, for the static page and the reader together", sum(h.values()) == 1 and list(h)[0].endswith("hero-1200.webp"), h)
@@ -163,7 +169,7 @@ async def main():
         await page.goto(base + f"/story/{WITH}/", wait_until="load"); await page.wait_for_selector("#reader.on"); await page.wait_for_timeout(300)
         ok("reader: the figure follows the deck and precedes the byline; caption, credit and disclosure present",
            await page.evaluate("(()=>{const w=document.querySelector('#rwrap');const o=[...w.querySelectorAll('h1,.rstand,figure.fig-hero,.rmeta,.rbody')].map(e=>e.matches('figure')?'figure':e.className||'h1');return JSON.stringify(o)})()") == '["h1","rstand","figure","rmeta","rbody"]'
-           and await page.locator("#rwrap .fig-ai").count() == 1 and "The Ledger" in await page.locator("#rwrap .fig-credit").text_content())
+           and await page.locator("#rwrap .fig-ai").count() == 1 and "Imperium Post" in await page.locator("#rwrap .fig-credit").text_content())
         t = await page.evaluate("(()=>{const px=e=>parseFloat(getComputedStyle(e).fontSize);return {h1:px(document.querySelector('#rwrap h1')),deck:px(document.querySelector('.rstand')),body:px(document.querySelector('.rbody')),lh:parseFloat(getComputedStyle(document.querySelector('.rbody')).lineHeight),italic:getComputedStyle(document.querySelector('#rwrap h1')).fontStyle}})()")
         ok("typography at 390px, regular size: headline 30–34px upright, deck 18–19.5px, body 20–21px with comfortable leading",
            30 <= t["h1"] <= 34 and 18 <= t["deck"] <= 19.5 and 20 <= t["body"] <= 21 and t["lh"] >= 30 and t["italic"] == "normal", t)
@@ -205,17 +211,21 @@ async def main():
         await page.evaluate("document.querySelector('#feed article.weekly').scrollIntoView()"); await page.wait_for_timeout(1200)
         ok("front page: the feature picture is a real image that has loaded once scrolled into view",
            await page.evaluate("(()=>{const i=document.querySelector('#feed article.weekly img');return i && i.complete && i.naturalWidth>0 && Math.round(i.getBoundingClientRect().width)>300})()"))
-        ok("front page: the compact thumbnail is 112px wide, 3:2, and the 480px derivative is chosen",
-           await page.evaluate("(()=>{const i=document.querySelector('#feed article.compact.has-image img');const r=i.getBoundingClientRect();return Math.round(r.width)===112 && Math.abs(r.width/r.height-1.5)<0.05 && (i.currentSrc||'').endsWith('hero-480.webp')})()"))
+        await page.goto(base + "/markets/", wait_until="load"); await page.wait_for_selector("#feed article.card"); await page.wait_for_timeout(500)
+        market_thumb = await page.evaluate("(()=>{const i=document.querySelector('#feed article.compact.has-image img');if(!i)return null;const r=i.getBoundingClientRect();return {width:Math.round(r.width),ratio:r.width/r.height,current:i.currentSrc,figs:[...document.querySelectorAll('#feed article.card figure.fig')].map(f=>f.className)}})()")
+        ok("Markets section after in-app navigation: the compact thumbnail remains 112px wide and 3:2 while reusing the derivative already loaded for the front-page lead",
+           market_thumb is not None and market_thumb["width"] == 112 and abs(market_thumb["ratio"] - 1.5) < 0.05 and market_thumb["current"].endswith("hero-1200.webp"), market_thumb)
+        await page.goto(base + "/", wait_until="load"); await page.wait_for_selector("#feed article.card"); await page.wait_for_timeout(300)
         clamp = await page.evaluate("(()=>{const m=e=>{const cs=getComputedStyle(e);return [e.clientHeight, parseFloat(cs.lineHeight), e.scrollHeight]};return {lead:m(document.querySelector('#feed article.lead .standfirst')), comp:m(document.querySelector('#feed article.compact .standfirst'))}})()")
         ok("front page on a phone: the lead's summary shows at most four lines and a supporting story's three, the rest clipped",
            clamp["lead"][0] <= clamp["lead"][1] * 4 + 2 and clamp["lead"][2] > clamp["lead"][0] and clamp["comp"][0] <= clamp["comp"][1] * 3 + 2, clamp)
-        ok("front page in the app: one lead picture, two thumbnails, one feature picture — and no more",
-           await page.evaluate("[...document.querySelectorAll('#feed article.card figure.fig')].map(f=>f.className.replace('fig ',''))") == ["fig-lead", "fig-thumb", "fig-thumb", "fig-feature"])
+        front_figs = await page.evaluate("[...document.querySelectorAll('#feed article.card figure.fig')].map(f=>f.className.replace('fig ',''))")
+        ok("front page in the app after Newsstand composition: one lead picture, two thumbnails and one feature picture — and no more",
+           front_figs == ["fig-lead", "fig-thumb", "fig-thumb", "fig-feature"], front_figs)
         await ctx.close()
 
         # ---- the worker's picture cache: scoped to the build, bounded, refreshed by a replaced picture
-        HERO = f"/assets/editorial/{WITH}/hero-1200.webp"
+        HERO = media_url(WITH, "hero-1200.webp")
         ctx = await b.new_context(viewport={"width":390,"height":844}, is_mobile=True, has_touch=True, device_scale_factor=2)
         page = await ctx.new_page()
         await page.goto(base + f"/story/{WITH}/", wait_until="load")
@@ -230,7 +240,7 @@ async def main():
         ok("worker: one image cache, named for this build, holding the 1200px hero after a controlled load",
            len(img_caches) == 1 and stampA in img_caches[0] and HERO in held, (img_caches, held))
         os.makedirs(os.path.join(site, "assets", "editorial", "limit"))
-        small = open(os.path.join(site, "assets", "editorial", WITH, "hero-480.webp"), "rb").read()
+        small = open(os.path.join(site, "assets", "editorial", WITH, MEDIA_VERSION, "hero-480.webp"), "rb").read()
         for i in range(45): open(os.path.join(site, "assets", "editorial", "limit", f"hero-{i}.webp"), "wb").write(small)
         await page.evaluate("async () => { for (let i=0;i<45;i++) await fetch('/assets/editorial/limit/hero-'+i+'.webp'); }")
         await page.wait_for_timeout(1500)
@@ -239,7 +249,7 @@ async def main():
         # a new build in which this piece's picture was replaced, and nothing else changed
         alt = os.path.join(work, "assets-b"); shutil.copytree(os.path.join(ROOT, "assets", "editorial"), alt)
         for f in ["hero-1200.webp", "hero-768.webp", "hero-480.webp", "hero-1200.jpg"]:
-            shutil.copy(os.path.join(alt, FEATURE, f), os.path.join(alt, WITH, f))
+            shutil.copy(os.path.join(alt, FEATURE, MEDIA_VERSION, f), os.path.join(alt, WITH, MEDIA_VERSION, f))
         siteb = os.path.join(work, "site-b")
         rb = subprocess.run(["node", os.path.join(ROOT, "build.mjs"), siteb, "--assets", alt], capture_output=True, text=True)
         os.makedirs(os.path.join(siteb, "data")); open(os.path.join(siteb, "data", "feed.json"), "w").write(stub)
@@ -255,7 +265,7 @@ async def main():
         update = await update_and_wait_for_controller(page)
         activated = update["changed"] and update["state"] == "activated"
         await page.reload(wait_until="load"); await page.wait_for_selector("#reader.on")
-        newlen = os.path.getsize(os.path.join(siteb, "assets", "editorial", WITH, "hero-1200.webp"))
+        newlen = os.path.getsize(os.path.join(siteb, "assets", "editorial", WITH, MEDIA_VERSION, "hero-1200.webp"))
         got = await page.evaluate("u => fetch(u).then(r=>r.arrayBuffer()).then(b=>b.byteLength)", HERO)
         keys2 = await page.evaluate("caches.keys()")
         after_hits = STATE["hits"][HERO]

@@ -1,0 +1,64 @@
+{
+  "articleId": "led-20260817-fed",
+  "master": {
+    "sha256": "f52013d2e2d1e2d5a58b3554cab94eb7581951d19bbb65eb34b1bb5bbece3554",
+    "bytes": 2147757,
+    "w": 1536,
+    "h": 1024,
+    "committed": false
+  },
+  "aiGenerated": true,
+  "credit": "Imperium Post",
+  "crop": "none — full 3:2 composition at every size",
+  "derived": "2026-09-14",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 320,
+      "bytes": 18826,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 512,
+      "bytes": 36798,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 800,
+      "bytes": 70952,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 800,
+      "bytes": 128665,
+      "type": "image/jpeg"
+    }
+  ],
+  "version": 2,
+  "assetBase": "/assets/editorial/led-20260817-fed/photo-v2",
+  "generationDate": "2026-09-14",
+  "method": "Built-in Image Generation",
+  "modelSelection": "not exposed",
+  "prompt": "Use case: photorealistic-natural. One landscape 3:2 editorial photographic illustration for a story about disagreement among monetary policymakers ahead of a central-bank symposium. Believable detail photograph of an empty, modest institutional conference room before a discussion: several simple gooseneck conference microphones facing different empty dark upholstered chairs along a real rectangular wooden table, closed plain briefing folders and clear water glasses set irregularly. Camera close to one microphone in foreground with another microphone across the table in middle distance, rest of room soft, creating a sense of competing positions without an artificial symbol. Ordinary window daylight mixed with subtle ceiling light, neutral grey/beige and wood, honest scratches and fabric weave, professional news-magazine photography. Generic fictional setting, absolutely not a reproduction of Jackson Hole venue or a Federal Reserve event. No mountains, people, logos, government seals, nameplates, flags, readable official documents, arrows, staged origami, giant props, moody cinematic glow or watermark. Not a perfect symmetrical boardroom stock render.",
+  "kind": "photographic_illustration",
+  "alt": "Microphones, closed briefing folders and water glasses on an empty conference table.",
+  "caption": "A fictional policy-discussion setting; not a photograph of the Federal Reserve or Jackson Hole symposium.",
+  "editorialReview": "Root approved master for integration subject to final on-page visual review.",
+  "documentaryStatus": "Generated photographic illustration; fictional scene; not a licensed or documentary photo.",
+  "replaces": {
+    "version": 1,
+    "derivativeSha256": {
+      "hero-1200.jpg": "8983016e7861dd2122e07d5215aeac47e6ae58935b57a7cb7fe427424fd87128",
+      "hero-1200.webp": "b2b93c315cd109ac0c19e36101f4ad838ad09271d0113d064160bbde06753955",
+      "hero-480.webp": "9ac5020911ef24e65503674388fd9fab0879dad64f516a43e30fdc099bb4c15d",
+      "hero-768.webp": "f56b3810eaa6df007e5f6aca1d90f8874ebc5820d8c41ee952aba783931869e5"
+    }
+  }
+}
