@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; connect-src 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculators and tools — Imperium Post</title>
+<meta name="description" content="Free Canadian money calculators with the arithmetic shown: TFSA contribution room, OAS clawback, mortgage renewal payment, GIC ladder, and the date of the next Bank of Canada rate announcement.">
+<link rel="canonical" href="https://imperiumpost.com/tools/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Imperium Post">
+<meta property="og:title" content="Calculators and tools">
+<meta property="og:description" content="TFSA room, OAS clawback, mortgage renewal, GIC ladder, next Bank of Canada announcement — free, sourced, and the working is shown.">
+<meta property="og:url" content="https://imperiumpost.com/tools/">
+<meta property="og:image" content="https://imperiumpost.com/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Calculators and tools — Imperium Post">
+<meta name="twitter:image" content="https://imperiumpost.com/og-default.png">
+<link rel="icon" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "CollectionPage", "name": "Calculators and tools", "url": "https://imperiumpost.com/tools/", "isPartOf": {"@type": "WebSite", "name": "Imperium Post", "url": "https://imperiumpost.com/"}}</script>
+<style>
+:root{
+  --paper:#FFF1E5;--paper-2:#F2E5DA;--ink:#12100E;--ink-2:#33302C;--ink-3:#6B6560;--rule:#DCCFC4;--rule-2:#C9BAAE;
+  --accent:#0F5499;--accent-2:#990F3D;--teal:#0A626B;--chip:#FFFFFF;--ok:#1B6B3A;
+  --serif:"Source Serif 4",Charter,Georgia,"Times New Roman",serif;--display:"Playfair Display",Georgia,serif;
+  --ui:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--maxw:720px;
+}
+@media (prefers-color-scheme:dark){:root{--paper:#12100E;--paper-2:#1C1916;--ink:#F5EFE8;--ink-2:#D8D0C8;--ink-3:#9C948C;--rule:#332E29;--rule-2:#4A433C;--accent:#6FA8DC;--accent-2:#E4718F;--teal:#5FB3BC;--chip:#1C1916;--ok:#7CCB9A}}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);line-height:1.6;font-size:1.0625rem}
+a{color:var(--accent)}
+.masthead{border-bottom:1px solid var(--rule);padding:14px 18px;display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.wordmark{font-family:var(--display);font-weight:800;font-size:1.4rem;letter-spacing:-.02em;text-decoration:none;color:inherit}
+.wordmark span{color:var(--accent-2)}
+.masthead nav{font-family:var(--ui);font-size:.85rem;display:flex;gap:14px;flex-wrap:wrap}
+.masthead nav a{color:var(--ink-2);text-decoration:none}
+main{max-width:var(--maxw);margin:0 auto;padding:28px 18px 60px}
+.kicker{font-family:var(--ui);font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-2);margin:0 0 10px;font-weight:600}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(1.8rem,5vw,2.4rem);line-height:1.12;margin:0 0 12px;letter-spacing:-.01em}
+.stand{font-size:1.15rem;color:var(--ink-2);margin:0 0 18px}
+.meta{font-family:var(--ui);font-size:.85rem;color:var(--ink-3);margin:0 0 26px;padding-bottom:16px;border-bottom:1px solid var(--rule)}
+h2{font-family:var(--display);font-size:1.4rem;margin:36px 0 10px;line-height:1.2}
+h3{font-family:var(--ui);font-size:.95rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin:22px 0 8px}
+.calc{background:var(--chip);border:1px solid var(--rule);border-radius:12px;padding:20px;box-shadow:0 8px 30px rgba(18,16,14,.06)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+label{display:block;font-family:var(--ui);font-size:.9rem;font-weight:600;margin-bottom:6px}
+.help{display:block;font-family:var(--ui);font-weight:400;font-size:.8rem;color:var(--ink-3);margin-top:4px}
+input[type=number],select{width:100%;font:inherit;font-family:var(--ui);font-size:1.05rem;padding:10px 12px;border:1px solid var(--rule-2);border-radius:8px;background:var(--paper);color:var(--ink)}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
+.money{position:relative}
+.money input{padding-left:26px}
+.money::before{content:"$";position:absolute;left:11px;top:50%;transform:translateY(-50%);font-family:var(--ui);color:var(--ink-3)}
+.result{margin-top:22px;padding:18px 20px;border-radius:10px;background:var(--paper-2);border-left:4px solid var(--teal)}
+.result .big{font-family:var(--display);font-size:clamp(1.9rem,6vw,2.6rem);font-weight:800;margin:0;line-height:1.1}
+.result .big.neg{color:var(--accent-2)}
+.result .big.ok{color:var(--ok)}
+.result p{margin:8px 0 0;font-family:var(--ui);font-size:.95rem;color:var(--ink-2)}
+.warn{margin-top:14px;padding:12px 14px;border-radius:8px;background:rgba(153,15,61,.08);border:1px solid var(--accent-2);font-family:var(--ui);font-size:.9rem}
+table{width:100%;border-collapse:collapse;font-family:var(--ui);font-size:.9rem;margin:12px 0}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:600;color:var(--ink-3);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.total td{font-weight:700;border-top:2px solid var(--rule-2)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+button{font-family:var(--ui);font-size:.9rem;font-weight:600;padding:10px 14px;border-radius:8px;border:1px solid var(--rule-2);background:var(--paper);color:var(--ink);cursor:pointer}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.small{font-family:var(--ui);font-size:.85rem;color:var(--ink-3)}
+details{border:1px solid var(--rule);border-radius:8px;padding:10px 14px;margin:10px 0}
+summary{cursor:pointer;font-family:var(--ui);font-weight:600}
+.faq dt{font-weight:600;margin-top:14px}
+.faq dd{margin:4px 0 0}
+.sources{border-top:1px solid var(--rule);margin-top:36px;padding-top:16px;font-family:var(--ui);font-size:.88rem}
+.sources li{margin:6px 0}
+.disc{font-family:var(--ui);font-size:.82rem;color:var(--ink-3);margin-top:24px}
+.tablewrap{overflow-x:auto}
+footer{border-top:1px solid var(--rule);margin-top:40px;padding:18px;font-family:var(--ui);font-size:.82rem;color:var(--ink-3);text-align:center}
+.wordmark{display:inline-flex;align-items:center;gap:.4em}.wordmark .mono{display:inline-grid;place-items:center;width:1.55em;height:1.55em;background:#12100E;color:#FFF1E5;font-size:.72em;line-height:1} :focus-visible{outline:3px solid #0F5499;outline-offset:3px} input:invalid{border-color:#990F3D} #calcError{color:#990F3D} [hidden]{display:none!important} @media(max-width:420px){.masthead{flex-wrap:wrap}.wordmark{font-size:1.25rem}main{padding-left:14px;padding-right:14px}}
+</style>
+<style>
+.cards{list-style:none;padding:0;margin:20px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:620px){.cards{grid-template-columns:1fr}}
+.card{background:var(--chip);border:1px solid var(--rule);border-radius:12px;padding:18px 20px;box-shadow:0 8px 30px rgba(18,16,14,.05);display:flex;flex-direction:column;gap:8px}
+.card h2{margin:0;font-size:1.2rem}
+.card h2 a{text-decoration:none;color:inherit}
+.card h2 a:hover{text-decoration:underline}
+.card p{margin:0;font-size:.98rem;color:var(--ink-2)}
+.card .tag{font-family:var(--ui);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-2);font-weight:600}
+.card .go{font-family:var(--ui);font-size:.9rem;font-weight:600;margin-top:auto}
+.example{font-family:var(--ui);font-size:.85rem;color:var(--ink-3)}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <a class="wordmark" href="/" aria-label="Imperium Post — front page"><span class="mono" aria-hidden="true">IP</span>Imperium Post</a>
+  <nav aria-label="Sections"><a href="/">Front page</a><a href="/personal-finance/">Personal Finance</a><a href="/tools/">Tools</a><a href="/about/">About</a><a href="/privacy/">Privacy</a></nav>
+</header>
+<main id="main">
+  <p class="kicker">Tools</p>
+  <h1>Calculators and tools</h1>
+  <p class="stand">Small, free calculators for Canadian money questions. Every one shows its working, links the figures it uses to the government or Bank of Canada page they came from, and runs entirely in your browser — nothing you type is sent anywhere.</p>
+  <p class="meta">Imperium Post · Constants are checked against the primary source on the date shown at the foot of each tool · If a number looks wrong, the page tells you where it came from so you can check it yourself</p>
+
+  <ul class="cards">
+    <li class="card">
+      <span class="tag">Savings · TFSA</span>
+      <h2><a href="/tools/tfsa-room/">TFSA contribution room calculator</a></h2>
+      <p>How much can you put into a TFSA this year? Enter the year you turned 18 (or became a resident), what you have contributed and withdrawn, and see your room from the CRA's annual limits for a continuous-eligibility history. Excess-contribution tax is not calculated.</p>
+      <span class="example">Example: eligible since 2015, $40,000 in, $5,000 withdrawn last year → $43,000 of room.</span>
+      <a class="go" href="/tools/tfsa-room/">Open the TFSA calculator →</a>
+    </li>
+    <li class="card">
+      <span class="tag">Retirement · OAS</span>
+      <h2><a href="/tools/oas-clawback/">OAS clawback calculator</a></h2>
+      <p>Will the Old Age Security recovery tax take part of your pension? Enter the income year and actual gross OAS to estimate annual repayment and illustrate later withholding, using Service Canada's published figures for income years 2024 to 2026.</p>
+      <span class="example">Example: $100,000 of 2025 income, $8,000 gross OAS → $981.90 annual estimate; $81.83 illustrative monthly withholding.</span>
+      <a class="go" href="/tools/oas-clawback/">Open the OAS calculator →</a>
+    </li>
+    <li class="card">
+      <span class="tag">Housing · Mortgages</span>
+      <h2><a href="/tools/mortgage-renewal/">Mortgage renewal payment calculator</a></h2>
+      <p>Your term is ending. Enter the balance, the expiring rate and the lender's offer and see the new payment, the change per month, the interest over the next term, and what happens if you keep paying the old amount — for fixed-rate monthly loans using semi-annual compounding.</p>
+      <span class="example">Example: $500,000 at 4% over 25 years; after five years renew at 6% over 20 years → $2,630.10 becomes $3,099.94 monthly.</span>
+      <a class="go" href="/tools/mortgage-renewal/">Open the renewal calculator →</a>
+    </li>
+    <li class="card">
+      <span class="tag">Savings · GICs</span>
+      <h2><a href="/tools/gic-ladder/">GIC ladder calculator</a></h2>
+      <p>Split a lump sum across one- to five-year GICs and see the blended rate, what matures each year, the value after five and ten years, and how the ladder compares with rolling one-year GICs, a single five-year GIC or a savings account. Defaults are the Bank of Canada's weekly posted-rate series; type in your own quotes.</p>
+      <span class="example">Example: $50,000 at the dated five-rung defaults → 2.58% average; $1,290 accrued interest in year one before tax.</span>
+      <a class="go" href="/tools/gic-ladder/">Open the GIC ladder calculator →</a>
+    </li>
+    <li class="card">
+      <span class="tag">Rates · Bank of Canada</span>
+      <h2><a href="/resources/next-bank-of-canada-announcement/">When is the next Bank of Canada announcement?</a></h2>
+      <p>The date and time of the next policy-rate decision, a countdown, the full 2026 and 2027 schedule, a dated policy/prime-rate snapshot. Add the next date to your calendar in one click.</p>
+      <span class="example">As of September 14: next decision 28 October 2026, 9:45 a.m. ET, with the Monetary Policy Report.</span>
+      <a class="go" href="/resources/next-bank-of-canada-announcement/">See the schedule →</a>
+    </li>
+    <li class="card"><span class="tag">Retirement · CPP</span><h2><a href="/tools/cpp-start-age/">CPP start-age calculator</a></h2><p>Compare statutory age adjustments using the same fixed age-65 estimate, before taxes and contribution-record changes.</p><span class="example">$1,000 at 65 becomes $640 at 60 or $1,420 at 70.</span><a class="go" href="/tools/cpp-start-age/">Open the CPP calculator →</a></li>
+  </ul>
+
+  <h2 style="margin-top:40px">How these tools are built</h2>
+  <p>Each calculator holds its constants — contribution limits, thresholds, posted rates, announcement dates — in one block at the top of the page with the source URL and the date it was last checked, and the page prints that date at the bottom. Constants do not update automatically. Compare the dated assumptions with the linked source before relying on a result. Results are estimates for planning. The CRA, Service Canada, your lender or your bank calculates the real thing from your actual records, and nothing here is tax, legal or investment advice.</p>
+  <p>Have a calculation you keep doing by hand? Tell us: <a href="/about/">the About page</a> has the address.</p>
+</main>
+<footer>© Imperium Post · <a href="/privacy/">Privacy</a> · <a href="/about/">About</a></footer>
+</body>
+</html>

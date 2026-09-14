@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; connect-src 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GIC ladder calculator — Imperium Post</title>
+<meta name="description" content="Build a one-to-five-year GIC ladder from any lump sum: see the blended rate, what matures each year, the value after five and ten years, and how it compares with rolling one-year GICs, one five-year GIC, or a savings account — with the arithmetic shown.">
+<link rel="canonical" href="https://imperiumpost.com/tools/gic-ladder/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Imperium Post">
+<meta property="og:title" content="GIC ladder calculator">
+<meta property="og:description" content="Split a lump sum across one- to five-year GICs and see what matures each year, the blended rate, and the ten-year comparison against rolling one-year GICs, a single five-year GIC and a savings account.">
+<meta property="og:url" content="https://imperiumpost.com/tools/gic-ladder/">
+<meta property="og:image" content="https://imperiumpost.com/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GIC ladder calculator">
+<meta name="twitter:image" content="https://imperiumpost.com/og-default.png">
+<link rel="icon" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "GIC ladder calculator", "url": "https://imperiumpost.com/tools/gic-ladder/", "isPartOf": {"@type": "WebSite", "name": "Imperium Post", "url": "https://imperiumpost.com/"}}</script>
+<style>
+:root{
+  --paper:#FFF1E5;--paper-2:#F2E5DA;--ink:#12100E;--ink-2:#33302C;--ink-3:#6B6560;--rule:#DCCFC4;--rule-2:#C9BAAE;
+  --accent:#0F5499;--accent-2:#990F3D;--teal:#0A626B;--chip:#FFFFFF;--ok:#1B6B3A;
+  --serif:"Source Serif 4",Charter,Georgia,"Times New Roman",serif;--display:"Playfair Display",Georgia,serif;
+  --ui:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--maxw:720px;
+}
+@media (prefers-color-scheme:dark){:root{--paper:#12100E;--paper-2:#1C1916;--ink:#F5EFE8;--ink-2:#D8D0C8;--ink-3:#9C948C;--rule:#332E29;--rule-2:#4A433C;--accent:#6FA8DC;--accent-2:#E4718F;--teal:#5FB3BC;--chip:#1C1916;--ok:#7CCB9A}}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);line-height:1.6;font-size:1.0625rem}
+a{color:var(--accent)}
+.masthead{border-bottom:1px solid var(--rule);padding:14px 18px;display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.wordmark{font-family:var(--display);font-weight:800;font-size:1.4rem;letter-spacing:-.02em;text-decoration:none;color:inherit}
+.wordmark span{color:var(--accent-2)}
+.masthead nav{font-family:var(--ui);font-size:.85rem;display:flex;gap:14px;flex-wrap:wrap}
+.masthead nav a{color:var(--ink-2);text-decoration:none}
+main{max-width:var(--maxw);margin:0 auto;padding:28px 18px 60px}
+.kicker{font-family:var(--ui);font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-2);margin:0 0 10px;font-weight:600}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(1.8rem,5vw,2.4rem);line-height:1.12;margin:0 0 12px;letter-spacing:-.01em}
+.stand{font-size:1.15rem;color:var(--ink-2);margin:0 0 18px}
+.meta{font-family:var(--ui);font-size:.85rem;color:var(--ink-3);margin:0 0 26px;padding-bottom:16px;border-bottom:1px solid var(--rule)}
+h2{font-family:var(--display);font-size:1.4rem;margin:36px 0 10px;line-height:1.2}
+h3{font-family:var(--ui);font-size:.95rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin:22px 0 8px}
+.calc{background:var(--chip);border:1px solid var(--rule);border-radius:12px;padding:20px;box-shadow:0 8px 30px rgba(18,16,14,.06)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+label{display:block;font-family:var(--ui);font-size:.9rem;font-weight:600;margin-bottom:6px}
+.help{display:block;font-family:var(--ui);font-weight:400;font-size:.8rem;color:var(--ink-3);margin-top:4px}
+input[type=number],select{width:100%;font:inherit;font-family:var(--ui);font-size:1.05rem;padding:10px 12px;border:1px solid var(--rule-2);border-radius:8px;background:var(--paper);color:var(--ink)}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
+.money{position:relative}
+.money input{padding-left:26px}
+.money::before{content:"$";position:absolute;left:11px;top:50%;transform:translateY(-50%);font-family:var(--ui);color:var(--ink-3)}
+.result{margin-top:22px;padding:18px 20px;border-radius:10px;background:var(--paper-2);border-left:4px solid var(--teal)}
+.result .big{font-family:var(--display);font-size:clamp(1.9rem,6vw,2.6rem);font-weight:800;margin:0;line-height:1.1}
+.result .big.neg{color:var(--accent-2)}
+.result .big.ok{color:var(--ok)}
+.result p{margin:8px 0 0;font-family:var(--ui);font-size:.95rem;color:var(--ink-2)}
+.warn{margin-top:14px;padding:12px 14px;border-radius:8px;background:rgba(153,15,61,.08);border:1px solid var(--accent-2);font-family:var(--ui);font-size:.9rem}
+table{width:100%;border-collapse:collapse;font-family:var(--ui);font-size:.9rem;margin:12px 0}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:600;color:var(--ink-3);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.total td{font-weight:700;border-top:2px solid var(--rule-2)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+button{font-family:var(--ui);font-size:.9rem;font-weight:600;padding:10px 14px;border-radius:8px;border:1px solid var(--rule-2);background:var(--paper);color:var(--ink);cursor:pointer}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.small{font-family:var(--ui);font-size:.85rem;color:var(--ink-3)}
+details{border:1px solid var(--rule);border-radius:8px;padding:10px 14px;margin:10px 0}
+summary{cursor:pointer;font-family:var(--ui);font-weight:600}
+.faq dt{font-weight:600;margin-top:14px}
+.faq dd{margin:4px 0 0}
+.sources{border-top:1px solid var(--rule);margin-top:36px;padding-top:16px;font-family:var(--ui);font-size:.88rem}
+.sources li{margin:6px 0}
+.disc{font-family:var(--ui);font-size:.82rem;color:var(--ink-3);margin-top:24px}
+.tablewrap{overflow-x:auto}
+footer{border-top:1px solid var(--rule);margin-top:40px;padding:18px;font-family:var(--ui);font-size:.82rem;color:var(--ink-3);text-align:center}
+.wordmark{display:inline-flex;align-items:center;gap:.4em}.wordmark .mono{display:inline-grid;place-items:center;width:1.55em;height:1.55em;background:#12100E;color:#FFF1E5;font-size:.72em;line-height:1} :focus-visible{outline:3px solid #0F5499;outline-offset:3px} input:invalid{border-color:#990F3D} #calcError{color:#990F3D} [hidden]{display:none!important} @media(max-width:420px){.masthead{flex-wrap:wrap}.wordmark{font-size:1.25rem}main{padding-left:14px;padding-right:14px}}
+</style>
+<style>
+.rates{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media (max-width:560px){.rates{grid-template-columns:repeat(2,1fr)}}
+.rates label{font-size:.8rem}
+.rates .pct{position:relative}
+.rates .pct input{padding-right:26px}
+.rates .pct::after{content:"%";position:absolute;right:10px;top:50%;transform:translateY(-50%);font-family:var(--ui);color:var(--ink-3)}
+.cmp td.best{font-weight:700;color:var(--ok)}
+.toggle{display:flex;gap:8px;align-items:center;font-family:var(--ui);font-size:.9rem;margin-top:12px}
+.toggle input{width:auto}
+tr.muted td{color:var(--ink-3)}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <a class="wordmark" href="/" aria-label="Imperium Post — front page"><span class="mono" aria-hidden="true">IP</span>Imperium Post</a>
+  <nav aria-label="Sections"><a href="/">Front page</a><a href="/personal-finance/">Personal Finance</a><a href="/tools/">Tools</a><a href="/about/">About</a><a href="/privacy/">Privacy</a></nav>
+</header>
+<main id="main">
+  <p class="kicker">Tools · Personal Finance</p>
+  <h1>GIC ladder calculator</h1>
+  <p class="stand">Split a lump sum across one- to five-year GICs. See the blended rate, what comes free each year, the value after five and ten years as each rung is reinvested, and how the ladder compares with rolling one-year GICs, one five-year GIC or a savings account — with the arithmetic shown.</p>
+  <p class="meta">Imperium Post · Default rates are the Bank of Canada's weekly chartered-bank GIC series, observation 9 September 2026 · Edit them to the quotes your bank or credit union actually offers · Entered amounts are not saved or sent</p>
+
+  <form class="calc" id="calc" novalidate autocomplete="off"><p id="calcError" role="alert"></p><noscript>Enable JavaScript to calculate. This form cannot submit your inputs.</noscript>
+    <div class="grid">
+      <div>
+        <label for="amount">Amount to invest
+          <span class="help">Money you will not need for at least a year. The calculator splits it into equal rungs.</span></label>
+        <div class="money"><input type="number" id="amount" min="0" step="any" inputmode="decimal" value="50000" max="1000000000" required></div>
+      </div>
+      <div>
+        <label for="rungs">Number of rungs
+          <span class="help">Five rungs = one-, two-, three-, four- and five-year GICs. Three rungs = one, two and three years.</span></label>
+        <select id="rungs">
+          <option value="2">2 (one and two years)</option>
+          <option value="3">3 (one to three years)</option>
+          <option value="4">4 (one to four years)</option>
+          <option value="5" selected>5 (one to five years)</option>
+        </select>
+      </div>
+    </div>
+
+    <h3>GIC rates by term (annual, compounded yearly, paid at maturity)</h3>
+    <div class="rates" id="rates">
+      <div><label for="r1">1-year</label><div class="pct"><input type="number" id="r1" min="0" max="20" step="any" inputmode="decimal" value="2.45" required></div><span class="help">BoC posted</span></div>
+      <div><label for="r2">2-year</label><div class="pct"><input type="number" id="r2" min="0" max="20" step="any" inputmode="decimal" value="2.50" required></div><span class="help">midpoint — edit</span></div>
+      <div><label for="r3">3-year</label><div class="pct"><input type="number" id="r3" min="0" max="20" step="any" inputmode="decimal" value="2.55" required></div><span class="help">BoC posted</span></div>
+      <div><label for="r4">4-year</label><div class="pct"><input type="number" id="r4" min="0" max="20" step="any" inputmode="decimal" value="2.65" required></div><span class="help">midpoint — edit</span></div>
+      <div><label for="r5">5-year</label><div class="pct"><input type="number" id="r5" min="0" max="20" step="any" inputmode="decimal" value="2.75" required></div><span class="help">BoC posted</span></div>
+    </div>
+    <p class="small">Defaults are dated posted-rate observations, not offers. Replace them with issuer quotes and confirm terms.</p>
+
+    <div class="grid" style="margin-top:16px">
+      <div>
+        <label for="hisa">Savings-account rate to compare (optional)
+          <span class="help">A high-interest savings account. Leave as is if you just want the GIC comparison.</span></label>
+        <div class="pct" style="position:relative"><input type="number" id="hisa" min="0" max="20" step="any" inputmode="decimal" value="1.50" required><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-family:var(--ui);color:var(--ink-3)">%</span></div>
+      </div>
+      <div>
+        <label for="tax">Your marginal tax rate (optional)
+          <span class="help">First-year illustration only. Future balances are before tax. This does not model RRSP withdrawal tax.</span></label>
+        <div class="pct" style="position:relative"><input type="number" id="tax" min="0" max="60" step="any" inputmode="decimal" value="0" required><span style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-family:var(--ui);color:var(--ink-3)">%</span></div>
+      </div>
+    </div>
+    <div class="toggle"><input type="checkbox" id="reinvest" checked><label for="reinvest" style="margin:0">Reinvest each maturing rung in a new longest-term GIC at today's longest-term rate</label></div>
+
+    <div class="btnrow">
+      <button type="submit" class="primary">Calculate</button>
+      <button type="button" id="reset">Reset</button>
+    </div>
+
+    <div class="result" id="result" aria-live="polite">
+      <p class="big" id="blended">2.58%</p>
+      <p id="blendedText"></p>
+      <p id="firstYear" class="small"></p>
+      <div class="warn" id="warn" hidden></div>
+    </div>
+
+    <h3>What matures, year by year</h3>
+    <div class="tablewrap">
+    <table id="schedule" aria-label="Ladder schedule">
+      <thead><tr><th>Year</th><th>Matures</th><th class="num">Principal</th><th class="num">Interest</th><th class="num">Cash freed</th><th>Then</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    </div>
+
+    <h3>Ladder vs. the alternatives</h3>
+    <div class="tablewrap">
+    <table id="compare" class="cmp" aria-label="Comparison of strategies">
+      <thead><tr><th>Strategy</th><th class="num">Year 1</th><th class="num">After 5 years</th><th class="num">After 10 years</th><th class="num">Interest, 10 yrs</th><th>Access</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    </div>
+    <p class="small" id="cmpNote"></p>
+    <p class="small" id="taxNote" hidden></p>
+    <details>
+      <summary>Assumptions and the arithmetic</summary>
+      <ul class="small" id="assump"></ul>
+    </details>
+  </form>
+
+  <h2>How a ladder works</h2><p>Equal principal amounts buy terms of one to N years. Each original rung matures in its respective year. Maturities are either held as zero-interest cash or reinvested with all proceeds into a new N-year GIC at the entered N-year rate.</p><p>This model compounds annually and pays at maturity. Renewal rates stay constant for the illustration, not as a forecast. Five- and ten-year values include accrued interest on unmatured GICs and are not all accessible cash. Comparison balances are before tax, fees and inflation.</p>
+
+  <h2>A worked example</h2><p>$50,000 split five ways at 2.45%, 2.50%, 2.55%, 2.65% and 2.75% has a 2.58% average rate: $1,290 accrued across all rungs in year one. The first maturity is $10,245; the two-year maturity is $10,506.25. At a 30% illustrative tax rate, first-year interest after tax is $903. Future balances are before tax.</p>
+
+  <h2>Deposit insurance: the $100,000 line</h2><p>Eligible GICs at a CDIC member share the $100,000 principal-and-interest limit with other eligible deposits in the same ownership category at that institution. Different maturity terms do not create new coverage. Leave room for accrued interest and other deposits. This tool flags the ladder alone and cannot certify coverage; verify the issuer, category and all your deposits with CDIC.</p>
+
+  <h2>Frequently asked</h2>
+  <dl class="faq">
+    <dt>What is a GIC ladder?</dt><dd>A lump sum split into equal parts, each in a GIC of a different term, so that one part matures every year. Maturing parts are reinvested at the longest term. The interest difference depends on the rates and reinvestment assumptions.</dd>
+    <dt>Is a ladder better than one long GIC?</dt><dd>It depends on rates, renewal rates and access needs. The table compares assumptions and does not recommend a strategy.</dd>
+    <dt>Should I use equal rungs?</dt><dd>This calculator uses equal initial principal amounts. Maturity proceeds vary because terms and accumulated interest differ; unequal rungs are outside its scope.</dd>
+    <dt>Are GICs covered by CDIC?</dt><dd>Yes, at member institutions, up to $100,000 of principal and interest per depositor per insured category. GICs and other term deposits are eligible deposits. Check that the issuer is a member on CDIC's website; verify the issuer on CDIC’s member list.</dd>
+    <dt>Is GIC interest taxable?</dt><dd>Outside a registered account, yes, as ordinary income, and it is generally reported for each complete investment year, even without a T5 and even if the GIC pays at maturity. Inside a TFSA it is tax-free; inside an RRSP or RRIF it is deferred.</dd>
+    <dt>Where do the default rates come from?</dt><dd>The Bank of Canada publishes weekly series for chartered-bank one-, three- and five-year GIC rates (2.45%, 2.55% and 2.75% for 9 September 2026). The two- and four-year defaults are midpoints, not published figures.</dd>
+  </dl>
+
+  <div class="sources">
+    <strong>Sources</strong>
+    <ol>
+      <li>Bank of Canada, Valet API, series V80691339 (GICs: 1-year), V80691340 (3-year), V80691341 (5-year), chartered-bank rates, observation 2026-09-09: 2.45 / 2.55 / 2.75. Source: <a href="https://www.bankofcanada.ca/valet/observations/V80691339,V80691340,V80691341/json?start_date=2026-09-09&amp;end_date=2026-09-09">bankofcanada.ca</a></li>
+      <li>Canada Deposit Insurance Corporation, "How deposit insurance works": each insured category covered separately up to $100,000 including principal and interest; GICs and other term deposits are eligible (page checked 14 September 2026): <a href="https://www.cdic.ca/depositors/whats-covered/">cdic.ca</a></li>
+      <li>Canada Revenue Agency, "Line 12100 – Interest and other investment income": interest on investment contracts is reported annually as it accrues: <a href="https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/personal-income/line-12100-interest-other-investment-income.html">canada.ca</a></li>
+    </ol>
+  </div>
+  <p class="disc">General information for the assumptions stated on this page; not personal financial or tax advice. Prepared with AI assistance by Claude; adapted and source-checked by Codex on 14 September 2026. Human factual review is not documented. Inputs stay in this page and are not saved or sent.</p>
+</main>
+<footer>© Imperium Post · <a href="/privacy/">Privacy</a> · <a href="/about/">About</a></footer>
+
+<script>
+(function(){
+  "use strict";
+  // Bank of Canada Valet V80691339 / V80691340 / V80691341, observation 2026-09-09 (checked 2026-09-14). Refresh weekly.
+  const BOC = {1: 2.45, 3: 2.55, 5: 2.75};
+  const RATES_ASOF = "9 September 2026";
+  const CDIC_LIMIT = 100000;
+  const HORIZON = 10;
+  const $ = id => document.getElementById(id);
+  const fmt = n => "$" + Math.round(n).toLocaleString("en-CA");
+  const fmt2 = n => "$" + n.toLocaleString("en-CA", {minimumFractionDigits:2, maximumFractionDigits:2});
+  const pct = n => n.toFixed(2) + "%";
+  function num(id, lo, hi){ const v = parseFloat($(id).value); return isFinite(v) && v >= lo && v <= hi ? v : 0; }
+
+  // Simulate a ladder: equal rungs of terms 1..N; on maturity, reinvest in a new N-year at rate reinvRate (if reinvest) else hold as cash at 0.
+  function simulate(P, N, rates, reinvest, years){
+    const rung = P / N;
+    let hold = [];
+    for (let k = 1; k <= N; k++) hold.push({p: rung, r: rates[k], s: 0, t: k, label: k + "-year rung"});
+    const events = [];
+    const valueAt = [];
+    let cash = 0;
+    for (let y = 1; y <= years; y++){
+      const next = [];
+      let matured = [];
+      hold.forEach(h => {
+        if (h.s + h.t === y){
+          const mat = h.p * Math.pow(1 + h.r/100, h.t);
+          matured.push({label: h.label, principal: h.p, interest: mat - h.p, cash: mat, term: h.t, rate: h.r});
+          if (reinvest) next.push({p: mat, r: rates[N], s: y, t: N, label: N + "-year (reinvested yr " + y + ")"});
+          else cash += mat;
+        } else next.push(h);
+      });
+      hold = next;
+      events.push({year: y, matured: matured});
+      const v = hold.reduce((a, h) => a + h.p * Math.pow(1 + h.r/100, y - h.s), 0) + cash;
+      valueAt.push(v);
+    }
+    return {events, valueAt};
+  }
+  function lumpAt(P, r, years, term){
+    // One GIC of `term` years rolled at maturity; accrued value at each year end.
+    const out = [];
+    let p = P, s = 0;
+    for (let y = 1; y <= years; y++){
+      if (y - s === term){ p = p * Math.pow(1 + r/100, term); s = y; }
+      out.push(p * Math.pow(1 + r/100, y - s));
+    }
+    return out;
+  }
+
+  function compute(){
+    const valid = $("calc").checkValidity();
+    $("calcError").textContent = valid ? "" : "Check the fields: enter valid numbers within the stated range.";
+    $("result").hidden = !valid;
+    if (!valid) { $("calc").querySelectorAll("tbody").forEach(b => b.innerHTML = ""); ["cmpNote","taxNote","assump"].forEach(id => $(id).textContent=""); return; }
+
+    const P = num("amount", 0, 1e9);
+    const N = parseInt($("rungs").value, 10);
+    const rates = {};
+    for (let k = 1; k <= 5; k++) rates[k] = num("r" + k, 0, 20);
+    const hisa = num("hisa", 0, 20), tax = num("tax", 0, 60);
+    const reinvest = $("reinvest").checked;
+    for (let k = 1; k <= 5; k++) $("r" + k).parentElement.parentElement.style.opacity = k <= N ? "1" : ".4";
+
+    const rung = P / N;
+    let blended = 0; for (let k = 1; k <= N; k++) blended += rates[k]; blended /= N;
+    const firstYear = P * blended / 100;
+    $("blended").textContent = pct(blended);
+    $("blendedText").textContent = P ? `Blended rate in year one across ${N} rungs of ${fmt2(rung)}. Interest in the first year: ${fmt2(firstYear)}${tax ? ", or " + fmt2(firstYear * (1 - tax/100)) + " after tax at " + tax + "%" : ""}.` : "Enter an amount to see the ladder.";
+    $("firstYear").textContent = (P && reinvest) ? `Each maturity is reinvested at the ${N}-year rate (${pct(rates[N])}). One rung matures each year; its amount includes accumulated interest and varies as shown below.` : (P ? `Without reinvestment the ladder returns your money plus interest over ${N} years; the rows below show it held as cash after that.` : "");
+
+    const sim = simulate(P, N, rates, reinvest, HORIZON);
+    const roll1 = lumpAt(P, rates[1], HORIZON, 1);
+    const lumpN = lumpAt(P, rates[N], HORIZON, N);
+    const save = lumpAt(P, hisa, HORIZON, 1);
+
+    // schedule table
+    const tb = $("schedule").querySelector("tbody"); tb.innerHTML = "";
+    sim.events.forEach(ev => {
+      if (!ev.matured.length){ const tr = document.createElement("tr"); tr.className = "muted"; tr.innerHTML = `<td>${ev.year}</td><td>nothing matures</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>value ${fmt(sim.valueAt[ev.year-1])} incl. accrued interest</td>`; tb.appendChild(tr); return; }
+      ev.matured.forEach(m => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${ev.year}</td><td>${m.label} at ${pct(m.rate)}</td><td class="num">${fmt2(m.principal)}</td><td class="num">${fmt2(m.interest)}</td><td class="num">${fmt2(m.cash)}</td><td>${reinvest ? "→ new " + N + "-year GIC at " + pct(rates[N]) : "held as cash"}</td>`;
+        tb.appendChild(tr);
+      });
+    });
+
+    // comparison table
+    const cb = $("compare").querySelector("tbody"); cb.innerHTML = "";
+    const rows = [
+      {name: `${N}-rung ladder`, v: sim.valueAt, access: reinvest ? "one rung matures each year; amounts vary" : `one rung matures each year through year ${N}; cash held afterward`},
+      {name: "1-year GIC rolled every year", v: roll1, access: "all of it free every year"},
+      {name: `One ${N}-year GIC rolled at maturity`, v: lumpN, access: `nothing free for ${N} years`},
+      {name: `Savings account at ${pct(hisa)}`, v: save, access: "any time"}
+    ];
+    const best10 = Math.max(...rows.map(r => r.v[9]));
+    rows.forEach(r => {
+      const tr = document.createElement("tr");
+      const i10 = r.v[9] - P;
+      tr.innerHTML = `<td>${r.name}</td><td class="num">${fmt(r.v[0])}</td><td class="num">${fmt(r.v[4])}</td><td class="num${r.v[9] === best10 ? " best" : ""}">${fmt(r.v[9])}</td><td class="num">${fmt(i10)}</td><td>${r.access}</td>`;
+      cb.appendChild(tr);
+    });
+    const gap5 = lumpN[4] - sim.valueAt[4];
+    $("cmpNote").textContent = P ? `Over five years the ladder ${gap5 >= 0 ? "gives up " + fmt(gap5) : "earns " + fmt(-gap5) + " more"} compared with one ${N}-year GIC, and ${sim.valueAt[4] - roll1[4] >= 0 ? "earns " + fmt(sim.valueAt[4] - roll1[4]) + " more than" : "earns " + fmt(roll1[4] - sim.valueAt[4]) + " less than"} rolling one-year GICs — at today's rates held constant. Values include accrued interest on GICs that have not yet matured.` : "";
+    $("taxNote").hidden = !tax;
+    $("taxNote").textContent = tax ? "The tax rate applies only to first-year interest. All future balances and maturity values are BEFORE TAX. Tax paid from other money changes overall wealth; tax paid from maturities changes reinvestment. Neither cash flow is modeled." : "";
+
+    // warnings
+    const warn = $("warn");
+    if (P > CDIC_LIMIT){ warn.hidden = false; warn.textContent = `${fmt(P)} is above CDIC's $100,000 limit for one depositor in one insured category at one member institution. Split the ladder between institutions, or between a personal account and a TFSA or RRSP (each a separate category), so that no single category exceeds $100,000 including interest.`; }
+    else if (Math.max(...sim.valueAt) > CDIC_LIMIT && P > 0){ warn.hidden = false; warn.textContent = `${fmt(P)} plus the modeled accrued interest passes CDIC's $100,000 limit. Coverage counts principal and interest together — plan to split before it does.`; }
+    else if (P && rates[1] > rates[N]){ warn.hidden = false; warn.textContent = `Your one-year rate (${pct(rates[1])}) is higher than your ${N}-year rate (${pct(rates[N])}) — an inverted curve. A ladder still spreads your reinvestment dates, but reinvesting maturing rungs at the longer term is not automatically the best choice; compare the rows above.`; }
+    else warn.hidden = true;
+
+    // assumptions
+    const as = $("assump"); as.innerHTML = "";
+    [
+      `Equal rungs: ${fmt2(rung)} in each of ${N} GICs with terms of 1 to ${N} years.`,
+      `Each GIC compounds annually and pays principal plus interest at maturity: value = principal × (1 + rate)^years.`,
+      `Maturing rungs are ${reinvest ? "reinvested in a new " + N + "-year GIC at " + pct(rates[N]) : "held as cash earning nothing"}; rates are held constant for ${HORIZON} years.`,
+      `"After 5/10 years" values include interest accrued on GICs that have not yet matured, so every strategy is measured the same way.`,
+      `Default rates: Bank of Canada chartered-bank GIC series, ${RATES_ASOF} — 1-year ${pct(BOC[1])}, 3-year ${pct(BOC[3])}, 5-year ${pct(BOC[5])}. The 2- and 4-year defaults are midpoints, not published figures.`,
+      `CDIC limit: $100,000 per depositor per insured category per member institution, principal and interest combined.`
+    ].forEach(t => { const li = document.createElement("li"); li.textContent = t; as.appendChild(li); });
+
+
+  }
+
+  $("calc").addEventListener("submit", e => { e.preventDefault(); compute(); });
+  ["amount","rungs","r1","r2","r3","r4","r5","hisa","tax","reinvest"].forEach(id => { $(id).addEventListener("input", compute); $(id).addEventListener("change", compute); });
+  $("reset").addEventListener("click", () => {
+    $("amount").value = "50000"; $("rungs").value = "5";
+    $("r1").value = "2.45"; $("r2").value = "2.50"; $("r3").value = "2.55"; $("r4").value = "2.65"; $("r5").value = "2.75";
+    $("hisa").value = "1.50"; $("tax").value = "0"; $("reinvest").checked = true;
+    compute();
+  });
+
+  compute();
+})();
+</script>
+</body>
+</html>

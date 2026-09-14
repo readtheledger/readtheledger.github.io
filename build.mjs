@@ -36,6 +36,7 @@ const ABOUT_PATH = "/about/";
 const PRIVACY_PATH = "/privacy/";
 const FEED_PATH  = "/feed.xml";
 const NEWS_SITEMAP = "/sitemap-news.xml";
+const TOOL_PATHS = ["/tools/", "/tools/tfsa-room/", "/tools/oas-clawback/", "/tools/mortgage-renewal/", "/tools/gic-ladder/", "/tools/cpp-start-age/", "/resources/next-bank-of-canada-announcement/"];
 const REPO = "https://github.com/readtheledger/readtheledger.github.io";
 /* a news sitemap lists what was published in the last two days, and nothing older */
 const NEWS_WINDOW_MS = 48 * 3600 * 1000;
@@ -63,6 +64,7 @@ const consentSrc = read("consent.js");
 const analyticsSrc = read("analytics.js");
 const mediaSrc = read("media.js");
 const productionSrc = read("production.js");
+const toolPages = TOOL_PATHS.map(route => ({ route, html: read(route.slice(1) + "index.html") }));
 
 for (const marker of ["<!-- meta:start", "<!-- meta:end -->", "<!-- static:slot", '<p class="datestrip" id="datestrip"', '<meta name="robots" id="robotsMeta" content="index,follow">']) {
   if (!index.includes(marker)) fail("index.html is missing the " + marker + " marker");
@@ -186,6 +188,7 @@ function navHTML(current) {
   return '<nav class="static-nav" aria-label="Sections">' +
     ["Front page", ...PAGE_SECTIONS].map(s =>
       `<a class="seclink" href="${sectionPath(s)}"${s === current ? ' aria-current="page"' : ""}>${esc(s)}</a>`).join("") +
+    `<a class="seclink" href="/tools/">Tools</a>` +
     `<a class="seclink" href="${ABOUT_PATH}"${current === "About" ? ' aria-current="page"' : ""}>About</a>` +
     "</nav>";
 }
@@ -365,6 +368,13 @@ for (const info of infoPages) {
   }, infoHTML(info, info.section)));
 }
 
+// Standalone tools and reference pages are not articles or dated editions.
+for (const tool of toolPages) {
+  if (!tool.html.includes('href="' + SITE + tool.route + '"')) fail("tool canonical missing: " + tool.route);
+  if (/NewsArticle|URLSearchParams|history\.replaceState|sendBeacon|fetch\(/.test(tool.html)) fail("unexpected article classification or data flow in " + tool.route);
+  write(tool.route.slice(1) + "index.html", tool.html);
+}
+
 // sections
 const sectionUrls = [];
 for (const s of PAGE_SECTIONS) {
@@ -426,7 +436,7 @@ for (const a of articles) {
 const urls = [{ loc: SITE + "/", lastmod: newest }]
   .concat(sectionUrls)
   .concat(articles.map(a => ({ loc: SITE + storyPath(a), lastmod: a.updated || a.date })))
-  .concat([{ loc: SITE + ABOUT_PATH }, { loc: SITE + PRIVACY_PATH }], infoPages.map(info => ({ loc: SITE + info.infoPath })));
+  .concat([{ loc: SITE + ABOUT_PATH }, { loc: SITE + PRIVACY_PATH }], infoPages.map(info => ({ loc: SITE + info.infoPath })), TOOL_PATHS.map(route => ({ loc: SITE + route })));
 write("sitemap.xml",
   '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
   urls.map(u => `  <url><loc>${esc(u.loc)}</loc>${u.lastmod ? `<lastmod>${esc(u.lastmod)}</lastmod>` : ""}</url>`).join("\n") +
@@ -488,7 +498,7 @@ nav{border-top:1px solid var(--rule);margin-top:28px;padding-top:14px;font-famil
   <h1>That page isn't in this edition.</h1>
   <p>The address may have been mistyped, or the story it pointed to is no longer published. Everything Imperium Post has written is on the front page.</p>
   <p><a href="/">Go to the front page →</a></p>
-  <nav aria-label="Sections">${PAGE_SECTIONS.map(s => `<a href="${sectionPath(s)}">${esc(s)}</a>`).join("")}<a href="${ABOUT_PATH}">About</a><a href="${PRIVACY_PATH}">Privacy</a></nav>
+  <nav aria-label="Sections">${PAGE_SECTIONS.map(s => `<a href="${sectionPath(s)}">${esc(s)}</a>`).join("")}<a href="/tools/">Tools</a><a href="${ABOUT_PATH}">About</a><a href="${PRIVACY_PATH}">Privacy</a></nav>
 </main>
 </body>
 </html>
@@ -508,8 +518,8 @@ if (fs.existsSync(ASSETS_DIR)) {
     if (fs.statSync(src).isFile()) assetHash.update(f.replace(/\\/g, "/")).update(fs.readFileSync(src));
   }
 }
-const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(read("topics.js")).update(read("context.js")).update(aboutSrc).update(privacySrc).update(supportSrc).update(consentSrc).update(analyticsSrc).update(mediaSrc).update(productionSrc).update(swSrc).update(assetHash.digest()).digest("hex").slice(0, 8);
-const routes = ["/", "/index.html", ABOUT_PATH, PRIVACY_PATH].concat(infoPages.map(info => info.infoPath), PAGE_SECTIONS.map(sectionPath), articles.map(storyPath));
+const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(read("topics.js")).update(read("context.js")).update(aboutSrc).update(privacySrc).update(supportSrc).update(consentSrc).update(analyticsSrc).update(mediaSrc).update(productionSrc).update(swSrc).update(toolPages.map(tool => tool.html).join("\n")).update(assetHash.digest()).digest("hex").slice(0, 8);
+const routes = ["/", "/index.html", ABOUT_PATH, PRIVACY_PATH].concat(infoPages.map(info => info.infoPath), PAGE_SECTIONS.map(sectionPath), articles.map(storyPath), TOOL_PATHS);
 const sw = swSrc
   .replace('const BUILD = "dev";', 'const BUILD = "' + stamp + '";')
   .replace(/^const ROUTES = \[[^\n]*\];$/m, "const ROUTES = " + JSON.stringify(routes) + ";");

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; connect-src 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OAS clawback calculator (2026) — Imperium Post</title>
+<meta name="description" content="Will your Old Age Security be clawed back? Enter your net income and see the recovery tax for the July-to-June payment year, the monthly deduction, and how far you are from the threshold — with the arithmetic shown.">
+<link rel="canonical" href="https://imperiumpost.com/tools/oas-clawback/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Imperium Post">
+<meta property="og:title" content="OAS clawback calculator (2026)">
+<meta property="og:description" content="How much of your Old Age Security will the recovery tax take? Enter your income, see the repayment, the monthly deduction and the working.">
+<meta property="og:url" content="https://imperiumpost.com/tools/oas-clawback/">
+<meta property="og:image" content="https://imperiumpost.com/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="OAS clawback calculator (2026)">
+<meta name="twitter:image" content="https://imperiumpost.com/og-default.png">
+<link rel="icon" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "OAS clawback calculator", "url": "https://imperiumpost.com/tools/oas-clawback/", "isPartOf": {"@type": "WebSite", "name": "Imperium Post", "url": "https://imperiumpost.com/"}}</script>
+<style>
+:root{
+  --paper:#FFF1E5;--paper-2:#F2E5DA;--ink:#12100E;--ink-2:#33302C;--ink-3:#6B6560;--rule:#DCCFC4;--rule-2:#C9BAAE;
+  --accent:#0F5499;--accent-2:#990F3D;--teal:#0A626B;--chip:#FFFFFF;--ok:#1B6B3A;
+  --serif:"Source Serif 4",Charter,Georgia,"Times New Roman",serif;--display:"Playfair Display",Georgia,serif;
+  --ui:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--maxw:720px;
+}
+@media (prefers-color-scheme:dark){:root{--paper:#12100E;--paper-2:#1C1916;--ink:#F5EFE8;--ink-2:#D8D0C8;--ink-3:#9C948C;--rule:#332E29;--rule-2:#4A433C;--accent:#6FA8DC;--accent-2:#E4718F;--teal:#5FB3BC;--chip:#1C1916;--ok:#7CCB9A}}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);line-height:1.6;font-size:1.0625rem}
+a{color:var(--accent)}
+.masthead{border-bottom:1px solid var(--rule);padding:14px 18px;display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.wordmark{font-family:var(--display);font-weight:800;font-size:1.4rem;letter-spacing:-.02em;text-decoration:none;color:inherit}
+.wordmark span{color:var(--accent-2)}
+.masthead nav{font-family:var(--ui);font-size:.85rem;display:flex;gap:14px;flex-wrap:wrap}
+.masthead nav a{color:var(--ink-2);text-decoration:none}
+main{max-width:var(--maxw);margin:0 auto;padding:28px 18px 60px}
+.kicker{font-family:var(--ui);font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-2);margin:0 0 10px;font-weight:600}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(1.8rem,5vw,2.4rem);line-height:1.12;margin:0 0 12px;letter-spacing:-.01em}
+.stand{font-size:1.15rem;color:var(--ink-2);margin:0 0 18px}
+.meta{font-family:var(--ui);font-size:.85rem;color:var(--ink-3);margin:0 0 26px;padding-bottom:16px;border-bottom:1px solid var(--rule)}
+h2{font-family:var(--display);font-size:1.4rem;margin:36px 0 10px;line-height:1.2}
+h3{font-family:var(--ui);font-size:.95rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin:22px 0 8px}
+.calc{background:var(--chip);border:1px solid var(--rule);border-radius:12px;padding:20px;box-shadow:0 8px 30px rgba(18,16,14,.06)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+label{display:block;font-family:var(--ui);font-size:.9rem;font-weight:600;margin-bottom:6px}
+.help{display:block;font-family:var(--ui);font-weight:400;font-size:.8rem;color:var(--ink-3);margin-top:4px}
+input[type=number],select{width:100%;font:inherit;font-family:var(--ui);font-size:1.05rem;padding:10px 12px;border:1px solid var(--rule-2);border-radius:8px;background:var(--paper);color:var(--ink)}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
+.money{position:relative}
+.money input{padding-left:26px}
+.money::before{content:"$";position:absolute;left:11px;top:50%;transform:translateY(-50%);font-family:var(--ui);color:var(--ink-3)}
+.result{margin-top:22px;padding:18px 20px;border-radius:10px;background:var(--paper-2);border-left:4px solid var(--teal)}
+.result .big{font-family:var(--display);font-size:clamp(1.9rem,6vw,2.6rem);font-weight:800;margin:0;line-height:1.1}
+.result .big.neg{color:var(--accent-2)}
+.result .big.ok{color:var(--ok)}
+.result p{margin:8px 0 0;font-family:var(--ui);font-size:.95rem;color:var(--ink-2)}
+.warn{margin-top:14px;padding:12px 14px;border-radius:8px;background:rgba(153,15,61,.08);border:1px solid var(--accent-2);font-family:var(--ui);font-size:.9rem}
+table{width:100%;border-collapse:collapse;font-family:var(--ui);font-size:.9rem;margin:12px 0}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:600;color:var(--ink-3);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.total td{font-weight:700;border-top:2px solid var(--rule-2)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+button{font-family:var(--ui);font-size:.9rem;font-weight:600;padding:10px 14px;border-radius:8px;border:1px solid var(--rule-2);background:var(--paper);color:var(--ink);cursor:pointer}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.small{font-family:var(--ui);font-size:.85rem;color:var(--ink-3)}
+details{border:1px solid var(--rule);border-radius:8px;padding:10px 14px;margin:10px 0}
+summary{cursor:pointer;font-family:var(--ui);font-weight:600}
+.faq dt{font-weight:600;margin-top:14px}
+.faq dd{margin:4px 0 0}
+.sources{border-top:1px solid var(--rule);margin-top:36px;padding-top:16px;font-family:var(--ui);font-size:.88rem}
+.sources li{margin:6px 0}
+.disc{font-family:var(--ui);font-size:.82rem;color:var(--ink-3);margin-top:24px}
+.tablewrap{overflow-x:auto}
+footer{border-top:1px solid var(--rule);margin-top:40px;padding:18px;font-family:var(--ui);font-size:.82rem;color:var(--ink-3);text-align:center}
+.wordmark{display:inline-flex;align-items:center;gap:.4em}.wordmark .mono{display:inline-grid;place-items:center;width:1.55em;height:1.55em;background:#12100E;color:#FFF1E5;font-size:.72em;line-height:1} :focus-visible{outline:3px solid #0F5499;outline-offset:3px} input:invalid{border-color:#990F3D} #calcError{color:#990F3D} [hidden]{display:none!important} @media(max-width:420px){.masthead{flex-wrap:wrap}.wordmark{font-size:1.25rem}main{padding-left:14px;padding-right:14px}}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <a class="wordmark" href="/" aria-label="Imperium Post — front page"><span class="mono" aria-hidden="true">IP</span>Imperium Post</a>
+  <nav aria-label="Sections"><a href="/">Front page</a><a href="/personal-finance/">Personal Finance</a><a href="/tools/">Tools</a><a href="/about/">About</a><a href="/privacy/">Privacy</a></nav>
+</header>
+<main id="main">
+  <p class="kicker">Tools · Personal Finance</p>
+  <h1>OAS clawback calculator</h1>
+  <p class="stand">Will the Old Age Security recovery tax take part of your pension? Enter the income year, income and actual gross OAS to estimate annual repayment and illustrate possible later withholding, with the arithmetic shown.</p>
+  <p class="meta">Imperium Post · Uses Service Canada's published thresholds for income years 2024, 2025 and 2026 · Source check: Codex, 14 September 2026 · Entered amounts are not saved or sent</p>
+
+  <form class="calc" id="calc" novalidate autocomplete="off"><p id="calcError" role="alert"></p><noscript>Enable JavaScript to calculate. This form cannot submit your inputs.</noscript>
+    <div class="grid">
+      <div>
+        <label for="year">Income year (the tax return that sets the clawback)
+          <span class="help">Your 2025 return sets the deductions from July 2026 to June 2027. Use 2026 to plan this year's income.</span></label>
+        <select id="year">
+          <option value="2026">2026 income → deductions July 2027 to June 2028</option>
+          <option value="2025" selected>2025 income → deductions July 2026 to June 2027</option>
+          <option value="2024">2024 income → deductions July 2025 to June 2026</option>
+        </select>
+      </div>
+      <div>
+        <label for="age">Age band (reference table only)
+          <span class="help">Published ceilings differ by age. Your actual OAS amount determines the cap used here.</span></label>
+        <select id="age">
+          <option value="65" selected>65 to 74</option>
+          <option value="75">75 and over</option>
+        </select>
+      </div>
+      <div>
+        <label for="income">Income used for OAS repayment
+          <span class="help">For the simple case use line 23400, including OAS. CRA’s worksheet adjusts UCCB/RDSP amounts and EI repayments. This tool does not calculate those adjustments or GIS repayment.</span></label>
+        <div class="money"><input type="number" id="income" required min="0" step="any" inputmode="decimal" placeholder="100000" max="1000000000"></div>
+      </div>
+      <div>
+        <label for="oas">Gross OAS received in that income year
+          <span class="help">Required: actual annual OAS before tax withheld, or your 2026 planning estimate. Exclude GIS. Zero is valid; no amount is assumed.</span></label>
+        <div class="money"><input type="number" id="oas" required min="0" step="any" inputmode="decimal" placeholder="Required annual amount" max="1000000000"></div>
+      </div>
+    </div>
+    <div class="btnrow">
+      <button type="submit" class="primary">Calculate</button>
+      <button type="button" id="reset">Reset</button>
+    </div>
+
+    <div class="result" id="result" aria-live="polite">
+      <p class="big" id="repay">$0</p>
+      <p id="repayText"></p>
+      <p id="monthly" class="small"></p>
+      <div class="warn" id="warn" hidden></div>
+    </div>
+
+    <h3>The working</h3>
+    <table id="working" aria-label="Recovery tax arithmetic">
+      <thead><tr><th>Line</th><th class="num">Amount</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <details>
+      <summary>Thresholds used (Service Canada)</summary>
+      <div class="tablewrap">
+      <table id="thresholds" aria-label="OAS recovery tax thresholds by income year">
+        <thead><tr><th>Income year</th><th>Deductions apply</th><th class="num">Clawback starts</th><th class="num">Fully repaid, 65–74</th><th class="num">Fully repaid, 75+</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      </div>
+    </details>
+  </form>
+
+  <h2>How the calculation works</h2><p>For a Canadian resident in the simple case, subtract the income-year threshold, multiply a positive difference by 15%, then cap the estimate at actual gross OAS received in that income year. Zero OAS gives zero repayment. This does not calculate GIS, EI repayment, non-resident rules or the adjustments in CRA’s worksheet.</p><p>Annual repayment and withholding differ. Repayment is reconciled on the return for that income year, with tax already withheld credited as tax deducted. That return can also set estimated withholding from July of the following year to June of the year after. Dividing the annual estimate by 12 here illustrates withholding; it is not a second tax or a guaranteed deduction.</p><p>Published full-recovery ceilings are reference values for a maximum pension, not your personal cap. Service Canada marks 2026 ceilings as estimates through September. Partial-year, deferred and age-75 pensions can differ; use actual records and the official worksheet.</p>
+
+  <h2>A worked example</h2><p>$100,000 of 2025 income exceeds $93,454 by $6,546. At 15%, repayment is $981.90, assuming actual gross OAS of at least that amount. With $8,000 OAS, the cap does not bind; $81.83 per month illustrates later withholding. With only $500 gross OAS, the annual estimate is capped at $500. Zero OAS gives zero repayment.</p>
+
+  <h2>Check your assessment</h2><p>Use CRA’s line 23500 worksheet for your return and Service Canada’s advisory letter for withholding. If expected income falls substantially, CRA describes reduced withholding through T1213(OAS). A withholding change does not itself remove annual repayment.</p>
+
+  <h2>Frequently asked</h2><dl class="faq"><dt>Which threshold?</dt><dd>$90,997 for 2024 income, $93,454 for 2025, $95,323 for 2026.</dd><dt>Does 2026 income only matter in July 2027?</dt><dd>No. It can create repayment on the 2026 return and affect later withholding. Withheld tax is credited on the return.</dd><dt>Is the monthly result exact?</dt><dd>No. The annual estimate divided by 12 is an illustration. Your assessed return, pension and adjustments govern.</dd></dl>
+
+  <div class="sources"><strong>Sources checked by Codex, 14 September 2026</strong><ol><li><a href="https://www.canada.ca/en/services/benefits/publicpensions/old-age-security/repayment.html">Service Canada: repayment and withholding</a></li><li><a href="https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/deductions-credits-expenses/line-23500-social-benefits-repayment.html">CRA: line 23500 adjustments and credits for withheld tax</a></li><li><a href="https://www.canada.ca/en/services/benefits/publicpensions/old-age-security/recovery-tax.html">Service Canada: income-year thresholds and estimated 2026 ceilings</a></li></ol></div>
+  <p class="disc">General information for the assumptions stated on this page; not personal financial or tax advice. Prepared with AI assistance by Claude; adapted and source-checked by Codex on 14 September 2026. Human factual review is not documented. Inputs stay in this page and are not saved or sent.</p>
+</main>
+<footer>© Imperium Post · <a href="/privacy/">Privacy</a> · <a href="/about/">About</a></footer>
+
+<script>
+(function(){
+  "use strict";
+  // Service Canada, recovery-tax page, checked 2026-09-14. min = where 15% starts; max65/max75 = fully repaid.
+  const THRESHOLDS = {
+    2024: {min: 90997, max65: 148451, max75: 154196, period: "July 2025 to June 2026"},
+    2025: {min: 93454, max65: 152062, max75: 157923, period: "July 2026 to June 2027"},
+    2026: {min: 95323, max65: 155109, max75: 161088, period: "July 2027 to June 2028"}
+  };
+  const RATE = 0.15;
+  function annualRepayment(income, threshold, grossOas){ return Math.min(Math.max(0, income-threshold)*RATE, grossOas); }
+  const $ = id => document.getElementById(id);
+  const fmt = n => (n<0?"−":"") + "$" + Math.abs(Math.round(n)).toLocaleString("en-CA");
+  const fmt2 = n => "$" + Math.abs(n).toLocaleString("en-CA", {minimumFractionDigits:2, maximumFractionDigits:2});
+
+  // thresholds table
+  const ttb = $("thresholds").querySelector("tbody");
+  Object.keys(THRESHOLDS).sort().forEach(y => { const t = THRESHOLDS[y]; const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${y}</td><td>${t.period}</td><td class="num">${fmt(t.min)}</td><td class="num">${fmt(t.max65)}</td><td class="num">${fmt(t.max75)}</td>`; ttb.appendChild(tr); });
+
+  function num(id){ const v = parseFloat($(id).value); return isFinite(v) && v > 0 ? v : 0; }
+
+  function compute(){
+    const valid=$("calc").checkValidity();
+    $("calcError").textContent=valid?"":"Enter income and actual annual gross OAS, both zero or positive.";
+    $("result").hidden=!valid;
+    if(!valid){$("working").querySelector("tbody").innerHTML="";return;}
+    const year=Number($("year").value), t=THRESHOLDS[year];
+    const income=Number($("income").value), oas=Number($("oas").value);
+    const excess=Math.max(0,income-t.min), raw=excess*RATE, repay=annualRepayment(income,t.min,oas);
+    $("repay").textContent=fmt2(repay);
+    $("repayText").textContent="Estimated annual repayment for "+year+" income, capped at "+fmt2(oas)+" actual gross OAS; not the amount still due after tax withheld.";
+    $("monthly").textContent="Illustrative withholding: "+fmt2(repay/12)+" per month for "+t.period+". Annual repayment is reconciled separately; withheld tax is credited.";
+    $("warn").hidden=false;
+    $("warn").textContent="Use CRA’s worksheet for income adjustments, GIS, EI repayments or non-resident cases. Published 2026 full-recovery ceilings are estimates through September.";
+    const rows=[["Income used",income],["Income-year threshold",-t.min],["Positive excess",excess],["15% of excess",raw],["Actual gross OAS cap",oas],["Annual repayment estimate",repay]];
+    const tb=$("working").querySelector("tbody");tb.innerHTML="";
+    rows.forEach(row=>{const tr=document.createElement("tr"); const label=document.createElement("td"),val=document.createElement("td");label.textContent=row[0];val.textContent=(row[1]<0?"−":"")+fmt2(row[1]);val.className="num";tr.appendChild(label);tr.appendChild(val);tb.appendChild(tr);});
+  }
+
+  $("calc").addEventListener("submit", e => { e.preventDefault(); compute(); });
+  ["year","age","income","oas"].forEach(id => $(id).addEventListener("input", compute));
+  $("reset").addEventListener("click", () => { $("year").value = "2025"; $("age").value = "65"; $("income").value = ""; $("oas").value = ""; compute(); });
+
+  compute();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; connect-src 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TFSA contribution room calculator (2026) — Imperium Post</title>
+<meta name="description" content="Work out how much TFSA room you have in 2026 from the CRA's annual limits (2009–2026), your contributions and your withdrawals. Shows the arithmetic, not just the answer.">
+<link rel="canonical" href="https://imperiumpost.com/tools/tfsa-room/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Imperium Post">
+<meta property="og:title" content="TFSA contribution room calculator (2026)">
+<meta property="og:description" content="How much can you put in your TFSA this year? Enter when you turned 18, what you have contributed and withdrawn, and see the room with the working shown.">
+<meta property="og:url" content="https://imperiumpost.com/tools/tfsa-room/">
+<meta property="og:image" content="https://imperiumpost.com/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TFSA contribution room calculator (2026)">
+<meta name="twitter:image" content="https://imperiumpost.com/og-default.png">
+<link rel="icon" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "TFSA contribution room calculator", "url": "https://imperiumpost.com/tools/tfsa-room/", "isPartOf": {"@type": "WebSite", "name": "Imperium Post", "url": "https://imperiumpost.com/"}}</script>
+<style>
+:root{
+  --paper:#FFF1E5;--paper-2:#F2E5DA;--ink:#12100E;--ink-2:#33302C;--ink-3:#6B6560;--rule:#DCCFC4;--rule-2:#C9BAAE;
+  --accent:#0F5499;--accent-2:#990F3D;--teal:#0A626B;--chip:#FFFFFF;--ok:#1B6B3A;
+  --serif:"Source Serif 4",Charter,Georgia,"Times New Roman",serif;--display:"Playfair Display",Georgia,serif;
+  --ui:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--maxw:720px;
+}
+@media (prefers-color-scheme:dark){:root{--paper:#12100E;--paper-2:#1C1916;--ink:#F5EFE8;--ink-2:#D8D0C8;--ink-3:#9C948C;--rule:#332E29;--rule-2:#4A433C;--accent:#6FA8DC;--accent-2:#E4718F;--teal:#5FB3BC;--chip:#1C1916;--ok:#7CCB9A}}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);line-height:1.6;font-size:1.0625rem}
+a{color:var(--accent)}
+.masthead{border-bottom:1px solid var(--rule);padding:14px 18px;display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.wordmark{font-family:var(--display);font-weight:800;font-size:1.4rem;letter-spacing:-.02em;text-decoration:none;color:inherit}
+.wordmark span{color:var(--accent-2)}
+.masthead nav{font-family:var(--ui);font-size:.85rem;display:flex;gap:14px;flex-wrap:wrap}
+.masthead nav a{color:var(--ink-2);text-decoration:none}
+main{max-width:var(--maxw);margin:0 auto;padding:28px 18px 60px}
+.kicker{font-family:var(--ui);font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-2);margin:0 0 10px;font-weight:600}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(1.8rem,5vw,2.4rem);line-height:1.12;margin:0 0 12px;letter-spacing:-.01em}
+.stand{font-size:1.15rem;color:var(--ink-2);margin:0 0 18px}
+.meta{font-family:var(--ui);font-size:.85rem;color:var(--ink-3);margin:0 0 26px;padding-bottom:16px;border-bottom:1px solid var(--rule)}
+h2{font-family:var(--display);font-size:1.4rem;margin:36px 0 10px;line-height:1.2}
+h3{font-family:var(--ui);font-size:.95rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin:22px 0 8px}
+.calc{background:var(--chip);border:1px solid var(--rule);border-radius:12px;padding:20px;box-shadow:0 8px 30px rgba(18,16,14,.06)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+label{display:block;font-family:var(--ui);font-size:.9rem;font-weight:600;margin-bottom:6px}
+.help{display:block;font-family:var(--ui);font-weight:400;font-size:.8rem;color:var(--ink-3);margin-top:4px}
+input[type=number],select{width:100%;font:inherit;font-family:var(--ui);font-size:1.05rem;padding:10px 12px;border:1px solid var(--rule-2);border-radius:8px;background:var(--paper);color:var(--ink)}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
+.money{position:relative}
+.money input{padding-left:26px}
+.money::before{content:"$";position:absolute;left:11px;top:50%;transform:translateY(-50%);font-family:var(--ui);color:var(--ink-3)}
+.result{margin-top:22px;padding:18px 20px;border-radius:10px;background:var(--paper-2);border-left:4px solid var(--teal)}
+.result .big{font-family:var(--display);font-size:clamp(1.9rem,6vw,2.6rem);font-weight:800;margin:0;line-height:1.1}
+.result .big.neg{color:var(--accent-2)}
+.result p{margin:8px 0 0;font-family:var(--ui);font-size:.95rem;color:var(--ink-2)}
+.warn{margin-top:14px;padding:12px 14px;border-radius:8px;background:rgba(153,15,61,.08);border:1px solid var(--accent-2);font-family:var(--ui);font-size:.9rem}
+table{width:100%;border-collapse:collapse;font-family:var(--ui);font-size:.9rem;margin:12px 0}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:600;color:var(--ink-3);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.total td{font-weight:700;border-top:2px solid var(--rule-2)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+button{font-family:var(--ui);font-size:.9rem;font-weight:600;padding:10px 14px;border-radius:8px;border:1px solid var(--rule-2);background:var(--paper);color:var(--ink);cursor:pointer}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.small{font-family:var(--ui);font-size:.85rem;color:var(--ink-3)}
+details{border:1px solid var(--rule);border-radius:8px;padding:10px 14px;margin:10px 0}
+summary{cursor:pointer;font-family:var(--ui);font-weight:600}
+.faq dt{font-weight:600;margin-top:14px}
+.faq dd{margin:4px 0 0}
+.sources{border-top:1px solid var(--rule);margin-top:36px;padding-top:16px;font-family:var(--ui);font-size:.88rem}
+.sources li{margin:6px 0}
+.disc{font-family:var(--ui);font-size:.82rem;color:var(--ink-3);margin-top:24px}
+.sr{position:absolute;left:-9999px}
+footer{border-top:1px solid var(--rule);margin-top:40px;padding:18px;font-family:var(--ui);font-size:.82rem;color:var(--ink-3);text-align:center}
+.wordmark{display:inline-flex;align-items:center;gap:.4em}.wordmark .mono{display:inline-grid;place-items:center;width:1.55em;height:1.55em;background:#12100E;color:#FFF1E5;font-size:.72em;line-height:1} :focus-visible{outline:3px solid #0F5499;outline-offset:3px} input:invalid{border-color:#990F3D} #calcError{color:#990F3D} [hidden]{display:none!important} @media(max-width:420px){.masthead{flex-wrap:wrap}.wordmark{font-size:1.25rem}main{padding-left:14px;padding-right:14px}}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <a class="wordmark" href="/" aria-label="Imperium Post — front page"><span class="mono" aria-hidden="true">IP</span>Imperium Post</a>
+  <nav aria-label="Sections"><a href="/">Front page</a><a href="/personal-finance/">Personal Finance</a><a href="/tools/">Tools</a><a href="/about/">About</a><a href="/privacy/">Privacy</a></nav>
+</header>
+<main id="main">
+  <p class="kicker">Tools · Personal Finance</p>
+  <h1>TFSA contribution room calculator</h1>
+  <p class="stand">How much can you put into your TFSA in 2026? Enter three things and see the room, with the arithmetic shown line by line so you can check it against your CRA My Account figure.</p>
+  <p class="meta">Imperium Post · Uses the CRA's annual dollar limits for 2009–2026 · Source check: Codex, 14 September 2026 · Entered amounts are not saved or sent</p>
+
+  <p class="small"><strong>Scope:</strong> current resident aged 18+, continuously eligible since the selected year, with no excess-contribution history. Check the assumptions below before using a result.</p><form class="calc" id="calc" novalidate autocomplete="off"><p id="calcError" role="alert"></p><noscript>Enable JavaScript to calculate. This form cannot submit your inputs.</noscript>
+    <div class="grid">
+      <div>
+        <label for="startYear">First year you qualified for room
+          <span class="help">The later of: the year you turned 18, the year you became a Canadian resident, or 2009 (when TFSAs began).</span></label>
+        <select id="startYear"></select>
+      </div>
+      <div>
+        <label for="contrib">Total you have ever contributed
+          <span class="help">Ordinary contributions across all TFSA accounts and years. Exclude qualifying transfers, exempt contributions, growth and interest.</span></label>
+        <div class="money"><input type="number" id="contrib" min="0" step="any" inputmode="decimal" placeholder="0" max="1000000000"></div>
+      </div>
+      <div>
+        <label for="wdPrev">Withdrawals made before 2026
+          <span class="help">Money you took out in 2025 or earlier. Each withdrawal restored room on the following January 1.</span></label>
+        <div class="money"><input type="number" id="wdPrev" min="0" step="any" inputmode="decimal" placeholder="0" max="1000000000"></div>
+      </div>
+      <div>
+        <label for="wdThis">Withdrawals made in 2026
+          <span class="help">These do not add room until 1 January 2027. No 2027 dollar limit is assumed.</span></label>
+        <div class="money"><input type="number" id="wdThis" min="0" step="any" inputmode="decimal" placeholder="0" max="1000000000"></div>
+      </div>
+    </div>
+    <div class="btnrow">
+      <button type="submit" class="primary">Calculate</button>
+      <button type="button" id="reset">Reset</button>
+    </div>
+
+    <div class="result" id="result" aria-live="polite">
+      <p class="big" id="roomNow">$109,000</p>
+      <p id="roomText">Room available in 2026 for someone who has qualified since 2009 and never contributed.</p>
+      <p id="roomNext" class="small"></p>
+      <div class="warn" id="warn" hidden></div>
+    </div>
+
+    <h3>The working</h3>
+    <table id="working" aria-label="Contribution room arithmetic">
+      <thead><tr><th>Line</th><th class="num">Amount</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <details>
+      <summary>Annual limits used (CRA)</summary>
+      <table id="limits" aria-label="TFSA annual dollar limits by year">
+        <thead><tr><th>Year</th><th class="num">Limit</th><th class="num">Cumulative</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </details>
+  </form>
+
+  <h2>How the calculation works</h2>
+  <p>Your TFSA contribution room on any day in 2026 is the sum of every annual dollar limit from your first qualifying year through 2026, minus every dollar you have ever contributed, plus every dollar you withdrew in 2025 or earlier. This formula applies only within the continuous-eligibility scope above. Use the CRA worksheet for other histories.</p>
+  <p>Three rules do most of the work. Room accrues for a full calendar year even if you turned 18 in December of that year. Room does not accrue for any year in which you were a non-resident of Canada for the whole year. And withdrawals are added back to your room on January 1 of the next year — never sooner — which is why a same-year re-deposit can create an excess contribution.</p>
+  <p>Use this simplified tool only if you are currently a Canadian resident aged 18+, eligible every year since your selected start year, with no excess-contribution history or special distributions. Exclude qualifying transfers and exempt contributions from both totals. Otherwise use CRA’s worksheet and dated records.</p>
+
+  <h2>Checking against CRA My Account</h2>
+  <p>CRA shows your room as of January 1 of the current year. It is built from what your banks and brokers reported for the previous year, so it can lag if an institution filed late or you opened an account recently. To reconcile: take the My Account figure, subtract every contribution you have made since January 1, and ignore this year's withdrawals. If the figures differ, reconcile dated transactions with your institutions and CRA before contributing.</p>
+
+  <h2>If you have over-contributed</h2><p>This does not calculate an excess-contribution tax or the amount to withdraw. CRA generally taxes excess amounts at 1% per month and says to remove a remaining excess promptly. Use CRA guidance and dated transaction records; a negative total here is a warning to check those records.</p>
+
+  <h2>Frequently asked</h2>
+  <dl class="faq">
+    <dt>What is the TFSA contribution limit for 2026?</dt><dd>$7,000, the same as 2024 and 2025. The dollar limit is indexed to inflation and rounded to the nearest $500.</dd>
+    <dt>What is the total room for someone who has never contributed?</dt><dd>$109,000 for a person who was at least 18 and resident in Canada in every year from 2009 to 2026.</dd>
+    <dt>Do withdrawals give me my room back?</dt><dd>Yes, on January 1 of the following year. A withdrawal in 2026 is added to your 2027 room.</dd>
+    <dt>What happens if I contribute more than my room?</dt><dd>Generally 1% of the highest excess amount in each month. This tool does not calculate that tax; use CRA guidance and dated records.</dd>
+    <dt>Why does the CRA My Account figure differ from this calculator?</dt><dd>CRA's figure is as of January 1 and depends on what institutions reported. Subtract contributions made since January 1 and check that every account has been reported.</dd>
+    <dt>Does investment growth inside the TFSA use up room?</dt><dd>No. Room is only reduced by money you put in. Growth, dividends and interest do not count, and losses do not restore room.</dd>
+  </dl>
+
+  <div class="sources">
+    <strong>Sources</strong>
+    <ol>
+      <li>Canada Revenue Agency, "Contribution room" and annual TFSA dollar limits (2026 limit $7,000): <a href="https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/contributing/calculate-room.html">canada.ca</a></li>
+      <li>Canada Revenue Agency, "Making or replacing withdrawals from a TFSA" (withdrawals restore room the following year): <a href="https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/withdraw.html">canada.ca</a></li>
+      <li>Canada Revenue Agency, "Tax payable on excess TFSA amount" (1% per month): <a href="https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/contributing/overcontribute.html">canada.ca</a></li>
+      <li>CRA annual limits and eligibility: <a href="https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/contributing/before.html">canada.ca</a></li>
+    </ol>
+  </div>
+  <p class="disc">General information for the assumptions stated on this page; not personal financial or tax advice. Prepared with AI assistance by Claude; adapted and source-checked by Codex on 14 September 2026. Human factual review is not documented. Inputs stay in this page and are not saved or sent.</p>
+</main>
+<footer>© Imperium Post · <a href="/privacy/">Privacy</a> · <a href="/about/">About</a></footer>
+
+<script>
+(function(){
+  "use strict";
+  const LIMITS = {2009:5000,2010:5000,2011:5000,2012:5000,2013:5500,2014:5500,2015:10000,2016:5500,2017:5500,2018:5500,2019:6000,2020:6000,2021:6000,2022:6000,2023:6500,2024:7000,2025:7000,2026:7000};
+  const THIS_YEAR = 2026;
+  function contributionRoom(start, contributions, priorWithdrawals){ let sum=0; for(let y=start;y<=THIS_YEAR;y++) sum+=LIMITS[y]; return sum-contributions+priorWithdrawals; }
+  const $ = id => document.getElementById(id);
+  const fmt = n => (n<0?"−":"") + "$" + Math.abs(Math.round(n)).toLocaleString("en-CA");
+
+  // populate start-year select
+  const sel = $("startYear");
+  for (let y = 2009; y <= THIS_YEAR; y++) {
+    const o = document.createElement("option"); o.value = y; o.textContent = y === 2009 ? "2009 or earlier (18+ and resident since TFSAs began)" : String(y); sel.appendChild(o);
+  }
+  // limits table
+  let cum = 0; const ltb = $("limits").querySelector("tbody");
+  Object.keys(LIMITS).forEach(y => { cum += LIMITS[y]; const tr = document.createElement("tr"); tr.innerHTML = `<td>${y}</td><td class="num">${fmt(LIMITS[y])}</td><td class="num">${fmt(cum)}</td>`; ltb.appendChild(tr); });
+
+  function num(id){ const v = parseFloat($(id).value); return isFinite(v) && v > 0 ? v : 0; }
+
+  function compute(){
+    const valid = $("calc").checkValidity();
+    $("calcError").textContent = valid ? "" : "Check the fields: enter valid numbers within the stated range.";
+    $("result").hidden = !valid;
+    if (!valid) { $("calc").querySelectorAll("tbody").forEach(b => { if (!b.closest("#limits") && !b.closest("#thresholds")) b.innerHTML = ""; }); return; }
+
+    const start = parseInt(sel.value, 10);
+    const contrib = num("contrib"), wdPrev = num("wdPrev"), wdThis = num("wdThis");
+    let limitSum = 0; for (let y = start; y <= THIS_YEAR; y++) limitSum += LIMITS[y];
+    const room = contributionRoom(start, contrib, wdPrev);
+
+    const years = THIS_YEAR - start + 1;
+
+    const big = $("roomNow"); big.textContent = fmt(room); big.classList.toggle("neg", room < 0);
+    $("roomText").textContent = room >= 0
+      ? `Room available to contribute in ${THIS_YEAR}${contrib||wdPrev ? "" : " if you have never contributed"}.`
+      : "Negative simplified total: use CRA guidance and dated records before contributing.";
+    $("roomNext").textContent = "Withdrawals in 2026 add room on January 1, 2027. No 2027 dollar limit is assumed.";
+
+    const warn = $("warn");
+    if (room < 0) { warn.hidden = false; warn.textContent = "This method cannot assess excess amounts or tax. Check dated records and CRA guidance."; }
+    else if (wdPrev > contrib) { warn.hidden = false; warn.textContent = "You have entered more withdrawals than contributions. Withdrawals can include growth, so this is possible, but double-check both figures."; }
+    else warn.hidden = true;
+
+    const tb = $("working").querySelector("tbody"); tb.innerHTML = "";
+    const rows = [
+      [`Sum of annual limits, ${start}–${THIS_YEAR} (${years} year${years>1?"s":""})`, limitSum],
+      ["Minus: everything you have ever contributed", -contrib],
+      ["Plus: withdrawals made before 2026 (restored the following January 1)", wdPrev],
+    ];
+    rows.forEach(r => { const tr = document.createElement("tr"); tr.innerHTML = `<td>${r[0]}</td><td class="num">${fmt(r[1])}</td>`; tb.appendChild(tr); });
+    const tot = document.createElement("tr"); tot.className = "total"; tot.innerHTML = `<td>Contribution room in ${THIS_YEAR}</td><td class="num">${fmt(room)}</td>`; tb.appendChild(tot);
+    const nx = document.createElement("tr"); nx.innerHTML = `<td class="small">Withdrawals in ${THIS_YEAR} (count from 1 January 2027 only)</td><td class="num small">${fmt(wdThis)}</td>`; tb.appendChild(nx);
+
+
+  }
+
+  $("calc").addEventListener("submit", e => { e.preventDefault(); compute(); });
+  ["startYear","contrib","wdPrev","wdThis"].forEach(id => $(id).addEventListener("input", compute));
+  $("reset").addEventListener("click", () => { sel.value = "2009"; ["contrib","wdPrev","wdThis"].forEach(id => $(id).value = ""); compute(); });
+
+  compute();
+})();
+</script>
+</body>
+</html>

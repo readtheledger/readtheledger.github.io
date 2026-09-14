@@ -2106,10 +2106,10 @@ function navLinks(cls){
   }).join("");
 }
 function renderSecNav(){
-  $("#secnav").innerHTML = navLinks("seclink tap");
+  $("#secnav").innerHTML = navLinks("seclink tap") + '<a class="seclink tap" href="/tools/">Tools</a>';
   $("#menuTopics").innerHTML = SECTIONS.map(s=>
-    `<li><a href="${esc(sectionHref(s))}" data-sec="${esc(s)}"${s===S.section ? ' aria-current="page"' : ''}>${esc(s)}</a></li>`).join("");
-  $$("#secnav .seclink, #menuTopics a").forEach(b=>b.onclick=ev=>{
+    `<li><a href="${esc(sectionHref(s))}" data-sec="${esc(s)}"${s===S.section ? ' aria-current="page"' : ''}>${esc(s)}</a></li>`).join("") + '<li><a href="/tools/">Tools</a></li>';
+  $$("#secnav [data-sec], #menuTopics [data-sec]").forEach(b=>b.onclick=ev=>{
     if(ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
     ev.preventDefault();
     closeMenu();

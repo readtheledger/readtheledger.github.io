@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; connect-src 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CPP start-age calculator: take it at 60, 65 or 70? — Imperium Post</title>
+<meta name="description" content="Should you start CPP at 60, 65 or 70? Enter your estimated pension at 65 and a start age; see the monthly amount, the break-even age against any other start age, and the cumulative payout by 75, 80, 85 and 90 — with the arithmetic shown.">
+<link rel="canonical" href="https://imperiumpost.com/tools/cpp-start-age/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Imperium Post">
+<meta property="og:title" content="CPP start-age calculator: 60, 65 or 70?">
+<meta property="og:description" content="Monthly amount at any start age from 60 to 70, the break-even age against another start, and cumulative payouts — using Service Canada's 0.6% and 0.7% per-month rules.">
+<meta property="og:url" content="https://imperiumpost.com/tools/cpp-start-age/">
+<meta property="og:image" content="https://imperiumpost.com/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CPP start-age calculator: 60, 65 or 70?">
+<meta name="twitter:image" content="https://imperiumpost.com/og-default.png">
+<link rel="icon" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "CPP start-age calculator: take it at 60, 65 or 70?", "url": "https://imperiumpost.com/tools/cpp-start-age/", "isPartOf": {"@type": "WebSite", "name": "Imperium Post", "url": "https://imperiumpost.com/"}}</script>
+<style>
+:root{
+  --paper:#FFF1E5;--paper-2:#F2E5DA;--ink:#12100E;--ink-2:#33302C;--ink-3:#6B6560;--rule:#DCCFC4;--rule-2:#C9BAAE;
+  --accent:#0F5499;--accent-2:#990F3D;--teal:#0A626B;--chip:#FFFFFF;--ok:#1B6B3A;
+  --serif:"Source Serif 4",Charter,Georgia,"Times New Roman",serif;--display:"Playfair Display",Georgia,serif;
+  --ui:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--maxw:720px;
+}
+@media (prefers-color-scheme:dark){:root{--paper:#12100E;--paper-2:#1C1916;--ink:#F5EFE8;--ink-2:#D8D0C8;--ink-3:#9C948C;--rule:#332E29;--rule-2:#4A433C;--accent:#6FA8DC;--accent-2:#E4718F;--teal:#5FB3BC;--chip:#1C1916;--ok:#7CCB9A}}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);line-height:1.6;font-size:1.0625rem}
+a{color:var(--accent)}
+.masthead{border-bottom:1px solid var(--rule);padding:14px 18px;display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.wordmark{font-family:var(--display);font-weight:800;font-size:1.4rem;letter-spacing:-.02em;text-decoration:none;color:inherit}
+.wordmark span{color:var(--accent-2)}
+.masthead nav{font-family:var(--ui);font-size:.85rem;display:flex;gap:14px;flex-wrap:wrap}
+.masthead nav a{color:var(--ink-2);text-decoration:none}
+main{max-width:var(--maxw);margin:0 auto;padding:28px 18px 60px}
+.kicker{font-family:var(--ui);font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-2);margin:0 0 10px;font-weight:600}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(1.8rem,5vw,2.4rem);line-height:1.12;margin:0 0 12px;letter-spacing:-.01em}
+.stand{font-size:1.15rem;color:var(--ink-2);margin:0 0 18px}
+.meta{font-family:var(--ui);font-size:.85rem;color:var(--ink-3);margin:0 0 26px;padding-bottom:16px;border-bottom:1px solid var(--rule)}
+h2{font-family:var(--display);font-size:1.4rem;margin:36px 0 10px;line-height:1.2}
+h3{font-family:var(--ui);font-size:.95rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin:22px 0 8px}
+.calc{background:var(--chip);border:1px solid var(--rule);border-radius:12px;padding:20px;box-shadow:0 8px 30px rgba(18,16,14,.06)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+label{display:block;font-family:var(--ui);font-size:.9rem;font-weight:600;margin-bottom:6px}
+.help{display:block;font-family:var(--ui);font-weight:400;font-size:.8rem;color:var(--ink-3);margin-top:4px}
+input[type=number],select{width:100%;font:inherit;font-family:var(--ui);font-size:1.05rem;padding:10px 12px;border:1px solid var(--rule-2);border-radius:8px;background:var(--paper);color:var(--ink)}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
+.money{position:relative}
+.money input{padding-left:26px}
+.money::before{content:"$";position:absolute;left:11px;top:50%;transform:translateY(-50%);font-family:var(--ui);color:var(--ink-3)}
+.result{margin-top:22px;padding:18px 20px;border-radius:10px;background:var(--paper-2);border-left:4px solid var(--teal)}
+.result .big{font-family:var(--display);font-size:clamp(1.9rem,6vw,2.6rem);font-weight:800;margin:0;line-height:1.1}
+.result .big.neg{color:var(--accent-2)}
+.result .big.ok{color:var(--ok)}
+.result p{margin:8px 0 0;font-family:var(--ui);font-size:.95rem;color:var(--ink-2)}
+.warn{margin-top:14px;padding:12px 14px;border-radius:8px;background:rgba(153,15,61,.08);border:1px solid var(--accent-2);font-family:var(--ui);font-size:.9rem}
+table{width:100%;border-collapse:collapse;font-family:var(--ui);font-size:.9rem;margin:12px 0}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:600;color:var(--ink-3);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.total td{font-weight:700;border-top:2px solid var(--rule-2)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+button{font-family:var(--ui);font-size:.9rem;font-weight:600;padding:10px 14px;border-radius:8px;border:1px solid var(--rule-2);background:var(--paper);color:var(--ink);cursor:pointer}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.small{font-family:var(--ui);font-size:.85rem;color:var(--ink-3)}
+details{border:1px solid var(--rule);border-radius:8px;padding:10px 14px;margin:10px 0}
+summary{cursor:pointer;font-family:var(--ui);font-weight:600}
+.faq dt{font-weight:600;margin-top:14px}
+.faq dd{margin:4px 0 0}
+.sources{border-top:1px solid var(--rule);margin-top:36px;padding-top:16px;font-family:var(--ui);font-size:.88rem}
+.sources li{margin:6px 0}
+.disc{font-family:var(--ui);font-size:.82rem;color:var(--ink-3);margin-top:24px}
+.tablewrap{overflow-x:auto}
+footer{border-top:1px solid var(--rule);margin-top:40px;padding:18px;font-family:var(--ui);font-size:.82rem;color:var(--ink-3);text-align:center}
+
+.agegrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pill{display:inline-block;font-family:var(--ui);font-size:.8rem;padding:2px 8px;border-radius:999px;border:1px solid var(--rule-2);color:var(--ink-2);margin-left:6px}
+tr.you td{background:rgba(15,84,153,.08);font-weight:600}
+.wordmark{display:inline-flex;align-items:center;gap:.4em}.wordmark .mono{display:inline-grid;place-items:center;width:1.55em;height:1.55em;background:#12100E;color:#FFF1E5;font-size:.72em;line-height:1} :focus-visible{outline:3px solid #0F5499;outline-offset:3px} input:invalid{border-color:#990F3D} #calcError{color:#990F3D} [hidden]{display:none!important} @media(max-width:420px){.masthead{flex-wrap:wrap}.wordmark{font-size:1.25rem}main{padding-left:14px;padding-right:14px}}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <a class="wordmark" href="/" aria-label="Imperium Post — front page"><span class="mono" aria-hidden="true">IP</span>Imperium Post</a>
+  <nav aria-label="Sections"><a href="/">Front page</a><a href="/personal-finance/">Personal Finance</a><a href="/tools/">Tools</a><a href="/about/">About</a><a href="/privacy/">Privacy</a></nav>
+</header>
+<main id="main">
+  <p class="kicker">Tools · Personal Finance</p>
+  <h1>CPP start-age calculator: take it at 60, 65 or 70?</h1>
+  <p class="stand">Every month you wait changes your Canada Pension Plan retirement pension for life. Enter the estimate from your Service Canada statement, pick a start age, and see the monthly amount, the age at which a later start overtakes an earlier one, and what each choice adds up to by 75, 80, 85 and 90 — with the arithmetic shown.</p>
+  <p class="meta">Imperium Post · Uses Service Canada's 0.6% and 0.7% per-month rules and 2026 amounts · Last checked against canada.ca on 14 September 2026 · Entered amounts are not saved or sent</p>
+
+  <form class="calc" id="calc" novalidate autocomplete="off"><p id="calcError" role="alert"></p><noscript>Enable JavaScript to calculate. This form cannot submit your inputs.</noscript>
+    <div class="grid">
+      <div>
+        <label for="p65">Your estimated monthly CPP at 65 (today's dollars)
+          <span class="help">Use View my benefit estimates in My Service Canada Account. Leave blank to use the average new pension at 65, $877.01 (April 2026). The 2026 maximum is $1,507.65.</span></label>
+        <div class="money"><input type="number" id="p65" min="0" max="2000" step="any" inputmode="decimal" placeholder="877.01"></div>
+      </div>
+      <div>
+        <label for="ret">Real return on all modeled payments (optional)
+          <span class="help">Both options invest all modeled payments at this constant real return. 0% is the undiscounted comparison; no return is guaranteed.</span></label>
+        <select id="ret">
+          <option value="0" selected>0% — plain comparison</option>
+          <option value="1">1% above inflation</option>
+          <option value="2">2% above inflation</option>
+          <option value="3">3% above inflation</option>
+          <option value="4">4% above inflation</option>
+          <option value="5">5% above inflation</option>
+        </select>
+      </div>
+      <div>
+        <label>Start age you are considering<span class="help">Any month from your 60th to your 70th birthday.</span></label>
+        <div class="agegrid">
+          <select id="sy" aria-label="Start age, years"></select>
+          <select id="sm" aria-label="Start age, months"></select>
+        </div>
+      </div>
+      <div>
+        <label>Compare with starting at<span class="help">The break-even is worked out against this age. 65 is the reference point Service Canada uses.</span></label>
+        <div class="agegrid">
+          <select id="cy" aria-label="Comparison age, years"></select>
+          <select id="cm" aria-label="Comparison age, months"></select>
+        </div>
+      </div>
+    </div>
+    <div class="btnrow">
+      <button type="submit" class="primary">Calculate</button>
+      <button type="button" id="reset">Reset</button>
+    </div>
+
+    <div class="result" id="result" aria-live="polite">
+      <p class="big" id="bigNum">$0</p>
+      <p id="bigText"></p>
+      <p id="beText"></p>
+      <p id="leText" class="small"></p>
+      <div class="warn" id="warn" hidden></div>
+    </div>
+
+    <h3>The working</h3>
+    <table id="working" aria-label="Start-age arithmetic">
+      <thead><tr><th>Line</th><th class="num">Amount</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <h3>Every start age, side by side</h3>
+    <div class="tablewrap">
+    <table id="compare" aria-label="Monthly pension and cumulative payout by start age">
+      <thead><tr><th>Start</th><th class="num">Monthly</th><th class="num">vs 65</th><th class="num">By 75</th><th class="num">By 80</th><th class="num">By 85</th><th class="num">By 90</th><th class="num">Break-even vs 65</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    </div>
+    <p class="small">Constant-dollar model using the SAME fixed age-65 baseline at every start age. Both options invest all payments at the chosen real return from each payment month’s start. Future wage-based starting amounts, exact indexation and taxes are not modeled. Your own start age is highlighted.</p>
+  </form>
+
+  <h2>How the calculation works</h2>
+  <p>Service Canada sets your retirement pension at 65 from your contribution record, then adjusts it for when you actually start. Every month before 65 takes off 0.6% — 7.2% a year, 36% if you start on your 60th birthday. Every month after 65 adds 0.7% — 8.4% a year, 42% at 70. The adjustment is permanent: it is applied once and then the pension is indexed to inflation every January for the rest of your life. Waiting past 70 adds nothing, so the calculator stops there.</p>
+  <p>The break-even age answers the obvious question: if the later start pays more per month but starts later, when does it catch up? With no investment return the arithmetic is a straight line — the earlier pension's head start divided by the monthly gap. Between 60 and 65 that is about 73 years and 11 months; between 65 and 70, about 81 years and 11 months. If you would invest the early payments rather than spend them, the head start grows, and the break-even moves later; the drop-down shows how much.</p>
+
+
+  <h2>A worked example</h2>
+  <p>Take the average new pension, $877.01 a month at 65. Started at 60 it is $561.29 a month; at 70 it is $1,245.35. By 75 the early starter has collected about $101,000, the 65 starter about $105,200 and the 70 starter about $74,700. By 85 the order has reversed: about $168,400, $210,500 and $224,200. At the maximum pension, $1,507.65, the same percentages give $964.90 at 60 and $2,140.86 at 70 — a gap of $1,176 a month between the two extremes, for life.</p>
+
+  <h2>What the calculator does not do</h2>
+  <p>It does not recalculate your base pension. If you stop working at 60 and delay CPP to 65, those five zero-earning years enter your contribution record; the base-component general drop-out lets Service Canada exclude up to eight of your lowest-earning years, so the effect depends on your record; the enhanced component uses different rules. It ignores the post-retirement benefit you earn by contributing while receiving CPP before 70. It ignores tax, the Guaranteed Income Supplement (which CPP income reduces), the OAS recovery tax and survivor benefits, all of which can tip the answer. And it cannot know how long you will live. Use it to see the size of the trade-off, then check the estimate in My Service Canada Account before deciding.</p>
+
+  <h2>Frequently asked</h2>
+  <dl class="faq">
+    <dt>How much is CPP reduced if I take it at 60?</dt><dd>By 0.6% for every month before your 65th birthday: 7.2% a year, 36% at 60. A pension of $1,000 a month at 65 is $640 at 60, for life, before indexation.</dd>
+    <dt>How much more do I get if I wait until 70?</dt><dd>0.7% for every month after 65: 8.4% a year, 42% at 70. $1,000 at 65 becomes $1,420 at 70. Nothing is added for waiting past 70.</dd>
+    <dt>What is the break-even age between 60 and 65?</dt><dd>In this fixed-baseline, zero-return model, the first whole month at which 65 catches 60 is age 73 years 11 months. The 70-versus-65 crossover is 81 years 11 months. Payment timing conventions can shift the result.</dd>
+    <dt>Is CPP indexed to inflation?</dt><dd>Yes, every January, using the change in the all-items CPI averaged over the previous November-to-October period. The 2026 increase was 2.0%. If prices fall, benefits stay where they are.</dd>
+    <dt>Can I keep working while receiving CPP?</dt><dd>Yes, and the pension is not reduced. Under 65 you keep contributing and each year of contributions earns a post-retirement benefit; from 65 you can opt out of contributing; contributions stop at 70 regardless.</dd>
+    <dt>Where do I find my estimated CPP at 65?</dt><dd>View my benefit estimates in My Service Canada Account. The 2026 maximum at 65 is $1,507.65 a month; the average new pension at 65 was $877.01 in April 2026.</dd>
+  </dl>
+
+  <div class="sources"><strong>Sources checked by Codex, 14 September 2026</strong><ol><li><a href="https://www.canada.ca/en/services/benefits/publicpensions/cpp/when-start.html">Service Canada: CPP age adjustments</a></li><li><a href="https://www.canada.ca/en/services/benefits/publicpensions/cpp/amount.html">Service Canada: amounts and contribution-record effects</a></li><li><a href="https://www.canada.ca/en/services/benefits/publicpensions/cpp/receive-benefits/consumer-price-index.html">Service Canada: annual CPI adjustments</a></li></ol></div>
+  <p class="disc">General information for the assumptions stated on this page; not personal financial or tax advice. Prepared with AI assistance by Claude; adapted and source-checked by Codex on 14 September 2026. Human factual review is not documented. Inputs stay in this page and are not saved or sent.</p>
+</main>
+<footer>© Imperium Post · <a href="/privacy/">Privacy</a> · <a href="/about/">About</a></footer>
+
+<script>
+(function(){
+  "use strict";
+  // Service Canada, when-start page (modified 2026-06-18), checked 2026-09-14.
+  const DOWN = 0.006, UP = 0.007;            // per month before / after 65
+  const AVG65 = 877.01, MAX65 = 1507.65;     // amount page (modified 2026-07-02): Apr 2026 average, Jan 2026 maximum
+  const $ = id => document.getElementById(id);
+  const fmt = n => (n<0?"−":"") + "$" + Math.abs(Math.round(n)).toLocaleString("en-CA");
+  const fmt2 = n => (n<0?"−":"") + "$" + Math.abs(n).toLocaleString("en-CA", {minimumFractionDigits:2, maximumFractionDigits:2});
+  const pct = f => ((f-1)*100).toFixed(1).replace(/\.0$/,"") + "%";
+  const signed = f => (f>=1?"+":"−") + Math.abs((f-1)*100).toFixed(1).replace(/\.0$/,"") + "%";
+  const ageStr = m => { const y = Math.floor(m/12), mm = m%12; return mm ? `${y} years ${mm} month${mm>1?"s":""}` : `${y}`; };
+
+  function factor(m){ const d = m - 780; return d < 0 ? 1 + DOWN*d : 1 + UP*Math.min(d, 60); }  // m = age in months
+  // cumulative value at age X (months) of monthly payments from S, compounded at monthly real rate rm
+  function cum(S, X, pay, rm){ if (X <= S) return 0; const n = X - S; return rm ? pay * ((Math.pow(1+rm, n) - 1) / rm) * (1+rm) : pay * n; }
+  function breakEven(A, B, P, rm){ // returns age in months when the later start's cumulative >= the earlier start's, or null
+    const lo = Math.min(A,B), hi = Math.max(A,B); if (lo === hi || P === 0) return null;
+    const pl = P*factor(lo), ph = P*factor(hi);
+    for (let X = hi+1; X <= 1440; X++){ if (cum(hi, X, ph, rm) >= cum(lo, X, pl, rm)) return X; }
+    return null;
+  }
+
+  // populate selects
+  function fill(sel, from, to, label){ for (let i = from; i <= to; i++){ const o = document.createElement("option"); o.value = i; o.textContent = label(i); sel.appendChild(o); } }
+  fill($("sy"), 60, 70, i => i + " years"); fill($("sm"), 0, 11, i => i + (i===1?" month":" months"));
+  fill($("cy"), 60, 70, i => i + " years"); fill($("cm"), 0, 11, i => i + (i===1?" month":" months"));
+  $("sy").value = "60"; $("sm").value = "0"; $("cy").value = "65"; $("cm").value = "0";
+
+  function ageMonths(y, m){ let t = parseInt($(y).value,10)*12 + parseInt($(m).value,10); return Math.max(720, Math.min(840, t)); }
+
+  function compute(){
+    const valid = $("calc").checkValidity();
+    $("calcError").textContent = valid ? "" : "Check the fields: enter valid numbers within the stated range.";
+    $("result").hidden = !valid;
+    if (!valid) { $("calc").querySelectorAll("tbody").forEach(b => { if (!b.closest("#limits") && !b.closest("#thresholds")) b.innerHTML = ""; }); return; }
+
+    const raw = parseFloat($("p65").value); const P = isFinite(raw) && raw >= 0 ? raw : AVG65; const usingAvg = !(isFinite(raw) && raw >= 0);
+    const r = parseFloat($("ret").value)/100; const rm = r ? Math.pow(1+r, 1/12) - 1 : 0;
+    const S = ageMonths("sy","sm"), C = ageMonths("cy","cm");
+    if (S === 840) $("sm").value = "0"; if (C === 840) $("cm").value = "0";
+    const fS = factor(S), fC = factor(C);
+    const pS = P*fS, pC = P*fC;
+
+    const big = $("bigNum"); big.textContent = fmt2(pS) + " a month";
+    big.classList.toggle("neg", fS < 1); big.classList.toggle("ok", fS > 1);
+    $("bigText").textContent = `Starting at ${ageStr(S)}: ${signed(fS)} against the ${fmt2(P)} you would get at 65${usingAvg ? " (the April 2026 average new pension — enter your own estimate above)" : ""}. Starting at ${ageStr(C)} would pay ${fmt2(pC)} a month (${signed(fC)}).`;
+
+    let be = null, beText;
+    if (P === 0) beText = "Zero baseline: zero payments at every age, with no crossover.";
+    else if (S === C) beText = "Pick two different ages to see a break-even.";
+    else {
+      be = breakEven(S, C, P, rm);
+      const later = Math.max(S,C), earlier = Math.min(S,C);
+      const laterIsYou = later === S;
+      beText = be ? `Break-even: the ${ageStr(later)} start overtakes the ${ageStr(earlier)} start at age ${ageStr(be)}${r ? ` if all payments in both options earn ${(r*100).toFixed(0)}% a year above inflation` : ""}. Live longer than that and ${laterIsYou ? "your choice" : `waiting until ${ageStr(later)}`} pays more in total; die sooner and ${laterIsYou ? `starting at ${ageStr(earlier)}` : "your choice"} would have.` : `At this return the ${ageStr(later)} start never catches up within the calculator's range (to age 120).`;
+    }
+    $("beText").textContent = beText;
+    $("leText").textContent = "Tax, further contributions, wage growth, survivor benefits and lifespan can change the decision; this holds the age-65 baseline fixed.";
+
+    const warn = $("warn");
+    if (raw > MAX65) { warn.hidden = false; warn.textContent = `The amount you entered (${fmt2(raw)}) is above the 2026 maximum pension at 65, ${fmt2(MAX65)}. Check the figure — it should be the "at 65" estimate on your statement, not the amount at 70.`; }
+    else warn.hidden = true;
+
+    // working
+    const tb = $("working").querySelector("tbody"); tb.innerHTML = "";
+    const months = S - 780; const rate = months < 0 ? DOWN : UP;
+    const rows = [
+      ["Pension at 65 (today's dollars)", fmt2(P)],
+      [`Months ${months < 0 ? "before" : "after"} your 65th birthday`, Math.abs(months) + ""],
+      [`× ${months < 0 ? "0.6% reduction" : "0.7% increase"} per month`, (Math.abs(months)*rate*100).toFixed(1) + "%"],
+      [`Adjustment factor (${months < 0 ? "1 − " : "1 + "}${(Math.abs(months)*rate).toFixed(3)})`, fS.toFixed(3)],
+      [`Monthly pension starting at ${ageStr(S)}`, fmt2(pS)],
+      ["Annual pension, before indexation", fmt(pS*12)],
+    ];
+    if (S !== C) { const lo = Math.min(S,C), hi = Math.max(S,C); rows.push([`Head start of the ${ageStr(lo)} option before ${ageStr(hi)} begins`, fmt(cum(lo, hi, P*factor(lo), rm))]); rows.push([`Monthly gap once both are paying`, fmt2(P*factor(hi) - P*factor(lo))]); if (be) rows.push([`Months for the gap to repay the head start`, (be - hi) + ""]); }
+    rows.forEach(rw => { const tr = document.createElement("tr"); tr.innerHTML = `<td>${rw[0]}</td><td class="num">${rw[1]}</td>`; tb.appendChild(tr); });
+    if (be) { const tr = document.createElement("tr"); tr.className = "total"; tr.innerHTML = `<td>Break-even age</td><td class="num">${ageStr(be)}</td>`; tb.appendChild(tr); }
+
+    // comparison table
+    const cb = $("compare").querySelector("tbody"); cb.innerHTML = "";
+    const starts = [720, 744, 780, 804, 840]; if (!starts.includes(S)) { starts.push(S); starts.sort((a,b)=>a-b); }
+    starts.forEach(st => {
+      const p = P*factor(st); const b = st === 780 ? null : breakEven(st, 780, P, rm);
+      const tr = document.createElement("tr"); if (st === S) tr.className = "you";
+      tr.innerHTML = `<td>${ageStr(st)}${st===S?'<span class="pill">you</span>':""}</td><td class="num">${fmt2(p)}</td><td class="num">${st===780?"—":signed(factor(st))}</td>` +
+        [900,960,1020,1080].map(X => `<td class="num">${fmt(cum(st, X, p, rm))}</td>`).join("") +
+        `<td class="num">${st===780?"—":(b?ageStr(b):"never")}</td>`;
+      cb.appendChild(tr);
+    });
+
+
+  }
+
+  $("calc").addEventListener("submit", e => { e.preventDefault(); compute(); });
+  ["p65","ret","sy","sm","cy","cm"].forEach(id => $(id).addEventListener("input", compute));
+  ["sy","sm","cy","cm","ret"].forEach(id => $(id).addEventListener("change", compute));
+  $("reset").addEventListener("click", () => { $("p65").value = ""; $("ret").value = "0"; $("sy").value = "60"; $("sm").value = "0"; $("cy").value = "65"; $("cm").value = "0"; compute(); });
+
+  compute();
+})();
+</script>
+</body>
+</html>
