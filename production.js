@@ -28,11 +28,11 @@ window.LEDGER_PRODUCTION = (() => {
   function line(a) {
     // A malformed or stale runtime item must never become a human-writing claim.
     // The build rejects it; a reader with inconsistent local data stays neutral.
-    if (error(a)) return "The Ledger. Production status is unavailable." + more;
+    if (error(a)) return "Imperium Post. Production status is unavailable." + more;
     if (a.produced === "legacy-unrecorded") return legacyText + more;
-    if (a.produced === "assisted") return "Drafted with AI assistance from the credited sources and reviewed by <strong>The Ledger</strong>'s editor before publication.";
+    if (a.produced === "assisted") return "Drafted with AI assistance from the credited sources and reviewed by <strong>Imperium Post</strong>'s editor before publication.";
     if (a.produced === "ai-source-reviewed") return "Drafted with AI assistance from the credited sources and source-checked by AI before publication. No human factual review is claimed.";
-    return "Reported and written by <strong>The Ledger</strong>.";
+    return "Reported and written by <strong>Imperium Post</strong>.";
   }
   function archiveNotice(a) {
     return !error(a) && a.produced === "legacy-unrecorded" ? legacyText : "";

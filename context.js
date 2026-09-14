@@ -1,4 +1,4 @@
-/* The Ledger — reviewed context for individual Newsstand stories.
+/* Imperium Post — reviewed context for individual Newsstand stories.
 
    The Newsstand's standing notes (WIM_NOTES in index.html) are general
    background by desk, and the app labels them "Background". A note here is
@@ -12,13 +12,13 @@
      why       the reviewed context, plain text, one or two paragraphs at most
      sources   what it rests on: [{t: title, u: https URL, p: publisher}]
      reviewed  ISO date of the review
-     by        who reviewed it (a name or "The Ledger's editor")
+     by        who reviewed it (a name or "Imperium Post's editor")
 
    Example (not live — copy it, fill it in, and remove the leading //):
    // "https://example.com/story": {
    //   why: "…",
    //   sources: [{t: "…", u: "https://…", p: "…"}],
-   //   reviewed: "2026-09-10", by: "The Ledger's editor"
+   //   reviewed: "2026-09-10", by: "Imperium Post's editor"
    // }
 */
 window.LEDGER_CONTEXT = {};

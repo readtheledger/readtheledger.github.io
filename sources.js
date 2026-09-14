@@ -1,4 +1,4 @@
-/* The Ledger — the public feeds the Newsstand reads.
+/* Imperium Post — the public feeds the Newsstand reads.
 
    Every feed here was checked by hand: public, free to read, no paywall and no
    login. Nothing from the FT, WSJ, Bloomberg or The Economist is included by
@@ -18,7 +18,7 @@
              verdict, not just evidence — a central bank's press feed is Central
              Banks whatever a headline says; everything else is filed by its
              actual subject (topics.js), with s as supporting evidence
-     rights  what The Ledger may carry from this feed, recorded explicitly:
+     rights  what Imperium Post may carry from this feed, recorded explicitly:
                "summary" — a summary, at most one short attributed quote, and a
                            link out; the article itself stays with the publisher
                "full"    — the whole article, under the licence named in lic

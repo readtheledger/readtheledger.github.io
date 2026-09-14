@@ -27,19 +27,22 @@
 <meta name="google-site-verification" content="HRTi_4B1AL_3WZcrRViVq4onwxlfSPT4fSQpbqtaT2c" />
 <meta name="google-adsense-account" content="ca-pub-1632733900961015">
 <!-- meta:start — build.mjs replaces this block per page (story, section, front) -->
-<title>The Ledger — Finance, read properly</title>
+<title>Imperium Post — Read what matters.</title>
 <meta name="description" content="A quiet reader for high-quality, free-to-read financial journalism.">
 <link rel="canonical" href="https://imperiumpost.com/">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="The Ledger">
-<meta property="og:title" content="The Ledger — Finance, read properly">
+<meta property="og:site_name" content="Imperium Post">
+<meta property="og:title" content="Imperium Post — Read what matters.">
 <meta property="og:description" content="A quiet reader for high-quality, free-to-read financial journalism.">
 <meta property="og:url" content="https://imperiumpost.com/">
-<meta property="og:image" content="https://imperiumpost.com/icon-512.png">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="The Ledger — Finance, read properly">
+<meta property="og:image" content="https://imperiumpost.com/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Imperium Post — Read what matters.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Imperium Post — Read what matters.">
 <meta name="twitter:description" content="A quiet reader for high-quality, free-to-read financial journalism.">
-<meta name="twitter:image" content="https://imperiumpost.com/icon-512.png">
+<meta name="twitter:image" content="https://imperiumpost.com/og-default.png">
 <!-- meta:end -->
 <!-- app-only views (Newsstand, Saved, search) are addressed by ?view= and ?q=;
      the app marks them noindex, with a canonical of their own so the two do not
@@ -50,20 +53,21 @@
 <meta name="theme-color" content="#FFF1E5" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#12100E" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="The Ledger">
+<meta name="apple-mobile-web-app-title" content="Imperium Post">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="apple-touch-icon" href="/icon-180.png">
-<link rel="icon" href="/icon-192.png">
+<link rel="icon" href="/icon-192.png" type="image/png">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- only the weights the stylesheet actually uses (Playfair 700/800 and its italic,
+<!-- only the weights the stylesheet actually uses (Playfair 700/800/900 and its italic,
      Source Serif 400/600 and its italic, Inter 400/600/700), and loaded so the
      first paint does not wait for it: the text shows in the fallback face and
      swaps when the fonts arrive -->
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,500;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,500;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,500;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,500;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 <style>
 /* ---------- tokens ---------- */
 :root{
@@ -128,7 +132,10 @@ header.masthead{
 }
 .mast-row{display:flex;align-items:center;gap:8px;padding:6px 14px 8px;max-width:1100px;margin:0 auto}
 .wordmark{font-family:var(--display);font-weight:800;font-size:1.4rem;letter-spacing:-.02em;line-height:1;flex:1;min-width:0;white-space:nowrap;text-decoration:none;color:inherit}
-.wordmark span{color:var(--accent-2)}
+.wordmark{display:inline-flex;align-items:center;gap:.4em}
+.wordmark .mono{display:inline-grid;place-items:center;width:1.55em;height:1.55em;background:#12100E;color:#FFF1E5;font-weight:900;font-size:.72em;letter-spacing:-.06em;line-height:1;flex:none}
+.brand-slogan{font-family:var(--ui);font-size:.7rem;color:var(--ink-2);padding:0 14px 6px;max-width:1100px;margin:0 auto}
+@media(max-width:420px){.wordmark{font-size:clamp(1rem,4.5vw,1.2rem)}.mastbtn{padding:0 6px;gap:3px;font-size:.7rem}.mastbtn svg{width:16px}}
 /* the two masthead actions carry a visible word each: what they do is not a guess */
 .mastbtn{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 12px 0 10px;border:1px solid var(--rule-2);border-radius:999px;font-family:var(--ui);font-size:.76rem;font-weight:600;color:var(--ink-2);background:var(--chip);flex:0 0 auto}
 .mastbtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -142,7 +149,7 @@ header.masthead{
 .icobtn{border:1px solid transparent}
 @media(max-width:380px){
   .mast-row{gap:6px;padding:6px 10px 8px}
-  .wordmark{font-size:1.25rem}
+  .wordmark{font-size:clamp(1rem,4.5vw,1.2rem)}
   .mastbtn{padding:0 9px 0 8px;font-size:.72rem}
 }
 
@@ -311,7 +318,7 @@ ol.rail .hl{font-size:1rem;line-height:1.25}
 .srcbox{font-family:var(--ui);font-size:.82rem;color:var(--ink-3);line-height:1.5}
 .srcbox a{color:var(--accent);font-weight:600}
 
-/* reader: the attributed quote, the Ledger's context box, attribution */
+/* reader: the attributed quote, Imperium Post's context box, attribution */
 .quotebox{margin:1.4em 0;padding:0}
 .quotebox blockquote{margin:0;padding:2px 0 2px 16px;border-left:3px solid var(--accent-2);font-family:var(--display);font-size:1.16em;line-height:1.4;font-style:italic;color:var(--ink)}
 .quotebox figcaption{font-family:var(--ui);font-size:.72rem;color:var(--ink-3);margin-top:8px}
@@ -472,7 +479,7 @@ html.js #static{display:none}
 
 <header class="masthead">
   <div class="mast-row">
-    <a class="wordmark" href="/" aria-label="The Ledger — front page">The Ledger<span>.</span></a>
+    <a class="wordmark" href="/" aria-label="Imperium Post — front page"><span class="mono" aria-hidden="true">IP</span>Imperium Post</a>
     <button class="mastbtn tap" id="btnSearch" aria-expanded="false" aria-controls="searchwrap">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span>Search</span>
     </button>
@@ -482,6 +489,7 @@ html.js #static{display:none}
   </div>
   <!-- the edition line: the newest publication date in content.js, written by the
        build for readers without JavaScript and kept current by the app; never a clock -->
+  <p class="brand-slogan">Read what matters.</p>
   <p class="datestrip" id="datestrip"></p>
   <div class="secwrap" id="secwrap">
     <nav class="sections" id="secscroll" aria-label="Topics"><div class="sections-inner" id="secnav"></div></nav>
@@ -566,7 +574,7 @@ html.js #static{display:none}
     <div class="grab"></div>
     <h2>Menu</h2>
     <nav aria-label="Topics"><ul class="menulist" id="menuTopics"></ul></nav>
-    <p class="menu-about"><a href="/about/" id="menuAbout">About The Ledger</a></p>
+    <p class="menu-about"><a href="/about/" id="menuAbout">About Imperium Post</a></p>
     <div class="privacy-controls" data-privacy-controls>
       <a href="/privacy/" data-open-privacy>Privacy</a>
       <button type="button" data-ad-settings hidden disabled>Privacy and cookie settings</button>
@@ -642,12 +650,12 @@ html.js #static{display:none}
     <div class="field">
       <label>Newsstand sources <span style="font-weight:400;text-transform:none;letter-spacing:0">(as last gathered)</span></label>
       <div class="feedlist" id="feedstatus"></div>
-      <p class="hint">The Newsstand is gathered on the site's build, on a half-hour schedule that GitHub runs when it can — a target, not a promise — so the time shown is when it was <em>actually</em> gathered. Only publicly available RSS/Atom feeds are used; nothing behind a paywall or login is fetched, and every story links back to its publisher. Gathering the Newsstand never changes The Ledger's own articles.</p>
+      <p class="hint">The Newsstand is gathered on the site's build, on a half-hour schedule that GitHub runs when it can — a target, not a promise — so the time shown is when it was <em>actually</em> gathered. Only publicly available RSS/Atom feeds are used; nothing behind a paywall or login is fetched, and every story links back to its publisher. Gathering the Newsstand never changes Imperium Post's own articles.</p>
     </div>
 
     <div class="field">
       <label>Feedback</label>
-      <p class="hint">The Ledger is new and shaped by its readers. Tell us what to fix or cover:
+      <p class="hint">Imperium Post is new and shaped by its readers. Tell us what to fix or cover:
       <a href="https://github.com/readtheledger/readtheledger.github.io/issues" target="_blank" rel="noopener noreferrer"><strong>send feedback →</strong></a></p>
     </div>
 
@@ -676,7 +684,7 @@ html.js #static{display:none}
 <script>
 "use strict";
 /* =======================================================================
-   The Ledger — a quiet reader for free, high-quality financial journalism.
+   Imperium Post — a quiet reader for free, high-quality financial journalism.
    Single-page app. No tracking, no ads, no paywall circumvention.
    ======================================================================= */
 
@@ -691,9 +699,9 @@ html.js #static{display:none}
      "analysis"  — the why-it-matters layer; twenty to thirty per cent
      "deep"      — expert, research-grade work; ten to fifteen per cent
 
-   lic marks the few sources whose work The Ledger may lawfully republish in
+   lic marks the few sources whose work Imperium Post may lawfully republish in
    full, and names the licence shown beside it. Everything else — however open
-   the feed, however careful the credit — is presented as The Ledger's own
+   the feed, however careful the credit — is presented as Imperium Post's own
    summary with a short attributed quote and a link out. A public feed is an
    invitation to read, not a licence to republish. */
 const SOURCES = (window.LEDGER_SOURCES || []);
@@ -711,7 +719,7 @@ const TOPICS = window.LEDGER_TOPICS || {classify: o => ({section: o.hint || "", 
 const CONTEXT = window.LEDGER_CONTEXT || {};
 
 /* ------------------------- 1b. addresses -------------------------
-   Every Ledger story and every editorial section has a page of its own, written
+   Every Imperium Post story and every editorial section has a page of its own, written
    by build.mjs; these helpers are the one place the shape of those addresses is
    decided, and build.mjs mirrors them. Newsstand and Saved are app-only views
    (live feeds and this device's bookmarks), so they have no page. */
@@ -814,35 +822,35 @@ function toast(msg,ms){
 }
 
 /* ------------------------- 3. demo article (offline safety net) -------------
-   Written by The Ledger itself so the reading experience, Listen and Copy all
+   Written by Imperium Post itself so the reading experience, Listen and Copy all
    work before any network call succeeds. Not attributed to any publisher.     */
 /* The About page has no publication date and takes no place in the chronology:
    it is shown as a card of its own at the foot of the front page, and never in
    a section, the Newsstand or a search. */
 const DEMO = Object.assign({
-  id:"demo-1", source:"The Ledger", section:"About", author:"The Ledger",
+  id:"demo-1", source:"Imperium Post", section:"About", author:"Imperium Post",
   date:"", link:"", demo:true, fullText:true
-}, window.LEDGER_ABOUT || { title:"About The Ledger", standfirst:"", html:"<p>The About page could not be loaded.</p>" });
+}, window.LEDGER_ABOUT || { title:"About Imperium Post", standfirst:"", html:"<p>The About page could not be loaded.</p>" });
 DEMO.text = htmlToText(DEMO.html);
 DEMO.words = DEMO.text.split(/\s+/).filter(Boolean).length;
 DEMO.ts = NaN;
 const PRIVACY = Object.assign({
-  id:"privacy-page", source:"The Ledger", section:"Privacy", author:"The Ledger",
+  id:"privacy-page", source:"Imperium Post", section:"Privacy", author:"Imperium Post",
   date:"", link:"", demo:true, fullText:true, infoPath:PRIVACY_PATH
 }, window.LEDGER_PRIVACY || {title:"Privacy", standfirst:"", html:"<p>The privacy page could not be loaded.</p>"});
 PRIVACY.text = htmlToText(PRIVACY.html);
 PRIVACY.words = PRIVACY.text.split(/\s+/).filter(Boolean).length;
 PRIVACY.ts = NaN;
 const INFO_PAGES = (window.LEDGER_INFO_PAGES || []).map(info=>{
-  const page = Object.assign({source:"The Ledger", author:"The Ledger", date:"", link:"", demo:true, fullText:true}, info);
+  const page = Object.assign({source:"Imperium Post", author:"Imperium Post", date:"", link:"", demo:true, fullText:true}, info);
   page.text = htmlToText(page.html);
   page.words = page.text.split(/\s+/).filter(Boolean).length;
   page.ts = NaN;
   return page;
 });
 
-/* ------------------------- 3b. the Ledger's editorial voice -------------------
-   Two things here are written by The Ledger itself, in this file, and are the
+/* ------------------------- 3b. Imperium Post's editorial voice -------------------
+   Two things here are written by Imperium Post itself, in this file, and are the
    only prose the app publishes as its own.
 
    WIM_NOTES is the "Why it matters" layer: short original context, by desk,
@@ -901,15 +909,15 @@ function contextOf(it){
   if(c && c.why){
     return {label:"Why it matters", text:String(c.why), reviewed:true,
             sources:(c.sources||[]).map(x=>({t:x.t, u:safeUrl(x.u), p:x.p})).filter(x=>x.u),
-            sig:"— The Ledger" + (c.by ? ", " + c.by : "") + (c.reviewed ? ", reviewed " + c.reviewed : "")};
+            sig:"— Imperium Post" + (c.by ? ", " + c.by : "") + (c.reviewed ? ", reviewed " + c.reviewed : "")};
   }
   const desk = it.section || "Markets";
   return {label:"Background", text:ledgerNote(it), reviewed:false, sources:[],
-          sig:"— The Ledger's standing note on " + desk + " stories, not a reading of this article"};
+          sig:"— Imperium Post's standing note on " + desk + " stories, not a reading of this article"};
 }
 
-/* The Ledger's articles, loaded from content.js — the publication itself.
-   Each is original Ledger writing with its material sources credited and
+/* Imperium Post's articles, loaded from content.js — the publication itself.
+   Each is original Imperium Post writing with its material sources credited and
    linked; makeEditorial turns an entry into a first-class item. */
 function makeEditorial(a){
   const clean = sanitize(a.html||"");
@@ -918,7 +926,7 @@ function makeEditorial(a){
     id:a.id, ledger:true, weekly:!!a.weekly, kind:a.kind||"news",
     // Preserve the explicit category; never infer human writing from its absence.
     produced: a.produced, updated:a.updated,
-    source:"The Ledger", author:"The Ledger", section:a.section||"Markets",
+    source:"Imperium Post", author:"Imperium Post", section:a.section||"Markets",
     title:a.title, standfirst:a.standfirst||"", link:"",
     date:a.date, ts:Date.parse(a.date),   // NaN if the date does not parse: shown as unknown, never as now
     html:clean, text, words:text.trim().split(/\s+/).length,
@@ -1093,9 +1101,9 @@ function shortQuote(it){
   return q;
 }
 
-/* What The Ledger actually presents for an item — and therefore all that
+/* What Imperium Post actually presents for an item — and therefore all that
    Listen and Copy may carry. Its own writing and licensed articles in full;
-   for everything else the summary, the short quote, and the Ledger's context,
+   for everything else the summary, the short quote, and Imperium Post's context,
    never the withheld body. */
 function presentedText(it){
   if(it.demo || it.ledger || it.republish) return it.text || "";
@@ -1234,7 +1242,7 @@ function renderDatestrip(){ const d=$("#datestrip"); if(d) d.textContent = editi
    outcomes, and each is reported in those words: a newer edition was loaded;
    there is no newer edition than the one on show; or the edition could not be
    reached and the previous one is kept, with its own gathering time. None of
-   them touches The Ledger's own articles — gathering the Newsstand is not new
+   them touches Imperium Post's own articles — gathering the Newsstand is not new
    reporting, and the edition line says so separately. */
 async function loadFeeds(opts){
   if(S.loading) return; S.loading=true;
@@ -1359,7 +1367,7 @@ function visible(){
     list = Array.from(byId.values()).sort((a,b)=>(S.saved[b.id]||0)-(S.saved[a.id]||0));
   }
   else if(S.section==="Front page"){
-    // the front page is The Ledger's own journalism; the wires live in the Newsstand
+    // the front page is Imperium Post's own journalism; the wires live in the Newsstand
     if(EDITORIAL.length){
       list = composeFront(EDITORIAL.filter(i=>!i.weekly)).concat([DEMO]);
     }else{
@@ -1395,7 +1403,7 @@ function cardHTML(it, lead, pos){
         ${kickerHTML(it)}
         <h2 class="hl">${esc(it.title)}</h2>
         <p class="standfirst">${esc(it.standfirst)}</p>
-        <div class="meta"><span class="badge">The Ledger</span><span class="dot">Part of the app · no date</span></div>
+        <div class="meta"><span class="badge">Imperium Post</span><span class="dot">Part of the app · no date</span></div>
       </div></div>
     </article>`;
   }
@@ -1426,7 +1434,7 @@ function cardHTML(it, lead, pos){
   </article>`;
 }
 
-/* A Ledger story's headline is an ordinary link to its own page — crawlable, and
+/* A Imperium Post story's headline is an ordinary link to its own page — crawlable, and
    usable with the middle button or a long press. The anchor is kept out of the tab
    order because the card itself is focusable and opens on Enter, so a keyboard
    user meets each story once. Feed items have no page of their own. */
@@ -1439,7 +1447,7 @@ function wimCardHTML(it){
     <p class="wimlabel">Why it matters</p>
     <h2 class="hl">${linkHTML(it)}</h2>
     <p class="wimnote">${esc(it.ledger ? it.standfirst : ledgerNote(it))}</p>
-    <div class="meta"><span class="badge">${esc(it.source)}</span><span class="dot">${when(it.ts)}</span><span class="dot">${it.ledger?"Analysis by The Ledger":"Context by The Ledger"}</span></div>
+    <div class="meta"><span class="badge">${esc(it.source)}</span><span class="dot">${when(it.ts)}</span><span class="dot">${it.ledger?"Analysis by Imperium Post":"Context by Imperium Post"}</span></div>
   </article>`;
 }
 function weeklyCardHTML(){
@@ -1448,10 +1456,10 @@ function weeklyCardHTML(){
   const fig = it.image ? LEDGER_MEDIA.figureHTML(it.image, {variant:"feature", caption:false}) : "";
   return `<article class="card weekly feature${it.image?" has-image":""}" data-id="${it.id}" tabindex="0">
     ${fig}
-    <p class="weeklylabel">The Ledger Weekly · Deep dive</p>
+    <p class="weeklylabel">Imperium Post Weekly · Deep dive</p>
     <h2 class="hl feature-hl">${linkHTML(it)}</h2>
     <p class="standfirst">${esc(it.standfirst)}</p>
-    <div class="meta"><span class="badge">The Ledger</span><span class="dot">${readMins(it.words)} min read</span><span class="dot">Original analysis</span></div>
+    <div class="meta"><span class="badge">Imperium Post</span><span class="dot">${readMins(it.words)} min read</span><span class="dot">Original analysis</span></div>
   </article>`;
 }
 
@@ -1531,7 +1539,7 @@ function viewHeadHTML(n){
     if(S.edition && S.edition.cached) bits.push("this device's saved copy");
     if(stale) bits.push(stale + (stale===1?" source":" sources") + " kept from an earlier gathering");
     if(down) bits.push(down + " unavailable");
-    return `<header class="viewhead"><h1>Newsstand</h1><p class="viewnote" id="gathered">${esc(bits.join(" · "))}. What the desk is reading from public feeds, with a link to each original — not The Ledger's own reporting.<br><button class="btn ghost small" id="nsRefresh">Check for a newer edition</button></p></header>`;
+    return `<header class="viewhead"><h1>Newsstand</h1><p class="viewnote" id="gathered">${esc(bits.join(" · "))}. What the desk is reading from public feeds, with a link to each original — not Imperium Post's own reporting.<br><button class="btn ghost small" id="nsRefresh">Check for a newer edition</button></p></header>`;
   }
   if(sec==="Saved") return `<header class="viewhead"><h1>Saved articles</h1><p class="viewnote">${n} saved on this device</p></header>`;
   if(sec==="Front page") return `<h1 class="sr">Front page</h1>`;
@@ -1541,13 +1549,13 @@ function bindViewHead(){
   const b=$("#nsRefresh"); if(b) b.onclick=()=>loadFeeds({manual:true});
 }
 /* the document title names the view, so tabs and history entries read right */
-const SITE_TITLE = "The Ledger — Finance, read properly";
+const SITE_TITLE = "Imperium Post — Read what matters.";
 function viewTitle(){
-  if(S.query) return "Search: " + S.query + " — The Ledger";
-  if(S.section==="Newsstand") return "Newsstand — The Ledger";
-  if(S.section==="Saved") return "Saved articles — The Ledger";
+  if(S.query) return "Search: " + S.query + " — Imperium Post";
+  if(S.section==="Newsstand") return "Newsstand — Imperium Post";
+  if(S.section==="Saved") return "Saved articles — Imperium Post";
   if(S.section==="Front page") return SITE_TITLE;
-  return S.section + " — The Ledger";
+  return S.section + " — Imperium Post";
 }
 function setTitle(){ if(!$("#reader").classList.contains("on")) document.title = viewTitle(); }
 /* a personal or transient view is not a page to index: it is marked noindex and
@@ -1625,11 +1633,11 @@ function openReader(it, opts){
   const link = safeUrl(it.link);
 
   /* Three presentations, decided by rights rather than by what the feed carried.
-     "ledger"   — The Ledger's own writing, shown in full.
+     "ledger"   — Imperium Post's own writing, shown in full.
      "licensed" — the publisher's licence permits full republication; shown in
                   full, the licence named in the attribution line.
-     "summary"  — everything else: The Ledger's summary, one short attributed
-                  quote where the feed justifies it, the Ledger's why-it-matters
+     "summary"  — everything else: Imperium Post's summary, one short attributed
+                  quote where the feed justifies it, Imperium Post's why-it-matters
                   context, and a prominent route to the original. The article
                   itself stays with the publisher. */
   const own  = it.demo || it.ledger;
@@ -1662,7 +1670,7 @@ function openReader(it, opts){
     body = (lede ? `<p>${esc(lede)}</p>` : "") +
            (quote ? `<figure class="quotebox"><blockquote>${esc(quote)}</blockquote><figcaption>— from ${esc(it.source)}'s report</figcaption></figure>` : "");
     wimBox = ctxBox();
-    attr = `<p class="attrline">Reported by <strong>${esc(it.source)}</strong>${sameName(it.author,it.source)?"":" ("+esc(it.author)+")"}. This is a Newsstand preview — a summary by The Ledger; the article itself stays with the publisher.</p>
+    attr = `<p class="attrline">Reported by <strong>${esc(it.source)}</strong>${sameName(it.author,it.source)?"":" ("+esc(it.author)+")"}. This is a Newsstand preview — a summary by Imperium Post; the article itself stays with the publisher.</p>
       ${link?`<p class="srccta"><a class="btn solid" href="${esc(link)}" target="_blank" rel="noopener noreferrer">Read the original at ${esc(it.source)} →</a></p>`:""}`;
   }
 
@@ -1683,7 +1691,7 @@ function openReader(it, opts){
        ${it.words && mode!=="summary" && !it.demo ?`<span class="dot">${readMins(it.words)} min read</span>`:""}
        ${filed}
      </div>
-     ${own?"":`<p class="srcbox" style="margin:-4px 0 20px">${mode==="licensed"?"Republished with permission":"Preview by The Ledger"}${link?` · <a href="${esc(link)}" target="_blank" rel="noopener noreferrer">read the original at ${esc(it.source)} →</a>`:""}</p>`}
+     ${own?"":`<p class="srcbox" style="margin:-4px 0 20px">${mode==="licensed"?"Republished with permission":"Preview by Imperium Post"}${link?` · <a href="${esc(link)}" target="_blank" rel="noopener noreferrer">read the original at ${esc(it.source)} →</a>`:""}</p>`}
      <div class="rbody">${body}</div>
      ${wimBox}
      ${attr}
@@ -1692,7 +1700,7 @@ function openReader(it, opts){
   const rs=$("#rSave");
   rs.setAttribute("aria-pressed", !!S.saved[it.id]);
   $("svg",rs).setAttribute("fill", S.saved[it.id]?"currentColor":"none");
-  // the share button says what it will share: a Ledger story's own link, or
+  // the share button says what it will share: a Imperium Post story's own link, or
   // the publisher's original for a Newsstand item
   const shareOwn = !!storyPath(it);
   $("#rShareLbl").textContent = shareOwn ? "Share" : "Share original";
@@ -1700,11 +1708,11 @@ function openReader(it, opts){
 
   const r=$("#reader"); r.classList.add("on"); r.setAttribute("aria-hidden","false"); r.scrollTop=0;
   document.body.style.overflow="hidden";
-  // a Ledger story is read at its own address, so the URL bar, a bookmark and a
+  // a Imperium Post story is read at its own address, so the URL bar, a bookmark and a
   // shared link all name the story; a feed item keeps the page it was opened from.
   // popstate re-opens a story from history and asks not to push it again.
   if(!opts.nopush) history.pushState({reader:true, id:it.id}, "", storyPath(it) || location.pathname + location.search);
-  document.title = (it.demo && !it.infoPath ? (it.section || "About") + " — The Ledger" : it.title + " — The Ledger");
+  document.title = (it.demo && !it.infoPath ? (it.section || "About") + " — Imperium Post" : it.title + " — Imperium Post");
   updateProgress();
   render();
   if(it.demo) bindAnalyticsPreference();
@@ -1789,7 +1797,7 @@ function updateProgress(){
   $("#progress").style.width = (h>0 ? Math.min(100,(r.scrollTop/h)*100) : 0) + "%";
 }
 
-/* article → clean plain text, carrying exactly what The Ledger presents */
+/* article → clean plain text, carrying exactly what Imperium Post presents */
 function plainText(it){
   const link = safeUrl(it.link);
   const lines=[it.title,"",it.source + (it.author&&it.author!==it.source?" — "+it.author:""),
@@ -1809,7 +1817,7 @@ function plainText(it){
     const c = contextOf(it);
     lines.push("", c.label+": "+c.text, c.sig);
     if(c.sources.length) lines.push(...c.sources.map(x=>"  "+x.t+" — "+x.p+": "+x.u));
-    lines.push("", "[Newsstand preview — a summary by The Ledger. The original article is at "+it.source+(link?": "+link:".")+"]");
+    lines.push("", "[Newsstand preview — a summary by Imperium Post. The original article is at "+it.source+(link?": "+link:".")+"]");
   }
   return lines.join("\n");
 }
@@ -1829,7 +1837,7 @@ async function copyArticle(){
   if(await copyText(txt)) toast("Copied — "+txt.trim().split(/\s+/).length+" words");
   else toast("Couldn't copy — long-press to select instead", 2600);
 }
-/* Share hands the system the right link — a Ledger story's own address, or the
+/* Share hands the system the right link — a Imperium Post story's own address, or the
    publisher's original for a Newsstand item — and says what happened: the share
    sheet completed (which means the link went to the app the reader chose, not
    that anything was posted), the reader cancelled, or sharing was unavailable
@@ -2049,7 +2057,7 @@ function fmt(s){ s=Math.max(0,Math.floor(s||0)); return Math.floor(s/60)+":"+Str
 function mediaSession(){
   if(!("mediaSession" in navigator) || !TTS.item) return;
   navigator.mediaSession.metadata = new MediaMetadata({
-    title: TTS.item.title, artist: TTS.item.author||TTS.item.source, album: "The Ledger"
+    title: TTS.item.title, artist: TTS.item.author||TTS.item.source, album: "Imperium Post"
   });
   const A=(k,f)=>{ try{ navigator.mediaSession.setActionHandler(k,f); }catch(e){} };
   A("play",()=>togglePlay()); A("pause",()=>togglePlay());

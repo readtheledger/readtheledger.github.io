@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* The Ledger — gathers the Newsstand.
+/* Imperium Post — gathers the Newsstand.
 
    Reads every public feed in sources.js and writes one file, data/feed.json,
    that the app loads with a single request: the items, the time they were
@@ -21,7 +21,7 @@
        the confidence of that filing and the reason are all in the file, and the
        publisher's own category is kept beside them as desk. A story with no
        clear economic subject is filed under no topic and stays in the Newsstand.
-     - Rights are enforced in the data. Each source declares what The Ledger may
+     - Rights are enforced in the data. Each source declares what Imperium Post may
        carry from it; a source with no rights value, or "full" with no licence,
        stops the run. A "summary" source ships an excerpt of the text and a word
        count — never the article — so nothing downstream can republish what it
