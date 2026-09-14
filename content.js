@@ -13,6 +13,36 @@ window.LEDGER_CONTENT = {
   articles: [
 
 {
+  id: "led-anthropic-ai-race-brakes",
+  kind: "analysis",
+  section: "Tech & Finance",
+  produced: "ai-codex-checked",
+  date: "2026-09-14T14:34:25Z",
+  title: "Anthropic wants brakes on the AI race. Who makes its rivals slow down?",
+  standfirst: "The company behind Claude wants outside scrutiny and shared limits. The uncomfortable question is who gets to write the rules.",
+  html: `<p>Anthropic is helping build the AI future. Its chief executive now wants the race to move more slowly.</p>
+<p>In a September essay, Dario Amodei calls for slowing advances in AI capabilities so safeguards can catch up. His proposal would keep model training going. Anthropic is committing to bring outside evaluators inside the company, while asking for wider coordination among competitors and governments.</p>
+<p>The awkward part is business. Suppose two rivals both believe the race is becoming dangerous. If one takes longer to release its next model, the other could win the customers and attention. Each might welcome a shared limit while finding a reason to resist going first.</p>
+<p>That is what makes this debate interesting beyond the AI industry: the companies competing to build the most powerful systems are also proposing how that competition should be governed.</p>
+<h2>Let the outsiders in</h2>
+<p>Amodei's most concrete pledge concerns access. Anthropic intends to give external reviewers employee-like access and the right to publish key findings without company editorial control. Narrow confidentiality and security redactions would remain possible, and reviewers could flag consequential omissions. The essay describes a team still to be invited.</p>
+<p>The business significance is the potential cost of an uncomfortable finding. An inspection means more if the people being inspected cannot simply bury the result.</p>
+<p>But disclosure leaves a harder question open. If a reviewer identifies a serious problem, who can require a company to fix it before releasing the product? A report and an enforceable condition do different jobs.</p>
+<h2>The industry might help write its own rules</h2>
+<p>Google DeepMind chief Demis Hassabis outlined another proposal in July: a federally overseen standards body, with independent experts and open-source representatives on its board, funded largely by industry. It would classify the most capable models and initially review them voluntarily up to 30 days before release. A successful system could later become mandatory for US deployment. Models below the frontier threshold would be exempt.</p>
+<p>There is a sensible case for involving the builders: effective scrutiny needs expertise, money and access to the technology. There is also an obvious question for everyone outside the leading labs: how much influence should the companies being judged have over the judge?</p>
+<p>That is a design problem, not evidence of a secret deal. A high safety bar could protect the public. A badly designed one could also be easier for a wealthy incumbent to meet than a smaller challenger. Who sets the threshold—and who can challenge it—would matter.</p>
+<p>A July statement from AI-company employees puts the competitive dilemma plainly, requesting government-supported international tools to manage the pace of automated AI development. Individual signatures do not bind their employers.</p>
+<p>For readers following the money, this connects to the obligations behind the build-out. Our <a href="https://imperiumpost.com/story/led-20260817-weekly/" target="_blank" rel="noopener noreferrer">earlier Microsoft capital-spending analysis</a> examines that commitment of resources. A company can welcome a safety principle in public; the harder test comes when applying it could delay a product it wants to sell.</p>
+<p>The revealing next development would be a rule that changes an actual commercial decision: a release delayed, a finding published despite embarrassment, or a review requirement applied equally to an influential lab and a challenger. That would show how much force the proposed brakes really have.</p>`,
+  sources: [
+    { t: "We Must Pace the Frontier", u: "https://darioamodei.com/post/we-must-pace-the-frontier", p: "Dario Amodei" },
+    { t: "A Framework for Frontier AI and the Dawning of a New Age", u: "https://demishassabis.substack.com/p/a-framework-for-frontier-ai-and-the-dawning-of-a-new-age", p: "Demis Hassabis" },
+    { t: "Pacing the Frontier", u: "https://www.pacingthefrontier.com/", p: "Pacing the Frontier" }
+  ]
+},
+
+{
   "id": "led-tfsa-inheritance-2026",
   "kind": "analysis",
   "section": "Personal Finance",
