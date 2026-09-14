@@ -32,7 +32,7 @@ window.LEDGER_PRODUCTION = (() => {
     if (a.produced === "legacy-unrecorded") return legacyText + more;
     if (a.produced === "assisted") return "Drafted with AI assistance from the credited sources and reviewed by <strong>Imperium Post</strong>'s editor before publication.";
     if (a.produced === "ai-source-reviewed") return "Drafted with AI assistance from the credited sources and source-checked by AI before publication. No human factual review is claimed.";
-    if (a.produced === "ai-codex-checked") return "Written with AI assistance, source-checked by Codex and reviewed by a second Codex task. No human or Claude factual review was performed.";
+    if (a.produced === "ai-codex-checked") return "Written and source-checked by Codex, with an editorial review by a second Codex task. Human factual review is not documented for this version.";
     return "Reported and written by <strong>Imperium Post</strong>.";
   }
   function archiveNotice(a) {
