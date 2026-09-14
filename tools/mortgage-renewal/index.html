@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; connect-src 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mortgage renewal payment calculator (Canada, 2026) — Imperium Post</title>
+<meta name="description" content="Your mortgage term is ending. See the balance you will renew, the new payment at your lender's offer and at the posted rate, the monthly increase, and what keeping the old payment would do to your amortization — with Canadian semi-annual compounding and the arithmetic shown.">
+<link rel="canonical" href="https://imperiumpost.com/tools/mortgage-renewal/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Imperium Post">
+<meta property="og:title" content="Mortgage renewal payment calculator (Canada, 2026)">
+<meta property="og:description" content="How much will your payment rise at renewal? Enter the mortgage you took out and the rate you are offered; see the new payment, the increase and the working.">
+<meta property="og:url" content="https://imperiumpost.com/tools/mortgage-renewal/">
+<meta property="og:image" content="https://imperiumpost.com/og-default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Mortgage renewal payment calculator (Canada, 2026)">
+<meta name="twitter:image" content="https://imperiumpost.com/og-default.png">
+<link rel="icon" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Mortgage renewal payment calculator", "url": "https://imperiumpost.com/tools/mortgage-renewal/", "isPartOf": {"@type": "WebSite", "name": "Imperium Post", "url": "https://imperiumpost.com/"}}</script>
+<style>
+:root{
+  --paper:#FFF1E5;--paper-2:#F2E5DA;--ink:#12100E;--ink-2:#33302C;--ink-3:#6B6560;--rule:#DCCFC4;--rule-2:#C9BAAE;
+  --accent:#0F5499;--accent-2:#990F3D;--teal:#0A626B;--chip:#FFFFFF;--ok:#1B6B3A;
+  --serif:"Source Serif 4",Charter,Georgia,"Times New Roman",serif;--display:"Playfair Display",Georgia,serif;
+  --ui:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--maxw:720px;
+}
+@media (prefers-color-scheme:dark){:root{--paper:#12100E;--paper-2:#1C1916;--ink:#F5EFE8;--ink-2:#D8D0C8;--ink-3:#9C948C;--rule:#332E29;--rule-2:#4A433C;--accent:#6FA8DC;--accent-2:#E4718F;--teal:#5FB3BC;--chip:#1C1916;--ok:#7CCB9A}}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);line-height:1.6;font-size:1.0625rem}
+a{color:var(--accent)}
+.masthead{border-bottom:1px solid var(--rule);padding:14px 18px;display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.wordmark{font-family:var(--display);font-weight:800;font-size:1.4rem;letter-spacing:-.02em;text-decoration:none;color:inherit}
+.wordmark span{color:var(--accent-2)}
+.masthead nav{font-family:var(--ui);font-size:.85rem;display:flex;gap:14px;flex-wrap:wrap}
+.masthead nav a{color:var(--ink-2);text-decoration:none}
+main{max-width:var(--maxw);margin:0 auto;padding:28px 18px 60px}
+.kicker{font-family:var(--ui);font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-2);margin:0 0 10px;font-weight:600}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(1.8rem,5vw,2.4rem);line-height:1.12;margin:0 0 12px;letter-spacing:-.01em}
+.stand{font-size:1.15rem;color:var(--ink-2);margin:0 0 18px}
+.meta{font-family:var(--ui);font-size:.85rem;color:var(--ink-3);margin:0 0 26px;padding-bottom:16px;border-bottom:1px solid var(--rule)}
+h2{font-family:var(--display);font-size:1.4rem;margin:36px 0 10px;line-height:1.2}
+h3{font-family:var(--ui);font-size:.95rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin:22px 0 8px}
+.calc{background:var(--chip);border:1px solid var(--rule);border-radius:12px;padding:20px;box-shadow:0 8px 30px rgba(18,16,14,.06)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+label{display:block;font-family:var(--ui);font-size:.9rem;font-weight:600;margin-bottom:6px}
+.help{display:block;font-family:var(--ui);font-weight:400;font-size:.8rem;color:var(--ink-3);margin-top:4px}
+input[type=number],select{width:100%;font:inherit;font-family:var(--ui);font-size:1.05rem;padding:10px 12px;border:1px solid var(--rule-2);border-radius:8px;background:var(--paper);color:var(--ink)}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
+.money{position:relative}
+.money input{padding-left:26px}
+.money::before{content:"$";position:absolute;left:11px;top:50%;transform:translateY(-50%);font-family:var(--ui);color:var(--ink-3)}
+.pct{position:relative}
+.pct input{padding-right:30px}
+.pct::after{content:"%";position:absolute;right:11px;top:50%;transform:translateY(-50%);font-family:var(--ui);color:var(--ink-3)}
+.result{margin-top:22px;padding:18px 20px;border-radius:10px;background:var(--paper-2);border-left:4px solid var(--teal)}
+.result .big{font-family:var(--display);font-size:clamp(1.9rem,6vw,2.6rem);font-weight:800;margin:0;line-height:1.1}
+.result .big.neg{color:var(--accent-2)}
+.result .big.ok{color:var(--ok)}
+.result p{margin:8px 0 0;font-family:var(--ui);font-size:.95rem;color:var(--ink-2)}
+.warn{margin-top:14px;padding:12px 14px;border-radius:8px;background:rgba(153,15,61,.08);border:1px solid var(--accent-2);font-family:var(--ui);font-size:.9rem}
+table{width:100%;border-collapse:collapse;font-family:var(--ui);font-size:.9rem;margin:12px 0}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:600;color:var(--ink-3);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.total td{font-weight:700;border-top:2px solid var(--rule-2)}
+tr.hl td{background:rgba(10,98,107,.08)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+button{font-family:var(--ui);font-size:.9rem;font-weight:600;padding:10px 14px;border-radius:8px;border:1px solid var(--rule-2);background:var(--paper);color:var(--ink);cursor:pointer}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.small{font-family:var(--ui);font-size:.85rem;color:var(--ink-3)}
+details{border:1px solid var(--rule);border-radius:8px;padding:10px 14px;margin:10px 0}
+summary{cursor:pointer;font-family:var(--ui);font-weight:600}
+.faq dt{font-weight:600;margin-top:14px}
+.faq dd{margin:4px 0 0}
+.sources{border-top:1px solid var(--rule);margin-top:36px;padding-top:16px;font-family:var(--ui);font-size:.88rem}
+.sources li{margin:6px 0}
+.disc{font-family:var(--ui);font-size:.82rem;color:var(--ink-3);margin-top:24px}
+.tablewrap{overflow-x:auto}
+footer{border-top:1px solid var(--rule);margin-top:40px;padding:18px;font-family:var(--ui);font-size:.82rem;color:var(--ink-3);text-align:center}
+.wordmark{display:inline-flex;align-items:center;gap:.4em}.wordmark .mono{display:inline-grid;place-items:center;width:1.55em;height:1.55em;background:#12100E;color:#FFF1E5;font-size:.72em;line-height:1} :focus-visible{outline:3px solid #0F5499;outline-offset:3px} input:invalid{border-color:#990F3D} #calcError{color:#990F3D} [hidden]{display:none!important} @media(max-width:420px){.masthead{flex-wrap:wrap}.wordmark{font-size:1.25rem}main{padding-left:14px;padding-right:14px}}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <a class="wordmark" href="/" aria-label="Imperium Post — front page"><span class="mono" aria-hidden="true">IP</span>Imperium Post</a>
+  <nav aria-label="Sections"><a href="/">Front page</a><a href="/personal-finance/">Personal Finance</a><a href="/tools/">Tools</a><a href="/about/">About</a><a href="/privacy/">Privacy</a></nav>
+</header>
+<main id="main">
+  <p class="kicker">Tools · Personal Finance</p>
+  <h1>Mortgage renewal payment calculator</h1>
+  <p class="stand">Your term is ending and the rate is not what it was. Enter the mortgage you took out and the rate you are being offered; see the balance you will renew, the new payment, the monthly increase, and what happens if you keep the old payment instead — with the arithmetic shown.</p>
+  <p class="meta">Imperium Post · Fixed-rate monthly payments with semi-annual compounding · Bank of Canada rates checked by Codex, 14 September 2026 · Entered amounts are not saved or sent</p>
+
+  <form class="calc" id="calc" novalidate autocomplete="off"><p id="calcError" role="alert"></p><noscript>Enable JavaScript to calculate. This form cannot submit your inputs.</noscript>
+    <h3>The mortgage you have now</h3>
+    <div class="grid">
+      <div>
+        <label for="principal">Amount borrowed at the start of this term
+          <span class="help">The balance when the expiring term began, not the original purchase price.</span></label>
+        <div class="money"><input type="number" id="principal" min="1000" step="any" inputmode="decimal" value="400000" max="1000000000" required></div>
+      </div>
+      <div>
+        <label for="rate0">Rate on the expiring term
+          <span class="help">Fixed-rate mortgages only; an average variable rate cannot reproduce the balance history.</span></label>
+        <div class="pct"><input type="number" id="rate0" min="0" max="25" step="any" inputmode="decimal" value="2.50" required></div>
+      </div>
+      <div>
+        <label for="amort">Amortization when the term began (years)
+          <span class="help">Enter the remaining repayment period at the start of this term.</span></label>
+        <input type="number" id="amort" min="1" max="40" step="any" inputmode="numeric" value="25" required>
+      </div>
+      <div>
+        <label for="term">Length of the expiring term (years)
+          <span class="help">Scheduled payments, no prepayments; the same term length is used after renewal.</span></label>
+        <input type="number" id="term" min="1" max="10" step="any" inputmode="numeric" value="5" required>
+      </div>
+      <div>
+        <label for="freq">Payment frequency
+          <span class="help">Monthly payments only.</span></label>
+        <select id="freq">
+          <option value="12" selected>Monthly</option>
+        </select>
+      </div>
+      <div>
+        <label for="balance">Balance at renewal, if you know it (optional)
+          <span class="help">From your renewal statement or mortgage portal. Overrides the estimate.</span></label>
+        <div class="money"><input type="number" id="balance" min="0" step="any" inputmode="decimal" placeholder="estimated" max="1000000000"></div>
+      </div>
+    </div>
+    <h3>The renewal</h3>
+    <div class="grid">
+      <div>
+        <label for="offer">Rate your lender is offering
+          <span class="help">Preset 4.50% is an illustration, not a market rate — type the figure on your renewal statement or a broker's quote.</span></label>
+        <div class="pct"><input type="number" id="offer" min="0" max="25" step="any" inputmode="decimal" value="4.50" required></div>
+      </div>
+      <div>
+        <label for="newamort">Amortization for the new term (years remaining)
+          <span class="help">Leave blank to keep the original schedule. Extending lowers the payment and raises total interest.</span></label>
+        <input type="number" id="newamort" min="1" max="40" step="any" inputmode="numeric" placeholder="remaining">
+      </div>
+    </div>
+    <div class="btnrow">
+      <button type="submit" class="primary">Calculate</button>
+      <button type="button" id="reset">Reset</button>
+    </div>
+
+    <div class="result" id="result" aria-live="polite">
+      <p class="big" id="bigDelta">$0</p>
+      <p id="deltaText"></p>
+      <p id="balText" class="small"></p>
+      <div class="warn" id="warn" hidden></div>
+    </div>
+
+    <h3>New payment at four rates</h3>
+    <div class="tablewrap">
+    <table id="rates" aria-label="New payment at several renewal rates">
+      <thead><tr><th>Rate</th><th class="num">Payment</th><th class="num">Change</th><th class="num">%</th><th class="num">Interest over new term</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    </div>
+    <p class="small" id="ratesNote"></p>
+
+    <h3>If you keep the old payment instead</h3>
+    <p class="small" id="keepText"></p>
+
+    <details>
+      <summary>The working</summary>
+      <table id="working" aria-label="Renewal arithmetic">
+        <thead><tr><th>Step</th><th class="num">Amount</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </details>
+  </form>
+
+  <h2>How the calculation works</h2><p>This models a fixed-rate loan with monthly payments and semi-annual compounding. The monthly rate is (1 + annual rate ÷ 2)<sup>1/6</sup> − 1. At zero interest, payment is principal divided by repayment months. This is a specified convention, not a claim about every Canadian mortgage.</p><p>Payments are on schedule with no prepayments, fees, insurance or variable-rate changes. A statement balance overrides the estimate, including zero. The new term uses the same length as the expiring term. Interest stops at repayment; lender rounding and day-count differences are excluded.</p>
+
+  <h2>A worked example</h2><p>$500,000 at a nominal 4%, semi-annual compounding and 25-year amortization gives $2,630.10 monthly. After 60 payments, $435,269.58 remains. Renew at 6% over the remaining 20 years: $3,099.94 monthly, an increase of $469.84. These are mathematical examples, not rate offers.</p>
+
+  <h2>Comparing an offer</h2><p>Use your statement balance and quoted rate. Changing amortization changes payments and interest. The old-payment comparison does not establish lender approval. Check fees and contract terms separately.</p>
+
+  <h2>Frequently asked</h2><dl class="faq"><dt>Does this support variable or biweekly loans?</dt><dd>No: constant fixed rate, monthly payments, semi-annual compounding only.</dd><dt>Is the posted rate an offer?</dt><dd>No. The 6.09% reference is the Bank of Canada posted five-year series dated September 9, 2026.</dd><dt>Can I enter zero?</dt><dd>Zero interest and a zero statement balance are supported. The original principal must be positive.</dd></dl>
+
+  <div class="sources"><strong>Sources checked by Codex, 14 September 2026</strong><ol><li><a href="https://laws-lois.justice.gc.ca/eng/acts/I-15/page-1.html">Interest Act, section 6: yearly or half-yearly stated basis</a></li><li><a href="https://www.bankofcanada.ca/valet/observations/V80691335,V80691311/json?start_date=2026-09-09&end_date=2026-09-09">Bank of Canada: September 9 posted 5-year 6.09%, prime 4.45%</a></li><li><a href="https://www.bankofcanada.ca/2026/09/fad-press-release-2026-09-02/">Bank of Canada: September 2 policy rate 2.25%</a></li></ol></div>
+  <p class="disc">General information for the assumptions stated on this page; not personal financial or tax advice. Prepared with AI assistance by Claude; adapted and source-checked by Codex on 14 September 2026. Human factual review is not documented. Inputs stay in this page and are not saved or sent.</p>
+</main>
+<footer>© Imperium Post · <a href="/privacy/">Privacy</a> · <a href="/about/">About</a></footer>
+
+<script>
+(function(){
+  "use strict";
+  // Bank of Canada Valet, checked 2026-09-14. posted = V80691335 (2026-09-09); prime = V80691311 (2026-09-09); policy = V39079 (2026-09-08).
+  const RATES = { posted: 6.09, prime: 4.45, policy: 2.25, asOf: "9 September 2026" };
+  const $ = id => document.getElementById(id);
+  const fmt = n => (n<0?"−":"") + "$" + Math.abs(Math.round(n)).toLocaleString("en-CA");
+  const fmt2 = n => (n<0?"−":"") + "$" + Math.abs(n).toLocaleString("en-CA", {minimumFractionDigits:2, maximumFractionDigits:2});
+  const pct = n => (n>=0?"+":"−") + Math.abs(n).toFixed(1) + "%";
+
+  // Canadian convention: annual rate compounded semi-annually, converted to the payment period.
+  function periodRate(annualPct, perYear){ return Math.pow(1 + annualPct/200, 2/perYear) - 1; }
+  function payment(B, i, n){ return i === 0 ? B/n : B * i / (1 - Math.pow(1+i, -n)); }
+  function balanceAfter(B, i, P, k){ return i === 0 ? B - P*k : B*Math.pow(1+i,k) - P*(Math.pow(1+i,k)-1)/i; }
+  function periodsToRepay(B, i, P){ if (i === 0) return B/P; const x = 1 - B*i/P; return x > 0 ? -Math.log(x)/Math.log(1+i) : Infinity; }
+  function num(id, dflt){ const v = parseFloat($(id).value); return isFinite(v) && v > 0 ? v : dflt; }
+
+  function compute(){
+    const valid = $("calc").checkValidity();
+    $("calcError").textContent = valid ? "" : "Check the fields: enter valid numbers within the stated range.";
+    $("result").hidden = !valid;
+    if (!valid) { $("calc").querySelectorAll("tbody").forEach(b => b.innerHTML = ""); $("ratesNote").textContent=""; $("keepText").textContent=""; $("ratesNote").textContent=""; return; }
+
+    const principal = num("principal", 0), r0 = num("rate0", 0), amortY = num("amort", 25), termY = num("term", 5);
+    const freqSel = $("freq").value; const perYear = freqSel === "12" ? 12 : 26; const accel = freqSel === "26a";
+    const offer = num("offer", 0);
+    const newAmortIn = parseFloat($("newamort").value);
+    const balIn = parseFloat($("balance").value);
+    if (!principal || termY >= amortY) { $("result").hidden=true; $("calcError").textContent="Enter a positive principal and a term shorter than the original amortization."; $("rates").querySelector("tbody").innerHTML=""; $("working").querySelector("tbody").innerHTML=""; $("keepText").textContent=""; $("ratesNote").textContent=""; return; }
+
+    const i0 = periodRate(r0, perYear);
+    const n0 = Math.round(amortY * perYear);
+    let P0 = payment(principal, i0, n0);
+    if (accel) P0 = payment(principal, periodRate(r0,12), Math.round(amortY*12)) / 2;
+    const k = Math.round(termY * perYear);
+    const estBal = Math.max(0, balanceAfter(principal, i0, P0, k));
+    const bal = (isFinite(balIn) && balIn >= 0) ? balIn : estBal;
+    // Remaining amortization: for accelerated biweekly the schedule shortens; report the scheduled remainder, not the accelerated one.
+    const remY = amortY - termY;
+    const newAmortY = (isFinite(newAmortIn) && newAmortIn > 0) ? newAmortIn : remY;
+    const n1 = Math.round(newAmortY * perYear);
+    const perLabel = perYear === 12 ? "month" : "two weeks";
+
+    function newPay(rate){ if (accel) return payment(bal, periodRate(rate,12), Math.round(newAmortY*12)) / 2; return payment(bal, periodRate(rate, perYear), n1); }
+    function interestOverTerm(rate,P){const i=periodRate(rate,perYear),kk=Math.round(termY*perYear);let b=bal,interest=0;for(let n=0;n<kk && b>1e-7;n++){const c=b*i;interest+=c;b=Math.max(0,b+c-Math.min(P,b+c));}return interest;}
+
+    const P1 = newPay(offer); const delta = P1 - P0; const deltaPct = (P1/P0 - 1)*100;
+    const big = $("bigDelta"); big.textContent = (delta>=0?"+":"−") + fmt2(Math.abs(delta)).replace("$","$");
+    big.classList.toggle("neg", delta > 0); big.classList.toggle("ok", delta <= 0);
+    $("deltaText").textContent = `per ${perLabel}: from ${fmt2(P0)} to ${fmt2(P1)} at ${offer.toFixed(2)}% (${pct(deltaPct)}), on a balance of ${fmt(bal)} over ${newAmortY} years.`;
+    $("balText").textContent = (isFinite(balIn) && balIn >= 0) ? `Using your stated balance of ${fmt(balIn)}. The calculator's own estimate was ${fmt(estBal)}.` : `Estimated balance after ${k} scheduled payments of ${fmt2(P0)}: ${fmt(estBal)} — ${fmt(principal - estBal)} of principal repaid, ${fmt(P0*k - (principal - estBal))} of interest paid over the term.`;
+
+    // rates table
+    const rows = [
+      {label: `Offer − 0.50% (${(offer-0.5).toFixed(2)}%)`, r: offer-0.5},
+      {label: `Your offer (${offer.toFixed(2)}%)`, r: offer, hl: true},
+      {label: `Offer + 0.50% (${(offer+0.5).toFixed(2)}%)`, r: offer+0.5},
+      {label: `Bank of Canada posted 5-year (${RATES.posted.toFixed(2)}%, ${RATES.asOf})`, r: RATES.posted}
+    ];
+    const tb = $("rates").querySelector("tbody"); tb.innerHTML = "";
+    rows.forEach(row => { if (row.r < 0) return; const P = newPay(row.r); const tr = document.createElement("tr"); if (row.hl) tr.className = "hl";
+      tr.innerHTML = `<td>${row.label}</td><td class="num">${fmt2(P)}</td><td class="num">${(P-P0>=0?"+":"−")}${fmt2(Math.abs(P-P0)).slice(0)}</td><td class="num">${pct((P/P0-1)*100)}</td><td class="num">${fmt(interestOverTerm(row.r, P))}</td>`; tb.appendChild(tr); });
+    const quarter = newPay(offer+0.25) - P1;
+    $("ratesNote").textContent = `Interest is over a new ${termY}-year term at each rate. On this balance each 0.25% is worth about ${fmt2(quarter)} per ${perLabel}. Prime is ${RATES.prime.toFixed(2)}% and the policy rate ${RATES.policy.toFixed(2)}% (Bank of Canada, ${RATES.asOf}).`;
+
+    // keep old payment
+    const iOff = accel ? periodRate(offer, 26) : periodRate(offer, perYear);
+    const keepP = P0;
+    const nKeep = periodsToRepay(bal, iOff, keepP);
+    const perYearEff = perYear;
+    if (!isFinite(nKeep)) $("keepText").textContent = `Keeping the old payment of ${fmt2(P0)} at ${offer.toFixed(2)}% would never repay the mortgage: the payment does not cover the interest (${fmt2(bal*iOff)} per ${perLabel}). This is arithmetic, not an available lender offer.`;
+    else { const yrs = nKeep/perYearEff; $("keepText").textContent = `Keeping the old payment of ${fmt2(P0)} at ${offer.toFixed(2)}% would take about ${yrs.toFixed(1)} years to repay the ${fmt(bal)} balance, against ${newAmortY} years on the new schedule — ${yrs > newAmortY ? "about " + (yrs-newAmortY).toFixed(1) + " years longer, with correspondingly more interest." : "faster than scheduled."}`; }
+
+    const warn = $("warn");
+    if (bal > 0 && deltaPct >= 20) { warn.hidden = false; warn.textContent = `The modeled payment rises ${deltaPct.toFixed(0)}%. This excludes fees, insurance and lender eligibility rules; compare the payment with the quoted contract.`; }
+    else if (bal > 0 && delta < 0) { warn.hidden = false; warn.textContent = `The modeled payment falls. The old-payment comparison below shows the arithmetic of paying more, subject to your lender's prepayment terms.`; }
+    else warn.hidden = true;
+
+    // working
+    const w = $("working").querySelector("tbody"); w.innerHTML = "";
+    const per = perYear === 12 ? "monthly" : "biweekly";
+    const wr = [
+      [`Rate per period at ${r0.toFixed(2)}%: (1 + ${r0.toFixed(2)}% ÷ 2)^(2 ÷ ${perYear}) − 1`, (i0*100).toFixed(4) + "%"],
+      [`Existing ${per} payment${accel ? " (accelerated: monthly ÷ 2)" : ""}, ${amortY} years`, fmt2(P0)],
+      [`Balance after ${k} payments${(isFinite(balIn) && balIn >= 0) ? " (overridden by your figure)" : ""}`, fmt2(bal)],
+      [`Amortization remaining for the new term`, `${newAmortY} years`],
+      [`Rate per period at ${offer.toFixed(2)}%`, (iOff*100).toFixed(4) + "%"],
+      [`New ${per} payment at ${offer.toFixed(2)}%`, fmt2(P1)],
+    ];
+    wr.forEach(r => { const tr = document.createElement("tr"); tr.innerHTML = `<td>${r[0]}</td><td class="num">${r[1]}</td>`; w.appendChild(tr); });
+    const tot = document.createElement("tr"); tot.className = "total"; tot.innerHTML = `<td>Change per ${perLabel}</td><td class="num">${(delta>=0?"+":"−")}${fmt2(Math.abs(delta))}</td>`; w.appendChild(tot);
+
+
+  }
+
+  $("calc").addEventListener("submit", e => { e.preventDefault(); compute(); });
+  ["principal","rate0","amort","term","freq","balance","offer","newamort"].forEach(id => $(id).addEventListener("input", compute));
+  $("reset").addEventListener("click", () => { $("principal").value = "400000"; $("rate0").value = "2.50"; $("amort").value = "25"; $("term").value = "5"; $("freq").value = "12"; $("balance").value = ""; $("offer").value = "4.50"; $("newamort").value = ""; compute(); });
+
+  compute();
+})();
+</script>
+</body>
+</html>

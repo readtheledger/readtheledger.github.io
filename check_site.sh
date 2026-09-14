@@ -17,7 +17,8 @@ say() { echo "$1"; missing=1; }
 # the files the installed app precaches, and the files this release publishes
 for f in index.html content.js sources.js topics.js context.js about.js privacy.js support.js consent.js analytics.js media.js production.js sw.js manifest.webmanifest \
          icon-180.png icon-192.png icon-512.png icon-maskable-512.png icon-mono.svg favicon.ico og-default.png \
-         sitemap.xml sitemap-news.xml feed.xml robots.txt ads.txt 404.html about/index.html privacy/index.html work-with-us/index.html resources/money-headline-checklist/index.html .nojekyll; do
+         sitemap.xml sitemap-news.xml feed.xml robots.txt ads.txt 404.html about/index.html privacy/index.html work-with-us/index.html resources/money-headline-checklist/index.html \
+         tools/index.html tools/tfsa-room/index.html tools/oas-clawback/index.html tools/mortgage-renewal/index.html tools/gic-ladder/index.html tools/cpp-start-age/index.html resources/next-bank-of-canada-announcement/index.html .nojekyll; do
   [ -f "$dir/$f" ] || say "MISSING from $dir: $f"
 done
 
