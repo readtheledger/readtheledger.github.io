@@ -13,6 +13,49 @@ window.LEDGER_CONTENT = {
   articles: [
 
 {
+  "id": "led-tfsa-inheritance-2026",
+  "kind": "analysis",
+  "section": "Personal Finance",
+  "produced": "ai-codex-checked",
+  "date": "2026-09-14T06:01:31Z",
+  "title": "Inherited a TFSA? CRA’s 2026 form and online checklist don’t match",
+  "standfirst": "A 2026 change can protect post-death growth from qualifying trusteed TFSAs. CRA’s new form and part of its beneficiary webpage give different instructions.",
+  "html": "<p>Naming your spouse as a TFSA beneficiary instead of a successor holder does not automatically make the account&#39;s later growth taxable. For qualifying survivor payments received from January 1, 2026, the rules offer a broader route to preserve the shelter. For a TFSA held in trust, that can include growth after death. Eligibility, deadlines and the account&#39;s legal form still matter. The updated <a href=\"https://www.canada.ca/content/dam/cra-arc/formspubs/pbg/rc240/rc240-26e.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">RC240 form</a> and <a href=\"https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-146.2.html\" target=\"_blank\" rel=\"noopener noreferrer\">current tax law</a> support the distinction.</p>\n<p>The practical question: which transfer route applies, and what must the survivor document?</p>\n<h2>Taking over the account is different from receiving its money</h2>\n<p>A valid successor holder is the deceased&#39;s surviving spouse or common-law partner who becomes the new account holder. The TFSA continues, sheltering its death-date value and later earnings. Assuming no excess contribution in the deceased&#39;s account, taking over does not consume the survivor&#39;s own room. The deceased&#39;s unused contribution room does not transfer. <a href=\"https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/death-of-holder/successor-holder.html\" target=\"_blank\" rel=\"noopener noreferrer\">CRA&#39;s successor-holder guidance</a>.</p>\n<p>A designated beneficiary receives money under a different route. The amount inherited up to the account&#39;s fair market value at death is generally not taxable to that beneficiary. Being a beneficiary does not make the entire inherited balance taxable. <a href=\"https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/death-of-holder/beneficiary.html\" target=\"_blank\" rel=\"noopener noreferrer\">CRA&#39;s beneficiary guidance</a>.</p>\n<h2>The 2026 change reaches beyond the original balance</h2>\n<p>Previously, the exempt-contribution calculation limited the spouse&#39;s sheltering route by death-date value. That cap has been repealed in the <a href=\"https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-207.01.html\" target=\"_blank\" rel=\"noopener noreferrer\">current exempt-contribution definition</a>. RC240&#39;s 2026 edition calculates the maximum from survivor payments received, less amounts already designated. It applies to payments received on or after January 1, 2026—not necessarily deaths in 2026.</p>\n<p>For trust arrangements, <a href=\"https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-146.2.html\" target=\"_blank\" rel=\"noopener noreferrer\">section 146.2(9)</a> also accounts for exempt contributions when determining taxable distributions. A qualifying spouse-beneficiary can therefore protect post-death growth. This article does not extend that result to post-death earnings on deposit or annuity contracts; establish the account type with its issuer.</p>\n<p><strong>Illustration, not a tax-saving estimate:</strong> a trusteed TFSA is worth $100,000 at death and earns $5,000 before a $105,000 survivor payment is received in 2026. Assume one eligible Canadian-resident spouse, no excess contribution, no previous exempt designation and all deadlines met. Properly contributing and designating the payment could shelter $105,000. The $5,000 is growth; $105,000 is the amount sheltered, not a tax saving. This creates no inherited allowance for unrelated new deposits.</p>\n<h2>Two deadlines, plus a provincial question</h2>\n<p>The survivor generally must receive the payment and contribute it to their own TFSA by December 31 of the year following death. The form says to send RC240 to CRA within 30 days after that contribution, unless CRA permits later filing. A timely payment alone is insufficient. The <a href=\"https://www.canada.ca/content/dam/cra-arc/formspubs/pbg/rc240/rc240-26e.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">form</a> directs exceptional cases—including excess amounts or multiple survivors—to CRA; relief should not be assumed.</p>\n<p>Quebec requires particular care. CRA says Quebec does not recognize TFSA successor-holder designations, or beneficiary designations for deposit and trust arrangements. Nevertheless, a surviving spouse or common-law partner there may qualify for an exempt contribution. The contract, will and applicable provincial or territorial succession law determine the beneficiary arrangement. Federal tax eligibility does not settle inheritance rights. <a href=\"https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/death-of-holder/what-happens.html\" target=\"_blank\" rel=\"noopener noreferrer\">CRA&#39;s provincial explanation</a>.</p>\n<p>There is a documentation wrinkle: CRA&#39;s beneficiary page announces the 2026 growth change but retains a lower checklist limiting exempt contributions to death-date value. Read that inconsistency alongside the updated form and enacted law; an isolated checklist can mislead. This is general information, not instructions for drafting a will or settling an estate.</p>\n<h2>Three quick answers</h2>\n<p><strong>Can a child use the spouse&#39;s exempt-contribution route?</strong> No. A beneficiary who is not a surviving spouse or common-law partner needs their own room to put inherited money into a TFSA. <a href=\"https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/death-of-holder/beneficiary.html\" target=\"_blank\" rel=\"noopener noreferrer\">CRA</a>.</p>\n<p><strong>Does a successor holder file RC240?</strong> The ordinary qualifying successor-holder takeover does not require it. <a href=\"https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/death-of-holder/successor-holder.html\" target=\"_blank\" rel=\"noopener noreferrer\">CRA</a>.</p>\n<p><strong>What should I collect first?</strong> The account type, designation or will, death-date valuation, payment and contribution dates, and earlier exemption records.</p>\n<p>Related reading: <a href=\"https://imperiumpost.com/story/led-tfsa-withdrawal-recontribution/\" target=\"_blank\" rel=\"noopener noreferrer\">TFSA withdrawals and recontributions</a> and the <a href=\"https://imperiumpost.com/tools/tfsa-room/\" target=\"_blank\" rel=\"noopener noreferrer\">TFSA room calculator</a>, which does not calculate inheritance exemptions.</p>\n<p><em>Written and source-checked by Codex with AI assistance, including statutory and form checks by another Codex task. Human factual review is not documented. Sources checked September 14, 2026.</em></p>",
+  "sources": [
+    {
+      "t": "CRA — If you are a successor holder of a TFSA",
+      "u": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/death-of-holder/successor-holder.html",
+      "p": "Canada Revenue Agency"
+    },
+    {
+      "t": "CRA — If you are a designated beneficiary of a TFSA (August 12, 2026)",
+      "u": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/death-of-holder/beneficiary.html",
+      "p": "Canada Revenue Agency"
+    },
+    {
+      "t": "CRA — What happens when a TFSA holder dies; Quebec designations",
+      "u": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/tax-free-savings-account/death-of-holder/what-happens.html",
+      "p": "Canada Revenue Agency"
+    },
+    {
+      "t": "CRA — RC240, Designation of an Exempt Contribution, 2026 edition",
+      "u": "https://www.canada.ca/content/dam/cra-arc/formspubs/pbg/rc240/rc240-26e.pdf",
+      "p": "Canada Revenue Agency"
+    },
+    {
+      "t": "Income Tax Act 207.01 — exempt contribution definition",
+      "u": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-207.01.html",
+      "p": "Department of Justice Canada"
+    },
+    {
+      "t": "Income Tax Act 146.2(9) — TFSA trust payments after death",
+      "u": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-146.2.html",
+      "p": "Department of Justice Canada"
+    }
+  ]
+},
+
+{
   "id": "led-tokenized-deposits-cdic-insurance",
   "kind": "analysis",
   "section": "Personal Finance",
