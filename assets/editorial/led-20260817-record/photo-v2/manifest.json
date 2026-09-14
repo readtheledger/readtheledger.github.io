@@ -1,0 +1,64 @@
+{
+  "articleId": "led-20260817-record",
+  "master": {
+    "sha256": "f74ac0947c3d15a82dd0b6e26a98555a292a993fb96446433fc04beb5c83799a",
+    "bytes": 1991425,
+    "w": 1536,
+    "h": 1024,
+    "committed": false
+  },
+  "aiGenerated": true,
+  "credit": "Imperium Post",
+  "crop": "none — full 3:2 composition at every size",
+  "derived": "2026-09-14",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 320,
+      "bytes": 20748,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 512,
+      "bytes": 37858,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 800,
+      "bytes": 63910,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 800,
+      "bytes": 120560,
+      "type": "image/jpeg"
+    }
+  ],
+  "version": 2,
+  "assetBase": "/assets/editorial/led-20260817-record/photo-v2",
+  "generationDate": "2026-09-14",
+  "method": "Built-in Image Generation",
+  "modelSelection": "not exposed",
+  "prompt": "Use case: photorealistic-natural. One landscape 3:2 editorial photographic illustration for a financial analysis about record stock-market prices coexisting with uncertainty over central-bank interest rates. Scene: a quiet professional market workstation in a modest high-rise office, close view of a physical trading keyboard with colored key groups, two angled monitors beyond it, and a normal small notepad beside the keyboard. Screens must be genuinely out of focus, showing only indistinct rows of muted red/green/white light without a readable chart, figure, company name or invented market record. Camera at desk level, tactile well-used keyboard foreground sharp, monitors and ordinary office windows softly receding; strong natural side light, realistic plastic and cable textures, restrained documentary photograph, slightly imperfect framing. No people, logos, arrows, giant stairs, money piles, cinematic glow, glossy futuristic CGI, fabricated readable financial data or watermark. Generic fictional scene, not an actual stock exchange/trading session. One coherent image. Not a collage.",
+  "kind": "photographic_illustration",
+  "alt": "A trading keyboard in front of two blurred financial monitors.",
+  "caption": "An illustrative market workstation; the screens do not show verified market data.",
+  "editorialReview": "Root approved master for integration subject to final on-page visual review.",
+  "documentaryStatus": "Generated photographic illustration; fictional scene; not a licensed or documentary photo.",
+  "replaces": {
+    "version": 1,
+    "derivativeSha256": {
+      "hero-1200.jpg": "380359f9c7e8dee5be2e31de9d6b27026309387d36d6153a0045a2b63c7930e8",
+      "hero-1200.webp": "55b134fa2c0566788d4925943bff7a3fb98e8bd66442729d36b64ef3d91b650d",
+      "hero-480.webp": "b413cbe25b864c48c26acd837099279c35f62125961cd1e1eff93d2f45bff08f",
+      "hero-768.webp": "69938a9c12b5938ec8801e42ae669d3148831408079b815d5728fe514fc33aa7"
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "articleId": "led-20260817-consumer",
+  "master": {
+    "sha256": "1d5aff8f79c8c941207e115f7615c567eb84549ef0b8a5aeb778bca8b7a18a4e",
+    "bytes": 2353766,
+    "w": 1536,
+    "h": 1024,
+    "committed": false
+  },
+  "aiGenerated": true,
+  "credit": "Imperium Post",
+  "crop": "none — full 3:2 composition at every size",
+  "derived": "2026-09-14",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 320,
+      "bytes": 29064,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 512,
+      "bytes": 53852,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 800,
+      "bytes": 97822,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 800,
+      "bytes": 160437,
+      "type": "image/jpeg"
+    }
+  ],
+  "version": 2,
+  "assetBase": "/assets/editorial/led-20260817-consumer/photo-v2",
+  "generationDate": "2026-09-14",
+  "method": "Built-in Image Generation",
+  "modelSelection": "not exposed",
+  "prompt": "Use case: photorealistic-natural. Create one landscape 3:2 editorial photographic illustration for an article on weakening American consumer demand and household spending. Subject: an ordinary grocery checkout conveyor belt with a modest week's essentials spaced loosely on it: a plain cardboard egg carton, a small bag of apples, unbranded milk carton, a loaf of bread in a simple paper sleeve and a few vegetables. A mostly empty wire shopping cart sits just beyond the belt; checkout lane background softly out of focus. View from shopper height at an oblique angle, grocery items central and large enough for a small article card. Honest supermarket overhead light, true-to-life colors, modest imperfections, no golden-hour studio lighting. Looks like a candid photograph from an everyday supermarket, not a styled luxury product flat lay. Fictional generic location. No people or readable receipts, shelf prices, brands, logos, money, arrows, fake statistics, dramatic disaster imagery, illustration texture or watermark. One coherent natural photograph, physically correct objects.",
+  "kind": "photographic_illustration",
+  "alt": "Eggs, bread, milk and vegetables on a grocery checkout belt beside a shopping cart.",
+  "caption": "An illustrative grocery checkout scene representing everyday household spending.",
+  "editorialReview": "Root approved master for integration subject to final on-page visual review.",
+  "documentaryStatus": "Generated photographic illustration; fictional scene; not a licensed or documentary photo.",
+  "replaces": {
+    "version": 1,
+    "derivativeSha256": {
+      "hero-1200.jpg": "235f15b13f422c94508b8f44e28cdfb209efdbf766563171d546edd6ffa52846",
+      "hero-1200.webp": "8003d49c7024c586147d5c4221a5e6ab81f8544d69d9fe166af10d2a66adc871",
+      "hero-480.webp": "e51aee78862eff27f163b0b752d1c30beb3b0fc9589b618daf4c54dccf526008",
+      "hero-768.webp": "b651c1d82ad9a9c48b0e46771e9f335b43cda36b18e2c0425df0f576477824f9"
+    }
+  }
+}

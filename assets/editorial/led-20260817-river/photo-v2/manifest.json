@@ -1,0 +1,64 @@
+{
+  "articleId": "led-20260817-river",
+  "master": {
+    "sha256": "3859638aaefdde5a050a4b745479b412cadf0836bfbef7737dccbc6bbf80d293",
+    "bytes": 2002292,
+    "w": 1536,
+    "h": 1024,
+    "committed": false
+  },
+  "aiGenerated": true,
+  "credit": "Imperium Post",
+  "crop": "none — full 3:2 composition at every size",
+  "derived": "2026-09-14",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 320,
+      "bytes": 21732,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 512,
+      "bytes": 38652,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 800,
+      "bytes": 65916,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 800,
+      "bytes": 125557,
+      "type": "image/jpeg"
+    }
+  ],
+  "version": 2,
+  "assetBase": "/assets/editorial/led-20260817-river/photo-v2",
+  "generationDate": "2026-09-14",
+  "method": "Built-in Image Generation",
+  "modelSelection": "not exposed",
+  "prompt": "Use case: photorealistic-natural. One landscape 3:2 editorial photographic illustration for an analysis distinguishing startup financing, investment rounds, and company valuations. A plausible small software startup office after a funding discussion: an open unbranded laptop and two closed slim laptops on a modest shared plywood work table, a neat but slightly used stack of printed financial documents in a plain folder, two empty mismatched task chairs, visible power cords and soft daylight from an ordinary city window. Frame from just above table height so the documents and working computer are the subject, with the humble workspace beyond. The open screen shows an out-of-focus software interface, no legible invented code or financial figures. Natural lived-in realism, restrained colors, ordinary textures, no perfectly staged luxury office. Fictional generic scene, not River or Lovable's actual office. No readable text, brand logos, handshake, people, banknotes, coins, plant growing from chip, glossy render, cinematic teal/orange lighting, painterly effects or watermark. Visually distinctive but truthful conceptual accompaniment; not a claim of a real financing event.",
+  "kind": "photographic_illustration",
+  "alt": "Laptops and financial paperwork on a shared table in a small office.",
+  "caption": "A fictional startup workspace illustrating the distinction between financing and valuation; not River or Lovable's office.",
+  "editorialReview": "Root approved master for integration subject to final on-page visual review.",
+  "documentaryStatus": "Generated photographic illustration; fictional scene; not a licensed or documentary photo.",
+  "replaces": {
+    "version": 1,
+    "derivativeSha256": {
+      "hero-1200.jpg": "9ccb42cb257713daa2403b0db1e27211a68008b5505929d6f2dd101a10986983",
+      "hero-1200.webp": "ec7a560234c06cc3a76f9788a0776ae6018f746ae0b4a75586a26c9b07f7900b",
+      "hero-480.webp": "d5d82d1265936e74fab66e2a2191cedab3d6114bf5046785497f707e4f22c0a8",
+      "hero-768.webp": "1e02f7f8c641bdbe76c3eaf8277369af342f89efdb5c3e0570dabdc5dff41836"
+    }
+  }
+}

@@ -31,11 +31,11 @@ asset here.
 
 ```
 image: {
-  u: "/assets/editorial/<id>/hero-1200.jpg",   // the JPEG fallback; https or root-relative
+  u: "/assets/editorial/<id>/<version>/hero-1200.jpg", // versioned JPEG fallback; https or root-relative
   alt: "what is visible",                       // required
   w: 1200, h: 800,                              // the fallback's pixels; required
   caption: "the editorial line",                // optional
-  credit: "The Ledger",                         // optional
+  credit: "Imperium Post",                       // optional
   ai: true,                                     // optional; renders the disclosure
   widths: [480, 768, 1200]                      // WebP derivatives beside u, hero-<w>.webp
 }
@@ -173,3 +173,11 @@ river, aitrade) and a receipt in two (consumer, aitrade), which is worth
 varying in the next round; the aitrade chip carries a small engraved brain
 motif, which the brief had asked to avoid but is restrained here; nothing
 depicts an actual place, person or facility, and no picture carries text.
+
+## Photographic illustration direction — version 2 (September 14, 2026)
+
+The owner rejected the uniform warm-paper engraving and surreal-object metaphor used in the first eight illustrations. Future generated article imagery should be a natural photographic editorial illustration built around a concrete article-specific subject, with varied composition, ordinary physical scale and believable light and texture. Avoid chip-brains, giant coins, floating arrows, fake charts, glossy 3D stock montages and reusable symbolic props.
+
+A generated photographic illustration remains `ai:true`, visibly disclosed and described as fictional or illustrative when its caption could otherwise imply documentary evidence. It must not fabricate a photograph of a named person, event, office, facility, product, government document or market screen. A factual documentary photo requires a real source, adequate reuse rights and an accurate credit. Article-specific assets use a versioned path such as `assets/editorial/<id>/photo-v2/` so a replacement never depends on an old URL being evicted from browser or worker caches. Use `Imperium Post` as the credit for new in-house generated work.
+
+The v2 replacement set preserves 3:2 masters outside the repository, uses the existing 480/768/1200 WebP plus 1200 JPEG derivative pipeline, records exact prompts and master/replaced-file hashes, and keeps article text, dates and production labels unchanged. Root visual acceptance of the master is followed by on-page phone/desktop review before release.

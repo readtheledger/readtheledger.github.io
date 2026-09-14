@@ -1,0 +1,64 @@
+{
+  "articleId": "led-20260817-savers",
+  "master": {
+    "sha256": "377480617b1add1ae1631f878af773fbd1d67b5d49abfa000a16d5ea05cde156",
+    "bytes": 2293192,
+    "w": 1536,
+    "h": 1024,
+    "committed": false
+  },
+  "aiGenerated": true,
+  "credit": "Imperium Post",
+  "crop": "none — full 3:2 composition at every size",
+  "derived": "2026-09-14",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 320,
+      "bytes": 26130,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 512,
+      "bytes": 50142,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 800,
+      "bytes": 89462,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 800,
+      "bytes": 148269,
+      "type": "image/jpeg"
+    }
+  ],
+  "version": 2,
+  "assetBase": "/assets/editorial/led-20260817-savers/photo-v2",
+  "generationDate": "2026-09-14",
+  "method": "Built-in Image Generation",
+  "modelSelection": "not exposed",
+  "prompt": "Use case: photorealistic-natural. One landscape 3:2 editorial photographic illustration for an article explaining how inflation expectations affect the purchasing power of cash savings. Close natural photograph of an ordinary household kitchen table: a worn pocket calculator, an opened unbranded bank envelope and a few grocery receipts next to a small shopping bag containing bread and three apples. Receipts curl and overlap naturally; crop and shallow focus make all printed words and numbers unreadable, calculator display dark. Objects have actual human-scale wear and believable physical geometry. Composition slightly oblique, groceries occupy right middle, calculator and envelope left foreground, daylight from nearby window, soft neutral shadows, textured laminate table rather than luxurious styling. Looks like an unposed real photograph of doing household finances after shopping. No coins, money towers, symbolic shadows, arrows, graphs, legible fake rates, people, logos, excessive orange grading or watermark. This is a fictional still life, not evidence of prices at a named store.",
+  "kind": "photographic_illustration",
+  "alt": "A calculator, receipts and an opened envelope beside a bag of groceries on a kitchen table.",
+  "caption": "An illustrative household-budgeting scene, not a record of actual grocery prices or account balances.",
+  "editorialReview": "Root approved master for integration subject to final on-page visual review.",
+  "documentaryStatus": "Generated photographic illustration; fictional scene; not a licensed or documentary photo.",
+  "replaces": {
+    "version": 1,
+    "derivativeSha256": {
+      "hero-1200.jpg": "bb4f86941457be793a2dd51f47bd7e7c932405f350447912d3540d73ace87890",
+      "hero-1200.webp": "67138b78a50de9db76a7fca216bcd887ae75d6ba3adf5f7d694b46cdd7d13dbb",
+      "hero-480.webp": "4c86f6311971d4b951b9f6796e2f3edd03c9a3bbb53dbc75675f336b333bfdab",
+      "hero-768.webp": "d852af1283061c524ed381968faca0bd85319d4048ff44410c711d9a5f27abc8"
+    }
+  }
+}

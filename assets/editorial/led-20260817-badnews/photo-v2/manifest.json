@@ -1,0 +1,64 @@
+{
+  "articleId": "led-20260817-badnews",
+  "master": {
+    "sha256": "3349aa486a107b39046da020045ffc07df9c57c70bb6a5b6ce069838fc2d5b19",
+    "bytes": 1903559,
+    "w": 1536,
+    "h": 1024,
+    "committed": false
+  },
+  "aiGenerated": true,
+  "credit": "Imperium Post",
+  "crop": "none — full 3:2 composition at every size",
+  "derived": "2026-09-14",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 320,
+      "bytes": 15246,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 512,
+      "bytes": 27138,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 800,
+      "bytes": 46508,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 800,
+      "bytes": 100213,
+      "type": "image/jpeg"
+    }
+  ],
+  "version": 2,
+  "assetBase": "/assets/editorial/led-20260817-badnews/photo-v2",
+  "generationDate": "2026-09-14",
+  "method": "Built-in Image Generation",
+  "modelSelection": "not exposed",
+  "prompt": "Use case: photorealistic-natural. Create one landscape 3:2 editorial photographic illustration for a markets explainer on why weak economic releases can first lift stocks by reducing interest-rate pressure, until economic weakness becomes the larger concern. A quiet, believable analyst at an ordinary office desk reading a freshly printed economic report next to a computer, shown over the shoulder from behind. One adult in a simple navy sweater, unposed thoughtful concentration rather than panic or celebration. The person's face is not visible. Papers held naturally in two anatomically correct hands; pages show indistinct printed lines with no legible headlines or figures. The monitor beyond is softly defocused with a neutral financial-news page, no readable chart or company logo. Frame the near hand, creased paper edge and part of the shoulder as the main subject, medium crop with useful context; cool morning window light, lived-in desk, natural skin texture and ordinary objects. Realistic professional editorial photograph appearance, generic fictional analyst and report, not a real person or event. No symbols, scales, giant newspaper, arrows, stock photography handshake, dramatic mood, fake financial statistics, painterly effect or watermark.",
+  "kind": "photographic_illustration",
+  "alt": "A person reading printed pages at a desk beside a computer displaying a blurred news page.",
+  "caption": "A fictional analyst reading a report, illustrating how investors interpret economic news.",
+  "editorialReview": "Root approved master for integration subject to final on-page visual review.",
+  "documentaryStatus": "Generated photographic illustration; fictional scene; not a licensed or documentary photo.",
+  "replaces": {
+    "version": 1,
+    "derivativeSha256": {
+      "hero-1200.jpg": "399ab06c0eed60753c2bc01e1e8212d4ebb1999ae8427b6a783b4d75c7fa8ff1",
+      "hero-1200.webp": "a7cc265a63d767638d880f86ca7b654844aa09324161345d4e9bd8a2946e25e9",
+      "hero-480.webp": "b90eb2c8b53c04c2f8c798b9e6edda0b8855344b55976f72ca99e8a2fec11999",
+      "hero-768.webp": "5aee489c365fa94a20010ad809a49a02289a05bc9af6025ae156d6427e5b43f1"
+    }
+  }
+}
