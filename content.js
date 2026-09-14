@@ -16,7 +16,7 @@ window.LEDGER_CONTENT = {
   "id": "led-tokenized-deposits-cdic-insurance",
   "kind": "analysis",
   "section": "Personal Finance",
-  "produced": "ai-source-reviewed",
+  "produced": "ai-codex-checked",
   "date": "2026-09-14T04:41:01Z",
   "title": "Tokenized deposits and the $100,000 question",
   "standfirst": "A tokenized deposit may qualify for CDIC insurance. The answer depends on the legal product, the institution and how the account is held.",

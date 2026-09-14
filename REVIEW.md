@@ -1,6 +1,6 @@
 # Editorial review
 
-New Ledger pieces use one of three explicit production categories. The existing
+New Ledger pieces use one of four explicit production categories. The existing
 archive has a separate, limited status for missing records. The attribution
 line must describe the evidence honestly; this process makes new labels true.
 
@@ -9,6 +9,7 @@ line must describe the evidence honestly; this process makes new labels true.
 | `"reported"` | Reported and written by The Ledger. | A person wrote it from the credited sources. |
 | `"assisted"` | Drafted with AI assistance from the credited sources and reviewed by The Ledger's editor before publication. | A model drafted it from the credited sources; a person checked every claim before it went out. |
 | `"ai-source-reviewed"` | Drafted with AI assistance from the credited sources and source-checked by AI before publication. No human factual review is claimed. | AI systems drafted the piece and checked its claims against the credited sources; no person is claimed to have completed the factual review. |
+| `"ai-codex-checked"` | Written with AI assistance, source-checked by Codex and reviewed by a second Codex task. No human or Claude factual review was performed. | Codex checked the credited sources and a second Codex task reviewed the final prose; this does not claim the Claude review required for `ai-source-reviewed`. |
 | `"legacy-unrecorded"` | From The Ledger archive. A factual review record is not available for this article. | The eight original August 17, 2026 articles lack retained factual-review records and have incomplete production evidence. |
 
 The label is set explicitly per piece in `content.js`, never by default.
@@ -74,6 +75,10 @@ This route does not change the human checklist or make `assisted` available
 without a person's completed review. At release, check that the built static and
 interactive pages show the `ai-source-reviewed` line and that the publication
 date is the actual first-publication time.
+
+## Codex source-check designation
+
+Use `produced: "ai-codex-checked"` when the drafting Codex task checked the credited sources and a second Codex task reviewed the final prose. Record the actual reviewer roles, sources opened, claim outcomes, final hash and timing in the publication pull request. Do not imply that the second task opened every source, that Claude reviewed it, that a human performed factual review, or that the two tasks provide independent review. This designation does not relax the `ai-source-reviewed` condition above. Check the explicit label in both the static page and interactive reader; a metadata-only correction preserves the original publication timestamp.
 
 ## The checklist
 
