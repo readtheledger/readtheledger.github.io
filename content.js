@@ -13,6 +13,46 @@ window.LEDGER_CONTENT = {
   articles: [
 
 {
+  id: "led-google-quebec-ai-power-bill",
+  kind: "analysis",
+  section: "Tech & Finance",
+  produced: "ai-codex-checked",
+  date: "2026-09-15T03:44:27Z",
+  title: "Google is fighting a power tariff. Who pays for AI?",
+  standfirst: "A Quebec dispute puts a price on the AI boom—and asks how much of the electricity build-out belongs on everybody else's bill.",
+  html: `<p>Google wants Quebec's regulator to <a href="https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-C-Google-0016-Preuve-Memoire-2026_07_20.pdf" target="_blank" rel="noopener noreferrer">reject a proposed data-centre electricity tariff</a>. <a href="https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-B-0004-Dem-Piece-2026_02_19.pdf" target="_blank" rel="noopener noreferrer">Hydro-Québec wants those electricity-hungry facilities</a> to carry more of the cost of serving them.</p>
+<p>Each side argues for a fair bill. They disagree about how to divide the cost of the next wave of power supply.</p>
+<p><a href="https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026" target="_blank" rel="noopener noreferrer">The dispute is still open</a>. A <a href="https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-A-0033-Audi-Corresp-2026_09_03.pdf" target="_blank" rel="noopener noreferrer">regulatory hearing is scheduled to begin October 1</a>. This is a fight over a proposal, not a new charge already imposed.</p>
+<h2>What would the power bill look like?</h2>
+<p>Consider an illustrative new data centre drawing 100 megawatts continuously for a 30-day month. Under the <a href="https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-B-0076-Dem-PieceRev-2026_08_04.pdf" target="_blank" rel="noopener noreferrer">full proposed rate</a>, its basic charges would total <strong>CAD $9,541,600</strong>.</p>
+<table><thead><tr><th>Basic charge</th><th>Calculation</th><th>CAD millions</th></tr></thead><tbody><tr><td>Electricity used</td><td>72 million kWh × $0.08710</td><td>6.2712</td></tr><tr><td>Billing demand</td><td>100,000 kW × $32.704</td><td>3.2704</td></tr><tr><td>Total</td><td>30 days at constant load</td><td><strong>9.5416</strong></td></tr></tbody></table>
+<p>This is our calculation from Hydro-Québec's August 4 proposed tariff—not Google's actual bill, and not an estimate of a price increase. It assumes a fully operating new facility, matching billing demand, and no additional charges. Taxes, credits and existing-customer transition discounts are excluded.</p>
+<p>The scale explains why an electricity rate deserves a place beside chips and financing in any discussion of the AI build-out. An apparently small pricing disagreement can matter enormously when consumption never stops.</p>
+<h2>Who benefits from the next power plant?</h2>
+<p><a href="https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-B-0004-Dem-Piece-2026_02_19.pdf" target="_blank" rel="noopener noreferrer">Hydro-Québec's case</a> is that new supply costs money, and serving large data centres can require substantial investment. Its proposal aims to limit the effect on its other customers while keeping data-centre rates competitive.</p>
+<p><a href="https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-C-Google-0016-Preuve-Memoire-2026_07_20.pdf" target="_blank" rel="noopener noreferrer">Google's submission</a> challenges the way those costs are allocated. New generation becomes part of a wider system, it argues, benefiting customers beyond data centres. Other industries also contribute to growing demand.</p>
+<p>The company's requested remedy is a replacement tariff supported by costs, with separate treatment for existing and new customers. Its <a href="https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-C-Google-0018-Preuve-Memoire-2026_08_11.pdf" target="_blank" rel="noopener noreferrer">French submission filed August 11</a> retains that position. These are Google's arguments; the regulator has not endorsed them in the documents reviewed here.</p>
+<p>Imagine a town expanding its water system after a large factory arrives. Charging the factory for the expansion sounds reasonable. But if the new pipes also improve supply to houses and other businesses, the argument quickly becomes about how much of the upgrade belongs to whom.</p>
+<p>That is an analogy, not a calculation of Quebec's costs. It shows why “make AI pay” is a starting point rather than a complete pricing rule.</p>
+<h2>And if the promised demand never arrives?</h2>
+<p>There is another side to the investment decision: a utility can build for demand that fails to materialize. Google's own filing acknowledges the risk that other customers could then be left covering costs.</p>
+<p>It also seeks flexibility to change a project's scheduled rise in demand before Hydro-Québec makes the corresponding investments.</p>
+<p>For readers following the money behind AI, this is the part to watch: who carries the risk when a growth forecast meets a long-lived electricity system?</p>
+<p>Our earlier reporting on <a href="/story/led-ai-data-centre-power-bills-canada-2026/">AI companies’ promises to cover their power costs</a> examines the broad Canadian framework. This Quebec case puts a specific price proposal and a named company’s objection on the record. For more on the commitments behind headline spending, see <a href="/story/led-20260817-weekly/">our examination of Microsoft’s capex accounting</a>.</p>
+<p>The October hearing gives that question a concrete venue. Watch which costs the regulator accepts, how existing customers are treated, and what happens when a data centre needs less power than it planned. Those choices will say more than either side's promise of a fair bill.</p>
+<h2>Related desk</h2>
+<ul><li><a href="/tech-and-finance/">Tech &amp; Finance</a></li></ul>`,
+  sources: [
+    { t: "Proposed data-centre tariff, August 4 revision (B-0076)", p: "Hydro-Québec Distribution", u: "https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-B-0076-Dem-PieceRev-2026_08_04.pdf" },
+    { t: "Hydro-Québec Distribution filing B-0004", p: "Hydro-Québec Distribution", u: "https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-B-0004-Dem-Piece-2026_02_19.pdf" },
+    { t: "Google evidence C-Google-0016 (English)", p: "Google LLC", u: "https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-C-Google-0016-Preuve-Memoire-2026_07_20.pdf" },
+    { t: "Google evidence C-Google-0018 (French)", p: "Google LLC", u: "https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-C-Google-0018-Preuve-Memoire-2026_08_11.pdf" },
+    { t: "Hearing notice A-0033", p: "Régie de l'énergie", u: "https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-A-0033-Audi-Corresp-2026_09_03.pdf" },
+    { t: "R-4333-2026 docket", p: "Régie de l'énergie", u: "https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026" }
+  ]
+},
+
+{
   id: "led-anthropic-ai-race-brakes",
   kind: "analysis",
   section: "Tech & Finance",
