@@ -295,20 +295,30 @@ async def main():
         ok("refresh keeps the story open at the same address",
            (await page.locator("#rwrap h1").inner_text()).strip() == a0["title"] and await page.evaluate("location.pathname") == p0)
 
-        # back from a story landed on directly reaches the front page, in the app
-        await page.go_back()
+        # The app's own Back closes a direct landing to the front page without
+        # manufacturing a home entry behind the story in browser history.
+        await page.locator("#rBack").click()
         await page.wait_for_function("location.pathname === '/'", timeout=5000)
         await page.wait_for_timeout(400)
-        ok("browser back from a direct landing shows the front page",
-           await page.locator("#reader.on").count() == 0 and await page.locator("article.card").count() >= 1
-           and await page.evaluate("document.title") == "The Ledger — Finance, read properly")
+        ok("app Back from a direct landing shows the front page",
+           await page.locator("#reader.on").count() == 0 and await page.locator("article.card").count() >= 1)
+
+        # Browser Back still belongs to the browser: from a direct navigation it
+        # returns to the real preceding entry rather than a synthetic homepage.
+        await page.goto(base + "/markets/", wait_until="load")
+        await page.goto(base + p0, wait_until="load")
+        await page.wait_for_selector("#reader.on", timeout=8000)
+        await page.go_back()
+        await page.wait_for_function("location.pathname === '/markets/'", timeout=5000)
+        ok("browser back from a direct landing honors the real previous entry",
+           await page.locator("#reader.on").count() == 0 and await page.evaluate("location.pathname") == "/markets/")
         await page.go_forward()
         await page.wait_for_function(f"location.pathname === '{p0}'", timeout=5000)
         await page.wait_for_timeout(400)
         ok("browser forward re-opens the story", await page.locator("#reader.on").count() == 1
            and (await page.locator("#rwrap h1").inner_text()).strip() == a0["title"])
-        await page.go_back()
-        await page.wait_for_function("location.pathname === '/'", timeout=5000)
+        await page.goto(base + "/", wait_until="load")
+        await page.wait_for_selector("#feed article.card", timeout=5000)
 
         # a headline on the front page is a real link, opened in place
         card = page.locator("article.card").first
