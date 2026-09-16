@@ -1558,16 +1558,24 @@ function viewTitle(){
   return S.section + " — Imperium Post";
 }
 function setTitle(){ if(!$("#reader").classList.contains("on")) document.title = viewTitle(); }
-/* a personal or transient view is not a page to index: it is marked noindex and
-   given its own address as canonical, because a noindex page must not name
-   another page as the canonical one. Otherwise the page keeps the values the
-   build wrote for it (a section with no stories yet is noindex). */
+/* Canonical and robots signals follow the route that is visible now. They cannot
+   be restored from the HTML that booted the app: a shell first loaded at / would
+   otherwise keep the home canonical when it opens a story, while a shell first
+   loaded on an empty section would carry that section's noindex into the story.
+   Personal views keep their own noindex address, and empty editorial sections
+   stay noindex just as their static build does. */
 function setRobots(){
   const m=$("#robotsMeta"), c=$('link[rel="canonical"]'); if(!m) return;
-  if(!m.dataset.page){ m.dataset.page = m.getAttribute("content"); if(c) c.dataset.page = c.getAttribute("href"); }
+  const readerPath = $("#reader").classList.contains("on") ? storyPath(S.current) : "";
+  if(readerPath){
+    m.setAttribute("content", "index,follow,max-image-preview:large");
+    if(c) c.setAttribute("href", SITE + readerPath);
+    return;
+  }
   const personal = !!(S.query || S.section==="Newsstand" || S.section==="Saved");
-  m.setAttribute("content", personal ? "noindex,follow" : m.dataset.page);
-  if(c) c.setAttribute("href", personal ? location.origin + viewAddress() : c.dataset.page);
+  const emptySection = PAGE_SECTIONS.includes(S.section) && !EDITORIAL.some(it=>it.section===S.section);
+  m.setAttribute("content", (personal || emptySection) ? "noindex,follow" : "index,follow,max-image-preview:large");
+  if(c) c.setAttribute("href", personal ? location.origin + viewAddress() : SITE + (sectionPath(S.section) || "/"));
 }
 
 function bindCards(){
@@ -1727,22 +1735,43 @@ function openReader(it, opts){
   window.LEDGER_CONSENT?.refresh();
   trackVisiblePage();
 }
-function closeReader(){
+function closeReader(opts){
+  opts = opts||{};
   const r=$("#reader"); r.classList.remove("on"); r.setAttribute("aria-hidden","true");
   document.body.style.overflow="";
   $("#progress").style.width="0";
-  document.title = viewTitle();
+  setTitle();
   // closed without going back through history (Escape with no entry, a test, a
   // direct call): the address must not keep naming a story that is no longer open
-  if(storyIdFromPath(location.pathname) || location.pathname === PRIVACY_PATH || INFO_PAGES.some(page=>page.infoPath===location.pathname)) history.replaceState({}, "", viewAddress());
+  if(!opts.keepAddress && (storyIdFromPath(location.pathname) || location.pathname === ABOUT_PATH || location.pathname === PRIVACY_PATH || INFO_PAGES.some(page=>page.infoPath===location.pathname))) history.replaceState({}, "", viewAddress());
+  setRobots();
   trackVisiblePage();
+}
+
+/* An in-app reader entry has a listing immediately behind it and can leave via
+   history. A direct landing has no synthetic home entry: Back/Escape replace that
+   one app entry with the front page, while the browser's own Back remains free to
+   return to the real page the visitor came from. */
+function leaveReader(){
+  const st = history.state || {};
+  if(st.reader && st.direct){
+    S.section = "Front page"; S.query = "";
+    $("#q").value = ""; $("#searchwrap").classList.remove("on"); $("#btnSearch").setAttribute("aria-expanded","false");
+    history.replaceState({home:true}, "", "/");
+    closeReader({keepAddress:true});
+    renderSecNav(); render();
+    return;
+  }
+  if(st.reader) history.back();
+  else closeReader();
 }
 
 /* ------------------------- 6b. addresses at boot ------------------------- */
 /* Every story and section page is the app plus a static copy of its content.
    When the app boots on one of those pages it drops the static copy and opens
    the same thing in the reader, so the address in the bar keeps meaning what it
-   meant. A story landed on directly is given a front page to go back to. */
+   meant. Direct entries are marked in place; no synthetic front-page history
+   entry is inserted ahead of them. */
 function route(){
   const st = $("#static");
   const path = location.pathname;
@@ -1756,14 +1785,17 @@ function route(){
     img.addEventListener("load", drop, {once:true}); img.addEventListener("error", drop, {once:true});
     setTimeout(drop, 2500);
   };
-  if(path === ABOUT_PATH || path === PRIVACY_PATH){ drop(); history.replaceState({home:true}, "", "/"); openReader(path === PRIVACY_PATH ? PRIVACY : DEMO); return; }
+  const direct = it=>{
+    history.replaceState({reader:true, id:it.id, direct:true}, "", location.pathname + location.search + location.hash);
+    openReader(it, {nopush:true});
+  };
+  if(path === ABOUT_PATH || path === PRIVACY_PATH){ drop(); direct(path === PRIVACY_PATH ? PRIVACY : DEMO); return; }
   const info = INFO_PAGES.find(page=>page.infoPath === path || page.infoPath === path + "/");
-  if(info){ drop(); history.replaceState({home:true}, "", "/"); openReader(info); return; }
+  if(info){ drop(); direct(info); return; }
   const id = storyIdFromPath(path);
   if(id){
     const it = EDITORIAL.find(a=>a.id===id) || S.savedItems[id] || null;
-    history.replaceState({home:true}, "", "/");
-    if(it){ openReader(it); afterImage(); return; }
+    if(it){ direct(it); afterImage(); return; }
     drop();
     toast("That story isn't in this edition", 2600);
     return;
@@ -2240,7 +2272,7 @@ function boot(){
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change",applyTheme);
 
   // reader
-  $("#rBack").onclick = ()=>{ if(history.state&&history.state.reader) history.back(); else closeReader(); };
+  $("#rBack").onclick = leaveReader;
   $("#rCopy").onclick = copyArticle;
   $("#rShare").onclick = shareArticle;
   $("#rListen").onclick = listen;
@@ -2259,7 +2291,7 @@ function boot(){
       const it = itemById(st.id) || EDITORIAL.find(a=>a.id===st.id) || (st.id===DEMO.id ? DEMO : null);
       if(it){ openReader(it, {nopush:true}); return; }
     }
-    if($("#reader").classList.contains("on")) closeReader();
+    if($("#reader").classList.contains("on")) closeReader({keepAddress:true});
   });
 
   // dock
@@ -2299,7 +2331,7 @@ function boot(){
       else if($("#menu").classList.contains("on")) closeMenu();
       // leave through history like the back button, so the history entry the
       // reader pushed doesn't linger after the panel has closed
-      else if($("#reader").classList.contains("on")){ if(history.state&&history.state.reader) history.back(); else closeReader(); }
+      else if($("#reader").classList.contains("on")) leaveReader();
     }
     if(e.key===" " && $("#dock").classList.contains("on")){ e.preventDefault(); togglePlay(); }
   });
