@@ -309,7 +309,7 @@ window.LEDGER_CONTENT = {
       { t: "Canada’s Responsible Data Centre Development Principles", u: "https://ised-isde.canada.ca/site/ised/en/canadas-responsible-data-centre-development-principles", p: "Innovation, Science and Economic Development Canada" },
       { t: "2026 Annual Planning Outlook in 5 Graphs and a Map", u: "https://www.ieso.ca/Sector-Participants/Planning-and-Forecasting/Annual-Planning-Outlook/2026-APO-Summary", p: "Independent Electricity System Operator" },
       { t: "B.C. launching competitive process for clean power in high-demand sectors", u: "https://news.gov.bc.ca/releases/2026ECS0005-000095", p: "Government of British Columbia" },
-      { t: "Emerging industries connections — updated September 16, 2026", u: "https://app.bchydro.com/accounts-billing/electrical-connections/large-load/emerging-industries-connections.html", p: "BC Hydro" },
+      { t: "Emerging industries connections — accessed September 16, 2026", u: "https://app.bchydro.com/accounts-billing/electrical-connections/large-load/emerging-industries-connections.html", p: "BC Hydro" },
       { t: "2026 Call for Demand: Request for Applications — February 1, 2026", u: "https://app.bchydro.com/content/dam/BCHydro/customer-portal/documents/accounts-billing/electrical-connections/2026-cfd-request-for-applications.pdf", p: "BC Hydro" }
     ]
   },
