@@ -18,9 +18,9 @@ window.LEDGER_CONTENT = {
   section: "Tech & Finance",
   produced: "ai-codex-checked",
   date: "2026-09-15T03:44:27Z",
-  updated: "2026-09-15T03:53:53Z",
+  updated: "2026-09-16T04:09:17Z",
   title: "Google is fighting a power tariff. Who pays for AI?",
-  standfirst: "A Quebec dispute puts a price on the AI boom—and asks how much of the electricity build-out belongs on everybody else's bill.",
+  standfirst: "Google wants Quebec's regulator to reject Hydro-Québec's proposed data-centre tariff. The dispute asks who pays for the grid behind the AI boom.",
   html: `<p><strong>Clarification — September 14, 2026:</strong> The August filing was an unofficial translation of the July report; source credits now identify the submitting Google entities.</p>
 <p>Google wants Quebec's regulator to <a href="https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-C-Google-0016-Preuve-Memoire-2026_07_20.pdf" target="_blank" rel="noopener noreferrer">reject a proposed data-centre electricity tariff</a>. <a href="https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-B-0004-Dem-Piece-2026_02_19.pdf" target="_blank" rel="noopener noreferrer">Hydro-Québec wants those electricity-hungry facilities</a> to carry more of the cost of serving them.</p>
 <p>Each side argues for a fair bill. They disagree about how to divide the cost of the next wave of power supply.</p>
@@ -61,22 +61,23 @@ window.LEDGER_CONTENT = {
   section: "Tech & Finance",
   produced: "ai-codex-checked",
   date: "2026-09-14T14:34:25Z",
+  updated: "2026-09-16T04:09:17Z",
   title: "Anthropic wants brakes on the AI race. Who makes its rivals slow down?",
-  standfirst: "The company behind Claude wants outside scrutiny and shared limits. The uncomfortable question is who gets to write the rules.",
-  html: `<p>Anthropic is helping build the AI future. Its chief executive now wants the race to move more slowly.</p>
-<p>In a September essay, Dario Amodei calls for slowing advances in AI capabilities so safeguards can catch up. His proposal would keep model training going. Anthropic is committing to bring outside evaluators inside the company, while asking for wider coordination among competitors and governments.</p>
+  standfirst: "Anthropic CEO Dario Amodei wants outside reviewers and shared limits to slow the AI race. The open question is who can enforce the brakes.",
+  html: `<p>Anthropic CEO Dario Amodei wants AI developers to slow advances in model capabilities while safeguards catch up. In a September essay, he commits Anthropic to bringing in outside reviewers with employee-like access and proposes coordination among competitors and governments on shared limits. Model training would continue.</p>
 <p>The awkward part is business. Suppose two rivals both believe the race is becoming dangerous. If one takes longer to release its next model, the other could win the customers and attention. Each might welcome a shared limit while finding a reason to resist going first.</p>
 <p>That is what makes this debate interesting beyond the AI industry: the companies competing to build the most powerful systems are also proposing how that competition should be governed.</p>
-<h2>Let the outsiders in</h2>
+<h2>What would Anthropic let outside reviewers see?</h2>
 <p>Amodei's most concrete pledge concerns access. Anthropic intends to give external reviewers employee-like access and the right to publish key findings without company editorial control. Narrow confidentiality and security redactions would remain possible, and reviewers could flag consequential omissions. The essay describes a team still to be invited.</p>
 <p>The business significance is the potential cost of an uncomfortable finding. An inspection means more if the people being inspected cannot simply bury the result.</p>
 <p>But disclosure leaves a harder question open. If a reviewer identifies a serious problem, who can require a company to fix it before releasing the product? A report and an enforceable condition do different jobs.</p>
-<h2>The industry might help write its own rules</h2>
+<h2>Who would enforce shared AI limits?</h2>
 <p>Google DeepMind chief Demis Hassabis outlined another proposal in July: a federally overseen standards body, with independent experts and open-source representatives on its board, funded largely by industry. It would classify the most capable models and initially review them voluntarily up to 30 days before release. A successful system could later become mandatory for US deployment. Models below the frontier threshold would be exempt.</p>
 <p>There is a sensible case for involving the builders: effective scrutiny needs expertise, money and access to the technology. There is also an obvious question for everyone outside the leading labs: how much influence should the companies being judged have over the judge?</p>
 <p>That is a design problem, not evidence of a secret deal. A high safety bar could protect the public. A badly designed one could also be easier for a wealthy incumbent to meet than a smaller challenger. Who sets the threshold—and who can challenge it—would matter.</p>
 <p>A July statement from AI-company employees puts the competitive dilemma plainly, requesting government-supported international tools to manage the pace of automated AI development. Individual signatures do not bind their employers.</p>
 <p>For readers following the money, this connects to the obligations behind the build-out. Our <a href="https://imperiumpost.com/story/led-20260817-weekly/" target="_blank" rel="noopener noreferrer">earlier Microsoft capital-spending analysis</a> examines that commitment of resources. A company can welcome a safety principle in public; the harder test comes when applying it could delay a product it wants to sell.</p>
+<p>For another live test of how the AI build-out meets public rules, read our analysis of <a href="/story/led-google-quebec-ai-power-bill/">Google's challenge to Quebec's proposed data-centre tariff</a>. Browse more reporting and analysis on the <a href="/tech-and-finance/">Tech &amp; Finance desk</a>.</p>
 <p>The revealing next development would be a rule that changes an actual commercial decision: a release delayed, a finding published despite embarrassment, or a review requirement applied equally to an influential lab and a challenger. That would show how much force the proposed brakes really have.</p>`,
   sources: [
     { t: "We Must Pace the Frontier", u: "https://darioamodei.com/post/we-must-pace-the-frontier", p: "Dario Amodei" },
@@ -278,6 +279,7 @@ window.LEDGER_CONTENT = {
     section: "Tech & Finance",
     produced: "ai-source-reviewed",
     date: "2026-09-13T16:28:02Z",
+    updated: "2026-09-16T04:09:17Z",
     title: "AI giants promise to pay their own power bills. Show Canadians the receipts.",
     standfirst: "Canada’s new data-centre principles say project-driven electricity costs should not land on households or existing businesses. The real test is who pays for grid upgrades—and who carries the cost if demand falls short.",
     html: `<p>A new data centre needs more than chips. It needs power—and someone to pay for the grid around it. Ottawa says that someone should not be Canadian households or existing businesses. Amazon, Google, Microsoft and other tech companies have signed on. The promise is worth having. But a signatory list cannot tell you who pays for a specific substation—or who carries the cost if a project uses less electricity than expected.</p>
@@ -292,6 +294,7 @@ window.LEDGER_CONTENT = {
 <h2>Where the promise gets tested</h2>
 <p>British Columbia offers a concrete example of the decisions below the national headline. A January 30 provincial release says <a href="https://news.gov.bc.ca/releases/2026ECS0005-000095" target="_blank" rel="noopener noreferrer">prospective AI and data-centre projects must compete for clean-electricity access</a>. B.C. planned allocations of up to 400 megawatts over the first two years, with projects assessed on price and economic, community, data-sovereignty and environmental benefits. Well-advanced projects with specified agreements or deposits continue through the existing interconnection process; traditional industries are outside this competition.</p>
 <p>That selection process does not itself show whether other electricity customers will bear any project costs. It shows where project-specific conditions can be examined. Google says it supports paying for all power it uses and infrastructure needs directly driven by its growth. Meta says its Sturgeon County, Alberta project will fund required generation and grid infrastructure with no local ratepayer impact. Those are attributed company commitments. The next step is evidence that the approval, contract and later performance match the promise.</p>
+<p>Quebec now offers another test: <a href="/story/led-google-quebec-ai-power-bill/">Google's challenge to Hydro-Québec's proposed data-centre tariff</a> shows how quickly a general promise becomes a dispute over allocating specific system costs. Our analysis of <a href="/story/led-anthropic-ai-race-brakes/">Anthropic's call for outside AI reviewers and shared limits</a> examines a related question about what voluntary commitments can enforce.</p>
 <p>There is a fair upside. More domestic compute can support Canadian services, research and businesses; supplier-funded generation or grid additions can strengthen capacity; host communities may gain jobs, procurement and tax revenue. The national principles give communities a common standard for demanding those benefits.</p>
 <p>The public test should be simple: for every major project, show the expected load, the connection and serving costs, who pays each major upgrade, who bears cancellation or underuse risk, and how regulators concluded existing customers are protected. The companies have signed the promise. Now put the cost breakdown where Canadians can inspect it.</p>
 <h2>Related reading</h2>
