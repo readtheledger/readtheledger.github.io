@@ -9,8 +9,43 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-09-14",
+  updated: "2026-09-16",
   articles: [
+
+{
+  id: "led-puddery-viral-comeback",
+  kind: "analysis",
+  section: "Companies",
+  produced: "ai-codex-checked",
+  date: "2026-09-16T14:23:59Z",
+  title: "Her pudding shop went viral. Now she wants people to stop fearing the queue.",
+  standfirst: "The Puddery's comeback began with a plea for customers. Nearly three years later, Janel Prator is selling a different message: you can actually get served.",
+  html: `<p>A queue outside your shop is wonderful advertising. Until customers decide it is a reason to stay away.</p>
+<p>Prator told <a href="https://www.chron.com/food/article/pearland-puddery-keith-lee-revisited-22408216.php" target="_blank" rel="noopener noreferrer">Chron on August 28</a> her business was doing fine; a recent empty-line video was intended to challenge customers’ expectations of an enormous wait.</p>
+<p>For a dessert business that once struggled to draw customers, that is quite a reversal.</p>
+<h2>Before the line</h2>
+<p>The business began long before the internet noticed it. On <a href="https://thepuddery.com/about" target="_blank" rel="noopener noreferrer">The Puddery's own account of its beginnings</a>, Prator traces her banana pudding business to treats she brought to coworkers at a phone company in 2006. A product people loved did not automatically deliver enough people through the door.</p>
+<p>In a <a href="https://ca.rollingstone.com/culture/how-food-critic-keith-lee-went-from-mma-fighter-to-tiktok-star/" target="_blank" rel="noopener noreferrer">June 2024 Rolling Stone interview</a>, she recalled using buy-now-pay-later arrangements to cover inventory and rent. She said Keith Lee was one of five customers on the day he visited in November 2023; the following day, 130 people queued. Those are her recollections, not audited customer counts.</p>
+<p>Her own posts preserve the turning point. On <a href="https://www.instagram.com/p/C0GCbseuSSq/" target="_blank" rel="noopener noreferrer">November 25, 2023</a>, she asked followers to keep tagging Lee. By <a href="https://www.instagram.com/p/C0NoCWXOfY0/" target="_blank" rel="noopener noreferrer">November 28</a>, she was thanking him and her supporters with a short celebration: “WE DID IT.”</p>
+<h2>Attention needed somewhere to go</h2>
+<p>The rush was not frictionless. <a href="https://houston.eater.com/2025/3/26/24394610/houston-keith-lee-pearland-dessert-shop-the-puddery-money-grant-toast" target="_blank" rel="noopener noreferrer">Eater reported in March 2025</a> that demand following Lee's original visit had forced a temporary closure. It also reported that Lee and restaurant-software company Toast had returned with a <strong>US$50,000 gift</strong>. Prator said she intended to use the money to remodel another location. That was outside support, not US$50,000 in dessert sales or profit.</p>
+<p>For small-business owners, this is the useful part of the story. Being discovered and being ready for discovery are different jobs. A surge brings an immediate practical question: how many orders can you fill before the experience that attracted people starts to deteriorate?</p>
+<h2>The comeback after the crowd</h2>
+<p>The Puddery's <a href="https://www.instagram.com/p/Dc_dxHxg_2r/" target="_blank" rel="noopener noreferrer">September 7, 2026 hours post</a> advertises both its Pearland store and a Jersey Village food truck. Its official website lists both operations too. These are visible signs of a business still trading, not evidence of its profit margin.</p>
+<p>Meanwhile, the <a href="https://www.instagram.com/p/DchNq9pA78W/" target="_blank" rel="noopener noreferrer">recent return-to-the-shop post</a> had 8,400 likes when checked on September 16. Attention remains available. Turning it into a visit is another matter.</p>
+<p>That makes this more useful than a simple “get noticed” story. Attention can change the immediate problem. The work is noticing what now keeps a customer from buying—and changing the pitch accordingly.</p>
+<p>Follow more stories about how businesses adapt on the <a href="/companies/">Companies desk</a>.</p>`,
+  sources: [
+    { t: "The Puddery reckons with the Keith Lee effect three years later", p: "Chron", u: "https://www.chron.com/food/article/pearland-puddery-keith-lee-revisited-22408216.php" },
+    { t: "About The Puddery", p: "The Puddery", u: "https://thepuddery.com/about" },
+    { t: "How Food Critic Keith Lee Went From MMA Fighter to TikTok Star", p: "Rolling Stone Canada", u: "https://ca.rollingstone.com/culture/how-food-critic-keith-lee-went-from-mma-fighter-to-tiktok-star/" },
+    { t: "The Puddery's appeal to Keith Lee", p: "The Puddery on Instagram", u: "https://www.instagram.com/p/C0GCbseuSSq/" },
+    { t: "The Puddery's post-review thank-you", p: "The Puddery on Instagram", u: "https://www.instagram.com/p/C0NoCWXOfY0/" },
+    { t: "Keith Lee Returns to Pearland Dessert Shop With $50,000 Gift", p: "Eater Houston", u: "https://houston.eater.com/2025/3/26/24394610/houston-keith-lee-pearland-dessert-shop-the-puddery-money-grant-toast" },
+    { t: "Pearland store and Jersey Village food-truck hours", p: "The Puddery on Instagram", u: "https://www.instagram.com/p/Dc_dxHxg_2r/" },
+    { t: "Return-to-the-shop post", p: "The Puddery on Instagram", u: "https://www.instagram.com/p/DchNq9pA78W/" }
+  ]
+},
 
 {
   id: "led-google-quebec-ai-power-bill",
