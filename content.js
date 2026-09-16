@@ -277,7 +277,7 @@ window.LEDGER_CONTENT = {
     id: "led-ai-data-centre-power-bills-canada-2026",
     kind: "analysis",
     section: "Tech & Finance",
-    produced: "ai-source-reviewed",
+    produced: "ai-codex-checked",
     date: "2026-09-13T16:28:02Z",
     updated: "2026-09-16T04:09:17Z",
     title: "AI giants promise to pay their own power bills. Show Canadians the receipts.",
