@@ -66,7 +66,7 @@ const mediaSrc = read("media.js");
 const productionSrc = read("production.js");
 const toolPages = TOOL_PATHS.map(route => ({ route, html: read(route.slice(1) + "index.html") }));
 
-for (const marker of ["<!-- meta:start", "<!-- meta:end -->", "<!-- static:slot", '<p class="datestrip" id="datestrip"', '<meta name="robots" id="robotsMeta" content="index,follow">']) {
+for (const marker of ["<!-- meta:start", "<!-- meta:end -->", "<!-- static:slot", '<p class="datestrip" id="datestrip"', '<meta name="robots" id="robotsMeta" content="index,follow,max-image-preview:large">']) {
   if (!index.includes(marker)) fail("index.html is missing the " + marker + " marker");
 }
 if (!swSrc.includes('const BUILD = "dev";')) fail("sw.js is missing the BUILD stamp");
@@ -276,7 +276,7 @@ function storyHTML(a) {
       <h1>${esc(a.title)}</h1>
       <p class="rstand">${esc(a.standfirst)}</p>
       ${ledeImageHTML(a)}
-      <div class="rmeta"><span class="badge">Imperium Post</span><time class="dot" datetime="${esc(a.date)}">${dateTime(a.date)}</time><span class="dot">${readMins(w)} min read</span></div>
+      <div class="rmeta"><span class="badge">Imperium Post</span><time class="dot" datetime="${esc(a.date)}">${dateTime(a.date)}</time>${a.updated && a.updated !== a.date ? `<time class="dot" datetime="${esc(a.updated)}">Updated ${dateTime(a.updated)}</time>` : ""}<span class="dot">${readMins(w)} min read</span></div>
       <div class="rbody">${a.html}</div>
       <aside class="sourcesbox"><h2>Sources &amp; further reading</h2><ul>${srcs}</ul></aside>
       <p class="attrline">${production.line(a)} Material sources are credited and linked above; quotations are brief and attributed.</p>
@@ -305,7 +305,7 @@ function page(meta, staticHtml) {
     .replace(/<!-- meta:start[\s\S]*?<!-- meta:end -->/, metaBlock(meta))
     // a section with no stories yet is a real page with nothing to index; the
     // app keeps whatever value the build wrote here
-    .replace('<meta name="robots" id="robotsMeta" content="index,follow">', `<meta name="robots" id="robotsMeta" content="${meta.robots || "index,follow"}">`)
+    .replace('<meta name="robots" id="robotsMeta" content="index,follow,max-image-preview:large">', `<meta name="robots" id="robotsMeta" content="${meta.robots || "index,follow,max-image-preview:large"}">`)
     .replace(/<!-- static:slot[^>]*-->/, staticHtml)
     // the edition line comes from the publication, never from a clock: the
     // newest date in content.js, written here so it reads without JavaScript
@@ -389,7 +389,7 @@ for (const s of PAGE_SECTIONS) {
     title: s + " — Imperium Post", ogTitle: s + " — Imperium Post",
     description: descOf(description),
     canonical, ogType: "website",
-    robots: list.length ? "index,follow" : "noindex,follow",
+    robots: list.length ? "index,follow,max-image-preview:large" : "noindex,follow",
     ld: [
       { "@context":"https://schema.org", "@type":"CollectionPage", "name": s + " — Imperium Post", "url": canonical, "description": descOf(description), "isPartOf": { "@type":"WebSite", "name":"Imperium Post", "url": SITE + "/" },
         ...(list.length ? { "hasPart": list.map(a => ({ "@type":"NewsArticle", "headline": a.title, "url": SITE + storyPath(a), "datePublished": a.date })) } : {}) },
@@ -407,6 +407,7 @@ for (const a of articles) {
     title: a.title + " — Imperium Post", ogTitle: a.title, description, canonical, ogType: "article", image: a.image,
     extra: [
       `<meta property="article:published_time" content="${esc(a.date)}">`,
+      `<meta property="article:modified_time" content="${esc(a.updated || a.date)}">`,
       `<meta property="article:section" content="${esc(a.section)}">`,
       `<meta property="article:author" content="${SITE}/">`
     ],

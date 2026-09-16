@@ -49,7 +49,7 @@
      contradict, and robots.txt blocks nothing, so a crawler can read the
      instruction. The build writes noindex here for a section with no stories
      yet, and the app keeps that page's value. -->
-<meta name="robots" id="robotsMeta" content="index,follow">
+<meta name="robots" id="robotsMeta" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#FFF1E5" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#12100E" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1676,6 +1676,8 @@ function openReader(it, opts){
 
   const dateLine = it.demo ? "" : (isNaN(it.ts) ? "Publication date unknown"
                    : new Date(it.ts).toLocaleString(undefined,{day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit"}));
+  const updatedLine = it.ledger && it.updated && it.updated !== it.date && Number.isFinite(Date.parse(it.updated))
+    ? new Date(it.updated).toLocaleString(undefined,{day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit"}) : "";
   const filed = (!own && it.desk && it.desk!==(it.section||"")) ? `<span class="dot">filed by ${esc(it.source)} under ${esc(it.desk)}</span>` : "";
   $("#rwrap").classList.toggle("feature", !!(it.ledger && it.kind==="deep"));
   $("#rwrap").innerHTML =
@@ -1688,6 +1690,7 @@ function openReader(it, opts){
        <span class="badge">${esc(it.source)}</span>
        ${sameName(it.author,it.source)?"":`<span class="byline">${esc(it.author)}</span>`}
        ${dateLine ? `<span class="dot">${esc(dateLine)}</span>` : `<span class="dot">Part of the app · no date</span>`}
+       ${updatedLine ? `<time class="dot" datetime="${esc(it.updated)}">Updated ${esc(updatedLine)}</time>` : ""}
        ${it.words && mode!=="summary" && !it.demo ?`<span class="dot">${readMins(it.words)} min read</span>`:""}
        ${filed}
      </div>
