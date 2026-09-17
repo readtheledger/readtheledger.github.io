@@ -9,8 +9,30 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-09-16",
+  updated: "2026-09-17",
   articles: [
+
+{
+  id: "led-detroit-tacos-cross-border-comeback",
+  kind: "analysis",
+  section: "Companies",
+  produced: "ai-codex-checked",
+  date: "2026-09-17T04:17:01Z",
+  title: "His taco shop was near closing. Then Canadians crossed the border for tacos.",
+  standfirst: "A 19-year-old graduate put his savings into a Taylor taco shop, then watched a social-media appeal bring customers from Windsor and Ohio. The April 2026 turning point is a lesson in what attention can start—and what a small business still has to sustain.",
+  html: `<p>Breanna and Jordan Huynh drove from Windsor to a taco shop in Taylor, Michigan. A border crossing is an unusually committed response to a restaurant's social-media appeal. But in April 2026, <a href="https://www.wxyz.com/news/voices/viral-tiktok-video-saves-a-19-year-olds-struggling-michigan-taco-restaurant-from-closing-its-doors" target="_blank" rel="noopener noreferrer">WXYZ found the siblings</a> among the people showing up for Detroit Loves Tacos 2, a business that had been discussing closure.</p>
+<p>The owner, Alex, was 19 when <a href="https://www.wxyz.com/news/voices/viral-tiktok-video-saves-a-19-year-olds-struggling-michigan-taco-restaurant-from-closing-its-doors" target="_blank" rel="noopener noreferrer">WXYZ reported the story</a>. A 2025 graduate of Taylor High School, he opened the shop in November 2025 with US$5,000 from his personal savings and graduation money, plus a contribution from his mother, Julie Stevens. Those were the ingredients he could put on the line; the reporting does not establish a total startup cost.</p>
+<p>By the following spring, the shop was under pressure. Stevens told <a href="https://www.wxyz.com/news/voices/viral-tiktok-video-saves-a-19-year-olds-struggling-michigan-taco-restaurant-from-closing-its-doors" target="_blank" rel="noopener noreferrer">WXYZ</a> it was barely covering daily costs and its one employee. Alex responded with a 30-second TikTok introducing himself and inviting people to visit. He gave an unfamiliar storefront a person to root for.</p>
+<p><a href="https://www.wxyz.com/news/voices/viral-tiktok-video-saves-a-19-year-olds-struggling-michigan-taco-restaurant-from-closing-its-doors" target="_blank" rel="noopener noreferrer">WXYZ's April report</a> described the response: visitors from Canada and several US states, with Alex reporting near-sellouts and trying to keep enough inventory. <a href="https://people.com/teen-uses-high-school-graduation-money-to-start-taco-shop-faces-unexpected-challenge-11948873" target="_blank" rel="noopener noreferrer">PEOPLE reported on April 13</a> that his TikTok plea had attracted more than 420,000 views. That is the publication's historical count, not a fresh measurement by Imperium Post.</p>
+<p>When checked in September, the <a href="https://www.instagram.com/detroitlovestacos2/" target="_blank" rel="noopener noreferrer">business's public Instagram profile</a> still advertised its Taylor storefront. That offers a later sign of continuity, although neither the profile nor April's crowds establish today's sales or profit. The question after being discovered is practical: can the kitchen serve the rush, and will customers return when the excitement fades?</p>
+<p>It is the same change of problem explored in our <a href="/story/led-puddery-viral-comeback/">Puddery comeback story</a>. First, an owner needs people to notice. Then the business needs to deliver what persuaded them to come. A post can introduce the promise; each order has to keep it.</p>
+<p>Alex's story offers something more concrete than advice to simply believe harder. He made a direct invitation when his savings and work were at risk. People answered with actual visits, some from across a national border. Asking for support did not finish the work. It gave him more customers to do that work for.</p>`,
+  sources: [
+    { t: "Viral TikTok video saves a 19-year-old's struggling Michigan taco restaurant from closing its doors", p: "WXYZ", u: "https://www.wxyz.com/news/voices/viral-tiktok-video-saves-a-19-year-olds-struggling-michigan-taco-restaurant-from-closing-its-doors" },
+    { t: "Teen Uses High School Graduation Money to Start Taco Shop, Faces Unexpected Challenge", p: "PEOPLE", u: "https://people.com/teen-uses-high-school-graduation-money-to-start-taco-shop-faces-unexpected-challenge-11948873" },
+    { t: "Detroit Loves Tacos 2", p: "Detroit Loves Tacos 2 on Instagram", u: "https://www.instagram.com/detroitlovestacos2/" }
+  ]
+},
 
 {
   id: "led-sk-hynix-ai-memory-turnaround",
