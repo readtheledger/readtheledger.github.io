@@ -13,6 +13,45 @@ window.LEDGER_CONTENT = {
   articles: [
 
 {
+  id: "led-sk-hynix-ai-memory-turnaround",
+  kind: "deep",
+  section: "Companies",
+  produced: "ai-codex-checked",
+  date: "2026-09-17T03:20:21Z",
+  title: "SK hynix nearly collapsed. Now comes its US$720 billion AI bet.",
+  standfirst: "The memory-chip maker survived a 2001 creditor rescue, spent years on a technology few customers needed and now says it will invest 1,100 trillion won across three Korean manufacturing hubs.",
+  html: `<p>In 2001, the company now called SK Hynix needed its creditors to keep it alive. Twenty-five years later, it has announced a manufacturing plan so large that <a href="https://www.youtube.com/watch?v=vjixvebQGdY" target="_blank" rel="noopener noreferrer">CNBC Television framed it on August 13 as a US$720 billion AI bet</a>.</p>
+<p>The company's own figure is more precise: <strong>1,100 trillion Korean won</strong>, spread across three production hubs over an extended period. It is a plan, not money already spent. How does a company get from needing a rescue to planning factories on that scale?</p>
+<h2>The company that creditors rescued</h2>
+<p><a href="https://www.channelnewsasia.com/east-asia/sk-hynix-story-record-us-listing-ai-chips-6245921" target="_blank" rel="noopener noreferrer">CNA reported in July</a> that Hyundai Electronics, founded in 1983, came close to bankruptcy when chip prices collapsed in 2001. A creditor-bank bailout kept it operating, and creditors controlled the business for nearly a decade. SK Group acquired it in 2012.</p>
+<p>A <a href="https://news.skhynix.com/en/one-team-spirit-from-industry-latecomer-to-ai-memory-leader/" target="_blank" rel="noopener noreferrer">company retrospective</a> adds the human cost. SK hynix says employees returned wages and took unpaid leave, while researchers modified existing equipment instead of buying new tools. It exited the creditor workout in 2005.</p>
+<p>Corporate comebacks are often cleaned up into tales of grit. Here, survival required outside financing, painful labour concessions and years of technical work. Inspiration does not erase who absorbed the cost.</p>
+<h2>The unfashionable technology</h2>
+<p>The decisive work began before the AI boom. SK hynix says it started developing through-silicon-via technology for high-bandwidth memory, or HBM, in 2009 and released its first HBM product in December 2013. HBM stacks memory chips so they can move data quickly beside processors—a useful feature for today's AI systems.</p>
+<p>Demand did not arrive on schedule. In a <a href="https://news.skhynix.com/en/hbm-design-head-myeong-jae-park/" target="_blank" rel="noopener noreferrer">2024 company interview</a>, HBM design head Myeong-jae Park recalled the department being described as “somewhere off the beaten path.” He said slower-than-expected market growth and difficulties developing HBM2 created doubts about its business value.</p>
+<p>The team kept refining the product, packaging process and customer relationships. That is the practical lesson: resilience was not waiting for luck. It was preserving technical capability through a crisis, then building a specialization for years before the market rewarded it.</p>
+<h2>What the giant number includes</h2>
+<p>SK hynix’s <a href="https://news.skhynix.com/en/fact-05/" target="_blank" rel="noopener noreferrer">June investment strategy</a> divides the 1,100 trillion won into <strong>600 trillion won for Yongin, 100 trillion won for Cheongju and 400 trillion won for a new southwestern cluster</strong>.</p>
+<p>The timetable is easy to overstate. The company aims to finish the first cleanroom in Yongin's fourth fab by 2033, but says equipment and remaining cleanrooms will extend beyond that year. The southwestern site had not been chosen when the plan was announced, and its scale and timing remain subject to market demand and board approvals.</p>
+<p>On August 7, the board approved <a href="https://news.skhynix.com/en/fab-facility-investment-2026/" target="_blank" rel="noopener noreferrer">54.3 trillion won for two new fabs</a>: 35.2 trillion won for Yongin Y2 and 19.1 trillion won for Cheongju M17. That decision executes part of the broader plan; it is not another 54.3 trillion won to add on top.</p>
+<h2>The next test is execution</h2>
+<p>Memory chips remain cyclical. Fabs take years to build and need reliable electricity and water. SK hynix says spending will follow demand and rely mainly on operating cash flow.</p>
+<p>That makes the headline number a statement of direction rather than a guaranteed bill. The risk is that demand, financing or infrastructure fails to match the schedule. The opportunity is that a company once saved by creditors has spent long enough preparing for an emerging market to invest from a position of strength.</p>
+<p>For anyone rebuilding a business, that is the part worth remembering: a difficult chapter need not be the final one. But the next chapter needs more than belief. It needs something customers will pay for—and a way to stay alive until they do.</p>
+<p>Read more corporate-turnaround and business-strategy stories on the <a href="/companies/">Companies desk</a>. See how <a href="/story/led-puddery-viral-comeback/">The Puddery turned viral attention into a different business problem</a>, or how the AI build-out is colliding with infrastructure costs in <a href="/story/led-google-quebec-ai-power-bill/">our analysis of Quebec's proposed data-centre power tariff</a>.</p>
+<p>This article provides general information and is not investment advice.</p>`,
+  sources: [
+    { t: "SK hynix: From near collapse to AI chip powerhouse", p: "CNA", u: "https://www.channelnewsasia.com/east-asia/sk-hynix-story-record-us-listing-ai-chips-6245921" },
+    { t: "From Industry Latecomer to AI Memory Leader", p: "SK hynix Newsroom", u: "https://news.skhynix.com/en/one-team-spirit-from-industry-latecomer-to-ai-memory-leader/" },
+    { t: "HBM Design Head Myeong-Jae Park interview", p: "SK hynix Newsroom", u: "https://news.skhynix.com/en/hbm-design-head-myeong-jae-park/" },
+    { t: "Explainer: SK hynix's Mid-to-Long-Term Investment Strategy", p: "SK hynix Newsroom", u: "https://news.skhynix.com/en/fact-05/" },
+    { t: "Investment Plan for Southwestern Region", p: "SK hynix Newsroom", u: "https://news.skhynix.com/en/fact-06/" },
+    { t: "SK hynix Invests 54 Trillion Won in Yongin Y2 and Cheongju M17", p: "SK hynix Newsroom", u: "https://news.skhynix.com/en/fab-facility-investment-2026/" },
+    { t: "SK Hynix's $720 billion AI bet", p: "CNBC Television", u: "https://www.youtube.com/watch?v=vjixvebQGdY" }
+  ]
+},
+
+{
   id: "led-puddery-viral-comeback",
   kind: "analysis",
   section: "Companies",
