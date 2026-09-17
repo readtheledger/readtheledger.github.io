@@ -1,0 +1,44 @@
+{
+  "articleId": "led-sk-hynix-ai-memory-turnaround",
+  "master": {
+    "sha256": "711f99b82d7e9628a9db36948c32cc755ab293016ed692d3f0d168e0e1aebcc2",
+    "bytes": 2274090,
+    "w": 1536,
+    "h": 1024,
+    "committed": false
+  },
+  "aiGenerated": true,
+  "credit": "Imperium Post",
+  "crop": "none \u2014 full 3:2 composition at every size",
+  "derived": "2026-09-16",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 320,
+      "bytes": 22904,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 512,
+      "bytes": 46986,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 800,
+      "bytes": 86878,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 800,
+      "bytes": 139813,
+      "type": "image/jpeg"
+    }
+  ]
+}
