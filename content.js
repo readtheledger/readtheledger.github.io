@@ -17,6 +17,7 @@ window.LEDGER_CONTENT = {
   kind: "deep",
   section: "Companies",
   produced: "ai-codex-checked",
+  image:{"u":"/assets/editorial/led-sk-hynix-ai-memory-turnaround/hero-1200.jpg","alt":"An unbranded chip on a circuit board resting on a laboratory workbench.","w":1200,"h":800,"widths":[480,768,1200],"ai":true,"credit":"Imperium Post","caption":"AI-generated illustration of semiconductor hardware; not a photograph of an SK hynix product or facility."},
   date: "2026-09-17T03:20:21Z",
   title: "SK hynix nearly collapsed. Now comes its US$720 billion AI bet.",
   standfirst: "The memory-chip maker survived a 2001 creditor rescue, spent years on a technology few customers needed and now says it will invest 1,100 trillion won across three Korean manufacturing hubs.",
