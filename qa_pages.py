@@ -290,6 +290,20 @@ async def main():
            and await page.locator("#static").count() == 0
            and a0["title"] in await page.title(), await page.evaluate("location.pathname"))
 
+        feedback = await page.evaluate("""() => {
+          const a = document.querySelector('#rwrap [data-reader-feedback]');
+          return {href: a && a.href, note: document.querySelector('#rwrap .feedback-note')?.textContent || ''};
+        }""")
+        parsed_feedback = urllib.parse.urlsplit(feedback["href"] or "")
+        feedback_query = urllib.parse.parse_qs(parsed_feedback.query)
+        ok("article feedback opens a story-specific email without subscription language",
+           parsed_feedback.scheme == "mailto"
+           and parsed_feedback.path == "inmyid@gmail.com"
+           and feedback_query.get("subject") == ["Imperium Post reader feedback"]
+           and a0["title"] in feedback_query.get("body", [""])[0]
+           and p0 in feedback_query.get("body", [""])[0]
+           and "does not subscribe you" in feedback["note"], feedback)
+
         await page.reload(wait_until="load")
         await page.wait_for_selector("#reader.on", timeout=8000)
         ok("refresh keeps the story open at the same address",
