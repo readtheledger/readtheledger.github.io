@@ -395,6 +395,9 @@ ol.rail .hl{font-size:1rem;line-height:1.25}
 .privacy-controls [hidden]{display:none}
 .site-footer{max-width:var(--maxw);margin:20px auto;padding:12px 16px;border-top:1px solid var(--rule)}
 .site-footer nav{display:flex;flex-wrap:wrap;gap:8px}
+.reader-feedback{margin:10px 0 0;font-family:var(--ui);font-size:.88rem;line-height:1.5}
+.reader-feedback strong{display:block;font-weight:650}
+.reader-feedback .feedback-note{display:block;color:var(--muted);font-size:.82rem}
 .rbody .support-cta{color:var(--paper);text-decoration:none;white-space:normal}
 .rbody .support-note,.print-instructions{font-family:var(--ui);font-size:.88rem;line-height:1.55;overflow-wrap:anywhere}
 .rbody .worksheet{padding-left:1.5em}
@@ -511,6 +514,7 @@ html.js #static{display:none}
 </main>
 <footer class="site-footer privacy-controls" id="siteFooter" data-privacy-controls>
   <nav aria-label="Publication and privacy"><a href="/work-with-us/" data-open-info>Work with us</a><a href="/resources/money-headline-checklist/" data-open-info>Resources</a><a href="/privacy/" data-open-privacy>Privacy</a><button type="button" data-ad-settings hidden disabled>Privacy and cookie settings</button></nav>
+  <p class="reader-feedback"><strong>What should we investigate next?</strong><a data-reader-feedback href="mailto:inmyid@gmail.com?subject=Imperium%20Post%20reader%20feedback">Email the desk →</a><span class="feedback-note">Opens your email app; it does not subscribe you.</span></p>
   <p data-consent-status role="status" tabindex="-1" hidden></p>
 </footer>
 
@@ -1707,6 +1711,15 @@ function openReader(it, opts){
      ${wimBox}
      ${attr}
      <footer class="site-footer privacy-controls" data-privacy-controls>${$("#siteFooter").innerHTML}</footer>`;
+
+  const feedback = $("#rwrap [data-reader-feedback]");
+  if(feedback){
+    const label = it.demo ? `Page: ${it.title}` : `Story: ${it.title}`;
+    const linkText = storyPath(it) || location.pathname;
+    const bodyText = `${label}\nLink: ${location.origin}${linkText}\n\nWhat should we investigate next?\n`;
+    feedback.href = `mailto:inmyid@gmail.com?subject=${encodeURIComponent("Imperium Post reader feedback")}&body=${encodeURIComponent(bodyText)}`;
+    feedback.setAttribute("aria-label", `Email feedback about ${it.title}`);
+  }
 
   const rs=$("#rSave");
   rs.setAttribute("aria-pressed", !!S.saved[it.id]);
