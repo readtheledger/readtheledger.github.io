@@ -1,0 +1,18 @@
+{
+  "articleId": "led-lj-food-for-the-soul-comeback",
+  "sourceSvg": {
+    "file": "docs/design/illustrations/led-lj-food-for-the-soul-comeback.svg",
+    "sha256": "1a4a64c4a2c181e78e1a8ced744bb5bd961550093a0f86086051c25022eca591",
+    "bytes": 2745,
+    "w": 1200,
+    "h": 675,
+    "committed": true
+  },
+  "aiGenerated": false,
+  "credit": "Imperium Post",
+  "crop": "none — labelled editorial diagram",
+  "derived": "2026-09-20",
+  "files": [
+    {"file":"hero-1200.png","w":1200,"h":675,"bytes":33647,"sha256":"7c5e0407cc1b6f974eef4f20860a581273b52386e3e902149d5e7487b53fa257","type":"image/png"}
+  ]
+}
