@@ -9,8 +9,35 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-09-17",
+  updated: "2026-09-20",
   articles: [
+{
+  id: "led-lj-food-for-the-soul-comeback",
+  kind: "analysis",
+  section: "Companies",
+  produced: "ai-codex-checked",
+  image: {u:"/assets/editorial/led-lj-food-for-the-soul-comeback/hero-1200.png",alt:"Editorial diagram showing attention moving from being seen to a first visit and then a return visit.",w:1200,h:675,credit:"Imperium Post",caption:"AI-assisted illustration: attention is the beginning of the customer journey."},
+  date: "2026-09-20T13:46:09Z",
+  title: "Four hours without a customer. Then his daughter pressed record.",
+  standfirst: "A look back at L&J Food for the Soul's April 2023 customer turnaround—not a claim about its finances today.",
+  html: `<p>Donald Jones was waiting by the window. His daughter Ladonna filmed him. By the next morning, the family's video had reached a million views, according to reporting by the Daily Southtown. For a restaurant struggling to get noticed, an ordinary family moment had become its introduction to strangers.</p>
+<h2>The change was being seen</h2>
+<p>L&J Food for the Soul had opened its Dolton restaurant on April 1. Four days later, about four hours passed without a customer. Owner Melanie Holly told reporter Alexandra Kukulka that the video was followed by new visitors and an increase in people coming back. <a href="https://edition.pagesuite.com/tribune/article_popover.aspx?guid=30e23cd7-8b59-4bd6-bb2f-c9445e26a771" target="_blank" rel="noopener noreferrer">Daily Southtown's reporting</a>.</p>
+<p>Her next ambition was practical: “I'm going to make sure you stay.” Getting attention and earning another order were different jobs.</p>
+<p><a href="https://www.cbsnews.com/amp/chicago/news/dolton-restaurant-tiktok/" target="_blank" rel="noopener noreferrer">CBS Chicago reported on April 11, 2023</a> that the family's video had exceeded three million views.</p>
+<p>Those are reported counts from 2023, not measurements taken today. This account does not establish the restaurant's current trading status, revenue or profit.</p>
+<h2>A comeback you can learn from without copying the emotion</h2>
+<p>Our reading of the story: a useful business post gives someone a reason to care and something concrete to do next. A polished menu can show the product; a moment like this can make the people behind it visible. Neither removes the work of serving the next customer well.</p>
+<p>There is a trap in the million-view headline, though. Reach, orders and money left over are different measures. The practical question is how much of that attention reaches people who can actually buy—and whether they return.</p>
+<p>Consider a deliberately hypothetical example, unrelated to L&amp;J's accounts. If 50 extra orders each bring in $20, that is $1,000 in sales. If ingredients and packaging cost $8 per order, $600 remains before labour, rent and other costs. It is not $1,000 of profit. The same attention spike can produce very different results for different businesses.</p>
+<p>For an owner trying a small social experiment, record the post date, customer enquiries, completed orders and repeat visits. Ask customers how they heard about you rather than assigning every busy day to a video. That turns an encouraging moment into something a business can learn from.</p>
+<p>The hopeful part of this story is that an overlooked business found an audience. The useful part is remembering what still had to happen after people watched.</p>
+<p>Related reading: <a href="/story/led-puddery-viral-comeback/">The Puddery's viral comeback</a> and <a href="/story/led-detroit-tacos-cross-border-comeback/">Detroit's cross-border taco-shop support</a>.</p>`,
+  sources: [
+    { t: "Dolton restaurant sees customers after family's TikTok video", p: "Daily Southtown", u: "https://edition.pagesuite.com/tribune/article_popover.aspx?guid=30e23cd7-8b59-4bd6-bb2f-c9445e26a771" },
+    { t: "Dolton restaurant TikTok story", p: "CBS Chicago", u: "https://www.cbsnews.com/amp/chicago/news/dolton-restaurant-tiktok/" }
+  ]
+},
 
 {
   id: "led-detroit-tacos-cross-border-comeback",
