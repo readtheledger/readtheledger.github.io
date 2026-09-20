@@ -8,7 +8,8 @@
     "h": 675,
     "committed": true
   },
-  "aiGenerated": false,
+  "aiGenerated": true,
+  "creationMethod": "Programmatic SVG authored with AI assistance; no photographic scene or image-generation model.",
   "credit": "Imperium Post",
   "crop": "none — labelled editorial diagram",
   "derived": "2026-09-20",

@@ -9,14 +9,14 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-09-17",
+  updated: "2026-09-20",
   articles: [
 {
   id: "led-lj-food-for-the-soul-comeback",
   kind: "analysis",
   section: "Companies",
   produced: "ai-codex-checked",
-  image: {u:"/assets/editorial/led-lj-food-for-the-soul-comeback/hero-1200.png",alt:"Editorial diagram showing attention moving from being seen to a first visit and then a return visit.",w:1200,h:675,credit:"Imperium Post",caption:"Illustration: attention is the beginning of the customer journey."},
+  image: {u:"/assets/editorial/led-lj-food-for-the-soul-comeback/hero-1200.png",alt:"Editorial diagram showing attention moving from being seen to a first visit and then a return visit.",w:1200,h:675,credit:"Imperium Post",caption:"AI-assisted illustration: attention is the beginning of the customer journey."},
   date: "2026-09-20T13:46:09Z",
   title: "Four hours without a customer. Then his daughter pressed record.",
   standfirst: "A look back at L&J Food for the Soul's April 2023 customer turnaround—not a claim about its finances today.",
