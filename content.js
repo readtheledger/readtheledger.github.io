@@ -142,10 +142,11 @@ window.LEDGER_CONTENT = {
   section: "Tech & Finance",
   produced: "ai-codex-checked",
   date: "2026-09-15T03:44:27Z",
-  updated: "2026-09-16T04:09:17Z",
+  updated: "2026-09-27T13:09:55Z",
   title: "Google is fighting a power tariff. Who pays for AI?",
   standfirst: "Google wants Quebec's regulator to reject Hydro-Québec's proposed data-centre tariff. The dispute asks who pays for the grid behind the AI boom.",
   html: `<p><strong>Clarification — September 14, 2026:</strong> The August filing was an unofficial translation of the July report; source credits now identify the submitting Google entities.</p>
+<p><strong>Update — September 27, 2026:</strong> The Régie's <a href="https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-A-0034-Audi-Planif-2026_09_25.pdf" target="_blank" rel="noopener noreferrer">September 25 planning letter</a> says the October 1–9 hearing period will cover only Hydro-Québec's evidence. It reserves December 7–11 and 15–18 for intervenor evidence and arguments. The October opening is therefore not a timetable for a final ruling.</p>
 <p>Google wants Quebec's regulator to <a href="https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-C-Google-0016-Preuve-Memoire-2026_07_20.pdf" target="_blank" rel="noopener noreferrer">reject a proposed data-centre electricity tariff</a>. <a href="https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-B-0004-Dem-Piece-2026_02_19.pdf" target="_blank" rel="noopener noreferrer">Hydro-Québec wants those electricity-hungry facilities</a> to carry more of the cost of serving them.</p>
 <p>Each side argues for a fair bill. They disagree about how to divide the cost of the next wave of power supply.</p>
 <p><a href="https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026" target="_blank" rel="noopener noreferrer">The dispute is still open</a>. A <a href="https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-A-0033-Audi-Corresp-2026_09_03.pdf" target="_blank" rel="noopener noreferrer">regulatory hearing is scheduled to begin October 1</a>. This is a fight over a proposal, not a new charge already imposed.</p>
@@ -165,7 +166,7 @@ window.LEDGER_CONTENT = {
 <p>It also seeks flexibility to change a project's scheduled rise in demand before Hydro-Québec makes the corresponding investments.</p>
 <p>For readers following the money behind AI, this is the part to watch: who carries the risk when a growth forecast meets a long-lived electricity system?</p>
 <p>Our earlier reporting on <a href="/story/led-ai-data-centre-power-bills-canada-2026/">AI companies’ promises to cover their power costs</a> examines the broad Canadian framework. This Quebec case puts a specific price proposal and a named company’s objection on the record. For more on the commitments behind headline spending, see <a href="/story/led-20260817-weekly/">our examination of Microsoft’s capex accounting</a>.</p>
-<p>The October hearing gives that question a concrete venue. Watch which costs the regulator accepts, how existing customers are treated, and what happens when a data centre needs less power than it planned. Those choices will say more than either side's promise of a fair bill.</p>
+<p>The staged hearing gives that question a concrete venue. Watch which costs the regulator accepts, how existing customers are treated, and what happens when a data centre needs less power than it planned. Those choices will say more than either side's promise of a fair bill.</p>
 <h2>Related desk</h2>
 <ul><li><a href="/tech-and-finance/">Tech &amp; Finance</a></li></ul>`,
   sources: [
@@ -175,6 +176,7 @@ window.LEDGER_CONTENT = {
     { t: "Google evidence — unofficial French translation (C-Google-0018)", p: "9380-8566 Québec inc. and Google Cloud Canada Corporation", u: "https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-C-Google-0018-Preuve-Memoire-2026_08_11.pdf" },
     { t: "Google filing cover letter C-Google-0017", p: "Borden Ladner Gervais, for Google", u: "https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-C-Google-0017-Preuve-Corresp-2026_08_11.pdf" },
     { t: "Hearing notice A-0033", p: "Régie de l'énergie", u: "https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-A-0033-Audi-Corresp-2026_09_03.pdf" },
+    { t: "September 25 hearing planning letter A-0034", p: "Régie de l'énergie", u: "https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026/doc/R-4333-2026-A-0034-Audi-Planif-2026_09_25.pdf" },
     { t: "R-4333-2026 docket", p: "Régie de l'énergie", u: "https://www.regie-energie.qc.ca/fr/participants/dossiers/R-4333-2026" }
   ]
 },
