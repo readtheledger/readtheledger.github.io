@@ -9,7 +9,7 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-09-20",
+  updated: "2026-10-02",
   articles: [
 {
   id: "led-lj-food-for-the-soul-comeback",
@@ -693,6 +693,41 @@ window.LEDGER_CONTENT = {
       {t:"Daily Treasury Par Yield Curve Rates, August 2026", u:"https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value_month=202608", p:"U.S. Department of the Treasury"},
       {t:"Daily Treasury Par Real Yield Curve Rates, August 2026", u:"https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_real_yield_curve&field_tdr_date_value_month=202608", p:"U.S. Department of the Treasury"}
     ]
-  }
+  },
+{
+    id: "led-ai-amazon-nvidia-chip-vehicle-20261002",
+    kind: "news",
+    section: "Tech & Finance",
+    produced: "ai-source-reviewed",
+    date: "2026-10-02T13:23:18Z",
+    title: "Amazon explores an $8bn Nvidia-chip lease-back, FT reports",
+    standfirst: "Amazon is testing investor appetite for a vehicle that would buy about $8bn of its Nvidia chips and rent them back, Reuters reported, citing the FT. The proposed lease-back raises a harder question: how much protection investors need when the hardware ages faster than a data centre.",
+    html: `<p><strong>All dollar amounts are in US dollars.</strong></p>
+<p>Amazon has been sounding out investors on a special-purpose vehicle that would own roughly $8 billion of its Nvidia Grace Blackwell chips and lease them back, <a href="https://www.streetinsider.com/Reuters/Amazon%2Bseeks%2Bto%2Boffload%2B%248%2Bbillion%2Bof%2BNvidia%2Bchips%2Bto%2Binvestors%2C%2BFT%2Breports/27137844.html" target="_blank" rel="noopener noreferrer">the FT report carried by Reuters</a> on 2 October.</p>
+<p>The chips would stay in more than a dozen Amazon data centres in five US states, according to the report. What changes is who owns them: outside investors would fund the vehicle through debt and an equity stake of up to 10%, <a href="https://www.streetinsider.com/Reuters/Amazon%2Bseeks%2Bto%2Boffload%2B%248%2Bbillion%2Bof%2BNvidia%2Bchips%2Bto%2Binvestors%2C%2BFT%2Breports/27137844.html" target="_blank" rel="noopener noreferrer">the FT report carried by Reuters</a>, while Amazon would remain the customer paying rent. The reports do not establish the final accounting treatment or how risks would be shared.</p>
+<h2>The numbers</h2>
+<p>By our calculation, $8 billion is about 15% of the $54.2 billion Amazon spent buying property and equipment in the second quarter alone, according to its <a href="https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Second-Quarter-Results/" target="_blank" rel="noopener noreferrer">30 July results</a>. It is 3.6% of the roughly $220 billion of 2026 cash capital spending that chief executive Andy Jassy forecast on the <a href="https://stockanalysis.com/stocks/amzn/transcripts/657334-q2-2026/" target="_blank" rel="noopener noreferrer">earnings call</a>, up from about $200 billion.</p>
+<p>The figure also roughly matches Amazon's cash gap. Free cash flow was an outflow of $7.6 billion over the 12 months to 30 June, compared with an inflow of $18.2 billion a year earlier. Amazon raised $67.0 billion of long-term debt in the first half of 2026, against $746 million a year before, and second-quarter interest expense rose to $1.31 billion from $516 million.</p>
+<p>Reported profit tells a different story from cash. Second-quarter net income of $62.6 billion included $53.4 billion of pre-tax non-operating income, mainly from Amazon's Anthropic investment, a paper gain that buys no chips. Jassy told analysts that even at $220 billion, "we will still not have enough capacity to meet all the demand we have in 2026."</p>
+<h2>Who carries the risk</h2>
+<p>The plan lands in a live argument over what AI chips are worth as collateral. Bankers and credit managers told <a href="https://www.reuters.com/legal/transactional/nvidias-bet-that-its-chips-can-finance-ai-boom-gets-wall-street-reality-check-2026-10-01/" target="_blank" rel="noopener noreferrer">Reuters</a> on 1 October they want stronger guarantees on the <a href="https://nvidianews.nvidia.com/news/nvidia-partners-with-apollo-blackrock-blackstone-brookfield-goldman-sachs-and-kkr-to-establish-ai-compute-infrastructure-financing-platforms-to-mobilize-over-500-billion-of-third-party-capital" target="_blank" rel="noopener noreferrer">$500 billion financing push</a> Nvidia launched in August with six Wall Street firms, including Apollo, Blackstone and KKR. Nvidia said its compute is "a productive, durable and fungible asset that can support long-term financing."</p>
+<p>An Amazon lease could provide a customer payment stream for investors to assess. That would address one concern raised by bankers in the Reuters report, but it does not establish that this proposed deal has met lenders’ conditions.</p>
+<p>Banks often underwrite GPUs using a three-to-four-year depreciation schedule, Impax Asset Management’s Tony Trzcinka told Reuters. That is a financing assumption, not evidence that these particular chips will lose a fixed amount of market value each year. Lease length, guarantees and residual-value assumptions would determine who bears that risk; no rent or term has been disclosed.</p>
+
+<p>Amazon offers a more optimistic view of equipment economics. On its July earnings call, Jassy said servers and networking equipment typically recover their investment in just under three years and have useful lives of at least five to six years. Those are management’s expectations, rather than a valuation of the proposed vehicle’s chips.</p>
+<h2>What happens next</h2>
+<p>Amazon is still testing investor appetite, and neither Amazon nor Nvidia responded to Reuters. The reports name no lenders, lease rate or closing date.</p>
+<p>Amazon’s next quarterly results will offer another reading of its cash spending. A confirmed agreement, if announced, would answer the more immediate questions: who supplies the money, what Amazon promises to pay and who absorbs any shortfall in the chips’ eventual value.</p>
+<p>Related reading: <a href="/story/led-google-quebec-ai-power-bill/">Google’s AI power-tariff fight</a>.</p>
+`,
+    sources: [
+      { t: "Amazon seeks to offload $8 billion of Nvidia chips to investors, FT reports", u: "https://www.reuters.com/business/retail-consumer/amazon-seeks-offload-8-billion-nvidia-chips-investors-ft-reports-2026-10-02/", p: "Reuters" },
+      { t: "Amazon to Move $8 Billion of Chips Off Its Books, FT Says (same Reuters report; not independent)", u: "https://www.streetinsider.com/Reuters/Amazon%2Bseeks%2Bto%2Boffload%2B%248%2Bbillion%2Bof%2BNvidia%2Bchips%2Bto%2Binvestors%2C%2BFT%2Breports/27137844.html", p: "Reuters syndicated by StreetInsider" },
+      { t: "Amazon.com Announces Second Quarter Results (30 July 2026)", u: "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Second-Quarter-Results/", p: "Amazon.com, Inc." },
+      { t: "Amazon (AMZN) Q2 2026 earnings call transcript", u: "https://stockanalysis.com/stocks/amzn/transcripts/657334-q2-2026/", p: "StockAnalysis" },
+      { t: "Nvidia's bet that its chips can finance the AI boom gets a Wall Street reality check", u: "https://www.reuters.com/legal/transactional/nvidias-bet-that-its-chips-can-finance-ai-boom-gets-wall-street-reality-check-2026-10-01/", p: "Reuters" },
+      { t: "NVIDIA Partners With Apollo, BlackRock, Blackstone, Brookfield, Goldman Sachs and KKR to Establish AI Compute Infrastructure Financing Platforms", u: "https://nvidianews.nvidia.com/news/nvidia-partners-with-apollo-blackrock-blackstone-brookfield-goldman-sachs-and-kkr-to-establish-ai-compute-infrastructure-financing-platforms-to-mobilize-over-500-billion-of-third-party-capital", p: "NVIDIA" },
+    ]
+  },
 
 ]};
