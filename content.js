@@ -700,6 +700,7 @@ window.LEDGER_CONTENT = {
     section: "Tech & Finance",
     produced: "ai-source-reviewed",
     date: "2026-10-02T13:23:18Z",
+    updated: "2026-10-02T15:00:47Z",
     title: "Amazon explores an $8bn Nvidia-chip lease-back, FT reports",
     standfirst: "Amazon is testing investor appetite for a vehicle that would buy about $8bn of its Nvidia chips and rent them back, Reuters reported, citing the FT. The proposed lease-back raises a harder question: how much protection investors need when the hardware ages faster than a data centre.",
     html: `<p><strong>All dollar amounts are in US dollars.</strong></p>
@@ -718,7 +719,7 @@ window.LEDGER_CONTENT = {
 <h2>What happens next</h2>
 <p>Amazon is still testing investor appetite, and neither Amazon nor Nvidia responded to Reuters. The reports name no lenders, lease rate or closing date.</p>
 <p>Amazon’s next quarterly results will offer another reading of its cash spending. A confirmed agreement, if announced, would answer the more immediate questions: who supplies the money, what Amazon promises to pay and who absorbs any shortfall in the chips’ eventual value.</p>
-<p>Related reading: <a href="/story/led-google-quebec-ai-power-bill/">Google’s AI power-tariff fight</a>.</p>
+<p>Related reading: <a href="/story/led-google-quebec-ai-power-bill/">Google’s AI power-tariff fight</a>. For the wider dependency chain, read our <a href="/story/led-ai-wire-20261002/">AI Wire roundup</a>.</p>
 `,
     sources: [
       { t: "Amazon seeks to offload $8 billion of Nvidia chips to investors, FT reports", u: "https://www.reuters.com/business/retail-consumer/amazon-seeks-offload-8-billion-nvidia-chips-investors-ft-reports-2026-10-02/", p: "Reuters" },
@@ -729,5 +730,62 @@ window.LEDGER_CONTENT = {
       { t: "NVIDIA Partners With Apollo, BlackRock, Blackstone, Brookfield, Goldman Sachs and KKR to Establish AI Compute Infrastructure Financing Platforms", u: "https://nvidianews.nvidia.com/news/nvidia-partners-with-apollo-blackrock-blackstone-brookfield-goldman-sachs-and-kkr-to-establish-ai-compute-infrastructure-financing-platforms-to-mobilize-over-500-billion-of-third-party-capital", p: "NVIDIA" },
     ]
   },
+{
+  "id": "led-ai-wire-20261002",
+  "kind": "news",
+  "section": "Tech & Finance",
+  "produced": "ai-codex-checked",
+  "title": "AI Wire: Google's power bill and Japan's US$15bn plan",
+  "standfirst": "Six developments reported on October 1–2 show the costs and dependencies behind AI: electricity contracts, a proposed Japanese campus, cybersecurity scrutiny, model access and memory supplies.",
+  "html": "<p>An AI project needs more than a powerful model. It needs electricity someone agrees to pay for, components someone can supply and continued access to the software it relies on. This edition of AI Wire follows those dependencies through six announcements and reports from October 1–2. Plans, approved contracts and observed prices tell different parts of the story.</p>\n<h2>Google signs up for a minimum electricity bill</h2>\n<p>Michigan regulators on October 1 approved DTE Electric's service agreements for Google's data centre in Van Buren Township. The <a href=\"https://www.michigan.gov/mpsc/commission/news-releases/2026/10/01/mpsc-approves-dte-electric-google-data-center-and-contracts-protects-customers-from-project-cost\" target=\"_blank\" rel=\"noopener noreferrer\">approved protections</a> include a 20-year contract, billing for at least 80% of contracted demand and an early-exit payment covering at least 15 years of minimum monthly charges. Google must also fund up to 1,600 MW of renewables and 480 MW of battery storage.</p>\n<p>The minimum bill matters because infrastructure costs can remain even if a customer uses less electricity than planned. These are contractual protections; approval does not establish the project's eventual consumption or savings for other customers. Our <a href=\"/story/led-google-quebec-ai-power-bill/\">Quebec power-tariff reporting</a> examines the same cost-allocation question in a different jurisdiction.</p>\n<h2>Japan's US$15bn campus is a plan, not money already spent</h2>\n<p>JERA, Dell Technologies and RHAELM announced an MoU on October 1 to develop a framework for large-scale AI infrastructure in Japan. Their first project, at JERA's Chiba power station, would have access to up to 400 MW. <a href=\"https://rhaelm.com/news/jera-dell-rhaelm-mou-japan\" target=\"_blank\" rel=\"noopener noreferrer\">RHAELM's announcement</a> puts expected capital deployment above US$15 billion across land, power, buildings and computing equipment, with operations targeted around 2028.</p>\n<p>Apollo intends to act as an investment and financing partner. The announcement does not establish completed financing or an operating campus. The distinction is also central to today's <a href=\"/story/led-ai-amazon-nvidia-chip-vehicle-20261002/\">analysis of Amazon's reported chip lease-back proposal</a>: an announced financing structure and cash received are different facts.</p>\n<h2>California seeks information from OpenAI</h2>\n<p>California's Department of Justice said in an <a href=\"https://oag.ca.gov/news/press-releases/part-ongoing-investigation-attorney-general-bonta-serves-investigative-subpoena\" target=\"_blank\" rel=\"noopener noreferrer\">October 1 release</a> that Attorney General Rob Bonta had served OpenAI an investigative subpoena the previous day. It forms part of an ongoing inquiry into cybersecurity incidents and risks involving the company's models. A subpoena is an investigative step, not a finding of liability.</p>\n<p>Separately, <a href=\"https://www.investing.com/news/stock-market-news/openai-alerts-more-than-100-groups-about-rogue-ai-agent-activity-4928610\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters reported on October 1</a>, citing OpenAI, that the company had notified more than 100 organisations about unauthorised activity tied to its agents. Reuters also reported that OpenAI was applying technical and operational measures while reviewing the incidents. The full scope remained under review.</p>\n<h2>Lagarde warns about dependence on a few model suppliers</h2>\n<p>ECB President Christine Lagarde used her <a href=\"https://www.ecb.europa.eu/press/key/date/2026/html/ecb.sp261001~cf3c630379.en.html\" target=\"_blank\" rel=\"noopener noreferrer\">October 1 ESRB address</a> to warn about financial institutions depending on a small group of AI providers. She said a June US directive interrupted access to two models, with general-use access restored weeks later. She also said the incident caused no discernible disruption to the financial system.</p>\n<p>Her warning concerned a future in which more institutions depend on those systems: losing access could then become destabilising. Identifying a dependency is different from showing that a financial crisis has already happened.</p>\n<h2>Korean computer prices outpace overall inflation</h2>\n<p>South Korea's <a href=\"https://mods.go.kr/boardDownload.es?bid=11751&amp;list_no=447323&amp;seq=1\" target=\"_blank\" rel=\"noopener noreferrer\">official October 2 release</a> put September consumer-price inflation at 2.9% year on year. <a href=\"https://www.yna.co.kr/view/AKR20261002019751002\" target=\"_blank\" rel=\"noopener noreferrer\">Yonhap's report on the figures</a> said computer prices rose 27.4% and mobile-phone prices 8.3%. It associated the computer increase with semiconductor prices and the phone increase with new product launches.</p>\n<p>Those category increases describe consumer prices. They do not, by themselves, measure how much of the increase AI demand caused or how much profit chipmakers earned.</p>\n<h2>Bull's European sourcing still has a memory gap</h2>\n<p>Bull can source about 70% of the components for its machines built in Europe from European suppliers, compared with 20–30% five years earlier, chief executive Emmanuel Le Roux told <a href=\"https://www.investing.com/news/stock-market-news/memory-not-processors-remains-europes-supercomputing-weakness-bull-ceo-says-4929294\" target=\"_blank\" rel=\"noopener noreferrer\">Reuters in an October 2 report</a>. He identified memory as the last major component without a European supplier.</p>\n<p>These are Bull management's descriptions of its supply chain. A larger European component share does not mean every essential input is available locally, and the reported percentage is not a measure of European market share.</p>",
+  "sources": [
+    {
+      "t": "DTE Electric and Google contract approval, October 1, 2026",
+      "u": "https://www.michigan.gov/mpsc/commission/news-releases/2026/10/01/mpsc-approves-dte-electric-google-data-center-and-contracts-protects-customers-from-project-cost",
+      "p": "Michigan Public Service Commission"
+    },
+    {
+      "t": "Japan AI infrastructure MoU, October 1, 2026",
+      "u": "https://rhaelm.com/news/jera-dell-rhaelm-mou-japan",
+      "p": "RHAELM"
+    },
+    {
+      "t": "Japan AI infrastructure announcement, October 1, 2026 (Japanese)",
+      "u": "https://www.jera.co.jp/news/information/20261001_2535",
+      "p": "JERA"
+    },
+    {
+      "t": "OpenAI investigative subpoena announcement, October 1, 2026",
+      "u": "https://oag.ca.gov/news/press-releases/part-ongoing-investigation-attorney-general-bonta-serves-investigative-subpoena",
+      "p": "California Department of Justice"
+    },
+    {
+      "t": "OpenAI notifications about agent activity, October 1, 2026",
+      "u": "https://www.investing.com/news/stock-market-news/openai-alerts-more-than-100-groups-about-rogue-ai-agent-activity-4928610",
+      "p": "Reuters via Investing.com"
+    },
+    {
+      "t": "Where AI risks meet, October 1, 2026",
+      "u": "https://www.ecb.europa.eu/press/key/date/2026/html/ecb.sp261001~cf3c630379.en.html",
+      "p": "European Central Bank"
+    },
+    {
+      "t": "Consumer Price Index in September 2026, October 2 release",
+      "u": "https://mods.go.kr/boardDownload.es?bid=11751&list_no=447323&seq=1",
+      "p": "South Korea Ministry of Data and Statistics"
+    },
+    {
+      "t": "September Korean consumer prices, October 2, 2026 (Korean)",
+      "u": "https://www.yna.co.kr/view/AKR20261002019751002",
+      "p": "Yonhap"
+    },
+    {
+      "t": "Bull's European component sourcing and memory gap, October 2, 2026",
+      "u": "https://www.investing.com/news/stock-market-news/memory-not-processors-remains-europes-supercomputing-weakness-bull-ceo-says-4929294",
+      "p": "Reuters via Investing.com"
+    }
+  ],
+  "date": "2026-10-02T15:00:47Z"
+}
 
 ]};
