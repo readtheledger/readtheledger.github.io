@@ -29,6 +29,7 @@ const opt  = (name, dflt) => { const i = argv.indexOf("--" + name); return i >= 
 const OUT  = path.resolve(argv.find(a => !a.startsWith("--") && !argv[argv.indexOf(a) - 1]?.startsWith("--")) || path.join(ROOT, "_site"));
 const CONTENT_FILE = path.resolve(opt("content", path.join(ROOT, "content.js")));   // the tests build from a content file of their own
 const ASSETS_DIR   = path.resolve(opt("assets", path.join(ROOT, "assets", "editorial")));   // and, for the worker's cache test, from pictures of their own
+const PUBLIC_ASSETS = ["assets/foxconn-tsmc-q2-margins-20261005.png"];
 const SITE = "https://imperiumpost.com";
 const SITE_TITLE = "Imperium Post — Read what matters.";
 const SITE_DESC  = "Imperium Post's own financial reporting and analysis — markets, central banks, the economy, tech and personal finance — every source credited and linked.";
@@ -519,6 +520,11 @@ if (fs.existsSync(ASSETS_DIR)) {
     if (fs.statSync(src).isFile()) assetHash.update(f.replace(/\\/g, "/")).update(fs.readFileSync(src));
   }
 }
+for (const f of PUBLIC_ASSETS) {
+  const src = path.join(ROOT, f);
+  if (!fs.existsSync(src)) fail("required public asset is missing: " + f);
+  assetHash.update(f).update(fs.readFileSync(src));
+}
 const stamp = crypto.createHash("sha256").update(index).update(contentSrc).update(sourcesSrc).update(read("topics.js")).update(read("context.js")).update(aboutSrc).update(privacySrc).update(supportSrc).update(consentSrc).update(analyticsSrc).update(mediaSrc).update(productionSrc).update(swSrc).update(toolPages.map(tool => tool.html).join("\n")).update(assetHash.digest()).digest("hex").slice(0, 8);
 const routes = ["/", "/index.html", ABOUT_PATH, PRIVACY_PATH].concat(infoPages.map(info => info.infoPath), PAGE_SECTIONS.map(sectionPath), articles.map(storyPath), TOOL_PATHS);
 const sw = swSrc
@@ -547,6 +553,15 @@ if (fs.existsSync(assetsDir)) {
     fs.copyFileSync(src, path.join(OUT, rel));
     written.push(rel);
   }
+}
+for (const f of PUBLIC_ASSETS) {
+  const src = path.join(ROOT, f);
+  if (!/\.(webp|jpe?g|png|avif)$/i.test(src)) fail("public asset has an unsupported type: " + f);
+  if (fs.statSync(src).size > 600 * 1024) fail("public asset is larger than 600 KB: " + f);
+  const rel = f.replace(/\\/g, "/");
+  fs.mkdirSync(path.dirname(path.join(OUT, rel)), { recursive: true });
+  fs.copyFileSync(src, path.join(OUT, rel));
+  written.push(rel);
 }
 
 // the gathered Newsstand, when fetch_feeds.mjs has run before the build; the app
