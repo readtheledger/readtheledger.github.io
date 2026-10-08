@@ -29,7 +29,7 @@ const opt  = (name, dflt) => { const i = argv.indexOf("--" + name); return i >= 
 const OUT  = path.resolve(argv.find(a => !a.startsWith("--") && !argv[argv.indexOf(a) - 1]?.startsWith("--")) || path.join(ROOT, "_site"));
 const CONTENT_FILE = path.resolve(opt("content", path.join(ROOT, "content.js")));   // the tests build from a content file of their own
 const ASSETS_DIR   = path.resolve(opt("assets", path.join(ROOT, "assets", "editorial")));   // and, for the worker's cache test, from pictures of their own
-const PUBLIC_ASSETS = ["assets/foxconn-tsmc-q2-margins-20261005.png", "assets/minimax-rd-revenue-20261006.png", "assets/google-power-definitions-20261007.png"];
+const PUBLIC_ASSETS = ["assets/foxconn-tsmc-q2-margins-20261005.png", "assets/minimax-rd-revenue-20261006.png", "assets/google-power-definitions-20261007.png", "assets/samsung-operating-margin-20261008.png"];
 const SITE = "https://imperiumpost.com";
 const SITE_TITLE = "Imperium Post — Read what matters.";
 const SITE_DESC  = "Imperium Post's own financial reporting and analysis — markets, central banks, the economy, tech and personal finance — every source credited and linked.";
