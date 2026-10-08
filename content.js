@@ -860,5 +860,40 @@ window.LEDGER_CONTENT = {
   "root_approved_at": "2026-10-06T18:16:39.672637+00:00",
   "source_review_receipt": "DEEPSEEK-SOURCE-REVIEW-2026-10-06.json",
   "date": "2026-10-06T18:20:07Z"
+},
+{
+  "id": "led-ai-samsung-memory-profit-20261008",
+  "kind": "news",
+  "section": "Tech & Finance",
+  "produced": "ai-source-reviewed",
+  "image": {
+    "u": "/assets/samsung-operating-margin-20261008.png",
+    "alt": "Samsung consolidated operating margins calculated from company figures: Q3 2025 14.1%, Q2 2026 52.2%, and Q3 2026 preliminary guidance 55.1%.",
+    "w": 1400,
+    "h": 800,
+    "caption": "Imperium Post calculations using Samsung figures. Q3 2026 is preliminary guidance; earlier quarters are reported results.",
+    "credit": "Imperium Post"
+  },
+  "date": "2026-10-08T21:00:32.3393592Z",
+  "title": "Samsung's 55% margin leaves a question for its phone business",
+  "standfirst": "Preliminary guidance points to a striking group profit margin. The next test is whether the device businesses shared in the improvement.",
+  "html": "<p>Samsung's latest estimate implies about 55 won of operating profit for every 100 won of sales. That extraordinary group number leaves an unanswered question: what happened to the businesses buying expensive components?</p>\n<p>In <a href=\"https://news.samsung.com/global/samsung-electronics-announces-earnings-guidance-for-third-quarter-2026\">guidance issued October 8</a>, Samsung put third-quarter sales at approximately 195 trillion won and operating profit at 107.4 trillion won. These are preliminary consolidated estimates, not a completed divisional earnings report.</p>\n<h2>A large annual jump, a smaller quarterly step</h2>\n<p>Our calculations from the guidance and its comparison figures put the operating margin at 55.1%, against 14.1% a year earlier and 52.2% in the second quarter of 2026. The year-on-year rise is about 40.9 percentage points; the quarter-on-quarter increase is about 2.9 points.</p>\n<p>The comparison matters. A dramatic annual recovery and a further quarterly improvement can coexist, but they describe different changes. Operating margin also measures neither cash generation nor the return earned on a factory investment.</p>\n<h2>The split was already visible</h2>\n<p>Samsung's <a href=\"https://news.samsung.com/global/samsung-electronics-announces-second-quarter-2026-results\">second-quarter results</a> showed why the group total deserves a closer look. Device Solutions reported 89.2 trillion won of operating profit. Mobile eXperience and Networks, together, recorded a 0.7 trillion won operating loss; visual display and domestic appliances also recorded a slight loss.</p>\n<p>The company attributed the memory business's performance partly to rising prices and strong AI demand despite limited capacity. It separately described elevated component costs as a drag on mobile earnings. These are the company's explanations for the earlier quarter, not a verified breakdown of the new guidance.</p>\n<p>For a manufacturer that sells both components and finished devices, a supply squeeze can create conflicting pressures. The prior results illustrate that tension; they do not establish how much of the latest profit increase came from prices, volumes or product mix.</p>\n<h2>The next useful disclosure</h2>\n<p>Samsung has scheduled its <a href=\"https://www.samsung.com/global/ir/reports-disclosures/notices/\">third-quarter earnings call for October 29</a>. The question to carry into that report is whether device profitability recovered alongside the group's margin. Today's short guidance does not answer it.</p>\n<p>Our <a href=\"/story/led-ai-foxconn-record-quarter-20261005/\">Foxconn analysis</a> likewise separates record sales from profit, while our <a href=\"/story/led-ai-google-power-deals-20261007/\">Google power-deal analysis</a> checks what a headline total actually measures.</p>",
+  "sources": [
+    {
+      "t": "Third-quarter 2026 preliminary guidance, October 8",
+      "u": "https://news.samsung.com/global/samsung-electronics-announces-earnings-guidance-for-third-quarter-2026",
+      "p": "Samsung Electronics"
+    },
+    {
+      "t": "Second-quarter 2026 results, July 30",
+      "u": "https://news.samsung.com/global/samsung-electronics-announces-second-quarter-2026-results",
+      "p": "Samsung Electronics"
+    },
+    {
+      "t": "Third-quarter earnings call notice, October 8",
+      "u": "https://www.samsung.com/global/ir/reports-disclosures/notices/",
+      "p": "Samsung Investor Relations"
+    }
+  ]
 }
 ]};
