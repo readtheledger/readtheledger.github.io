@@ -9,7 +9,7 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-10-07",
+  updated: "2026-10-09",
   articles: [
 {
   id: "led-ai-google-power-deals-20261007",
@@ -895,5 +895,35 @@ window.LEDGER_CONTENT = {
       "p": "Samsung Investor Relations"
     }
   ]
+},
+{
+  "id": "led-ai-firmus-ipo-pulled-20261009",
+  "kind": "news",
+  "section": "Tech & Finance",
+  "produced": "ai-source-reviewed",
+  "title": "Firmus won AI customers. Its IPO still fell through.",
+  "standfirst": "The withdrawn Australian listing exposes the gap between signing compute customers and financing the factories that will serve them.",
+  "html": "<p>Winning an AI customer and persuading investors to fund its computing capacity are separate achievements. Firmus has just supplied a striking example: an announced OpenAI partnership followed, a month later, by a withdrawn stock-market listing.</p>\n<p>The data-centre company abandoned its ASX application on October 9. <a href=\"https://www.abc.net.au/news/2026-10-09/firmus-float-gets-pulled-following-lacklustre-investor-demand/107246230\">ABC News reported</a> that Firmus cited market volatility and said the offer would not reflect its long-term prospects. It will pursue private funding. The proposed A$11 share price had targeted a valuation of roughly A$44 billion.</p>\n<h2>Contracts arrive before factories</h2>\n<p>Firmus's own <a href=\"https://firmus.co/newsroom/firmus-surpasses-900-mw-contracted-capacity-adds-openai-as-anchor-customer-and-expands-into-malaysia\">September 8 announcement</a> supplies the useful distinction. It said OpenAI would contract dedicated compute capacity at two Malaysian sites, taking total contracted capacity across all customers above 900 megawatts.</p>\n<p>In the same announcement, Firmus described seven factories across four countries: two operational sites, in Australia and Singapore, and five under development. It targeted those five becoming ready for service over the following 24 months. This is the company's dated description, not a fresh October construction audit; site counts also do not measure each site's capacity.</p>\n<p>A contract can support a financing case before a facility earns revenue. It does not erase the interval in which buildings, power connections and computing equipment must be delivered. That interval is where a promising order book becomes a funding question.</p>\n<h2>The next cheque still matters</h2>\n<p>In an investment update quoted by ABC, UniSuper investment chief John Pearce said the business had a compelling story but an unappealing valuation. He also raised the prospect of further debt and equity raising. Those are an investor's concerns, not proof that Firmus cannot complete its projects.</p>\n<p>The counterpoint matters: a withdrawn IPO is not evidence that customer contracts have disappeared. Firmus is seeking another funding route. The price and terms of that capital, and progress against its delivery timetable, will be more informative than treating the withdrawal as a verdict on all AI demand.</p>\n<p>Our <a href=\"/story/led-ai-google-power-deals-20261007/\">Google power-deal analysis</a> makes a related distinction between headline capacity and what is actually being supplied. For Firmus, the next useful comparison is contracted demand against financed, completed capacity—not a company valuation divided by a small operating footprint.</p>",
+  "sources": [
+    {
+      "t": "Firmus withdraws ASX application, October 9, 2026",
+      "u": "https://www.abc.net.au/news/2026-10-09/firmus-float-gets-pulled-following-lacklustre-investor-demand/107246230",
+      "p": "ABC News — Nassim Khadem and Lin Lin"
+    },
+    {
+      "t": "Contracted capacity and factory development status, September 8, 2026",
+      "u": "https://firmus.co/newsroom/firmus-surpasses-900-mw-contracted-capacity-adds-openai-as-anchor-customer-and-expands-into-malaysia",
+      "p": "Firmus"
+    }
+  ],
+  "image": {
+    "u": "/assets/firmus-factory-status-20261009.png",
+    "alt": "Firmus reported two operational AI factories and five under development on September 8, 2026. These are site counts, not megawatts or an October construction update.",
+    "w": 1400,
+    "h": 800,
+    "caption": "Company-reported site status on September 8, 2026. Firmus targeted the five developing sites becoming ready for service over the following 24 months. Site counts do not represent shares of capacity.",
+    "credit": "Imperium Post"
+  },
+  "date": "2026-10-09T13:15:58Z"
 }
 ]};
