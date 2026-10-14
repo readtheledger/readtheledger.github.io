@@ -9,7 +9,7 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-10-10",
+  updated: "2026-10-14",
   articles: [
 {
   id: "led-ai-google-power-deals-20261007",
@@ -969,5 +969,42 @@ window.LEDGER_CONTENT = {
       "p": "Computer Weekly - Aaron Tan; conference reporting"
     }
   ]
+},
+{
+  id: "led-ai-asml-supply-shortfall-20261014",
+  kind: "analysis",
+  section: "Tech & Finance",
+  produced: "ai-source-reviewed",
+  image: {
+    u: "/assets/asml-quarterly-profit-20261014.png",
+    alt: "ASML quarterly net income rose from 2.918 billion euros in Q2 2026 to 4.960 billion euros in Q3, a 70.0 percent increase by Imperium Post calculation.",
+    w: 1400,
+    h: 800,
+    credit: "Imperium Post",
+    caption: "Company-wide net income in euros. Source: ASML Q3 2026 results, October 14. Change calculated by Imperium Post; not AI-only profit."
+  },
+  date: "2026-10-14T13:04:53Z",
+  title: "ASML's profit jumps 70% as its capacity plans fall short",
+  standfirst: "The chip-equipment maker returned about €4.1bn through buybacks. That comparison alone cannot explain why supply is tight.",
+  html: `<p>ASML reported €4.96 billion in third-quarter net income on October 14, about 70% above the previous quarter. The chip-equipment maker also said its planned supply would fall short of customer demand in 2027 and 2028.</p>
+<p>The position matters beyond ASML's shareholders. <a href="https://www.rte.ie/news/business/2026/0715/1583417-asml-raises-2026-forecast/">Reuters reported on July 15</a> that ASML is the sole maker of extreme ultraviolet lithography tools, used for cutting-edge chips, and identified TSMC, Samsung, SK hynix and Micron among customers expanding capacity. A chipmaker can announce a larger budget before the equipment needed to spend it is ready.</p>
+<h2>More profit from each euro of sales</h2>
+<p>ASML's <a href="https://investor.asml.com/news-releases/news-release-details/asml-reports-eu11.7-billion-total-net-sales-and-eu5.0-billion-net-income-q3-2026">October 14 results</a> put quarterly sales at €11.662 billion, up from €9.326 billion in Q2. Net income rose from €2.918 billion. Our calculations give sales growth of 25.0%, profit growth of 70.0%, and net margins of 31.3% and 42.5%, respectively.</p>
+<p>The difference between those growth rates shows why revenue alone is an incomplete account of the quarter. More of each sales euro reached the bottom line. These company-wide net margins describe the earnings reported for each period; they do not measure the profitability of an individual AI machine or establish what the next quarter will earn.</p>
+<h2>A large buyback needs the right denominator</h2>
+<p>ASML also reported about €4.1 billion of quarterly share repurchases, equivalent to roughly 83% of its net income by our calculation.</p>
+<p>That ratio compares scale. Net income is an accounting result, while a buyback uses cash. It does not show that 83% of the quarter's cash generation was distributed, or that withholding the payout would have delivered more machines on time.</p>
+<p>To establish that trade-off, we would need evidence about feasible investment projects, their costs, production lead times and the constraints facing suppliers. A large payout alongside a shortage is a useful question for management; it is not proof that the payout caused the shortage.</p>
+<h2>The customer plans to watch</h2>
+<p>ASML says some customers are discussing orders for 2029 and 2030. Expressions of interest are different from completed deliveries. Its supply warning is management's assessment of customer demand against current plans.</p>
+<p>The distinction echoes the gap between the long investment plan and specific board approvals in our <a href="/story/led-sk-hynix-ai-memory-turnaround/">SK hynix analysis</a>. Announced ambition, equipment availability and operating capacity sit at different stages of the same investment cycle.</p>
+<p>The next scheduled customer update is <a href="https://investor.tsmc.com/english/quarterly-results/2026/q3">TSMC's third-quarter earnings conference on October 15 at 14:00 Taiwan time</a>. Its spending and capacity commentary can help test how customer plans line up with the equipment supplier's warning.</p>`,
+  sources: [
+    {t: "Q3 2026 results, October 14", u: "https://investor.asml.com/news-releases/news-release-details/asml-reports-eu11.7-billion-total-net-sales-and-eu5.0-billion-net-income-q3-2026", p: "ASML; primary company financial release"},
+    {t: "ASML raises 2026 forecast, expands capacity on AI chip demand, July 15", u: "https://www.rte.ie/news/business/2026/0715/1583417-asml-raises-2026-forecast/", p: "Reuters via RTE; dated background reporting"},
+    {t: "Third Quarter 2026 Earnings Conference", u: "https://investor.tsmc.com/english/quarterly-results/2026/q3", p: "TSMC; official investor calendar"}
+  ]
 }
 ]};
+
+
