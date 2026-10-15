@@ -9,7 +9,7 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-10-14",
+  updated: "2026-10-15",
   articles: [
 {
   id: "led-ai-google-power-deals-20261007",
@@ -1005,6 +1005,48 @@ window.LEDGER_CONTENT = {
     {t: "Third Quarter 2026 Earnings Conference", u: "https://investor.tsmc.com/english/quarterly-results/2026/q3", p: "TSMC; official investor calendar"}
   ]
 }
+,
+{
+  "id": "led-ai-tsmc-record-profit-20261015",
+  "kind": "analysis",
+  "section": "Tech & Finance",
+  "produced": "ai-source-reviewed",
+  "title": "TSMC earned US$259m a day as quarterly margins slipped",
+  "standfirst": "Profit rose 68.7% from a year earlier. The quarter-to-quarter comparison reveals new production costs, missing earlier gains and a useful distinction between earnings and cash.",
+  "html": "<p>TSMC earned NT$763.06 billion in the third quarter, up 68.7% from a year earlier, the chipmaker <a href=\"https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-10/526b65af7305df2dde6b9ece6812b1fdf1e49f9b/3Q26%20EarningsRelease.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">reported on October 15</a>. Its <a href=\"https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-10/3a94d1034b9e6b22446b674f7aaf3d088a12a193/FS.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">unaudited accounts</a> put profit attributable to shareholders at US$23.858 billion. Across the quarter's 92 days, that averages about US$259 million a day, by our calculation. It is an earnings average, not a daily cash receipt.</p>\n<p>The surprise is in the comparison with the previous quarter. Sales rose 17.6% in New Taiwan dollars, but profit rose only 8%. TSMC earned more in total while keeping a smaller share of each dollar of sales.</p>\n<h2>Growth and margins can move apart</h2>\n<p>Net profit margin fell from 55.6% to 51.1%, a drop of 4.5 percentage points. Gross margin declined from 67.7% to 66.4%, and operating margin from 60.3% to 58.7%.</p>\n<p>TSMC's <a href=\"https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-10/f83780000ddc0c3b48e57a87eab6814c4ab35058/3Q26%20ManagementReport.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">management report</a> attributes the gross-margin decline mainly to the initial ramp-up of its N2 technology. The comparison also includes income outside ordinary operations: non-operating gains fell from NT$95.83 billion to NT$34.59 billion, mainly because earlier gains on Vanguard International Semiconductor shares did not recur.</p>\n<p>The annual growth rate and the quarterly margin decline describe different things. Together they show why a profit headline needs both a time period and a denominator.</p>\n<h2>Cash covers this quarter's capital spending</h2>\n<p>Operating cash flow was NT$919.77 billion against NT$443.21 billion of capital expenditure. Spending therefore absorbed about 48.2% of operating cash flow, leaving NT$476.56 billion of free cash flow under the company's calculation.</p>\n<p>That is substantial funding capacity. It does not trace every factory payment to operating receipts. The same report records interest-bearing debt and investment tax-credit inflows; a cash-rich builder can still have several sources of financing.</p>\n<h2>The next test is another step up in sales</h2>\n<p>TSMC's <a href=\"https://investor.tsmc.com/english/quarterly-results/2026/q3\" target=\"_blank\" rel=\"noopener noreferrer\">fourth-quarter guidance</a> calls for US$52.3 billion to US$54.3 billion of revenue. The US$53.3 billion midpoint is about 14.1% above the third quarter's US$46.72 billion, by our calculation. Its projected gross margin is 65% to 67%, a range that includes the latest quarter's 66.4%.</p>\n<p>The forecast asks readers to expect more sales without assuming a higher margin. It remains management's outlook, not a completed result. These are company-wide figures, not a separate measure of AI-only profit.</p>\n<p>The expansion also depends on equipment and construction schedules. Read our analysis of <a href=\"/story/led-ai-asml-supply-shortfall-20261014/\">ASML's supply warning</a> and <a href=\"/story/led-sk-hynix-ai-memory-turnaround/\">the long timetable behind SK hynix's manufacturing plan</a>.</p>",
+  "sources": [
+    {
+      "t": "Third-quarter 2026 earnings release, October15",
+      "u": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-10/526b65af7305df2dde6b9ece6812b1fdf1e49f9b/3Q26%20EarningsRelease.pdf",
+      "p": "TSMC; primary company release"
+    },
+    {
+      "t": "Q3 2026 financial statements, unaudited",
+      "u": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-10/3a94d1034b9e6b22446b674f7aaf3d088a12a193/FS.pdf",
+      "p": "TSMC; primary consolidated financial statements"
+    },
+    {
+      "t": "Third-quarter 2026 management report, October15",
+      "u": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-10/f83780000ddc0c3b48e57a87eab6814c4ab35058/3Q26%20ManagementReport.pdf",
+      "p": "TSMC; primary explanation of results and cash flows"
+    },
+    {
+      "t": "2026 Q3 results and Q4 guidance",
+      "u": "https://investor.tsmc.com/english/quarterly-results/2026/q3",
+      "p": "TSMC; official investor results page"
+    }
+  ],
+  "image": {
+    "u": "/images/tsmc-quarterly-margins-20261015.png",
+    "alt": "TSMC company-wide margins fell from Q2 to Q3 2026: gross margin 67.7 to 66.4 percent, operating margin 60.3 to 58.7 percent, and net profit margin 55.6 to 51.1 percent.",
+    "w": 1400,
+    "h": 800,
+    "caption": "TSMC company-wide margins, Q2 and Q3 2026. Net income rose while margins narrowed; these are not AI-only margins.",
+    "credit": "Imperium Post from TSMC unaudited Q3 2026 accounts"
+  },
+  "date": "2026-10-15T13:00:00Z"
+}
+
 ]};
 
 
