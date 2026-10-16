@@ -9,7 +9,7 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-10-15",
+  updated: "2026-10-16",
   articles: [
 {
   id: "led-ai-google-power-deals-20261007",
@@ -1046,7 +1046,37 @@ window.LEDGER_CONTENT = {
   },
   "date": "2026-10-15T13:00:00Z"
 }
-
+,
+{
+  "id": "led-ai-china-ai-export-curbs-20261016",
+  "kind": "analysis",
+  "section": "Tech & Finance",
+  "produced": "ai-source-reviewed",
+  "image": {
+    "u": "/images/china-ai-export-categories-20261016.png",
+    "alt": "Forty proposed technology catalogue additions: 23 AI, five biomedicine and 12 solar manufacturing. These are category counts, not market shares.",
+    "w": 1400,
+    "h": 800,
+    "caption": "Proposed catalogue additions by field. Counts measure technology categories, not economic value.",
+    "credit": "Chart by Imperium Post from MOFCOM/MOST Announcement No.48, October16,2026."
+  },
+  "date": "2026-10-16T13:16:39.4693966Z",
+  "title": "China's AI export draft leaves a route for selling access",
+  "standfirst": "Temporary registration begins now, while proposed bans and licensing rules await consultation. The documents distinguish selling a service from transferring technology or control.",
+  "html": "<p>A Chinese AI company selling overseas access to its model and one transferring the underlying technology could face different export treatment. That distinction is central to a <a href=\"https://www.mofcom.gov.cn/zcfb/dwmygl/art/2026/art_61446ab4beee4f63973d4d0ab3097648.html\" target=\"_blank\" rel=\"noopener noreferrer\">proposal published on October 16</a> by China's commerce and science ministries.</p>\n<p>The draft would add 40 technologies to the export catalogue: 23 in AI, five in biomedicine and 12 in solar manufacturing. Separately, exporters must register covered transfers from October 16, including transactions already started but unfinished. Comments close November 15.</p>\n<h2>Registration starts before the proposed restrictions</h2>\n<p>The notice covers transfers of technology ownership, overseas licensing and changes that put a domestic technology's owner or actual controller in foreign hands. Registration includes the recipient, destination, intended use and expected transaction value.</p>\n<p>Those details make the transaction structure commercially significant. A customer buying an ongoing service and an investor seeking control of technology are buying different things. The registration form asks officials to see that difference, including its proposed price.</p>\n<p>The immediate duty is registration. The draft's bans and licence requirements are a separate proposed stage; the notice does not make them final on October 16.</p>\n<h2>Access is different from transfer</h2>\n<p>In its <a href=\"https://www.mofcom.gov.cn/zwgk/zcjd/art/2026/art_b11d5c1e9374421e93e85dc87eba6e38.html\" target=\"_blank\" rel=\"noopener noreferrer\">accompanying explanation</a>, the commerce ministry says API calls, apps, web interactions and SaaS supplied using restricted models fall outside large-model technology export management. Overseas local deployment of restricted technology would fall within it, with automatic-licensing arrangements envisaged for some cases such as a company's own overseas cloud.</p>\n<p>The explanation also identifies lightweight local edge deployment as outside that large-model scope. It therefore does not support a blanket claim that every overseas installation needs a licence. Technology already made public through open source or academic papers is also excluded from the proposal.</p>\n<p>The commercial reading is a distinction between earning recurring income from access and transferring control of a reusable asset. That is our analysis of the documents, not evidence of how much revenue the policy will preserve or deter.</p>\n<h2>What the headline counts cannot tell you</h2>\n<p>Across all three fields, the draft proposes 14 prohibited and 26 restricted entries. Those totals are not a breakdown of the 23 AI entries. They also measure catalogue categories, not market value or companies affected.</p>\n<p>The final scope remains open to consultation. For now, the useful questions are what crosses the border, who controls it and whether the transaction is a service, a licence or a transfer.</p>\n<p>For the hardware side of the AI economy, read our analysis of <a href=\"/story/led-ai-tsmc-record-profit-20261015/\">TSMC's profits and cash generation</a> and <a href=\"/story/led-ai-asml-supply-shortfall-20261014/\">ASML's manufacturing constraints</a>.</p>",
+  "sources": [
+    {
+      "t": "Announcement No.48 of 2026: proposed catalogue revision and temporary export registration, October16 (Chinese)",
+      "u": "https://www.mofcom.gov.cn/zcfb/dwmygl/art/2026/art_61446ab4beee4f63973d4d0ab3097648.html",
+      "p": "China Ministry of Commerce and Ministry of Science and Technology; primary notice"
+    },
+    {
+      "t": "Commerce ministry explanation of proposed technology export catalogue revision, October16 (Chinese)",
+      "u": "https://www.mofcom.gov.cn/zwgk/zcjd/art/2026/art_b11d5c1e9374421e93e85dc87eba6e38.html",
+      "p": "China Ministry of Commerce; primary explanation"
+    }
+  ]
+}
 ]};
 
 
