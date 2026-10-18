@@ -9,8 +9,39 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-10-16",
-  articles: [
+  updated: "2026-10-18",
+  articles: [{
+  id: "led-taco-bout-joys-comeback-20261018",
+  kind: "analysis",
+  section: "Companies",
+  produced: "ai-codex-checked",
+  image: {u:"/assets/editorial/led-taco-bout-joys-comeback/hero.jpg",alt:"Illustrative birria tacos on a plate; this Wikimedia Commons photograph is not Taco-Bout-Joy's food or premises.",w:960,h:1280,credit:"Creas1223 / Wikimedia Commons (CC BY 4.0)",caption:"Illustrative birria tacos, not Taco-Bout-Joy's food or premises. Photo by Creas1223, Wikimedia Commons, CC BY 4.0."},
+  date: "2026-10-18T21:09:41Z",
+  title: "A taco shop's viral turnaround brought a new problem: managing the rush",
+  standfirst: "A daughter's appeal brought attention to an empty Illinois restaurant. Contemporary reports show the practical response: warn people about waits, ask them to order ahead and explain where to park.",
+  html: `<p>In December 2022, Isabel Milan posted a video of her mother waiting for customers at Taco-Bout-Joy's in Glenview, Illinois. The shop was owned by sisters Joy Milan and Kack Keomanivong. The caption asked: “I wish I could give her customers for Christmas.”</p>
+<p><a href="https://www.buzzfeed.com/rossyoder/taco-bout-joys-mexican-restaurant-tiktok" target="_blank" rel="noopener noreferrer">BuzzFeed</a> reported Jordyn Chayhane’s account that the rush let the owners pay themselves for the first time since opening.</p>
+<p>Heather Wake’s December 15 report in <a href="https://www.upworthy.com/taco-bout-joys-tiktok/" target="_blank" rel="noopener noreferrer">Upworthy</a> linked the <a href="https://www.tiktok.com/@tacoboutjoys/video/7174662663534808363" target="_blank" rel="noopener noreferrer">original post</a> and reported more than 39 million views. That is a dated reported count, not a counter Imperium Post observed. The same report described a next-day update showing nine people working in the kitchen as orders arrived.</p>
+<h2>The work after the appeal</h2>
+<p><a href="https://abc7chicago.com/post/taco-bout-joys-glenview-il-tiktok-videos-birria-tacos/12550596/" target="_blank" rel="noopener noreferrer">ABC7 Chicago's December 10 reporting</a> supplied evidence beyond an online counter: customers were lining up outside on Friday night. Its reporters spoke to visitors who had travelled to support the shop.</p>
+<p>The consequential detail was the restaurant's response to the crowd. In a <a href="https://www.audacy.com/wxrt/news/local/glenviews-taco-bout-joys-goes-viral-following-heartfelt-tiktok" target="_blank" rel="noopener noreferrer">December 11 WBBM Newsradio report</a>, Mike Krauser described business as slow before the video. Afterwards, the restaurant's social posts warned that customers might wait an hour. A Sunday post asked people to order ahead and supplied parking instructions for a nearby mall.</p>
+<p>Those instructions suggest the immediate constraint had changed. A kitchen that needs more customers faces a different problem from one receiving orders faster than it can fill them. Attention can change the workload much faster than a business can add cooking space or trained staff.</p>
+<p>Advance orders could help make that workload visible. Clear wait estimates could let customers decide whether to stay. These are interpretations of the response, not measured findings about its effect on sales or customer satisfaction.</p>
+<h2>What this comeback establishes</h2>
+<p>The contemporary reporting supports a sharp change in customer demand. It does not establish profit, debt repayment, repeat purchasing or lasting financial stability. Millions of video views cannot supply those missing accounts, and a crowded kitchen cannot reveal its margins.</p>
+<p>This is a December 2022 case, not a claim about the restaurant's condition in 2026. Its useful question is operational: when an appeal brings people through the door, what helps the business serve them well enough to earn another visit?</p>
+<p>Related reporting: <a href="/story/led-cafe-bich-nga-comeback-20261010/">Café Bích Nga and the difference between a viral visit and a return visit</a>.</p>
+<p class="attrline">Provenance: AI-prepared analysis of the linked contemporary reporting. No interview or independent financial audit was conducted by Imperium Post. No social photographs or video frames have been copied.</p>`,
+  sources: [
+    { t: "Taco-Bout-Joy's Mexican restaurant TikTok report", p: "BuzzFeed", u: "https://www.buzzfeed.com/rossyoder/taco-bout-joys-mexican-restaurant-tiktok" },
+    { t: "Taco-Bout-Joy's TikTok report, December 15, 2022", p: "Upworthy", u: "https://www.upworthy.com/taco-bout-joys-tiktok/" },
+    { t: "Taco-Bout-Joy's Glenview TikTok videos and birria tacos", p: "ABC7 Chicago", u: "https://abc7chicago.com/post/taco-bout-joys-glenview-il-tiktok-videos-birria-tacos/12550596/" },
+    { t: "Glenview's Taco-Bout-Joy's goes viral", p: "WBBM Newsradio", u: "https://www.audacy.com/wxrt/news/local/glenviews-taco-bout-joys-goes-viral-following-heartfelt-tiktok" },
+    { t: "Birria-tacos.jpg", p: "Creas1223 / Wikimedia Commons, CC BY 4.0", u: "https://commons.wikimedia.org/wiki/File:Birria-tacos.jpg" },
+    { t: "CC BY 4.0 license", p: "Creative Commons", u: "https://creativecommons.org/licenses/by/4.0/" },
+    { t: "Original Taco-Bout-Joy's TikTok post", p: "Taco-Bout-Joy's on TikTok", u: "https://www.tiktok.com/@tacoboutjoys/video/7174662663534808363" }
+  ]
+},
 {
   id: "led-ai-google-power-deals-20261007",
   kind: "news",
@@ -1078,5 +1109,3 @@ window.LEDGER_CONTENT = {
   ]
 }
 ]};
-
-
