@@ -9,7 +9,7 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-10-18",
+  updated: "2026-10-18T21:09:41Z",
   articles: [{
   id: "led-taco-bout-joys-comeback-20261018",
   kind: "analysis",
