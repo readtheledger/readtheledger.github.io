@@ -9,8 +9,54 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-10-18T21:09:41Z",
-  articles: [{
+  updated: "2026-10-19T13:17:31Z",
+  articles: [
+{
+  "id": "led-ai-nscale-loughton-exit-20261019",
+  "kind": "news",
+  "section": "Tech & Finance",
+  "produced": "ai-source-reviewed",
+  "date": "2026-10-19T13:17:31Z",
+  "title": "Nscale’s 2027 AI plan meets a reported 2030s power date",
+  "standfirst": "Microsoft reportedly ended its Loughton agreement. The source report leaves its reason unspecified; the original announcements show why hardware delivery and usable power need separate scrutiny.",
+  "html": "<p>In September 2025, Nscale put a precise hardware target on its planned Loughton AI campus: 23,040 Nvidia GB300 GPUs, delivered in the first quarter of 2027. Its <a href=\"https://www.nscale.com/press-releases/nscale-uk-ai-infrastructure-announcement\">announcement</a> described 50 megawatts of AI capacity, expandable to 90MW, for Microsoft’s Azure services.</p>\n<p>Now Microsoft has reportedly ended its agreement for the Essex site. <a href=\"https://www.channelnewsasia.com/business/microsoft-pulls-out-uk-data-center-deal-nscale-telegraph-reports-6469486\">Reuters reported the withdrawal on October 18</a>, citing The Telegraph. Crucially, the newspaper did not specify Microsoft’s reason for withdrawing, Reuters said. Microsoft declined Reuters’ request for comment.</p>\n<p>The same report relayed a very different timetable for electricity: national grid officials had told Nscale they did not expect power for the site until the 2030s. That is a reported estimate, not a connection date independently verified by Imperium Post.</p>\n<h2>Two schedules that need to meet</h2>\n<p>The contrast exposes a basic condition behind an AI infrastructure announcement. Ordering computing equipment and securing usable electricity are separate commitments. A GPU delivery target cannot, by itself, establish when a customer will be able to run workloads.</p>\n<p>Nscale’s original wording matters here. It gave a date for delivery of the GPUs. That should not be converted into a guarantee that an operating campus would be ready on the same date. Equally, the reported grid delay should not be presented as Microsoft’s confirmed explanation for leaving.</p>\n<p>For readers assessing a project, the useful next evidence is more specific than another headline capacity figure: a firm power connection timetable, the conditions attached to it, and a customer agreement that matches the delivery schedule. Those are questions raised by the documents and reporting, not findings that such arrangements are absent.</p>\n<h2>One site is not the whole UK pledge</h2>\n<p><a href=\"https://blogs.microsoft.com/on-the-issues/2025/09/16/microsoft-30-billion-uk-ai-future/\">Microsoft’s September 2025 announcement</a> put its UK commitment at US$30 billion over 2025–2028. Half was capital expenditure for cloud and AI infrastructure; the other half supported ongoing UK operations. It included the Nscale supercomputer, alongside a broader expansion.</p>\n<p>The reported Loughton withdrawal therefore does not establish that the entire US$30 billion programme has been cancelled. Treating the national total as the price of this one site would also misstate the announcement.</p>\n<p>Nscale told Reuters that its other contracts were unaffected by the grid issue. It said it remained committed to Loughton and was exploring alternative power sources and other UK expansion sites. That is the company’s account; the report does not establish a replacement supply agreement or a new operating date.</p>\n<p>The next useful milestone is a credible route to powered capacity. Until then, the difference between an announced GPU fleet and a service customers can use remains central to this project’s business case.</p>\n<p>Related reporting: <a href=\"/story/led-google-quebec-ai-power-bill/\">the debate over who pays for AI data-centre electricity</a>.</p>\n<p><em>Provenance: AI-prepared analysis of the linked company announcements and attributed Reuters reporting. Imperium Post did not interview the companies or independently verify the grid connection estimate.</em></p>",
+  "sources": [
+    {
+      "t": "Microsoft pulls out of UK data center deal with Nscale, Telegraph reports",
+      "u": "https://www.channelnewsasia.com/business/microsoft-pulls-out-uk-data-center-deal-nscale-telegraph-reports-6469486",
+      "p": "Reuters via CNA, October 18, 2026"
+    },
+    {
+      "t": "Nscale announces UK AI infrastructure commitment",
+      "u": "https://www.nscale.com/press-releases/nscale-uk-ai-infrastructure-announcement",
+      "p": "Nscale, September 16, 2025"
+    },
+    {
+      "t": "Microsoft invests $30 billion in UK to power AI future",
+      "u": "https://blogs.microsoft.com/on-the-issues/2025/09/16/microsoft-30-billion-uk-ai-future/",
+      "p": "Microsoft, September 16, 2025"
+    },
+    {
+      "t": "Power transmission tower.jpg",
+      "p": "Nirbhaynt / Wikimedia Commons, CC BY-SA 4.0",
+      "u": "https://commons.wikimedia.org/wiki/File:Power_transmission_tower.jpg"
+    },
+    {
+      "t": "CC BY-SA 4.0 license",
+      "p": "Creative Commons",
+      "u": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  ],
+  "image": {
+    "u": "/assets/editorial/led-ai-nscale-loughton-exit-20261019/hero.jpg",
+    "alt": "Electricity transmission tower and overhead lines; illustrative photograph, not Nscale's Loughton site or a Microsoft facility.",
+    "w": 1280,
+    "h": 960,
+    "credit": "Nirbhaynt / Wikimedia Commons (CC BY-SA 4.0)",
+    "caption": "Illustrative electricity transmission infrastructure, not Nscale's Loughton site or a Microsoft facility. Photo by Nirbhaynt, Wikimedia Commons, CC BY-SA 4.0."
+  }
+},
+{
   id: "led-taco-bout-joys-comeback-20261018",
   kind: "analysis",
   section: "Companies",
