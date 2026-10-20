@@ -9,8 +9,63 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-10-19T13:17:31Z",
+  updated: "2026-10-20T13:17:37Z",
   articles: [
+{
+  "id": "led-ai-openai-pre-ipo-raise-20261020",
+  "kind": "analysis",
+  "section": "Tech & Finance",
+  "produced": "ai-source-reviewed",
+  "date": "2026-10-20T13:17:37Z",
+  "title": "OpenAI seeks US$30bn. One investor is already backing both rivals.",
+  "standfirst": "MGX participated in both labs’ last funding rounds. The reported race ahead of Anthropic’s expected IPO makes the distinction between new cash, company value and investor liquidity more consequential.",
+  "html": "<p>OpenAI is seeking about US$30 billion in a financing that could value it above US$1.4 trillion, <a href=\"https://www.investing.com/news/stock-market-news/exclusiveopenai-seeks-to-accelerate-fundraising-ahead-of-anthropic-ipo-sources-say-4958511\">Reuters reported on October 19</a>, citing people familiar with the talks. The reported push comes ahead of Anthropic’s expected mid-November market debut. Neither the fundraising nor that listing timetable is a completed outcome.</p>\n<p>One participant already has positions on both sides. MGX co-led OpenAI’s March funding round and invested in Anthropic’s May round, according to the companies’ announcements. The capital competition is real; a simple contest between two separate sets of backers would be the wrong picture.</p>\n<h2>New cash and company value are different numbers</h2>\n<p><a href=\"https://openai.com/index/accelerating-the-next-phase-ai/\">OpenAI’s March 31 announcement</a> recorded US$122 billion in committed capital and a US$852 billion post-money valuation. “Post-money” means the stated company value includes the new financing.</p>\n<p>At US$1.4 trillion, the headline benchmark would be 64.3% above March’s figure. This is our arithmetic, not an investor return: Reuters does not specify whether the proposed valuation includes the new cash, and the terms remain unconfirmed.</p>\n<p>For a simple equity deal, US$30 billion would buy 2.14% if US$1.4 trillion were post-money, or 2.10% if it were pre-money. These are conditional illustrations at exactly US$1.4 trillion, not the negotiated stake; share rights and other changes could matter.</p>\n<p>For the business, the distinction matters. A trillion-dollar headline is not a trillion dollars available to pay bills. The cash raised and the terms attached determine what the financing adds to the balance sheet.</p>\n<h2>The investor with two positions</h2>\n<p><a href=\"https://www.anthropic.com/news/series-h\">Anthropic’s May 28 announcement</a> named MGX among investors in its US$65 billion Series H, which valued the company at US$965 billion after the financing. OpenAI’s March announcement named MGX as a co-leader of its own round.</p>\n<p>In an <a href=\"https://www.mediaoffice.abudhabi/en/technology/tahnoon-bin-zayed-chairs-mgxs-third-board-meeting-of-2026/\">October 19 board statement</a>, MGX discussed revenue growth at both companies and their potential public listings. It also described possible sales of some existing holdings to give its investors early liquidity. The statement did not identify which holdings would be sold.</p>\n<p>That creates a distinction between financing the companies and cashing out an investment. A new primary share issue can fund a company; a sale of an existing stake can pay the selling holder. MGX’s broad statement is not evidence that it intends to sell either OpenAI or Anthropic now, or that backing one requires withdrawing from the other.</p>\n<h2>The public comparison comes later</h2>\n<p>A funding announcement is also not a set of comparable financial accounts. A valuation multiple becomes more useful when the reporting periods, accounting definitions, costs and obligations are clear.</p>\n<p><a href=\"https://www.sec.gov/about/divisions-offices/division-corporation-finance/voluntary-submission-draft-registration-statements-faqs\">SEC staff guidance</a> for an initial offering using the expanded nonpublic submission process requires public filing at least 15 days before a roadshow, or before effectiveness if there is no roadshow. That disclosure rule does not confirm either company’s listing date.</p>\n<p>The next test is concrete: financing terms that establish what the new money buys, and financial disclosures that let investors compare the underlying businesses.</p>\n<p>Related reporting: <a href=\"/story/led-ai-nscale-loughton-exit-20261019/\">why an AI hardware timetable is different from a powered campus</a>.</p>\n<p><em>Provenance: AI-prepared analysis of linked company statements, SEC staff guidance and attributed Reuters reporting. Calculations are Imperium Post’s conditional illustrations. No interviews or access to private deal documents are claimed.</em></p>",
+  "sources": [
+    {
+      "t": "OpenAI seeks to accelerate fundraising ahead of Anthropic IPO",
+      "u": "https://www.investing.com/news/stock-market-news/exclusiveopenai-seeks-to-accelerate-fundraising-ahead-of-anthropic-ipo-sources-say-4958511",
+      "p": "Reuters, Echo Wang, Krystal Hu and Sabrina Valle, October 19, 2026"
+    },
+    {
+      "t": "OpenAI announces US$122 billion in committed capital",
+      "u": "https://openai.com/index/accelerating-the-next-phase-ai/",
+      "p": "OpenAI, March 31, 2026"
+    },
+    {
+      "t": "Anthropic announces US$65 billion Series H",
+      "u": "https://www.anthropic.com/news/series-h",
+      "p": "Anthropic, May 28, 2026"
+    },
+    {
+      "t": "MGX third board meeting of 2026",
+      "u": "https://www.mediaoffice.abudhabi/en/technology/tahnoon-bin-zayed-chairs-mgxs-third-board-meeting-of-2026/",
+      "p": "Abu Dhabi Media Office, October 19, 2026"
+    },
+    {
+      "t": "Voluntary submission of draft registration statements — FAQs",
+      "u": "https://www.sec.gov/about/divisions-offices/division-corporation-finance/voluntary-submission-draft-registration-statements-faqs",
+      "p": "U.S. Securities and Exchange Commission"
+    },
+    {
+      "t": "1515 Third Street.jpg",
+      "p": "Coolcaesar / Wikimedia Commons, CC BY 4.0",
+      "u": "https://commons.wikimedia.org/wiki/File:1515_Third_Street.jpg"
+    },
+    {
+      "t": "CC BY 4.0 license",
+      "p": "Creative Commons",
+      "u": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  ],
+  "image": {
+    "u": "/assets/editorial/led-ai-openai-pre-ipo-raise-20261020/hero.jpg",
+    "alt": "Office building at 1515 Third Street in San Francisco, photographed in June 2025.",
+    "w": 1280,
+    "h": 853,
+    "credit": "Coolcaesar / Wikimedia Commons (CC BY 4.0)",
+    "caption": "1515 Third Street, San Francisco, photographed June 15, 2025, when the photographer identified it as OpenAI’s headquarters. Photo: Coolcaesar / Wikimedia Commons, CC BY 4.0. Reduced-size rendition; no scene alterations."
+  }
+},
 {
   "id": "led-ai-nscale-loughton-exit-20261019",
   "kind": "news",
