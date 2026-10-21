@@ -9,7 +9,7 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-10-20T13:17:37Z",
+  updated: "2026-10-21T13:18:33Z",
   articles: [
 {
   "id": "led-ai-openai-pre-ipo-raise-20261020",
@@ -1208,5 +1208,35 @@ window.LEDGER_CONTENT = {
       "p": "China Ministry of Commerce; primary explanation"
     }
   ]
-}
+  },
+{
+  id: "led-ai-spacex-ai-revenue-20261021",
+  kind: "analysis",
+  section: "Tech & Finance",
+  produced: "ai-source-reviewed",
+  image:{u:"/assets/editorial/led-ai-spacex-ai-revenue-20261021/hero.jpg",alt:"Exterior of SpaceX’s Hawthorne facility photographed in September 2012.",w:1280,h:853,ai:false,credit:"SpaceX / Wikimedia Commons",caption:"SpaceX’s Hawthorne facility in September 2012. Historical company photograph, not an image of the current AI expansion. SpaceX / Wikimedia Commons, CC0. Reduced-size rendition."},
+  date: "2026-10-21T13:18:33Z",
+  title: "SpaceX’s AI business leads in sales. Starlink still leads in operating profit.",
+  standfirst: "The latest accounts show why a company’s fastest-growing division and its strongest profit contributor can be different businesses.",
+  html: `<p>SpaceX’s Super Intelligence segment reported US$7.56 billion of third-quarter revenue, ahead of its Starlink-led connectivity division. But connectivity generated more than five times SI’s operating income, according to the company’s <a href="https://www.sec.gov/Archives/edgar/data/1181412/000162828026066482/spaceexplorationtechnologi.htm">October 20 earnings release</a>.</p>
+<h2>Two different leaders</h2>
+<table><caption>SpaceX’s third quarter of 2026; US$ billions, rounded</caption><thead><tr><th scope="col">Reported measure</th><th scope="col">Super Intelligence</th><th scope="col">Connectivity</th></tr></thead><tbody><tr><th scope="row">Revenue</th><td>7.560</td><td>5.248</td></tr><tr><th scope="row">Operating income</th><td>0.431</td><td>2.367</td></tr><tr><th scope="row">Capital expenditure</th><td>16.444</td><td>1.543</td></tr></tbody></table>
+<p>Our calculations put operating margins at 5.7% for SI and 45.1% for connectivity. SI accounted for 51.9% of group revenue but 83.9% of group capital expenditure. These compare the same quarter; they do not measure cash generation or future investment returns.</p>
+<p>The comparison has an important qualification: SI’s operating income includes US$1.2 billion of share-based compensation associated with the Cursor acquisition. Removing that expense would change the comparison, but would produce an adjusted figure.</p>
+<h2>Growth creates a second test</h2>
+<p>The revenue race and the financing test answer different questions. Sales show what customers bought during a period. Operating income deducts operating costs, including depreciation and stock compensation. Capital expenditure builds assets whose costs are generally recognized over time. Subtracting an entire investment programme from one quarter’s sales would not calculate an accounting loss.</p>
+<p>Nor does a high operating margin by itself establish that one division paid for another’s expansion. That requires cash-flow and funding evidence, including working capital, financing and obligations. The accounts can show different economic roles without establishing a particular transfer of cash between businesses.</p>
+<p><a href="https://techcrunch.com/2026/10/20/spacexs-ai-business-is-beating-expectations/">TechCrunch’s October 20 report</a>, by Tim Fernholz and Kirsten Korosec, described the next spending step: CFO Bret Johnsen forecast US$35 billion–US$40 billion of group capital investment in the fourth quarter. That is management’s plan, not completed spending.</p>
+<p>The same report described Musk’s focus on power and cooling constraints at the Memphis data-centre expansion, including using SpaceX’s metal-casting capability to help source turbine components. Those execution demands give the financial comparison practical meaning: growing demand still has to become usable infrastructure.</p>
+<h2>What to watch next</h2>
+<p>Our reading is that revenue leadership alone is an incomplete scorecard. The next useful comparison pairs margins with the cash required to deliver additional capacity. Investors need to see whether new infrastructure earns a return after the initial build, rather than treating a sales milestone as proof that expansion funds itself.</p>
+<p>The same distinction runs through <a href="/story/led-ai-nscale-loughton-exit-20261019/">our reporting on AI hardware and powered campuses</a>. For the separate question of what new financing adds to a company, see <a href="/story/led-ai-openai-pre-ipo-raise-20261020/">our analysis of OpenAI’s reported fundraising</a>.</p>
+<p><em>Provenance: AI-prepared analysis of SpaceX’s SEC-filed release and attributed TechCrunch reporting. Ratios are Imperium Post calculations. No interviews, private records or human review are claimed.</em></p>`,
+  sources: [
+    { t: "SpaceX reports third-quarter 2026 results", u: "https://www.sec.gov/Archives/edgar/data/1181412/000162828026066482/spaceexplorationtechnologi.htm", p: "SpaceX, SEC Exhibit 99.1, October 20, 2026; unaudited financial statements" },
+    { t: "SpaceX’s AI business is beating expectations", u: "https://techcrunch.com/2026/10/20/spacexs-ai-business-is-beating-expectations/", p: "TechCrunch, Tim Fernholz and Kirsten Korosec, October 20, 2026" },
+    { t: "Historical SpaceX Hawthorne facility photograph", u: "https://commons.wikimedia.org/wiki/File:SpaceX_Headquarters,_Hawthorne,_CA.jpg", p: "SpaceX / Wikimedia Commons; September 28, 2012; CC0 1.0" },
+    { t: "CC0 1.0 public-domain dedication", u: "https://creativecommons.org/publicdomain/zero/1.0/", p: "Photo license" }
+  ]
+},
 ]};
