@@ -9,8 +9,53 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-10-21T13:18:33Z",
+  updated: "2026-10-22T21:02:52Z",
   articles: [
+{
+  "id": "led-ai-meta-voteless-shares-20261022",
+  "kind": "news",
+  "section": "Companies",
+  "produced": "ai-codex-checked",
+  "date": "2026-10-22T21:02:52Z",
+  "title": "Meta’s new shares can raise money without spreading voting power",
+  "standfirst": "Capital spending exceeded operating cash flow last quarter. Meta’s planned non-voting stock separates financing from control; the initial share dividend itself raises no cash.",
+  "html": "<p>Meta spent US$34.91 billion on capital expenditure in the third quarter, including finance-lease principal, against US$32.79 billion of operating cash flow. Its <a href=\"https://www.sec.gov/Archives/edgar/data/1326801/000162828026066700/meta-09302026xexhibit991.htm\">October 21 results</a> put free cash flow at minus US$2.12 billion.</p>\n<p>Alongside those results, Meta announced non-voting Class C shares for purposes including capital raising, employee compensation and acquisitions. The financial question is how much new money investors will supply. The governance question is how much influence comes with it.</p>\n<h2>The spending gap</h2>\n<p>Our calculation from the cash-flow statement puts nine-month capex at US$85.824 billion: property-and-equipment purchases plus finance-lease principal. Meeting management’s US$135 billion–US$145 billion full-year outlook would require US$49.176 billion–US$59.176 billion in the fourth quarter. That is an implied spending range, not completed investment.</p>\n<p>These are company-wide totals, not a separately disclosed AI budget. Capital expenditure also differs from an operating expense: buying long-lived assets is not the same calculation as measuring quarterly profit. Our <a href=\"/story/led-ai-spacex-ai-revenue-20261021/\">SpaceX analysis</a> examines that distinction.</p>\n<h2>Shares and votes take different paths</h2>\n<p>According to <a href=\"https://www.sec.gov/Archives/edgar/data/1326801/000162828026066700/meta-20261019.htm\">Meta’s 8-K</a>, shareholders approved the recapitalization by written consent on October 20. The planned charter effective date is January 19, 2027. Each existing Class A or B share would receive one Class C share in a dividend contingent on the charter becoming effective.</p>\n<p>That dividend itself raises no cash. A later sale of newly issued shares could fund Meta; a shareholder selling an existing holding receives the proceeds instead. Non-voting issuance can preserve voting control while still changing each investor’s economic percentage. Protection against voting dilution is not protection against economic dilution.</p>\n<p>Zuckerberg’s own sales face conditions. Twenty percent of his group’s initial Class C allotment would be freely saleable; the remaining 80% generally requires a corresponding voting-share sale or conversion, subject to the agreement’s exceptions. Restrictions release over 32 qualifying quarters of continued full-time leadership.</p>\n<h2>The next test</h2>\n<p>Creating a financing instrument does not establish its eventual issue price, proceeds or investment return. The next useful comparison is between money raised, rights issued and cash committed—not simply the number of shares outstanding.</p>\n<p><em>Provenance: AI-prepared analysis checked against Meta’s SEC disclosures. Arithmetic is Imperium Post’s. No interviews or human review are claimed.</em></p>",
+  "sources": [
+    {
+      "t": "Meta reports third-quarter 2026 results",
+      "u": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026066700/meta-09302026xexhibit991.htm",
+      "p": "Meta Platforms, SEC Exhibit 99.1, October 21, 2026; unaudited financial statements"
+    },
+    {
+      "t": "Meta Form 8-K: recapitalization and Founder Alignment Agreement",
+      "u": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026066700/meta-20261019.htm",
+      "p": "Meta Platforms, October 21, 2026; earliest event October 19"
+    },
+    {
+      "t": "Meta Headquarters Sign.jpg",
+      "u": "https://commons.wikimedia.org/wiki/File:Meta_Headquarters_Sign.jpg",
+      "p": "Nokia621 / Wikimedia Commons, CC BY-SA 4.0"
+    },
+    {
+      "t": "CC BY-SA 4.0 license",
+      "u": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "p": "Creative Commons"
+    }
+  ],
+  "updated": "2026-10-22T21:02:52Z",
+  "image": {
+    "u": "/assets/editorial/led-ai-meta-voteless-shares-20261022/hero-768.jpg",
+    "alt": "Entrance sign at Meta headquarters in Menlo Park, photographed in May 2022.",
+    "w": 768,
+    "h": 576,
+    "widths": [
+      480,
+      768
+    ],
+    "credit": "Nokia621 / Wikimedia Commons (CC BY-SA 4.0)",
+    "caption": "Meta headquarters entrance sign in May 2022. Photo: Nokia621 / Wikimedia Commons, CC BY-SA 4.0. Archival image; resized for display."
+  }
+},
 {
   "id": "led-ai-openai-pre-ipo-raise-20261020",
   "kind": "analysis",
