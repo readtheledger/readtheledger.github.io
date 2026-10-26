@@ -9,7 +9,7 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-10-22T21:02:52Z",
+  updated: "2026-10-26T13:32:27Z",
   articles: [
 {
   "id": "led-ai-meta-voteless-shares-20261022",
@@ -237,6 +237,37 @@ window.LEDGER_CONTENT = {
   sources: [
     { t: "Dolton restaurant sees customers after family's TikTok video", p: "Daily Southtown", u: "https://edition.pagesuite.com/tribune/article_popover.aspx?guid=30e23cd7-8b59-4bd6-bb2f-c9445e26a771" },
     { t: "Dolton restaurant TikTok story", p: "CBS Chicago", u: "https://www.cbsnews.com/amp/chicago/news/dolton-restaurant-tiktok/" }
+  ]
+},
+
+{
+  id: "led-red-chimney-comeback-20261026",
+  kind: "analysis",
+  section: "Companies",
+  produced: "ai-source-reviewed",
+  image: {u:"/assets/editorial/led-red-chimney-comeback-20261026/hero-1200.jpg",alt:"State Road in Parma with the Cleveland skyline in the distance, photographed in October 2019.",w:1200,h:900,widths:[480,768,1200],credit:"3steph14 / Wikimedia Commons",caption:"Cleveland’s skyline seen from State Road in Parma, October 2019. Geographic context for Red Chimney’s move; the restaurant is not pictured. Photo: 3steph14 / Wikimedia Commons, CC BY-SA 4.0. Reduced-size rendition."},
+  date: "2026-10-26T13:32:27Z",
+  title: "Fire closed Red Chimney for a year. Its customers followed it to a new address.",
+  standfirst: "The Ohio restaurant reopened in Parma in August, after a fire forced it out of Cleveland. The return of familiar customers offers a concrete comeback milestone; the financial recovery remains unmeasured.",
+  html: `<p>A restaurant can replace an address more easily than it can replace the people who made a habit of going there. Red Chimney’s reopening offers a small, specific example of customers following a business after a long interruption.</p>
+<p>On August 26, 2026, the restaurant reopened on Snow Road in Parma, Ohio. <a href="https://www.cleveland19.com/2026/08/26/red-chimney-reopens-new-parma-location/">Cleveland 19’s reopening report</a> described co-owner Pete Skantzos becoming emotional as customers returned to see him and his brother. Skantzos told the broadcaster that many had come from the east side.</p>
+<p>This was an August reopening, not a new opening announced today. It followed a fire at the restaurant’s former Fleet Avenue premises in Cleveland’s Slavic Village.</p>
+<h2>A year without the old dining room</h2>
+<p><a href="https://www.cleveland19.com/2025/08/05/fire-cleveland-restaurant-featured-recent-superman-movie/">Cleveland 19 reported the fire on August 5, 2025</a>. Fire department spokesman Lt. Mike Norman said it began in an apartment above the restaurant. He estimated about US$300,000 in damage, mostly water damage from firefighting.</p>
+<p>“We’ve been here for over 26 years,” Skantzos told the station that day. At the time of the report, there was no reopening timetable. A customer interviewed outside expressed a wish to help the owners get back on their feet.</p>
+<p>The damage estimate describes the property harm reported by a fire official. It does not establish the owners’ uninsured loss, what a new restaurant cost, or how much cash they needed to reopen.</p>
+<h2>The part of a restaurant that can move</h2>
+<p>The turning point was concrete: trading resumed at a different address, with returning customers described in the opening-day reporting. The available evidence does not show that social media financed the move or caused the return.</p>
+<p>For a business built around repeat visits, a move tests more than whether the new premises can open. It tests whether customers will change their routines. Familiarity with the owners can be valuable when the familiar location is gone.</p>
+<p>Reopening and recovering financially are separate milestones. The two reports do not supply reopening costs, insurance proceeds, subsequent sales or profits. They therefore cannot show whether the losses have been recovered, or how the restaurant is performing in October.</p>
+<p>Red Chimney’s documented comeback is narrower and still consequential: after a year of closure, the owners had a place to serve customers again, and some of those customers were there.</p>
+<p>Related: <a href="/story/led-cafe-bich-nga-comeback-20261010/">Café Bích Nga’s comeback</a> and <a href="/story/led-taco-bout-joys-comeback-20261018/">Taco-Bout-Joy’s and the limits of a viral rescue</a>.</p>
+<p><em>Provenance: AI-prepared reporting analysis of two linked Cleveland 19 reports, published in August 2025 and August 2026. No interviews, financial records or current-site visit are claimed.</em></p>`,
+  sources: [
+    {t: "Red Chimney reopens at new Parma location", u: "https://www.cleveland19.com/2026/08/26/red-chimney-reopens-new-parma-location/", p: "19 News Digital Team and Noelle Williams, Cleveland 19, August 26, 2026"},
+    {t: "Fire damages Cleveland restaurant featured in recent Superman movie", u: "https://www.cleveland19.com/2025/08/05/fire-cleveland-restaurant-featured-recent-superman-movie/", p: "Noelle Haynes and Aria Janel, Cleveland 19, August 5, 2025"},
+    {t: "Parma, Ohio", u: "https://commons.wikimedia.org/wiki/File:Parma,_Ohio.jpg", p: "3steph14 / Wikimedia Commons, CC BY-SA 4.0"},
+    {t: "Creative Commons Attribution-ShareAlike 4.0 International", u: "https://creativecommons.org/licenses/by-sa/4.0/", p: "Creative Commons"}
   ]
 },
 
