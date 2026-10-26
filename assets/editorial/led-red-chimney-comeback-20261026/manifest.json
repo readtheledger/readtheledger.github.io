@@ -1,0 +1,49 @@
+{
+  "articleId": "led-red-chimney-comeback-20261026",
+  "master": {
+    "sha256": "2b9069e00a79681a395d81b06059fee6c8421188287f577521732cccc3726ee4",
+    "bytes": 299766,
+    "w": 1280,
+    "h": 960,
+    "committed": false
+  },
+  "aiGenerated": false,
+  "credit": "3steph14 / Wikimedia Commons, CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Parma,_Ohio.jpg",
+  "sourceRevision": "https://commons.wikimedia.org/w/index.php?title=File:Parma,_Ohio.jpg&oldid=498371926",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "photoDate": "2019-10-01",
+  "crop": "none \u2014 full source composition at every size (4:3; no crop)",
+  "derived": "2026-10-26",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 360,
+      "bytes": 46622,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 576,
+      "bytes": 96174,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 900,
+      "bytes": 168916,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 900,
+      "bytes": 239277,
+      "type": "image/jpeg"
+    }
+  ]
+}
