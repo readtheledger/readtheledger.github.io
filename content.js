@@ -9,8 +9,64 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-10-26T13:32:27Z",
+  updated: "2026-10-28T21:01:45Z",
   articles: [
+{
+  "id": "led-mama-llama-comeback-20261028",
+  "kind": "analysis",
+  "section": "Companies",
+  "produced": "ai-codex-checked",
+  "date": "2026-10-28T21:01:45Z",
+  "title": "Home pickups were ordered to stop. Mama Llama’s rolls found three café outlets.",
+  "standfirst": "Mama Llama Bakery faced a warning over customers collecting orders from its Las Vegas home. A café partnership gave the product another route to buyers; the financial terms remain undisclosed.",
+  "html": "<p>In August, Lindsay Skolnik received a warning to stop customers collecting cinnamon rolls from her Las Vegas home. By October 28, her bakery’s website listed three Café Lola locations where customers could find the rolls. The comeback involved changing how the product reached buyers.</p>\n<h2>The restriction was on the doorstep</h2>\n<p>In an <a href=\"https://www.fox5vegas.com/2026/08/12/viral-las-vegas-cottage-bakery-gets-cease-desist-order/\">August 11 report, updated August 12</a>, FOX5’s Jaclyn Schultz described the enforcement notice and quoted Clark County’s explanation. The county acknowledged Skolnik had a business license, but said on-site customers were not permitted without a special use permit.</p>\n<p>The same report linked her Instagram post showing the order and letter, and reported more than 200,000 views. That is a dated reported count for an identified owner post. It does not measure sales or show that publicity changed the county’s position.</p>\n<h2>An existing conversation became a production partnership</h2>\n<p>Skolnik had already been talking with restaurateur Alexandra Lourdes about bringing the rolls to Café Lola. After receiving the notice she contacted Lourdes, according to <a href=\"https://www.fox5vegas.com/2026/08/22/mama-llama-bakerys-famous-cinnamon-rolls-set-cafe-debut/\">Schultz’s August 21 follow-up</a>.</p>\n<p>“I called her immediately,” Skolnik told FOX5. The report said she was preparing to train café staff to bake her recipe, with a September 1 launch planned at the Hualapai and Flamingo Road location. Other locations would follow.</p>\n<p>The distinction matters. A café partnership can provide production capacity, staff and a place for customers to collect a product without the baker first opening a separate shop. It also makes the product’s consistency depend on people beyond its creator.</p>\n<p>Skolnik’s existing relationship with Lourdes is part of this account. Describing it simply as a viral rescue would conceal the commercial connection that was already developing.</p>\n<h2>What the October evidence establishes</h2>\n<p>On October 28, <a href=\"https://www.mamallamabakery.com/\">Mama Llama’s own website</a> listed Café Lola pickup locations in Summerlin, Henderson and Rainbow, with daily walk-ins advertised. Its <a href=\"https://www.mamallamabakery.com/october/\">October calendar</a> listed an October 22 launch at Rainbow.</p>\n<p>Those current listings support the existence of a new retail route after the August interruption. They are the business’s statements; we have not visited the locations or independently checked stock.</p>\n<p>The reports and listings reviewed do not disclose the partnership’s payment structure, Skolnik’s share of each sale, production costs or profits. Three outlets therefore cannot be translated into a revenue figure, much less proof that earlier losses have been recovered.</p>\n<p>The useful business lesson is specific: when a successful product runs into a constraint on where it can be made or collected, an established operator may offer a route back to customers. The economics still turn on who pays for production, who controls quality and how the proceeds are divided.</p>\n<p>Related: <a href=\"/story/led-red-chimney-comeback-20261026/\">Red Chimney’s return at a new address</a> and <a href=\"/story/led-taco-bout-joys-comeback-20261018/\">Taco-Bout-Joy’s and the limits of a viral rescue</a>.</p>\n<p><em>Provenance: AI-prepared analysis of two FOX5 reports and Mama Llama Bakery’s public website, checked October 28, 2026. No interviews, site visit or access to private financial records is claimed.</em></p>",
+  "sources": [
+    {
+      "t": "Mama Llama Bakery receives notice over doorstep pickups",
+      "u": "https://www.fox5vegas.com/2026/08/12/viral-las-vegas-cottage-bakery-gets-cease-desist-order/",
+      "p": "Jaclyn Schultz, FOX5, August 11, 2026; updated August 12"
+    },
+    {
+      "t": "Mama Llama Bakery’s cinnamon rolls set for café debut",
+      "u": "https://www.fox5vegas.com/2026/08/22/mama-llama-bakerys-famous-cinnamon-rolls-set-cafe-debut/",
+      "p": "Jaclyn Schultz, FOX5, August 21, 2026"
+    },
+    {
+      "t": "Mama Llama Bakery: current pickup locations",
+      "u": "https://www.mamallamabakery.com/",
+      "p": "Business website, read October 28, 2026"
+    },
+    {
+      "t": "Mama Llama Bakery October calendar",
+      "u": "https://www.mamallamabakery.com/october/",
+      "p": "Business calendar, read October 28, 2026"
+    },
+    {
+      "t": "Downtown Summerlin sign (2024)",
+      "u": "https://commons.wikimedia.org/wiki/File:Downtown_Summerlin_sign_(2024)_--_3190.jpg",
+      "p": "Roc0ast3r / Wikimedia Commons, CC0 1.0"
+    },
+    {
+      "t": "CC0 1.0 public domain dedication",
+      "u": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "p": "Creative Commons"
+    }
+  ],
+  "updated": "2026-10-28T21:01:45Z",
+  "image": {
+    "u": "/assets/editorial/led-mama-llama-comeback-20261028/hero-1200.jpg",
+    "alt": "Downtown Summerlin entrance sign in December 2024.",
+    "w": 1200,
+    "h": 900,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "credit": "Roc0ast3r / Wikimedia Commons, CC0 1.0",
+    "caption": "Downtown Summerlin, December 2024. Regional context for the Las Vegas bakery story; neither Mama Llama Bakery nor Café Lola is pictured. Photo: Roc0ast3r / Wikimedia Commons, CC0 1.0. Reduced-size rendition."
+  }
+},
 {
   "id": "led-ai-meta-voteless-shares-20261022",
   "kind": "news",

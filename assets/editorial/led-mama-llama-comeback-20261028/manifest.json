@@ -1,0 +1,49 @@
+{
+  "articleId": "led-mama-llama-comeback-20261028",
+  "master": {
+    "sha256": "35f9b94db069e6a5d2623340a209345d3592ab1102d6f52d660f4d2006ca73f4",
+    "bytes": 412964,
+    "w": 1280,
+    "h": 960,
+    "committed": false
+  },
+  "aiGenerated": false,
+  "credit": "Roc0ast3r / Wikimedia Commons, CC0 1.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Downtown_Summerlin_sign_(2024)_--_3190.jpg",
+  "sourceRevision": "https://commons.wikimedia.org/w/index.php?title=File:Downtown_Summerlin_sign_(2024)_--_3190.jpg&oldid=1212074614",
+  "license": "CC0 1.0",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "photoDate": "2024-12-29",
+  "crop": "none; full source composition at every size,4:3",
+  "derived": "2026-10-28",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 360,
+      "bytes": 57800,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 576,
+      "bytes": 148912,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 900,
+      "bytes": 334792,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 900,
+      "bytes": 387401,
+      "type": "image/jpeg"
+    }
+  ]
+}
