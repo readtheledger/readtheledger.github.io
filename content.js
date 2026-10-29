@@ -9,8 +9,59 @@
    sources [{t: title, u: url, p: publisher}],
    weekly: true on the current deep-dive feature. */
 window.LEDGER_CONTENT = {
-  updated: "2026-10-28T21:01:45Z",
+  updated: "2026-10-29T13:23:49Z",
   articles: [
+{
+  "id": "led-nicos-comeback-20261029",
+  "kind": "analysis",
+  "section": "Companies",
+  "produced": "ai-codex-checked",
+  "date": "2026-10-29T13:23:49Z",
+  "title": "Nico’s TikTok comeback came with a new problem: 90-minute waits.",
+  "standfirst": "A 2022 TikTok appeal brought customers back to a struggling Salt Lake City restaurant. The family reported rehiring staff and much longer waits; the episode shows why reach and operating capacity need separate plans.",
+  "html": "<p>In June 2022, Carlos Cardenas used TikTok to ask people to visit his father’s struggling Salt Lake City restaurant. The customers came. The harder question was how a business that had been short of diners would serve a sudden crowd.</p>\n<h2>A plea with somewhere to go</h2>\n<p>In <a href=\"https://www.fox13now.com/news/positively-utah/sons-tiktok-saves-salt-lake-city-mexican-restaurant\">FOX 13’s account of the turnaround</a>, Nico Cardenas said business had been slow after the pandemic. His son Carlos said his father had considered closing Nico’s Mexican Restaurant, on North Temple.</p>\n<p>Carlos described the change from roughly ten customers during an eleven-hour day to hundreds the next day. “It’s really crazy to me how the internet works,” he told FOX 13. Those customer numbers are his account, rather than figures checked against the restaurant’s books.</p>\n<p>The <a href=\"https://www.tiktok.com/@clumzycarlos/video/7105220955567607086\">original post on Carlos’s account</a> named the restaurant and asked people in Utah to visit. That detail matters: a viewer was given a specific place to spend money, rather than only a story to sympathize with.</p>\n<h2>The restaurant had to catch up</h2>\n<p>In her <a href=\"https://www.utahbusiness.com/archive/2022/09/30/tiktok-saved-this-salt-lake-mexican-restaurant/\">September 30, 2022 follow-up for Utah Business</a>, Diana Manos reported 13.5 million viewers for the three-second original video. That is a dated reported count, not a counter we observed today.</p>\n<p>Carlos told Manos that the family brought back waiters, a cook and a dishwasher. Orders that normally took ten minutes could take an hour and a half during the rush. By the September report, business had slowed again.</p>\n<p>Carlos wondered whether posting less and making customers wait had contributed to that slowdown. The report does not establish either explanation as the cause. Nor does it supply the accounts needed to measure profit or a lasting financial recovery.</p>\n<h2>Attention and capacity are different jobs</h2>\n<p>The operational lesson is to plan for the next order as well as the next viewer. A marketing success can bring demand faster than a kitchen can add equipment, trained staff or seats.</p>\n<p>For an owner preparing a promotion, two decisions deserve attention beforehand: how many orders the business can serve reliably, and how it will communicate a longer wait. A smaller menu, a realistic collection time or a clear temporary ordering limit are possible responses. These are options to assess against the business’s circumstances; the reporting reviewed here does not say Nico’s adopted them.</p>\n<p>A useful scorecard would separate people reached, orders completed, the cost of fulfilling those orders and customers who return. A view count answers only the first question. Busy shifts can still leave an owner unsure how much the extra trade earned.</p>\n<p>Nico’s 2022 experience illustrates an operational comeback with a documented complication: demand returned, and serving it became the next task. This retrospective does not establish the restaurant’s present trading position.</p>\n<p>Related: <a href=\"/story/led-taco-bout-joys-comeback-20261018/\">Taco-Bout-Joy’s and the limits of a viral rescue</a>, and <a href=\"/story/led-mama-llama-comeback-20261028/\">Mama Llama’s route into café outlets</a>.</p>\n<p><em>Provenance: AI-prepared analysis of FOX 13 and Utah Business reporting, read October 29, 2026. The events described took place in 2022. No interviews, restaurant visit, current native view count or access to private financial records is claimed.</em></p>",
+  "sources": [
+    {
+      "t": "Son’s TikTok saves Salt Lake City family restaurant",
+      "u": "https://www.fox13now.com/news/positively-utah/sons-tiktok-saves-salt-lake-city-mexican-restaurant",
+      "p": "FOX 13; historical report, read October 29, 2026; rendered byline/date unavailable"
+    },
+    {
+      "t": "A 3-second TikTok video saved this family restaurant",
+      "u": "https://www.utahbusiness.com/archive/2022/09/30/tiktok-saved-this-salt-lake-mexican-restaurant/",
+      "p": "Diana Manos, Utah Business, September 30, 2022"
+    },
+    {
+      "t": "Carlos Cardenas’s original restaurant appeal",
+      "u": "https://www.tiktok.com/@clumzycarlos/video/7105220955567607086",
+      "p": "@clumzycarlos; identified by Utah Business as posted in early June 2022; exact native date unavailable"
+    },
+    {
+      "t": "West North Temple Street (2015)",
+      "u": "https://commons.wikimedia.org/wiki/File:East_from_North_Temple_Bridge_Guadalupe,_Aug_15.jpg",
+      "p": "An Errant Knight / Wikimedia Commons, CC BY-SA 4.0"
+    },
+    {
+      "t": "Creative Commons Attribution-ShareAlike 4.0",
+      "u": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "p": "Creative Commons"
+    }
+  ],
+  "updated": "2026-10-29T13:23:49Z",
+  "image": {
+    "u": "/assets/editorial/led-nicos-comeback-20261029/hero-1200.jpg",
+    "alt": "West North Temple Street and tram tracks, looking east from the North Temple Bridge in August 2015.",
+    "w": 1200,
+    "h": 900,
+    "widths": [
+      480,
+      768,
+      1200
+    ],
+    "credit": "An Errant Knight / Wikimedia Commons, CC BY-SA 4.0",
+    "caption": "West North Temple Street, Salt Lake City, August 2015. Area context; Nico’s restaurant is not pictured. Photo: An Errant Knight / Wikimedia Commons, CC BY-SA 4.0. Reduced-size rendition under the same license."
+  }
+},
 {
   "id": "led-mama-llama-comeback-20261028",
   "kind": "analysis",

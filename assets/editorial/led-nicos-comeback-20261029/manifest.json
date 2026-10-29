@@ -1,0 +1,49 @@
+{
+  "articleId": "led-nicos-comeback-20261029",
+  "master": {
+    "sha256": "35045255455dd102efc99075d54fcb854b36e87261f70f3c77b2d35e3c8aaad5",
+    "bytes": 258659,
+    "w": 1280,
+    "h": 960,
+    "committed": false
+  },
+  "aiGenerated": false,
+  "credit": "An Errant Knight / Wikimedia Commons, CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:East_from_North_Temple_Bridge_Guadalupe,_Aug_15.jpg",
+  "sourceRevision": "https://commons.wikimedia.org/w/index.php?title=File:East_from_North_Temple_Bridge_Guadalupe,_Aug_15.jpg&oldid=1222679991",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "photoDate": "2015-08-14",
+  "crop": "none; full source composition at every size,4:3",
+  "derived": "2026-10-29",
+  "files": [
+    {
+      "file": "hero-480.webp",
+      "w": 480,
+      "h": 360,
+      "bytes": 34544,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-768.webp",
+      "w": 768,
+      "h": 576,
+      "bytes": 77254,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.webp",
+      "w": 1200,
+      "h": 900,
+      "bytes": 157516,
+      "type": "image/webp"
+    },
+    {
+      "file": "hero-1200.jpg",
+      "w": 1200,
+      "h": 900,
+      "bytes": 242947,
+      "type": "image/jpeg"
+    }
+  ]
+}
